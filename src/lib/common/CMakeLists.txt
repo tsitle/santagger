@@ -1,0 +1,5 @@
+add_subdirectory("binobj")
+add_subdirectory("mtes")
+add_subdirectory("stream")
+add_subdirectory("system")
+add_subdirectory("dynlist")

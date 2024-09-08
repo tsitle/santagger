@@ -1,0 +1,26 @@
+target_sources(santagger_lib
+		PRIVATE
+			tag_vorbc_fnc-prot.h
+			tag_vorbc_zrd.c
+			tag_vorbc_zwr.c
+			tag_vorbc_zfdeb.c
+			tag_vorbc_stcs-prot.h
+			tag_vorbc_zwr-pp.h
+			tag_vorbc_zfdeb-prot.h
+			tag_vorbc_fldget.c
+			tag_vorbc_opts.c
+			tag_vorbc_gs.c
+			tag_vorbc_stcs.c
+			tag_vorbc_fnc.c
+			tag_vorbc-prot.h
+			tag_vorbc_zrd-pp.h
+			tag_vorbc_ztidy-prot.h
+			tag_vorbc.c
+			tag_vorbc_gs-prot.h
+			tag_vorbc_fldadd.c
+			tag_vorbc_ztidy.c
+		PUBLIC FILE_SET HEADERS
+		BASE_DIRS ${PROJECT_SOURCE_DIR}
+		FILES
+			tag_vorbc-priv_flds.h
+	)

@@ -1,0 +1,23 @@
+target_sources(santagger_lib
+		PRIVATE
+			cont_ogg_zwr_cod-pp.h
+			cont_ogg_zwr_cod.c
+			cont_ogg_zwr-pp.h
+			cont_ogg_gs.c
+			cont_ogg_stcs.c
+			cont_ogg_zrd_cod-pp.h
+			cont_ogg_zfdeb.c
+			cont_ogg-prot.h
+			cont_ogg_zrd_cod.c
+			cont_ogg.c
+			cont_ogg_opts.c
+			cont_ogg_zrd-pp.h
+			cont_ogg_stcs-prot.h
+			cont_ogg-common-prot.h
+			cont_ogg_zrd.c
+			cont_ogg_zfdeb-prot.h
+			cont_ogg_zwr.c
+		PUBLIC FILE_SET HEADERS
+		BASE_DIRS ${PROJECT_SOURCE_DIR}
+		FILES
+	)

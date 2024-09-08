@@ -1,0 +1,33 @@
+target_sources(santagger_lib
+		PRIVATE
+			tag_id3v2_zchk-pp.h
+			tag_id3v2_fldadd.c
+			tag_id3v2_zfdeb.c
+			tag_id3v2_zsync-prot.h
+			tag_id3v2_fnc-priv.h
+			tag_id3v2_zrd.c
+			tag_id3v2_zfdeb-prot.h
+			tag_id3v2_zrd-pp.h
+			tag_id3v2_opts.c
+			tag_id3v2_zchk.c
+			tag_id3v2_zwr.c
+			tag_id3v2_stcs-prot.h
+			tag_id3v2_fnc-prot.h
+			tag_id3v2_zsync.c
+			tag_id3v2_zrd2.c
+			tag_id3v2-prot.h
+			tag_id3v2_stcs.c
+			tag_id3v2_fldget.c
+			tag_id3v2_zwr-pp.h
+			tag_id3v2_zrd2-pp.h
+			tag_id3v2_ztidy-prot.h
+			tag_id3v2_ztidy.c
+			tag_id3v2_fnc.c
+			tag_id3v2_gs-prot.h
+			tag_id3v2.c
+			tag_id3v2_gs.c
+		PUBLIC FILE_SET HEADERS
+		BASE_DIRS ${PROJECT_SOURCE_DIR}
+		FILES
+			tag_id3v2-priv_flds.h
+	)

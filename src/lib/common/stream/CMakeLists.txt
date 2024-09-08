@@ -1,0 +1,16 @@
+target_sources(santagger_lib
+		PRIVATE
+			streamwr-priv.h
+			streamwr.c
+			streamrd.c
+			stream_crcs-prot.h
+			stream_stcs.c
+			stream-prot.h
+			streamrd-prot.h
+			stream_stcs-prot.h
+			stream_crcs.c
+			streamrd-priv.h
+		PUBLIC FILE_SET HEADERS
+		BASE_DIRS ${PROJECT_SOURCE_DIR}
+		FILES
+	)

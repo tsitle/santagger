@@ -1,0 +1,18 @@
+target_sources(santagger_lib
+		PRIVATE
+			aud_mpeg1_gs.c
+			aud_mpeg1_zfdeb-prot.h
+			aud_mpeg1_zrd-prot.h
+			aud_mpeg1_stcs.c
+			aud_mpeg1-prot.h
+			aud_mpeg1.c
+			aud_mpeg1_zrd2.c
+			aud_mpeg1_opts.c
+			aud_mpeg1_stcs-prot.h
+			aud_mpeg1_zrd2-pp.h
+			aud_mpeg1_zfdeb.c
+			aud_mpeg1_zrd.c
+		PUBLIC FILE_SET HEADERS
+		BASE_DIRS ${PROJECT_SOURCE_DIR}
+		FILES
+	)

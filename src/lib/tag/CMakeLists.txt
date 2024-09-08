@@ -1,0 +1,31 @@
+target_sources(santagger_lib
+		PRIVATE
+			tag_fldmap_zid-priv.h
+			tag_id3_helper.c
+			tag_zfdeb-prot.h
+			tag_fldmap.c
+			tag_conv-priv.h
+			tag_comfnc_chk-pp.h
+			tag_fldmap_zid-prot.h
+			tag_comfnc.c
+			tag_conv.c
+			tag_fldmap_gs.c
+			tag_basics.c
+			tag_fldmap_zid.c
+			tag_zfdeb.c
+			tag_fldmap_stcs.c
+			tag_fldmap-prot.h
+			tag_basics-prot.h
+			tag_comfnc-prot.h
+			tag_comfnc_chk.c
+			tag_id3_helper-prot.h
+		PUBLIC FILE_SET HEADERS
+		BASE_DIRS ${PROJECT_SOURCE_DIR}
+		FILES
+	)
+
+add_subdirectory("vorbc")
+add_subdirectory("id3v2")
+add_subdirectory("meta")
+add_subdirectory("apev2")
+add_subdirectory("id3v1")

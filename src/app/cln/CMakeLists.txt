@@ -1,0 +1,22 @@
+target_sources(santagger_app
+		PRIVATE
+			cln_af.c
+			cln_fnc-prot.h
+			cln_af-prot.h
+			cln_fnc.c
+			cln_pargs.c
+			cln_hndarg.c
+			cln_setdefs.c
+			cln_hndhelp-pp.h
+			cln_setdefs-prot.h
+			cln_hndarg-pp.h
+			cln_hndhelp_fnc.c
+			cln_hndhelp_fnc-prot.h
+			cln_stcs-prot.h
+			cln_hndhelp.c
+			cln-prot.h
+			cln_psvt.c
+			cln_pargs-pp.h
+			cln_stcs.c
+			cln_psvt-pp.h
+	)
