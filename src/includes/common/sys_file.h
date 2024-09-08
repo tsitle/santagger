@@ -45,6 +45,9 @@ st_sysUnlinkFile(const Tst_str *pFilename);
 ST_EXPORT Tst_bool
 st_sysRenameFile(const Tst_str *pSrc, const Tst_str *pDst);
 
+ST_EXPORT Tst_bool
+st_sysCreateDir(const Tst_str *pDir, const Tst_sys_setFilePerm perms);
+
 /*** */
 ST_EXPORT Tst_bool
 st_sysFileBasename(const Tst_str *pFilen, Tst_str **ppFBn);
@@ -65,6 +68,9 @@ ST_EXPORT Tst_bool
 st_sysGetTmpFilename(Tst_str *pTmpFn,
                      const Tst_uint32 tmpFnMaxSz,
                      const Tst_bool inCurrentDir);
+
+ST_EXPORT Tst_bool
+st_sysGetTmpFilenameInDir(const Tst_str *pDirn, Tst_str **ppTmpFn);
 
 /*** */
 ST_EXPORT Tst_fsize

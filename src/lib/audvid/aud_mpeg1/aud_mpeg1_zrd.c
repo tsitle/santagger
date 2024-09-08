@@ -91,6 +91,11 @@ st_mpeg1_rd_findAndReadNextFrHd(Tst_mpeg1_obj_intn *pMOI,
 	pFar->couldFindNxFra = ST_B_TRUE;
 	pFar->frOffs         = st_streamrd_getCurPos(pMOI->pStrrd);
 
+	/**if (ST_AVFDEB_ISVERBAUD_BD(pMOI->opts.basOpts))
+		st_mpeg1_d_deb(&pMOI->opts, cFNCN,
+				"searching for next frame at "ST_TFOFFS_PRF_LD,
+				(Tst_foffs)pFar->frOffs);**/
+
 	while (rfhRes == ST_ERR_SUCC) {
 		/* read and parse MPEG frameheader */
 		rfhRes = st_mpeg1_rd2_readFrHd(pMOI, pFar);
@@ -184,6 +189,10 @@ st_mpeg1_rd_findAndReadNextFrHd(Tst_mpeg1_obj_intn *pMOI,
 
 	if (res == ST_ERR_SUCC && pFar->couldFindNxFra) {
 		pMFHnew->isOffsOK = (pFar->frOffsDelta == 0);
+		/**if (ST_AVFDEB_ISVERBAUD_BD(pMOI->opts.basOpts))
+			st_mpeg1_d_deb(&pMOI->opts, cFNCN,
+					"found next frame at "ST_TFOFFS_PRF_LD,
+					(Tst_foffs)(pFar->frOffs + pFar->frOffsDelta));**/
 	} else
 		--pMOI->frames.cnt;
 

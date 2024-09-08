@@ -70,6 +70,15 @@ st_contWav_opts_setOutputDir(Tst_contWav_obj *pWObj, const Tst_str *pOutpdir)
 				&((Tst_contWav_obj_intn*)pWObj->pObInternal)->opts.pOutpdir);
 }
 
+void
+st_contWav_opts_setOverwriteExistingOutputFiles(Tst_contWav_obj *pWObj,
+		const Tst_bool owExFiles)
+{
+	ST_ASSERTN_VOID(pWObj == NULL || pWObj->pObInternal == NULL)
+
+	((Tst_contWav_obj_intn*)pWObj->pObInternal)->opts.owExFiles = owExFiles;
+}
+
 /*----------------------------------------------------------------------------*/
 
 void

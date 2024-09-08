@@ -111,7 +111,8 @@ ST_BEGIN_C_DECLS
 	Tst_err ast_cln_hnd_o_pic_fn(Tast_cln_a *pCmdln);
 	Tst_err ast_cln_hnd_o_geo_fn(Tast_cln_a *pCmdln);
 	/*** */
-	Tst_err ast_cln_hnd_o_outdir(Tast_cln_a *pCmdln);
+	Tst_err ast_cln_hnd_o_od(Tast_cln_a *pCmdln);
+	Tst_err ast_cln_hnd_o_ow(Tast_cln_a *pCmdln);
 #endif  /* protected */
 
 

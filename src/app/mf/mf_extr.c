@@ -111,9 +111,12 @@ AST_MF__extr_extrTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 	Tst_err    res   = ST_ERR_SUCC;
 	Tst_bool   fnd;
 	Tst_uint32 bsIx  = 0,
-	           bsSIx = 0;
+	           bsSIx = 0,
+	           x,
+	           tagNr,
+	           tagCnt;
 	char const **ppTagD;
-	Tst_uint32 x;
+	char       fext1[16];
 	Tst_tagMeta_mt        *pMT;
 	Tst_tagBasics const   *pTBasOrg;
 	Tst_vorbc_tag         *pVor;
@@ -122,21 +125,40 @@ AST_MF__extr_extrTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 	ST_ASSERTN_IARG(pCmdln == NULL || pMF == NULL)
 
 	for (x = 0; x < cMTTPS_N; x++) {
-		pMT    = NULL;
 		ppTagD = st_tagMeta_fnc_getTagDesc(cMTTPS[x]);
 		fnd    = ST_B_FALSE;
 		tlix   = ast_mf_fnc_getSrcTLIXfromMTTP(cMTTPS[x]);
 		if (! pCmdln->opts.lstExtrTag[tlix])
 			continue;
+		/* count tags of current type */
+		pMT    = NULL;
+		tagNr  = 0;
+		tagCnt = 0;
 		while ((pMT = st_tagMeta_ite_nextTag_byTypeOrg(
 					&pMF->tagArr, cMTTPS[x], pMT)) != NULL) {
 			pTBasOrg = st_tagMeta_gs_getTag_tbasOrg(pMT);
 			if (pTBasOrg == NULL || ! st_tagBas_gs_getHasTag(pTBasOrg) ||
 					st_tagMeta_gs_getTag_type(pMT) != cMTTPS[x])
 				continue;
+			++tagCnt;
+		}
+		pMT = NULL;
+		/* */
+		while ((pMT = st_tagMeta_ite_nextTag_byTypeOrg(
+					&pMF->tagArr, cMTTPS[x], pMT)) != NULL) {
+			pTBasOrg = st_tagMeta_gs_getTag_tbasOrg(pMT);
+			if (pTBasOrg == NULL || ! st_tagBas_gs_getHasTag(pTBasOrg) ||
+					st_tagMeta_gs_getTag_type(pMT) != cMTTPS[x])
+				continue;
+			++tagNr;
+			if (tagCnt > 1)
+				sprintf(fext1, "%s_%02u", ppTagD[1], tagNr);
+			else
+				sprintf(fext1, "%s", ppTagD[1]);
+
 			if (cMTTPS[x] != ST_MTAG_TTP_VOR) {
 				res = AST_MF__extr_extrTag_sub(pCmdln,
-						&pMF->fstc, ppTagD[0], ppTagD[1],
+						&pMF->fstc, ppTagD[0], /*pFnExt:*/fext1,
 						st_tagBas_gs_getOffset(pTBasOrg),
 						st_tagBas_gs_getSize(pTBasOrg),
 						NULL, 0, 0);
@@ -147,7 +169,7 @@ AST_MF__extr_extrTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 				st_tagMeta_gs_getTag_bsIx(pMT, &bsIx, &bsSIx);
 				/* */
 				res = AST_MF__extr_extrTag_sub(pCmdln,
-						&pMF->fstc, ppTagD[0], ppTagD[1],
+						&pMF->fstc, ppTagD[0], /*pFnExt:*/fext1,
 						0, st_vorbc_gs_getRawTagSize(pVor),
 						pVor, bsIx, bsSIx);
 			}
@@ -174,18 +196,31 @@ AST_MF__extr_extrOther(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 	Tst_err    res    = ST_ERR_SUCC;
 	Tst_bool   fndOne = ST_B_FALSE;
 	char const *pTagD;
+	Tst_uint32 tagNr  = 0,
+	           tagCnt = 0;
 	Tst_tagMeta_mt      *pMT = NULL;
 	Tst_tagBasics const *pTBasOrg;
 	Tst_id3v2_tag       *pIv2;
 
 	ST_ASSERTN_IARG(pCmdln == NULL || pMF == NULL)
 
+	/* count (converted) IV2 tags */
+	while ((pMT = st_tagMeta_ite_nextTag_byType(
+				&pMF->tagArr, ST_MTAG_TTP_IV2, pMT)) != NULL) {
+		pTBasOrg = st_tagMeta_gs_getTag_tbasOrg(pMT);
+		if (pTBasOrg == NULL || ! st_tagBas_gs_getHasTag(pTBasOrg))
+			continue;
+		++tagCnt;
+	}
+	pMT = NULL;
+	/* */
 	while ((pMT = st_tagMeta_ite_nextTag_byType(
 				&pMF->tagArr, ST_MTAG_TTP_IV2, pMT)) != NULL) {
 		pTBasOrg = st_tagMeta_gs_getTag_tbasOrg(pMT);
 		if (pTBasOrg == NULL || ! st_tagBas_gs_getHasTag(pTBasOrg))
 			continue;
 		pTagD = st_tagMeta_fnc_getTagDesc(st_tagMeta_gs_getTag_typeOrg(pMT))[0];
+		++tagNr;
 		/* */
 		pIv2   = st_tagMeta_gs_getRealTag_iv2(pMT);
 		fndOne = ST_B_TRUE;
@@ -197,7 +232,7 @@ AST_MF__extr_extrOther(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 					st_sysFStc_getFilen(&pMF->fstc), pTagD, "Pic",
 					pCmdln->opts.extrPicAll, pCmdln->opts.pLstExtrPic,
 					ST_ID3V2_FID_NONE, ST_ID3V2_FTP_PIC,
-					pIv2);
+					pIv2, (tagCnt > 1 ? tagNr : 0));
 			if (res != ST_ERR_SUCC)
 				break;
 		}
@@ -208,7 +243,7 @@ AST_MF__extr_extrOther(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 					st_sysFStc_getFilen(&pMF->fstc), pTagD, "GEO",
 					pCmdln->opts.extrGeoAll, pCmdln->opts.pLstExtrGeo,
 					ST_ID3V2_FID_NONE, ST_ID3V2_FTP_GEO,
-					pIv2);
+					pIv2, (tagCnt > 1 ? tagNr : 0));
 			if (res != ST_ERR_SUCC)
 				break;
 		}
@@ -219,7 +254,7 @@ AST_MF__extr_extrOther(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 					st_sysFStc_getFilen(&pMF->fstc), pTagD, "BinData",
 					ST_B_TRUE, NULL,
 					ST_ID3V2_FID_NONE, ST_ID3V2_FTP_NONE,
-					pIv2);
+					pIv2, (tagCnt > 1 ? tagNr : 0));
 			if (res != ST_ERR_SUCC)
 				break;
 		}
@@ -266,6 +301,7 @@ AST_MF__extr_extrTag_sub(const Tast_cln_a *pCmdln,
 				vorBsIx : 0),
 			(pVor != NULL && st_vorbc_gs_getTag_wasEmbedded(pVor) ?
 				(vorBsIx == 0 ? 0 : (vorBsSIx == 0 ? 1 : vorBsSIx)) : 0),
+			pCmdln->opts.pOutpdir, pCmdln->opts.owExFiles,
 			&pOutFn);
 	if (res != ST_ERR_SUCC)
 		return res;
@@ -279,6 +315,16 @@ AST_MF__extr_extrTag_sub(const Tast_cln_a *pCmdln,
 			return res;
 		}
 		if (! pCmdln->opts.basOpts.pretWr) {
+			if (pCmdln->opts.owExFiles && st_sysDoesFileExist(pOutFn)) {
+				/* remove existing file */
+				if (! st_sysUnlinkFile(pOutFn)) {
+					ast_mf_op_d_fileErr(pInFn, cFNCN,
+							"can't delete output-file '%s'", pOutFn);
+					ST_DELPOINT(pOutFn)
+					st_sys_stc_freeFStc(&fstcOut);
+					return ST_ERR_FAIL;
+				}
+			}
 			st_sysFStc_setFilen(&fstcOut, pOutFn);
 			res = st_sysFStc_openNew(&fstcOut);
 			if (res != ST_ERR_SUCC) {
@@ -395,9 +441,9 @@ AST_MF__extr_isIndexInLst(const Tst_uint32 ix,
 static Tst_err
 AST_MF__extr_extrOther_sub(const Tast_cln_a *pCmdln,
 		const Tst_str *pFnIn, const char *pTDesc, const char *pDDesc,
-		const Tst_bool extrAll, const Tst_uint32 *pIxArr,
+		const Tst_bool extrAll, ST_OPTARG(const Tst_uint32 *pIxArr),
 		const Tst_id3v2_frID fldID, const Tst_id3v2_frTp fldType,
-		Tst_id3v2_tag *pTag)
+		Tst_id3v2_tag *pTag, const Tst_uint32 tagNr)
 {
 	const char *cFNCN = __FUNCTION__;
 	Tst_err       res     = ST_ERR_SUCC;
@@ -416,8 +462,7 @@ AST_MF__extr_extrOther_sub(const Tast_cln_a *pCmdln,
 	Tst_id3v2_fldd_dattp itFldDatTp;
 
 	ST_ASSERTN_IARG(pCmdln == NULL ||
-			pFnIn == NULL || pTDesc == NULL || pDDesc == NULL ||
-			pIxArr == NULL || pTag == NULL)
+			pFnIn == NULL || pTDesc == NULL || pDDesc == NULL || pTag == NULL)
 
 	switch (fldType) {
 	case ST_ID3V2_FTP_PIC:
@@ -463,16 +508,28 @@ AST_MF__extr_extrOther_sub(const Tast_cln_a *pCmdln,
 		case ST_ID3V2_FTP_GEO:
 			fext1[0] = 0x00;
 			if (fldType == ST_ID3V2_FTP_PIC) {
-				sprintf((char*)fext1, "apic-%02u-pt_%02u",
-						itFldNr,
-						st_id3v2_gs_getFieldAttr_picType(pItFld));
+				if (tagNr > 0)
+					sprintf((char*)fext1, "t%02u-apic_%02u", tagNr, itFldNr);
+				else
+					sprintf((char*)fext1, "apic_%02u", itFldNr);
 				pFExtTmp = (char*)st_utilsFmt_getPicFmt_fext_byEnum(
 						st_id3v2_gs_getFieldAttr_picFmt(pItFld));
 				if (pFExtTmp == NULL)
 					pFExtTmp = "xxx";
 			} else {
-				sprintf((char*)fext1, "geob-%02u", itFldNr);
-				pFExtTmp = "bin";
+				Tst_str const *pGeoMim;
+
+				if (tagNr > 0)
+					sprintf((char*)fext1, "t%02u-geob_%02u", tagNr, itFldNr);
+				else
+					sprintf((char*)fext1, "geob_%02u", itFldNr);
+				pGeoMim = st_id3v2_gs_getFieldAttr_geobMime(pItFld);
+				if (pGeoMim != NULL)
+					pFExtTmp = (char const*)st_utilsFmt_getMime_defFExt_byMime(pGeoMim);
+				else
+					pFExtTmp = NULL;
+				if (pFExtTmp == NULL)
+					pFExtTmp = "bin";
 			}
 			/* */
 			strcpy((char*)fext2, pFExtTmp);
@@ -487,8 +544,12 @@ AST_MF__extr_extrOther_sub(const Tast_cln_a *pCmdln,
 			if (itFldType == ST_ID3V2_FTP_PIC || itFldType == ST_ID3V2_FTP_GEO ||
 					itFldType == ST_ID3V2_FTP_CDM)
 				continue;
-			sprintf((char*)fext1, "%s-%02u",
-					(char*)st_id3v2_gs_getFieldProp_idStr(&fldPr), itFldNr);
+			if (tagNr > 0)
+				sprintf((char*)fext1, "t%02u-%s_%02u",
+						tagNr, (char*)st_id3v2_gs_getFieldProp_idStr(&fldPr), itFldNr);
+			else
+				sprintf((char*)fext1, "%s_%02u",
+						(char*)st_id3v2_gs_getFieldProp_idStr(&fldPr), itFldNr);
 			st_sysStrToLower(fext1);
 			while ((pCh = (Tst_str*)strrchr((char*)fext1, ' ')) != NULL)
 				*pCh = '_';
@@ -499,16 +560,27 @@ AST_MF__extr_extrOther_sub(const Tast_cln_a *pCmdln,
 		res = ast_mf_fnc_createOutFn(pFnIn,
 				fext1, fext2,
 				0, 0,
+				pCmdln->opts.pOutpdir, pCmdln->opts.owExFiles,
 				&pOutFn);
 		if (res != ST_ERR_SUCC)
 			return res;
 
 		/* write bin data to file */
 		if (! pCmdln->opts.basOpts.pretWr) {
-			res = st_id3v2_gs_getFieldData_binToFile(pItFld, pOutFn);
-			if (res != ST_ERR_SUCC)
-				ast_mf_op_d_fileErr(pFnIn, cFNCN,
-						"copying binary data to file failed");
+			if (pCmdln->opts.owExFiles && st_sysDoesFileExist(pOutFn)) {
+				/* remove existing file */
+				if (! st_sysUnlinkFile(pOutFn)) {
+					ast_mf_op_d_fileErr(pFnIn, cFNCN,
+							"can't delete output-file '%s'", pOutFn);
+					res = ST_ERR_FAIL;
+				}
+			}
+			if (res == ST_ERR_SUCC) {
+				res = st_id3v2_gs_getFieldData_binToFile(pItFld, pOutFn);
+				if (res != ST_ERR_SUCC)
+					ast_mf_op_d_fileErr(pFnIn, cFNCN,
+							"copying binary data to file failed");
+			}
 		}
 
 		/* */

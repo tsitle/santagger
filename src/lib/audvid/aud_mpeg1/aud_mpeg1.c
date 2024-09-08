@@ -272,8 +272,9 @@ ST_MPEG1__readFrame(Tst_mpeg1_obj_intn *pMOI, const char *pFnc,
 		Tst_mpeg1_decoder *pDecObj, Tst_mpeg1_farnfh *pNFI,
 		Tst_uint32 **ppBrCnt)
 {
-	Tst_err res;
+	Tst_err    res;
 	Tst_uint32 toRdOrSkip;
+	Tst_bool   abortAnyway = ST_B_FALSE;
 
 	/* save frame's offset */
 	/** save first frame's offset */
@@ -356,6 +357,62 @@ ST_MPEG1__readFrame(Tst_mpeg1_obj_intn *pMOI, const char *pFnc,
 	 *   (currently we're behind the frameheader,
 	 *    frameSz includes ST_MPEG1_FR_HD_SZ)  */
 	toRdOrSkip = (Tst_uint32)(pNFI->mfhNew.frameSz - ST_MPEG1_FR_HD_SZ);
+	if (toRdOrSkip > 32 &&
+			((pMOI->mhdVbr.vbrHdType != ST_MPEG1_VBRTYP_NONE &&
+					pMOI->frames.cnt >= pMOI->mhdVbr.aFraCnt) ||
+				(pMOI->mhdVbr.vbrHdType == ST_MPEG1_VBRTYP_NONE))) {
+		Tst_buf    tmpLastBuf[ST_MPEG1_FR_SZ_MAX];
+		Tst_uint32 tmpLastRd = 0;
+
+		ST_ASSERTN_NUM(ST_ERR_FAIL, toRdOrSkip > sizeof(tmpLastBuf))
+
+		/* sometimes the last frame is supposed to also contain
+		 *   the ID3v1 tag, to avoid skipping it here,
+		 *   we check if that's the case and then correct some values  */
+
+		/**if (ST_AVFDEB_ISVERBAUD_BD(pMOI->opts.basOpts)) {
+			if (pMOI->mhdVbr.vbrHdType != ST_MPEG1_VBRTYP_NONE)
+				st_mpeg1_d_deb(&pMOI->opts, pFnc, "checking last frame for IV1");
+			else
+				st_mpeg1_d_deb(&pMOI->opts, pFnc, "checking frame for IV1");
+		}**/
+		res = st_streamrd_rdAheadBuffer(pMOI->pStrrd,
+					(toRdOrSkip <= sizeof(tmpLastBuf) ? toRdOrSkip : sizeof(tmpLastBuf)),
+					tmpLastBuf, &tmpLastRd);
+		/* check for ID3v1 */
+		if (res == ST_ERR_SUCC && tmpLastRd >= 128 && tmpLastRd == toRdOrSkip) {
+			if (memcmp(&tmpLastBuf[tmpLastRd - 128], "TAG", 3) == 0) {
+				if (ST_AVFDEB_ISVERBAUD_OR_ANA_D(pMOI->opts))
+					st_mpeg1_d_debOrAna(&pMOI->opts, ST_B_FALSE, pFnc,
+							"last frame includes ID3v1 tag");
+				toRdOrSkip -= 128;
+			}
+		} else if (res == ST_ERR_SUCC && tmpLastRd + 128 == toRdOrSkip) {
+			/* seems like ID3v1 tag was originally included in last frame
+			 *   but is now missing  */
+			if (ST_AVFDEB_ISVERBAUD_OR_ANA_D(pMOI->opts))
+				st_mpeg1_d_debOrAna(&pMOI->opts, ST_B_FALSE, pFnc,
+						"last frame probably should've contained a ID3v1 tag, "
+						"but it doesn't");
+			toRdOrSkip -= 128;
+		} else if (res == ST_ERR_SUCC && tmpLastRd >= 128) {
+			if (memcmp(&tmpLastBuf[tmpLastRd - 128], "TAG", 3) == 0) {
+				if (ST_AVFDEB_ISVERBAUD_OR_ANA_D(pMOI->opts))
+					st_mpeg1_d_debOrAna(&pMOI->opts, ST_B_FALSE, pFnc,
+							"last frame is incomplete but includes ID3v1 tag");
+				toRdOrSkip  = tmpLastRd - 128;
+				abortAnyway = ST_B_TRUE;
+			}
+		}
+		/* check for Lame version */
+		/**{
+			TODO
+			st_mpeg1_prf("Frame:\n");
+			st_mpeg1_prBuf(tmpLastBuf, tmpLastRd);
+			st_mpeg1_prf("\n");
+		}**/
+		res = ST_ERR_SUCC;  /* ignore any error here */
+	}
 	if (decToPCM && ! *pWasLastVBRhd) {
 		if (pNFI->mfhNew.frameSz > pDecObj->bufInSz) {
 			res = st_mpeg1_stc_reszDecBufInp(pDecObj, pNFI->mfhNew.frameSz);
@@ -372,14 +429,14 @@ ST_MPEG1__readFrame(Tst_mpeg1_obj_intn *pMOI, const char *pFnc,
 	} else {
 		res = st_streamrd_rdSkipBytes(pMOI->pStrrd, toRdOrSkip, ST_B_TRUE);
 	}
-	if (res != ST_ERR_SUCC) {
+	if (res != ST_ERR_SUCC || abortAnyway) {
 		if (res == ST_ERR_FEOF) {
 			res = ST_ERR_ABRT;
 			/* */
 			pMOI->frames.errIsStrIncompl = ST_B_TRUE;
-		} else
+		} else if (! abortAnyway)
 			st_mpeg1_d_err(&pMOI->opts, pFnc, pMOI->pFilen,
-					"skipping input bytes failed");
+					"reading input bytes failed");
 		return res;
 	}
 

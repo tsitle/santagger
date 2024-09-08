@@ -62,10 +62,12 @@ ST_BEGIN_C_DECLS
 	/** */
 	Tst_err
 	ast_mf_fnc_createOutFn(const Tst_str *pFnIn,
-	                       const Tst_str *pFnExt1,
-	                       const Tst_str *pFnExt2,
+	                       ST_OPTARG(const Tst_str *pFnExt1),
+	                       ST_OPTARG(const Tst_str *pFnExt2),
 	                       const Tst_uint32 bsIx,
 	                       const Tst_uint32 bsSIx,
+	                       ST_OPTARG(const Tst_str *pOutpdir),
+	                       const Tst_bool owExFiles,
 	                       Tst_str **ppFnOut);
 #endif  /* protected */
 

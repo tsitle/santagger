@@ -111,6 +111,7 @@ ST_BEGIN_C_DECLS
 			{AST_CLN_OPT_GEO_FN_LO,    required_argument, NULL, 0},
 			/** */
 			{AST_CLN_OPT_OUTDIR_LO,    required_argument, NULL, 0},
+			{AST_CLN_OPT_OWEXF_LO,     no_argument,       NULL, 0},
 			/** */
 			{NULL, 0, NULL, 0} };
 

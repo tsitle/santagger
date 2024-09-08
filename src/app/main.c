@@ -58,7 +58,7 @@
 #include "mf/mf_read-pp.h"
 #include "mf/mf_extr-pp.h"
 #include "mf/mf_show-pp.h"
-//#include "mf/mf_fnc-pp.h"
+#include "mf/mf_fnc-pp.h"
 #include "mf/mf_outp-pp.h"
 #include "mf/mf_stcs-pp.h"
 /*** */
@@ -140,14 +140,15 @@ main(int argc, char *argv[])
 							! cmdln.opts.quiet) \
 						ast_mf_op_prMsg("\n"); \
 					}
-	int        resA       = 0;  /* succ */
-	Tst_err    resF       = ST_ERR_SUCC;
-	Tst_str    *pAppFn    = NULL;
-	Tst_uint32 fcnt       = 0,
+	int        resA        = 0;  /* succ */
+	Tst_err    resF        = ST_ERR_SUCC;
+	Tst_str    *pAppFn     = NULL;
+	Tst_uint32 fcnt        = 0,
 	           x,
-	           parbeg     = 0;
-	Tst_bool   wasCreated = ST_B_FALSE;
-	Tst_fsize  fsz        = 0;
+	           parbeg      = 0;
+	Tst_bool   wasFCreated = ST_B_FALSE,
+	           wasDCreated = ST_B_FALSE;
+	Tst_fsize  fsz         = 0;
 	char const *pLocaleStr;
 	Tast_cln_a    cmdln;
 	Tast_mf_finfo mf;
@@ -246,6 +247,21 @@ main(int argc, char *argv[])
 		ast_mf_op_d_mainErrApp(pAppFn,
 				"Notice: Locale is not UTF-8, but --disp-u8 was used");
 
+	/* create output directory */
+	if (! st_sysStrEmpty(cmdln.opts.pOutpdir) &&
+			! st_sysDoesDirExist(cmdln.opts.pOutpdir)) {
+		if (! st_sysCreateDir(cmdln.opts.pOutpdir, ST_SYS_FILEPERM_DEF)) {
+			ast_mf_op_d_mainErrApp(pAppFn,
+					"couldn't create output dir \"%s\"", cmdln.opts.pOutpdir);
+			ast_cln_stc_freeCln(&cmdln);
+			ST_DELPOINT(pAppFn)
+			exit(1);  /* error */
+		}
+		if (cmdln.opts.basOpts.verb != 0)
+			ast_mf_op_d_mainDeb("created output dir \"%s\"", cmdln.opts.pOutpdir);
+		wasDCreated = ST_B_TRUE;
+	}
+
 	/* init main object */
 	resF = ast_mf_stc_initMF(&mf);
 	if (resF != ST_ERR_SUCC) {
@@ -258,7 +274,6 @@ main(int argc, char *argv[])
 
 	/* initialize pseudo-random-number-generator */
 	st_sysInitRand(0);
-	/**sysTestRandDbl(); exit(0); **/
 
 	/* take care of all files given as argument */
 	resF = ST_ERR_SUCC;
@@ -451,7 +466,7 @@ main(int argc, char *argv[])
 		if (cmdln.opts.basOpts.verb != 0)
 			ast_mf_op_d_mainDeb("edit \"%s\"...", mf.pFilen);
 
-		wasCreated = ST_B_FALSE;
+		wasFCreated = ST_B_FALSE;
 		if (st_sysFStc_isOpen(&mf.fstc)) {
 			/* re-open file for reading+writing */
 			resF = st_sysFStc_changeMode(&mf.fstc, ST_B_TRUE);
@@ -471,13 +486,13 @@ main(int argc, char *argv[])
 			if (resF != ST_ERR_SUCC)
 				ast_mf_op_d_mainErrFile(mf.pFilen,
 						"can't create file, res=%d", resF);
-			wasCreated = ST_B_TRUE;
+			wasFCreated = ST_B_TRUE;
 		} else {
 			/* create&open 'virtual' file for writing */
 			resF = st_sysFStc_openNewVirtual(&mf.fstc);
 			if (resF != ST_ERR_SUCC)
 				ast_mf_op_d_mainErrFile(mf.pFilen,
-						"can't create virtul file, res=%d", resF);
+						"can't create virtual file, res=%d", resF);
 		}
 		if (resF != ST_ERR_SUCC)
 			break;
@@ -502,15 +517,15 @@ main(int argc, char *argv[])
 		/* close file */
 		st_sysFStc_close(&mf.fstc);
 		/* remove empty file */
-		if (wasCreated && st_sysGetFileSz_byFn(mf.pFilen, NULL) == 0)
+		if (wasFCreated && st_sysGetFileSz_byFn(mf.pFilen, NULL) == 0)
 			st_sysUnlinkFile(mf.pFilen);
-		wasCreated = ST_B_FALSE;
+		wasFCreated = ST_B_FALSE;
 		/* */
 		LOC_PRNLN_
 	}
 
 	/* remove empty file */
-	if (wasCreated && st_sysFStc_isOpen(&mf.fstc)) {
+	if (wasFCreated && st_sysFStc_isOpen(&mf.fstc)) {
 		st_sysFStc_close(&mf.fstc);
 		if (st_sysGetFileSz_byFn(mf.pFilen, NULL) == 0)
 			st_sysUnlinkFile(mf.pFilen);
@@ -518,6 +533,11 @@ main(int argc, char *argv[])
 	/* close file */
 	if (st_sysFStc_isOpen(&mf.fstc))
 		st_sysFStc_close(&mf.fstc);
+
+	/* if output directory is empty, remove it */
+	if (wasDCreated) {
+		/* TODO */
+	}
 
 	if (resF == ST_ERR_SUCC) {
 		if (fcnt == 0) {

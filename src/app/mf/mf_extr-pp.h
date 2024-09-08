@@ -72,10 +72,11 @@ ST_BEGIN_C_DECLS
 	                           const char *pTDesc,
 	                           const char *pDDesc,
 	                           const Tst_bool extrAll,
-	                           const Tst_uint32 *pIxArr,
+	                           ST_OPTARG(const Tst_uint32 *pIxArr),
 	                           const Tst_id3v2_frID fldID,
 	                           const Tst_id3v2_frTp fldType,
-	                           Tst_id3v2_tag *pTag);
+	                           Tst_id3v2_tag *pTag,
+	                           const Tst_uint32 tagNr);
 #endif  /* private */
 
 

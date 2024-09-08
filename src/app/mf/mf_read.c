@@ -1097,6 +1097,7 @@ AST_MF__rd_initPCMclient(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 				AST_MF__rd_cbPCMnewOutpStr);
 	if (! st_sysStrEmpty(pCmdln->opts.pOutpdir))
 		st_contWav_opts_setOutputDir(*ppWavObj, pCmdln->opts.pOutpdir);
+	st_contWav_opts_setOverwriteExistingOutputFiles(*ppWavObj, pCmdln->opts.owExFiles);
 	st_contWav_opts_setOutputFmt(*ppWavObj,
 			(pCmdln->optsAvMisc.decAudFmt == ST_UTILSFMT_MTP_AUDWAV));
 

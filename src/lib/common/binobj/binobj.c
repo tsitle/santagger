@@ -748,10 +748,11 @@ ST_BINOBJ__createAndOpenFile(Tst_binobj_intn *pBOI)
 	Tst_err res;
 
 	/* create filename */
-	ST_REALLOC(pBOI->pDataTmpFn, Tst_str*, 1024, 1)
+	ST_REALLOC(pBOI->pDataTmpFn, Tst_str*, 512, 1)
 	if (pBOI->pDataTmpFn == NULL)
 		return ST_ERR_OMEM;
-	if (! st_sysGetTmpFilename(pBOI->pDataTmpFn, 1024, ST_B_FALSE))
+	if (! st_sysGetTmpFilename(pBOI->pDataTmpFn,
+				512, /*inCurrentDir:*/ST_B_FALSE))
 		return ST_ERR_FAIL;
 
 	/* create and open file */

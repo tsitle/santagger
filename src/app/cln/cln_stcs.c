@@ -359,8 +359,9 @@ AST_CLN__stc_rsetOpts(Tast_cln_a *pCmd)
 	/* display */
 	AST_CLN__stc_rsetCOD(&pCmd->opts.disp);
 
-	/* output dir */
+	/* output dir etc. */
 	ST_DELPOINT(pCmd->opts.pOutpdir)
+	pCmd->opts.owExFiles = ST_B_FALSE;
 
 	/* taglists remove/extract */
 	ast_cln_stc_rsetT_taglist(pCmd->opts.lstRemTag, ST_B_FALSE);

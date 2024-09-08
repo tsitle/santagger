@@ -114,7 +114,8 @@ st_contWav_wr_prepareWritingCB(void *pWObj,
 
 	/* create nice output filename */
 	res = st_contwav_fnc_createOutpFn(pInputFilen, bsIx, bsSIx, appendBsIx,
-			pWObjI->opts.wrFmtRIFForAIFF, pWObjI->opts.pOutpdir, &pEI->pFilen);
+			pWObjI->opts.wrFmtRIFForAIFF, pWObjI->opts.pOutpdir,
+			pWObjI->opts.owExFiles, &pEI->pFilen);
 	if (res != ST_ERR_SUCC) {
 		st_contWav_d_err(&pWObjI->opts, cFNCN, pInputFilen,
 				"couldn't create output filename for bs#%u.%02u",
@@ -133,6 +134,15 @@ st_contWav_wr_prepareWritingCB(void *pWObj,
 
 	/* create and open file */
 	if (! pWObjI->opts.basOpts.pretWr) {
+		if (pWObjI->opts.owExFiles && st_sysDoesFileExist(pEI->pFilen)) {
+			/* remove existing file */
+			if (! st_sysUnlinkFile(pEI->pFilen)) {
+				st_contWav_d_err(&pWObjI->opts, cFNCN, pInputFilen,
+						"couldn't delete output file for bs#%u.%02u ('%s')",
+						bsIx, bsSIx, pEI->pFilen);
+				return ST_ERR_FAIL;
+			}
+		}
 		res = st_sysFStc_setFilen(&pEI->fstcOut, pEI->pFilen);
 		if (res == ST_ERR_SUCC)
 			res = st_sysFStc_openNew(&pEI->fstcOut);

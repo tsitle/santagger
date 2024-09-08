@@ -186,6 +186,9 @@ ast_cln_fnc_checkForAmbig(const Tst_str *pAppFn, const char *pFnc,
 					(slen < 5 || ! st_sysStrcmpN2(ST_B_TRUE, 5, argv[x], "--exa")))) {
 			/* conflict: --extr-*, --ebs, --examples */
 			isAmb = ST_B_TRUE;
+		} else if ((slen == 3) && st_sysStrcmpN2(ST_B_TRUE, 3, argv[x], "--o")) {
+			/* conflict: --od, --ow */
+			isAmb = ST_B_TRUE;
 		}
 		if (isAmb) {
 			pCmdln->cbErr(pAppFn, pFnc,

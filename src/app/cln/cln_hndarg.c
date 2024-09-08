@@ -1059,15 +1059,23 @@ ast_cln_hnd_o_geo_fn(Tast_cln_a *pCmdln)
 
 /*----------------------------------------------------------------------------*/
 
-/* --outdir <dirn> */
+/* --od <dirn> */
 Tst_err
-ast_cln_hnd_o_outdir(Tast_cln_a *pCmdln)
+ast_cln_hnd_o_od(Tast_cln_a *pCmdln)
 {
 	Tst_err res;
 
 	res = ast_cln_fnc_cpyarg_str(pCmdln, AST_CLN_OPT_OUTDIR_LO,
 			AST_CLN_MAX_ARGLEN, &pCmdln->opts.pOutpdir);
 	return res;
+}
+
+/* --ow */
+Tst_err
+ast_cln_hnd_o_ow(Tast_cln_a *pCmdln)
+{
+	pCmdln->opts.owExFiles = ST_B_TRUE;
+	return ST_ERR_SUCC;
 }
 
 /*----------------------------------------------------------------------------*/

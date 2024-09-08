@@ -229,7 +229,8 @@ ST_BEGIN_C_DECLS
 #	define AST_CLN_OPT_GEO_MI_LO    "geo-mi"
 #	define AST_CLN_OPT_GEO_FN_LO    "geo-fn"
 	/*** */
-#	define AST_CLN_OPT_OUTDIR_LO    "outdir"
+#	define AST_CLN_OPT_OUTDIR_LO    "od"
+#	define AST_CLN_OPT_OWEXF_LO     "ow"
 
 	/** arguments */
 	/*** general arguments */
@@ -433,6 +434,7 @@ ST_BEGIN_C_DECLS
 		Tast_cln_optsDisp  disp;           /* display options */
 		/** */
 		Tst_str            *pOutpdir;      /* output dir for decoded audio, extr. data, ... */
+		Tst_bool           owExFiles;      /* overwrite existing output files ? */
 		/** for parseArgs(): */
 		Tst_bool           paLstTagSwSet;  /* has a list been given at cmdline ? */
 		Tst_bool           paTagSwNone;    /* shall no Tag be shown at all ? */

@@ -69,6 +69,9 @@ ST_EXPORT Tst_err
 st_contWav_opts_setOutputDir(Tst_contWav_obj *pWObj,
                              const Tst_str *pOutpdir);
 
+ST_EXPORT void
+st_contWav_opts_setOverwriteExistingOutputFiles(Tst_contWav_obj *pWObj,
+                                                const Tst_bool owExFiles);
 /*** */
 ST_EXPORT void
 st_contWav_opts_setOutputFmt(Tst_contWav_obj *pWObj,

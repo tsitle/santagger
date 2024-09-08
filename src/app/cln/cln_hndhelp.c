@@ -188,20 +188,20 @@ ast_cln_hhlp_show_c_faddset(Tast_cln_a *pCmdln, const char *pOptCap,
 	pCmdln->cbMsg("  --%s %s:TBPM=200", pOptCap, AST_CLN_ARG_TIV2SH);
 	pCmdln->cbMsg("    same as: --%s %s:TBPM=200", pOptCap, AST_CLN_ARG_TIV2);
 	pCmdln->cbMsg("         or: --%s TBPM=200", pOptCap);
-	pCmdln->cbMsg("  --%s %s:MY_TEMPO_IS=200", pOptCap, AST_CLN_ARG_TVORSH);
-	pCmdln->cbMsg("    same as: --%s %s:MY_TEMPO_IS=200",
+	pCmdln->cbMsg("         or: --%s %s:TEMPO=200", pOptCap, AST_CLN_ARG_TVORSH);
+	pCmdln->cbMsg("  --%s %s:MY_WEIGHT_IS=173", pOptCap, AST_CLN_ARG_TVORSH);
+	pCmdln->cbMsg("    same as: --%s %s:MY_WEIGHT_IS=173",
 			pOptCap, AST_CLN_ARG_TVOR);
 	pCmdln->cbMsg("  --%s \"%s:IS IT RYTHMIC=yes, but not so much\"",
 			pOptCap, AST_CLN_ARG_TAV2SH);
+	pCmdln->cbMsg("  --%s IPLS=\"Producer:Florian; Guitar:Mike; Vocals:Pete\"",
+			pOptCap);
 	if (! addOrSet) {
 		pCmdln->cbMsg("  --%s %s:PRIV=", pOptCap, AST_CLN_ARG_TIV2SH);
 		pCmdln->cbMsg("    same as: --%s PRIV=", pOptCap);
 		pCmdln->cbMsg("         or: --%s PRIV=\"\"", pOptCap);
-		pCmdln->cbMsg("  --%s COMM.2=", pOptCap);
-		pCmdln->cbMsg("  --%s \"%s:LOCATION.1=At the Beach\"",
-				pOptCap, AST_CLN_ARG_TVORSH);
-		pCmdln->cbMsg("  --%s %s:LOCATION.2=Indoor",
-				pOptCap, AST_CLN_ARG_TVORSH);
+		pCmdln->cbMsg("  --%s TXXX.2=", pOptCap);
+		pCmdln->cbMsg("  --%s TXXX.1=\"At the Beach\"", pOptCap);
 	}
 }
 
@@ -917,7 +917,6 @@ AST_CLN__hhlp_c_faddset_posvalsAV2_or_VOR(Tast_cln_a *pCmdln,
 		} else {
 			pCmdln->cbMsg("  --%s %s:DATE=2009-12-31", pOptCap, pTagArg);
 			pCmdln->cbMsg("    same as:--%s %s:date=2009-12-31", pOptCap, pTagArg);
-			pCmdln->cbMsg("  --%s %s:DESCRIPTION.2=", pOptCap, pTagArg);
 		}
 	}
 	st_dynlist_stc_freeDL(&pvlist);

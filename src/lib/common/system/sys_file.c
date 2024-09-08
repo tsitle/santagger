@@ -32,7 +32,8 @@
 // System-Includes
 */
 #include <stdlib.h>      /* calloc() */
-#include <sys/stat.h>    /* stat() */
+#include <sys/stat.h>    /* stat(), mkdir(), ... */
+//#include <sys/types.h>   /* mode_t, ... */
 #include <fcntl.h>       /* open(), O_WRONLY, ... */
 #include <unistd.h>      /* unlink(),readlink(),rename() */
 #include <string.h>      /* memcpy() */
@@ -55,6 +56,13 @@ typedef struct {
 
 /*----------------------------------------------------------------------------*/
 
+static Tst_bool
+ST_SYSFILE__concatDirAndFilen(const Tst_str *pDirn, const Tst_str *pFilen,
+                              Tst_str *pFullPath, const Tst_uint32 fpSz);
+static Tst_bool
+ST_SYSFILE__getTmpFilename(const Tst_bool inCurDir, const Tst_bool inSpecDir,
+                           ST_OPTARG(const Tst_str *pInDir_Dirn),
+                           Tst_str *pTmpFn, const Tst_uint32 tmpFnMaxSz);
 static Tst_err
 ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, const Tst_bool exOrNew,
                      const Tst_bool allowSymAndHardLinks,
@@ -189,6 +197,36 @@ st_sysRenameFile(const Tst_str *pSrc, const Tst_str *pDst)
 	return ((st_sysDoesFileExist(pSrc) || st_sysDoesDirExist(pSrc)) &&
 			(! (st_sysDoesFileExist(pDst) || st_sysDoesDirExist(pDst))) &&
 			rename((const char*)pSrc, (const char*)pDst) == 0);
+}
+
+/*
+ * Create a directory
+ *
+ * returns: true on success
+ */
+Tst_bool
+st_sysCreateDir(const Tst_str *pDir, const Tst_sys_setFilePerm perms)
+{
+#	define LOC_MAP_(mac_myPerm, mac_sysPerm)  { \
+				if ((perms & (ST_SYS_SETPERM_##mac_myPerm)) != 0) ndMode |= (S_I##mac_sysPerm); }
+	mode_t ndMode = 0;
+
+	if (perms != ST_SYS_SETPERM_NONE) {
+		LOC_MAP_(OTHX, XOTH)
+		LOC_MAP_(OTHW, WOTH)
+		LOC_MAP_(OTHR, ROTH)
+		LOC_MAP_(GRPX, XGRP)
+		LOC_MAP_(GRPW, WGRP)
+		LOC_MAP_(GRPR, RGRP)
+		LOC_MAP_(USRX, XUSR)
+		LOC_MAP_(USRW, WUSR)
+		LOC_MAP_(USRR, RUSR)
+		LOC_MAP_(SVTX, SVTX)
+		LOC_MAP_(SGID, SGID)
+		LOC_MAP_(SUID, SUID)
+	}
+	return (mkdir((const char*)pDir, ndMode) == 0);
+#	undef LOC_MAP_
 }
 
 /*----------------------------------------------------------------------------*/
@@ -340,42 +378,16 @@ Tst_bool
 st_sysConcatDirAndFilen(const Tst_str *pDirn, const Tst_str *pFilen,
 		Tst_str **ppFullPath)
 {
-	Tst_uint32    lenD,
-	              lenF;
-	Tst_str       *pFBn = NULL;
-	Tst_str const *pIntFilen;
+	Tst_uint32 fpSz;
 
 	ST_ASSERTN_BOOL(ST_B_FALSE, pDirn == NULL || pFilen == NULL ||
 				ppFullPath == NULL)
 
-	lenD = st_sysStrlen(pDirn);
-	lenF = st_sysStrlen(pFilen);
-	if (lenF > 0 && strrchr((const char*)pFilen, '/') != NULL) {
-		if (! st_sysFileBasename(pFilen, &pFBn))
-			return ST_B_FALSE;
-		pIntFilen = pFBn;
-		lenF      = st_sysStrlen(pFBn);
-	} else
-		pIntFilen = pFilen;
-
-	ST_REALLOC(*ppFullPath, Tst_str*, lenD + lenF + 2, 1)
+	fpSz = st_sysStrlen(pDirn) + 2 + st_sysStrlen(pFilen) + 1;
+	ST_REALLOC(*ppFullPath, Tst_str*, fpSz, 1)
 	if (*ppFullPath == NULL)
 		return ST_B_FALSE;
-
-	if (lenD > 0) {
-		memcpy(*ppFullPath, pDirn, lenD);
-		if (pDirn[lenD - 1] != '/')
-			(*ppFullPath)[lenD++] = '/';
-	} else {
-		(*ppFullPath)[lenD++] = '.';
-		(*ppFullPath)[lenD++] = '/';
-	}
-	if (lenF > 0)
-		memcpy(&(*ppFullPath)[lenD], pIntFilen, lenF);
-	(*ppFullPath)[lenD + lenF] = 0x00;
-
-	ST_DELPOINT(pFBn)
-	return ST_B_TRUE;
+	return ST_SYSFILE__concatDirAndFilen(pDirn, pFilen, *ppFullPath, fpSz);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -384,7 +396,7 @@ st_sysConcatDirAndFilen(const Tst_str *pDirn, const Tst_str *pFilen,
  * Create a temporary filename
  *
  * pTmpFn       MUST be != NULL and at least tmpFnMaxSz bytes big
- * tmpFnMaxSz   MUST be > 25
+ * tmpFnMaxSz   MUST be >= 32
  *
  * returns: true on success
  *          pTmpFn will contain temporary filename
@@ -393,31 +405,25 @@ Tst_bool
 st_sysGetTmpFilename(Tst_str *pTmpFn, const Tst_uint32 tmpFnMaxSz,
 		const Tst_bool inCurrentDir)
 {
-	const Tst_uint32 cMAXTRIES = 1000;
-	Tst_uint32 cnt = 0;
-	Tst_bool   ex  = ST_B_TRUE;
+	ST_ASSERTN_BOOL(ST_B_FALSE, pTmpFn == NULL || tmpFnMaxSz < 32)
 
-	ST_ASSERTN_BOOL(ST_B_FALSE, pTmpFn == NULL)
-	if (tmpFnMaxSz <= L_tmpnam)
+	return ST_SYSFILE__getTmpFilename(inCurrentDir, /*inSpecDir:*/ST_B_FALSE,
+				/*pInDir_Dirn:*/NULL, pTmpFn, tmpFnMaxSz);
+}
+
+Tst_bool
+st_sysGetTmpFilenameInDir(const Tst_str *pDirn, Tst_str **ppTmpFn)
+{
+	Tst_uint32 tmpFnMaxSz;
+
+	ST_ASSERTN_BOOL(ST_B_FALSE, pDirn == NULL || ppTmpFn == NULL)
+
+	tmpFnMaxSz = st_sysStrlen(pDirn) + 8 + 256;
+	ST_REALLOC(*ppTmpFn, Tst_str*, tmpFnMaxSz, 1)
+	if (*ppTmpFn == NULL)
 		return ST_B_FALSE;
-
-	if (inCurrentDir) {
-		do {
-			snprintf((char*)pTmpFn, tmpFnMaxSz,
-					"./tmpfile.%03u.%03u.%03u.tmp",
-					st_sysGetRand(0, 999),
-					st_sysGetRand(0, 999),
-					st_sysGetRand(0, 999));
-			++cnt;
-			ex = st_sysDoesFileExist(pTmpFn) || st_sysDoesDirExist(pTmpFn);
-		} while (ex && cnt < cMAXTRIES);
-	} else {
-		ex = (tmpnam((char*)pTmpFn) == NULL);
-	}
-	if (ex)
-		pTmpFn[0] = 0x00;
-	/**printf(" tmpfn: '%s'\n", pTmpFn);**/
-	return (! ex);
+	return ST_SYSFILE__getTmpFilename(/*inCurDir:*/ST_B_FALSE, /*inSpecDir:*/ST_B_TRUE,
+				pDirn, *ppTmpFn, tmpFnMaxSz);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -944,6 +950,128 @@ st_sysFStc_readBuf(Tst_sys_fstc *pFStcIn,
 }
 
 /*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+static Tst_bool
+ST_SYSFILE__concatDirAndFilen(const Tst_str *pDirn, const Tst_str *pFilen,
+		Tst_str *pFullPath, const Tst_uint32 fpSz)
+{
+	Tst_uint32    lenD,
+	              lenF;
+	Tst_str       *pFBn = NULL;
+	Tst_str const *pIntFilen;
+
+	ST_ASSERTN_BOOL(ST_B_FALSE, pDirn == NULL || pFilen == NULL ||
+				pFullPath == NULL)
+
+	lenD = st_sysStrlen(pDirn);
+	lenF = st_sysStrlen(pFilen);
+	if (lenF > 0 && strrchr((const char*)pFilen, '/') != NULL) {
+		if (! st_sysFileBasename(pFilen, &pFBn))
+			return ST_B_FALSE;
+		pIntFilen = pFBn;
+		lenF      = st_sysStrlen(pFBn);
+	} else
+		pIntFilen = pFilen;
+
+	if (lenD > 0) {
+		if (lenD > fpSz)
+			return ST_B_FALSE;
+		memcpy(pFullPath, pDirn, lenD);
+		if (pDirn[lenD - 1] != '/') {
+			if (lenD + 1 > fpSz)
+				return ST_B_FALSE;
+			pFullPath[lenD++] = '/';
+		}
+	} else {
+		if (2 > fpSz)
+			return ST_B_FALSE;
+		pFullPath[lenD++] = '.';
+		pFullPath[lenD++] = '/';
+	}
+	if (lenF > 0) {
+		if (lenD + lenF > fpSz)
+			return ST_B_FALSE;
+		memcpy(&pFullPath[lenD], pIntFilen, lenF);
+	}
+	if (lenD + lenF + 1 > fpSz)
+		return ST_B_FALSE;
+	pFullPath[lenD + lenF] = 0x00;
+
+	ST_DELPOINT(pFBn)
+	return ST_B_TRUE;
+}
+
+/*----------------------------------------------------------------------------*/
+
+static Tst_bool
+ST_SYSFILE__getTmpFilename(const Tst_bool inCurDir, const Tst_bool inSpecDir,
+		ST_OPTARG(const Tst_str *pInDir_Dirn),
+		Tst_str *pTmpFn, const Tst_uint32 tmpFnMaxSz)
+{
+	Tst_bool ex = ST_B_TRUE;
+
+
+	ST_ASSERTN_BOOL(ST_B_FALSE, pTmpFn == NULL || tmpFnMaxSz <= L_tmpnam ||
+				(inSpecDir && pInDir_Dirn == NULL))
+
+	if (inCurDir || inSpecDir) {
+		const Tst_uint32 cMAXTRIES = 1000;
+		Tst_uint32    cnt = 0,
+		              tmpVal[3],
+		              lastVal[3];
+		Tst_str       locTmpFn[128];
+		Tst_str const *pODir;
+
+		if (inCurDir)
+			pODir = (const Tst_str*)".";
+		else
+			pODir = pInDir_Dirn;
+		do {
+			tmpVal[0] = st_sysGetRand(0, 999);
+			tmpVal[1] = st_sysGetRand(0, 999);
+			if (tmpVal[0] == tmpVal[1]) {
+				tmpVal[1] = st_sysGetRand(0, 999);
+				if (tmpVal[0] == tmpVal[1])
+					tmpVal[1] = (tmpVal[1] + 1) % 999;
+			}
+			tmpVal[2] = st_sysGetRand(0, 999);
+			if (tmpVal[0] == tmpVal[2] || tmpVal[1] == tmpVal[2]) {
+				tmpVal[2] = st_sysGetRand(0, 999);
+				if (tmpVal[0] == tmpVal[2] || tmpVal[1] == tmpVal[2])
+					tmpVal[2] = (tmpVal[2] + 2) % 999;
+			}
+			if (cnt > 0 &&
+					(tmpVal[0] == lastVal[0] || tmpVal[1] == lastVal[1] ||
+						tmpVal[2] == lastVal[2])) {
+				/* just in case the PRNG doesn't work correctly */
+				tmpVal[0] = ((tmpVal[0] + 1) * (cnt + 1)) % 999;
+				tmpVal[1] = (tmpVal[0] * 2) % 999;
+				tmpVal[2] = (tmpVal[1] * 3) % 999;
+			}
+			lastVal[0] = tmpVal[0];
+			lastVal[1] = tmpVal[1];
+			lastVal[2] = tmpVal[2];
+			/* */
+			snprintf((char*)locTmpFn, sizeof(locTmpFn),
+					"tmpfile.%03u.%03u.%03u.tmp",
+					tmpVal[0], tmpVal[1], tmpVal[2]);
+			ex = ! ST_SYSFILE__concatDirAndFilen(pODir, locTmpFn,
+						pTmpFn, tmpFnMaxSz);
+			if (ex)
+				break;
+			/* */
+			++cnt;
+			ex = st_sysDoesFileExist(pTmpFn) || st_sysDoesDirExist(pTmpFn);
+		} while (ex && cnt < cMAXTRIES);
+	} else {
+		ex = (tmpnam((char*)pTmpFn) == NULL);
+	}
+	if (ex)
+		pTmpFn[0] = 0x00;
+	return (! ex);
+}
+
 /*----------------------------------------------------------------------------*/
 
 static Tst_err

@@ -53,6 +53,7 @@ ST_BEGIN_C_DECLS
 	                            const Tst_bool appendBsIx,
 	                            const Tst_bool wrRIFForAIFF,
 	                            ST_OPTARG(const Tst_str *pOutpdir),
+	                            const Tst_bool owExFiles,
 	                            Tst_str **ppNewFilen);
 #endif  /* protected */
 

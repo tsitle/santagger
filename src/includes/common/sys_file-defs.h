@@ -37,6 +37,26 @@ typedef enum {
 	ST_SYS_SETFPOS_END = 2   /* ... end of file */
 } Tst_sys_setFilePos;
 
+/** for setting file/directory permissions */
+/*** these can be combined by OR'ing them (e.g. mode=(OTHX | OTHR | GRPX | GRPR)) */
+typedef enum {
+	ST_SYS_SETPERM_OTHX = 1,     /* execute/search by others */
+	ST_SYS_SETPERM_OTHW = 2,     /* write by others */
+	ST_SYS_SETPERM_OTHR = 4,     /* read by others */
+	ST_SYS_SETPERM_GRPX = 8,     /* execute/search by group */
+	ST_SYS_SETPERM_GRPW = 16,    /* write by group */
+	ST_SYS_SETPERM_GRPR = 32,    /* read by group */
+	ST_SYS_SETPERM_USRX = 64,    /* execute/search by owner */
+	ST_SYS_SETPERM_USRW = 128,   /* write by owner */
+	ST_SYS_SETPERM_USRR = 256,   /* read by owner */
+	ST_SYS_SETPERM_SVTX = 512,   /* sticky bit */
+	ST_SYS_SETPERM_SGID = 1024,  /* set-group-ID */
+	ST_SYS_SETPERM_SUID = 2048,  /* set-user-ID */
+	ST_SYS_SETPERM_NONE = 0
+} Tst_sys_setFilePerm;
+/*** default file/directory permissions (OTHX+OTHR+GRPX+GRPR+USRX+USRW+USRR) */
+#define ST_SYS_FILEPERM_DEF  (ST_SYS_SETPERM_OTHX|ST_SYS_SETPERM_OTHR|ST_SYS_SETPERM_GRPX|ST_SYS_SETPERM_GRPR|ST_SYS_SETPERM_USRX|ST_SYS_SETPERM_USRW|ST_SYS_SETPERM_USRR)
+
 
 /*
 // Types

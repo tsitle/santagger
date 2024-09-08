@@ -217,6 +217,7 @@ st_contWav_stc_rsetOpts(Tst_contWav_opts *pOpts)
 	pOpts->wrFmtRIFForAIFF = ST_B_TRUE;
 	/* */
 	ST_DELPOINT(pOpts->pOutpdir)
+	pOpts->owExFiles = ST_B_FALSE;
 	/* */
 	pOpts->cbNewOutpStr = NULL;
 }

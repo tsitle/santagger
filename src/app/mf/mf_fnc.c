@@ -130,74 +130,116 @@ ast_mf_fnc_isBsInList(const Tast_cln_t_ebs *pBsArr,
  */
 Tst_err
 ast_mf_fnc_createOutFn(const Tst_str *pFnIn,
-		const Tst_str *pFnExt1, const Tst_str *pFnExt2,
+		ST_OPTARG(const Tst_str *pFnExt1), ST_OPTARG(const Tst_str *pFnExt2),
 		const Tst_uint32 bsIx, const Tst_uint32 bsSIx,
+		ST_OPTARG(const Tst_str *pOutpdir), const Tst_bool owExFiles,
 		Tst_str **ppFnOut)
 {
-	Tst_err    res    = ST_ERR_SUCC;
-	Tst_str    *pCh;
-	Tst_uint32 nr     = 1000,
-	           olen,
-	           addlen = 0;
-	Tst_bool   fexists,
-	           vacFnd = ST_B_FALSE;
+	Tst_str       *pOrgFBn  = NULL,
+	              *pOrgDirn = NULL,
+	              *pNewFExt = NULL;
+	Tst_str const *pIntOutpdir;
+	Tst_uint32    nr        = 1000,
+	              olen,
+	              maxAddLen;
+	Tst_bool      resB,
+	              fexists,
+	              vacFnd    = ST_B_FALSE;
 
-	pCh = (Tst_str*)strrchr((char*)pFnIn, (int)'.');
-	if (pCh == NULL)
-		++addlen;
-	addlen += st_sysStrlen(pFnExt1) + (pFnExt2 ? 1 + st_sysStrlen(pFnExt2) : 0);
-	olen    = st_sysStrlen(pFnIn);
-	ST_REALLOC(*ppFnOut, Tst_str*, olen + addlen + 20, 1)
-	if (*ppFnOut == NULL)
-		return ST_ERR_OMEM;
-	memset(*ppFnOut, 0, olen + addlen + 20);
+	ST_ASSERTN_IARG(pFnIn == NULL || ppFnOut == NULL)
 
+	/* */
+	if (! st_sysFileBasename(pFnIn, &pOrgFBn))
+		return ST_ERR_FAIL;
+	if (st_sysStrEmpty(pOutpdir)) {
+		if (! st_sysDirname(pFnIn, &pOrgDirn)) {
+			ST_DELPOINT(pOrgFBn)
+			return ST_ERR_FAIL;
+		}
+		pIntOutpdir = pOrgDirn;
+	} else
+		pIntOutpdir = pOutpdir;
+	/* cut off original fileextension incl. '.' */
+	olen = st_sysStrlen(pOrgFBn);
+	if (olen > 0) {
+		Tst_str *pCh;
+
+		pCh  = (Tst_str*)strrchr((char*)pOrgFBn, (int)'.');
+		if (pCh != NULL)
+			olen = (Tst_uint32)(pCh - pOrgFBn);
+	}
+	pOrgFBn[olen] = 0x00;
 	/* copy everything but current fileextension to ppFnOut
-	 *   "filename.wav" --> "filename"  */
-	if (pCh != NULL)
-		olen = (Tst_uint32)(pCh - pFnIn);
-	memcpy(*ppFnOut, pFnIn, olen);
+	 *   "/some/dir/filename.wav" --> "/some/dir/filename"  */
+	resB = st_sysConcatDirAndFilen(pIntOutpdir, pOrgFBn, ppFnOut);
+	/* */
+	ST_DELPOINT(pOrgFBn)
+	ST_DELPOINT(pOrgDirn)
+	if (! resB)
+		return ST_ERR_FAIL;
+	/* */
+	if (pFnExt1 != NULL && pFnExt2 != NULL)
+		maxAddLen = st_sysStrlen(pFnExt1) + 1 + st_sysStrlen(pFnExt2);
+	else if (pFnExt1 != NULL)
+		maxAddLen = st_sysStrlen(pFnExt1);
+	else
+		maxAddLen = 0;
+	if (maxAddLen > 0) {
+		ST_CALLOC(pNewFExt, Tst_str*, maxAddLen + 1 + 1, 1)
+		if (pNewFExt == NULL)
+			return ST_ERR_OMEM;
+		if (pFnExt1 != NULL && pFnExt2 != NULL)
+			snprintf((char*)pNewFExt, maxAddLen + 1,
+				"%s.%s", pFnExt1, pFnExt2);
+		else
+			snprintf((char*)pNewFExt, maxAddLen + 1,
+				"%s", pFnExt1);
+	}
+	/* */
+	maxAddLen += 32;
+	olen       = st_sysStrlen(*ppFnOut);
+	ST_REALLOC(*ppFnOut, Tst_str*, olen + maxAddLen, 1)
+	if (*ppFnOut == NULL) {
+		ST_DELPOINT(pNewFExt)
+		return ST_ERR_OMEM;
+	}
+	memset(&(*ppFnOut)[olen], 0, maxAddLen);
 
 	do {
 		/* append (number and) fileexts to ppFnOut
 		 *   "filename" --> "filename.ape.tag"  or  "filename-001.ape.tag"*/
 		if (nr == 1000) {
-			if (pFnExt2 != NULL) {
+			if (pNewFExt != NULL) {
 				if (bsIx == 0)
-					sprintf((char*)&(*ppFnOut)[olen], ".%s.%s", pFnExt1, pFnExt2);
+					snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+							".%s", pNewFExt);
 				else
-					sprintf((char*)&(*ppFnOut)[olen], "-%u_%02u.%s.%s",
-							bsIx, bsSIx,
-							pFnExt1, pFnExt2);
+					snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+							"-%u_%02u.%s", bsIx, bsSIx, pNewFExt);
 			} else {
-				if (bsIx == 0)
-					sprintf((char*)&(*ppFnOut)[olen], ".%s", pFnExt1);
-				else
-					sprintf((char*)&(*ppFnOut)[olen], "-%u_%02u.%s",
-							bsIx, bsSIx,
-							pFnExt1);
+				if (bsIx != 0)
+					snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+							"-%u_%02u", bsIx, bsSIx);
 			}
 		} else {
-			if (pFnExt2 != NULL) {
+			if (pNewFExt != NULL) {
 				if (bsIx == 0)
-					sprintf((char*)&(*ppFnOut)[olen], "-%03u.%s.%s",
-							nr, pFnExt1, pFnExt2);
+					snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+							"-%03u.%s", nr, pNewFExt);
 				else
-					sprintf((char*)&(*ppFnOut)[olen], "-%u_%02u-%03u.%s.%s",
-							bsIx, bsSIx,
-							nr, pFnExt1, pFnExt2);
+					snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+							"-%u_%02u-%03u.%s", bsIx, bsSIx, nr, pNewFExt);
 			} else {
 				if (bsIx == 0)
-					sprintf((char*)&(*ppFnOut)[olen], "-%03u.%s",
-							nr, pFnExt1);
+					snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+							"-%03u", nr);
 				else
-					sprintf((char*)&(*ppFnOut)[olen], "-%u_%02u-%03u.%s",
-							bsIx, bsSIx,
-							nr, pFnExt1);
+					snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+							"-%u_%02u-%03u", bsIx, bsSIx, nr);
 			}
 		}
 		/* */
-		fexists = st_sysDoesFileExist(*ppFnOut);
+		fexists = (! owExFiles) && st_sysDoesFileExist(*ppFnOut);
 		if (fexists && nr == 999)
 			nr = 0;  /* --> stop while() and output error */
 		else if (fexists && nr < 999) {
@@ -211,27 +253,29 @@ ast_mf_fnc_createOutFn(const Tst_str *pFnIn,
 
 	if (! vacFnd) {
 		ST_DELPOINT(*ppFnOut)
-		res = ST_ERR_FAIL;
-	} else if (nr < 1000) {
-		if (pFnExt2 != NULL) {
+		ST_DELPOINT(pNewFExt)
+		return ST_ERR_FAIL;
+	}
+	if (nr < 1000) {
+		if (pNewFExt != NULL) {
 			if (bsIx == 0)
-				sprintf((char*)&(*ppFnOut)[olen], "-%03u.%s.%s",
-						nr, pFnExt1, pFnExt2);
+				snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+						"-%03u.%s", nr, pNewFExt);
 			else
-				sprintf((char*)&(*ppFnOut)[olen], "-%u_%02u-%03u.%s.%s",
-						bsIx, bsSIx,
-						nr, pFnExt1, pFnExt2);
+				snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+						"-%u_%02u-%03u.%s", bsIx, bsSIx, nr, pNewFExt);
 		} else {
 			if (bsIx == 0)
-				sprintf((char*)&(*ppFnOut)[olen], "-%03u.%s",
-						nr, pFnExt1);
+				snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+						"-%03u", nr);
 			else
-				sprintf((char*)&(*ppFnOut)[olen], "-%u_%02u-%03u.%s",
-						bsIx, bsSIx,
-						nr, pFnExt1);
+				snprintf((char*)&(*ppFnOut)[olen], maxAddLen,
+						"-%u_%02u-%03u", bsIx, bsSIx, nr);
 		}
 	}
-	return res;
+
+	ST_DELPOINT(pNewFExt)
+	return ST_ERR_SUCC;
 }
 
 /******************************************************************************/

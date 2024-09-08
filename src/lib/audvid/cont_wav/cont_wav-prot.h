@@ -47,6 +47,7 @@ ST_BEGIN_C_DECLS
 		Tst_bool    wrFmtRIFForAIFF;  /* write RIFF or AIFF format ? */
 		/* */
 		Tst_str     *pOutpdir;  /* output dir to write new files to */
+		Tst_bool    owExFiles;  /* overwrite existing output files ? */
 		/* */
 		Tst_contWav_cbNewOutputStream cbNewOutpStr;  /* to notify about new stream */
 	} Tst_contWav_opts;

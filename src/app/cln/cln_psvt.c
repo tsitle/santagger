@@ -1091,6 +1091,17 @@ AST_CLN__psvt_flddscaddset(const char *pFnc, const char *pFmt,
 	ST_DELPOINT(pLeftFNr)
 
 	/* check field name */
+	if (resB && pFP->ttp == AST_CLN_T_TAGLIST_IV2) {
+		char const *pTagN;
+
+		pTagN = ST_ID3V2_TAG_NAME;
+		if (st_sysStrlen(pFP->pFldname) > 4) {
+			pCmdln->cbErr(pCmdln->pAppFn, pFnc,
+					"field name too long (max. 4 chars) for %s tag in <%s>, "
+					"aborting", pTagN, pFmt);
+			resB = ST_B_FALSE;
+		}
+	}
 	if (resB) {
 		Tst_str    invch  = 0x00;
 		char const *pTagN = NULL;
@@ -1283,11 +1294,13 @@ AST_CLN__psvt_splitstr(const Tst_str *pStr, const char separator,
 		return ST_B_FALSE;
 
 	/* copy right part */
-	if (cplen >= 0 && slen >= (Tst_uint32)cplen)
+	if (cplen >= 0 && slen >= (Tst_uint32)cplen) {
 		cplen = (Tst_int32)slen - cplen;
-	else
+		if (cplen > 0)
+			++pChSplit;
+	} else
 		cplen = 0;
-	if (! AST_CLN__psvt_copystr((const Tst_str*)(pChSplit + 1), cplen, ppRight))
+	if (! AST_CLN__psvt_copystr((const Tst_str*)pChSplit, cplen, ppRight))
 		return ST_B_FALSE;
 	/* unescape */
 	if (canBeEscaped && cplen > 1 && ! AST_CLN__psvt_unescape(ppRight, separator))
@@ -1341,13 +1354,14 @@ static Tst_bool
 AST_CLN__psvt_copystr(const Tst_str *pSrc, Tst_int32 maxlen,
 		Tst_str **ppDst)
 {
-	Tst_uint32 slen;
-
-	slen = st_sysStrlen(pSrc);
-	if (maxlen < 0)
+	if (maxlen < 0) {
 		maxlen = st_sysStrlen(pSrc);
-	else if (slen < (Tst_uint32)maxlen)
-		maxlen = (Tst_int32)slen;
+	} else if (maxlen > 0) {
+		Tst_uint32 slen = st_sysStrlen(pSrc);
+
+		if (slen < (Tst_uint32)maxlen)
+			maxlen = (Tst_int32)slen;
+	}
 	ST_REALLOC(*ppDst, Tst_str*, (Tst_uint32)maxlen + 1, 1)
 	if (*ppDst == NULL)
 		return ST_B_FALSE;

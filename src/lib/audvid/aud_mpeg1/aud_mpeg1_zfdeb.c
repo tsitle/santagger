@@ -111,6 +111,20 @@ void st_mpeg1_prE(const char *pFmt, ...)
 	vfprintf(stderr, pFmt, args);
 	va_end(args);
 }
+
+void st_mpeg1_prBuf(const Tst_buf *pBuf, const Tst_uint32 sz)
+{
+	Tst_uint32 x,
+	           y = 0;
+
+	for (x = 0; x < sz; x++) {
+		printf("%c(%02x) ", (pBuf[x] >= 0x20 && pBuf[x] <= 0x7f ? pBuf[x] : '.'), pBuf[x]);
+		if (++y >= 20) {
+			printf("\n");
+			y = 0;
+		}
+	}
+}
 #endif
 
 /******************************************************************************/

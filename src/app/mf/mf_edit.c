@@ -25,6 +25,7 @@
 #include "src/includes/common/streamrd.h"
 #include "src/includes/common/streamwr.h"
 #include "src/includes/common/sys_file.h"
+#include "src/includes/common/sys_fnc.h"
 #include "src/includes/audvid/aud_mpeg1.h"
 #include "src/includes/audvid/cont_ogg.h"
 #include "src/includes/tag/tag_basics.h"
@@ -1076,20 +1077,21 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tast_mf_editInfo *pEdInf)
 {
 	const char *cFNCN = __FUNCTION__;
-	Tst_err    res    = ST_ERR_SUCC;
-	Tst_fsize  fszI,
-	           fszN   = 0,
-	           wrb    = 0,
-	           toCp,
-	           cpd    = 0,
-	           skdByt = 0;
-	Tst_foffs  curOffs;
-	Tst_str    tmpFn[1024 + 1];
-	Tst_bool   fndOne = ST_B_FALSE,
-	           doCopy,
-	           hasMPEG1,
-	           hasOGG,
-	           hasFLAC;
+	Tst_err   res         = ST_ERR_SUCC;
+	Tst_fsize fszI,
+	          fszN        = 0,
+	          wrb         = 0,
+	          toCp,
+	          cpd         = 0,
+	          skdByt      = 0;
+	Tst_foffs curOffs;
+	Tst_str   *pTmpOutpFn = NULL;
+	Tst_bool  fndOne      = ST_B_FALSE,
+	          doCopy,
+	          owInpFile,
+	          hasMPEG1,
+	          hasOGG,
+	          hasFLAC;
 	Tst_tagBasics  *pTBas;
 	Tst_tagMeta_mt *pMT;
 	Tst_sys_fstc   fstcOut;
@@ -1112,22 +1114,41 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		return ST_ERR_FAIL;
 	}
 
+	/* eventually overwrite the input/output file ? */
+	owInpFile = st_sysStrEmpty(pCmdln->opts.pOutpdir);
+
 	/* open output stream */
 	/** */
-	if (! st_sysGetTmpFilename(tmpFn, sizeof(tmpFn), ST_B_TRUE)) {
-		ast_mf_op_d_mfErr(pMF, cFNCN,
-				"can't create temp filename");
-		return ST_ERR_FAIL;
+	if (owInpFile) {
+		/* use temp. file in the current dir (./TEMPFILEN) */
+		ST_CALLOC(pTmpOutpFn, Tst_str*, 512, 1)
+		if (pTmpOutpFn == NULL)
+			return ST_ERR_OMEM;
+		if (! st_sysGetTmpFilename(pTmpOutpFn, 512, /*inCurrentDir:*/ST_B_TRUE)) {
+			ST_DELPOINT(pTmpOutpFn)
+			ast_mf_op_d_mfErr(pMF, cFNCN,
+					"can't create temp filename");
+			return ST_ERR_FAIL;
+		}
+	} else {
+		/* use temp. file in OUTPDIR (OUTPDIR/TEMPFILEN) */
+		if (! st_sysGetTmpFilenameInDir(pCmdln->opts.pOutpdir, &pTmpOutpFn)) {
+			ST_DELPOINT(pTmpOutpFn)
+			ast_mf_op_d_mfErr(pMF, cFNCN,
+					"can't create temp filename");
+			return ST_ERR_FAIL;
+		}
 	}
 	/** */
 	st_sys_stc_initFStc(&fstcOut);
 	if (! pCmdln->opts.basOpts.pretWr) {
-		st_sysFStc_setFilen(&fstcOut, tmpFn);
+		st_sysFStc_setFilen(&fstcOut, pTmpOutpFn);
 		res = st_sysFStc_openNew(&fstcOut);
 		if (res != ST_ERR_SUCC) {
 			ast_mf_op_d_mfErr(pMF, cFNCN,
-					"can't open tmp output-file '%s'", tmpFn);
+					"can't open temp output-file '%s'", pTmpOutpFn);
 			st_sys_stc_freeFStc(&fstcOut);
+			ST_DELPOINT(pTmpOutpFn)
 			return res;
 		}
 	}
@@ -1138,7 +1159,8 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		if (res != ST_ERR_SUCC) {
 			st_streamwr_stc_freeSObj(&strwr);
 			st_sys_stc_freeFStc(&fstcOut);
-			st_sysUnlinkFile(tmpFn);
+			st_sysUnlinkFile(pTmpOutpFn);
+			ST_DELPOINT(pTmpOutpFn)
 			return res;
 		}
 	}
@@ -1155,7 +1177,8 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		st_streamwr_stc_freeSObj(&strwr);
 		st_sys_stc_freeFStc(&fstcOut);
 		if (! pCmdln->opts.basOpts.pretWr)
-			st_sysUnlinkFile(tmpFn);
+			st_sysUnlinkFile(pTmpOutpFn);
+		ST_DELPOINT(pTmpOutpFn)
 		return res;
 	}
 	st_contOgg_gs_setStrrd(&pMF->avOgg, &strrd);
@@ -1367,27 +1390,70 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	if (res == ST_ERR_SUCC && ! pCmdln->opts.basOpts.pretWr)
 		st_sysFStc_close(&pMF->fstc);
 
-	/* */
-	if (res == ST_ERR_SUCC) {
-		if (! pCmdln->opts.basOpts.pretWr) {
-			Tst_str const *pInpFilen = st_sysFStc_getFilen(&pMF->fstc);
+	/* move temp. output file to real output file */
+	if (res == ST_ERR_SUCC && ! pCmdln->opts.basOpts.pretWr && owInpFile) {
+		Tst_str const *pInpFilen = st_sysFStc_getFilen(&pMF->fstc);
 
-			if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
-				ast_mf_op_d_deb(cFNCN,
-						"replacing old file with new one");
-			if (! st_sysUnlinkFile(pInpFilen)) {
+		/* temp. file is in the current dir (./TEMPFILEN) and
+		 *   will be moved to input file (./INPFILEN)  */
+		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+			ast_mf_op_d_deb(cFNCN,
+					"replacing old file with new one");
+		if (! st_sysUnlinkFile(pInpFilen)) {
+			ast_mf_op_d_mfErr(pMF, cFNCN,
+					"can't remove file '%s'", pInpFilen);
+			res = ST_ERR_FAIL;
+		} else {
+			if (! st_sysRenameFile(pTmpOutpFn, pInpFilen)) {
 				ast_mf_op_d_mfErr(pMF, cFNCN,
-						"can't remove file '%s'", pInpFilen);
+						"can't rename temp file '%s' to '%s'",
+						pTmpOutpFn, pInpFilen);
 				res = ST_ERR_FAIL;
-			} else {
-				if (! st_sysRenameFile(tmpFn, pInpFilen)) {
-					ast_mf_op_d_mfErr(pMF, cFNCN,
-							"can't rename temp. file '%s' to '%s'",
-							tmpFn, pInpFilen);
-					res = ST_ERR_FAIL;
-				}
 			}
 		}
+	} else if (res == ST_ERR_SUCC && ! pCmdln->opts.basOpts.pretWr) {
+		Tst_str *pRealOutpFn = NULL,
+		        *pOrgFBn     = NULL;
+
+		/* temp. file is in OUTPDIR (OUTPDIR/TEMPFILEN) and
+		 *   will be moved to OUTPDIR/INPFILEN  */
+		/** */
+		if (! st_sysFileBasename(st_sysFStc_getFilen(&pMF->fstc), &pOrgFBn))
+			res = ST_ERR_FAIL;
+		else if (! st_sysConcatDirAndFilen(pCmdln->opts.pOutpdir,
+					pOrgFBn, &pRealOutpFn))
+			res = ST_ERR_FAIL;
+		/** */
+		if (res == ST_ERR_SUCC && st_sysDoesFileExist(pRealOutpFn)) {
+			/* remove existing file */
+			if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+				ast_mf_op_d_deb(cFNCN,
+						"replacing old output file with new one");
+			if (! st_sysUnlinkFile(pRealOutpFn)) {
+				ast_mf_op_d_mfErr(pMF, cFNCN,
+						"can't remove output file '%s'", pRealOutpFn);
+				res = ST_ERR_FAIL;
+			}
+		} else if (res == ST_ERR_SUCC) {
+			if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+				ast_mf_op_d_deb(cFNCN,
+						"renaming filename to new output filename");
+		}
+		/** */
+		if (res == ST_ERR_SUCC) {
+			if (! st_sysRenameFile(pTmpOutpFn, pRealOutpFn)) {
+				ast_mf_op_d_mfErr(pMF, cFNCN,
+						"can't rename temp file '%s' to '%s'",
+						pTmpOutpFn, pRealOutpFn);
+				res = ST_ERR_FAIL;
+			} else {
+				st_sysFStc_setFilen(&pMF->fstc, pRealOutpFn);
+				if (pCmdln->opts.showStat && ! pCmdln->opts.basOpts.pretWr)
+					ast_mf_op_prMsg("*  wrote to '%s'", pRealOutpFn);
+			}
+		}
+		ST_DELPOINT(pRealOutpFn)
+		ST_DELPOINT(pOrgFBn)
 	}
 
 	if (res == ST_ERR_SUCC && pCmdln->opts.showStat)
@@ -1401,11 +1467,12 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		/* open freshly created file */
 		res = st_sysFStc_openExisting(&pMF->fstc,
 				pCmdln->opts.basOpts.allowLnkInpF, ST_B_TRUE);
-	} else {
-		if (! pCmdln->opts.basOpts.pretWr)
-			st_sysUnlinkFile(tmpFn);
+	} else if (! pCmdln->opts.basOpts.pretWr) {
+		/* if some error occured delete outp. file */
+		st_sysUnlinkFile(pTmpOutpFn);
 	}
 
+	ST_DELPOINT(pTmpOutpFn)
 	return res;
 }
 

@@ -55,6 +55,7 @@ ST_BEGIN_C_DECLS
 #	if (ST_AUD_MPEG1_DEB_ == 1)
 	void st_mpeg1_prf(const char *pFmt, ...);
 	void st_mpeg1_prE(const char *pFmt, ...);
+	void st_mpeg1_prBuf(const Tst_buf *pBuf, const Tst_uint32 sz);
 #	endif
 #endif  /* protected */
 

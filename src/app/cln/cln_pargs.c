@@ -235,6 +235,7 @@ AST_CLN__pa_sc_help(const Tst_str *pAppFn, const Tast_cln_cbMsg cbMsg,
 #		if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
 		LOC_PR_DE_(" - MPEG-1 (Layer I-III, e.g. MP3)");
 #		endif
+		LOC_PR_DE_("See --bps option");
 	cbMsg("\n");
 
 	/** tag-edit-commands */
@@ -374,9 +375,9 @@ AST_CLN__pa_sc_help(const Tst_str *pAppFn, const Tast_cln_cbMsg cbMsg,
 	/** */
 	cbMsg("Options:");
 	LOC_PR_S_(AST_CLN_OPT_QUIET_SO, NULL,
-			"don't output anything (but errors)");
+			"Don't output anything (but errors)");
 	LOC_PR_S_(AST_CLN_OPT_SWSTAT_SO, NULL,
-			"show some status info");
+			"Show some status info");
 	snprintf(sargs, sizeof(sargs), "help|<%s>", AST_CLN_SVT_FMT_VLEVLIST);
 	LOC_PR_L_(AST_CLN_OPT_VERBLEV_LO, sargs,
 			"Verbosity level");
@@ -447,7 +448,6 @@ AST_CLN__pa_sc_help(const Tst_str *pAppFn, const Tast_cln_cbMsg cbMsg,
 				"[default:%d]  (0 means let decoder decide)",
 				AST_CLN_DEF_BPS_VAL);
 		LOC_PR_DE_(sdesc);
-		LOC_PR_DE_("You can use this option with --dec");
 		LOC_PR_DE_("(when decoding Flac this option is ignored)");
 	/** */
 	LOC_PR_DIV_;
@@ -492,6 +492,9 @@ AST_CLN__pa_sc_help(const Tst_str *pAppFn, const Tast_cln_cbMsg cbMsg,
 	LOC_PR_DIV_;
 	LOC_PR_L_(AST_CLN_OPT_OUTDIR_LO, "<dirn>",
 			"Directory to write new/modified files to");
+	LOC_PR_L_(AST_CLN_OPT_OWEXF_LO, NULL,
+			"Overwrite existing files");
+		LOC_PR_DE_("when decoding or extracting data  [default:no]");
 
 	cbMsg("\n");
 
@@ -707,7 +710,7 @@ AST_CLN__pa_sc_examples(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 			"%*s--add-geo lyr.pdf --geo-de Lyrics *.mp3",
 			spadd, "");
 	LOC_PREX_("", msg);
-	LOC_PREX_("", "--dec wav *.flac");
+	LOC_PREX_("", "--dec wav --ow --ou wavfiles/ *.flac");
 	LOC_PREX_("", "--dec aiff --bps 24 *.ogg");
 	LOC_PREX_("", "--conv id3v1,apev2-id3v2 --tiv2 v3 *.mp3");
 	LOC_PREX_("", "--fset TBPM=150 song_with_150bpm.ogg");
@@ -937,7 +940,9 @@ AST_CLN__pa_hndArgLong(const Tst_int32 oix, Tast_cln_a *pCmdln)
 		return ast_cln_hnd_o_geo_fn(pCmdln);
 	/** */
 	if (LOC_CMP_(AST_CLN_OPT_OUTDIR_LO))
-		return ast_cln_hnd_o_outdir(pCmdln);
+		return ast_cln_hnd_o_od(pCmdln);
+	if (LOC_CMP_(AST_CLN_OPT_OWEXF_LO))
+		return ast_cln_hnd_o_ow(pCmdln);
 
 	return ST_ERR_FAIL;
 #	undef LOC_CMP_

@@ -115,7 +115,8 @@ st_contwav_fnc_getElem(Tst_contWav_obj_intn *pWObjI,
 Tst_err
 st_contwav_fnc_createOutpFn(const Tst_str *pOrgFilen,
 		const Tst_uint32 bsIx, const Tst_uint32 bsSIx, const Tst_bool appendBsIx,
-		const Tst_bool wrRIFForAIFF, ST_OPTARG(const Tst_str *pOutpdir),
+		const Tst_bool wrRIFForAIFF,
+		ST_OPTARG(const Tst_str *pOutpdir), const Tst_bool owExFiles,
 		Tst_str **ppNewFilen)
 {
 	const Tst_str *cFNEXT_WAV  = (const Tst_str*)"wav",
@@ -143,7 +144,7 @@ st_contwav_fnc_createOutpFn(const Tst_str *pOrgFilen,
 		pIntOutpdir = pOrgDirn;
 	} else
 		pIntOutpdir = pOutpdir;
-	/* */
+	/* cut off original fileextension incl. '.' */
 	olen = st_sysStrlen(pOrgFBn);
 	if (olen > 0) {
 		Tst_str *pCh;
@@ -187,7 +188,7 @@ st_contwav_fnc_createOutpFn(const Tst_str *pOrgFilen,
 						nr, pFExt);
 		}
 		/* */
-		fexists = st_sysDoesFileExist(*ppNewFilen);
+		fexists = (! owExFiles) && st_sysDoesFileExist(*ppNewFilen);
 		if (fexists && nr == 999)
 			nr = 0;  /* --> stop while() and output error */
 		else if (fexists && nr < 999) {
