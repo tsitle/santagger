@@ -132,8 +132,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/streamrd.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/streamrd.h"
 /** */
 #define SRC_W_BASE64_C
 #include "w-base64-prot.h"

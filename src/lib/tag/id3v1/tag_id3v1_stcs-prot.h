@@ -25,8 +25,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/streamrd-defs.h>
-#include <santag/tag/tag_id3v1-defs.h>
+#include "src/includes/common/streamrd-defs.h"
+#include "src/includes/tag/tag_id3v1-defs.h"
 /** */
 #include "tag_id3v1-prot.h"
 

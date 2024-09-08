@@ -22,8 +22,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/streamrd.h>
-#include <santag/common/streamwr.h>
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/streamwr.h"
 /** */
 #define SRC_STREAM_STCS_C
 #include "stream_stcs-prot.h"

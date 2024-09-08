@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_math.h>
+#include "src/includes/common/sys_math.h"
 /** */
 #define SRC_MF_READ_DECVRB_C
 #include "mf_read_decvrb-pp.h"

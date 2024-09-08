@@ -25,7 +25,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/dynlist-defs.h>
+#include "src/includes/common/dynlist-defs.h"
 
 
 ST_BEGIN_C_DECLS

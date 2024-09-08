@@ -22,13 +22,13 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/dynlist.h>
-#include <santag/common/string_mte.h>
-#include <santag/common/sys_file.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/utils/utils_fmt.h>
-#include <santag/tag/tag_vorbc.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/dynlist.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/common/sys_file.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/utils/utils_fmt.h"
+#include "src/includes/tag/tag_vorbc.h"
 /** */
 #define SRC_TAG_VORBC_FLDADD_C
 #include "tag_vorbc-prot.h"

@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/streamrd.h>
-#include <santag/audvid/cont_ogg.h>
-#include <santag/audvid/cont_ogg_vorbcomm.h>
+#include "src/includes/common/streamrd.h"
+#include "src/includes/audvid/cont_ogg.h"
+#include "src/includes/audvid/cont_ogg_vorbcomm.h"
 /** */
 #define SRC_AC_VORB_STCS_C
 #include "ac_vorb_stcs-prot.h"

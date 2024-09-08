@@ -32,7 +32,7 @@
 #	define ST_W_UTF_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
-#include <santag/lib_defs.h>
+#include "src/includes/lib_defs.h"
 
 
 ST_BEGIN_C_DECLS

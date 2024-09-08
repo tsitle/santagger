@@ -29,7 +29,7 @@
 #endif
 /** */
 #if (ST_CONTOGG_DEB_ == 1)
-#	include <santag/common/sys_math-defs.h>
+	#include "src/includes/common/sys_math-defs.h"
 #endif
 /** */
 #include "cont_ogg-prot.h"

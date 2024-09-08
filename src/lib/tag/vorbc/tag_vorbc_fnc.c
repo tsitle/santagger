@@ -22,10 +22,10 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/dynlist.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/common/string_mte.h>
-#include <santag/tag/tag_vorbc.h>
+#include "src/includes/common/dynlist.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/tag/tag_vorbc.h"
 /** */
 #define SRC_TAG_VORBC_FNC_C
 #include "tag_vorbc_fnc-prot.h"

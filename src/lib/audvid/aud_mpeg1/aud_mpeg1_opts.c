@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/audvid/aud_mpeg1.h>
+#include "src/includes/audvid/aud_mpeg1.h"
 /** */
 #define SRC_AUD_MPEG1_OPTS_C
 #include "aud_mpeg1-prot.h"

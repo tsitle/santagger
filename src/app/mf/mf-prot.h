@@ -25,11 +25,11 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_file-defs.h>
-#include <santag/common/streamrd-defs.h>
-#include <santag/audvid/aud_mpeg1-defs.h>
-#include <santag/audvid/cont_ogg-defs.h>
-#include <santag/tag/tag_meta-defs.h>
+#include "src/includes/common/sys_file-defs.h"
+#include "src/includes/common/streamrd-defs.h"
+#include "src/includes/audvid/aud_mpeg1-defs.h"
+#include "src/includes/audvid/cont_ogg-defs.h"
+#include "src/includes/tag/tag_meta-defs.h"
 /** */
 #include "../app_defs.h"
 #include "../cln/cln-prot.h"

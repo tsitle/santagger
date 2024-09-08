@@ -22,8 +22,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/sys_file.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/sys_file.h"
 /** */
 #define SRC_BINOBJ_STCS_C
 #include "binobj-prot.h"

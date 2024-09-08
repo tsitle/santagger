@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
+#include "src/includes/common/sys_fnc.h"
 /** */
 #define SRC_TAG_VORBC_ZFDEB_C
 #include "tag_vorbc_zfdeb-prot.h"

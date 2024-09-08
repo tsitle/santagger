@@ -22,17 +22,17 @@
 // Own-Includes
 */
 #if HAVE_APP_VERSION_H
-#	include <app_version.h>
-#	if !(defined(APP_ST_VERS_MAJ) && defined(APP_ST_VERS_MIN) && \
+	#include "app_version.h"
+	#if !(defined(APP_ST_VERS_MAJ) && defined(APP_ST_VERS_MIN) && \
 				defined(APP_ST_VERS_STRING) && \
 				defined(APP_ST_VERS_STRING_ADD) && \
 				defined(APP_ST_VERS_STRING_COMPLETE))
-#		error No application version defined
-#	endif
+		#error No application version defined
+	#endif
 #endif
 #if (APP_ST_VERS_MAJ == 0 && APP_ST_VERS_MIN == 0)
 	/* to detect dummy values */
-#	error No application version defined
+	#error No application version defined
 #endif
 
 

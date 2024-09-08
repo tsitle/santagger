@@ -22,8 +22,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_file.h>
-#include <santag/common/sys_fnc.h>
+#include "src/includes/common/sys_file.h"
+#include "src/includes/common/sys_fnc.h"
 /** */
 #define SRC_MF_FNC_C
 #include "mf_fnc-pp.h"

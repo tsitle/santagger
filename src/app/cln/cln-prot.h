@@ -25,10 +25,10 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/dynlist-defs.h>
-#include <santag/utils/utils_fmt-defs.h>
-#include <santag/audvid/aud_mpeg1-defs.h>
-#include <santag/tag/tag_id3v2-defs.h>
+#include "src/includes/common/dynlist-defs.h"
+#include "src/includes/utils/utils_fmt-defs.h"
+#include "src/includes/audvid/aud_mpeg1-defs.h"
+#include "src/includes/tag/tag_id3v2-defs.h"
 /** */
 #include "../app_defs.h"
 

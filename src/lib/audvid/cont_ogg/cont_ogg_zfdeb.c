@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_math.h>
+#include "src/includes/common/sys_math.h"
 /** */
 #define SRC_CONT_OGG_ZFDEB_C
 #include "cont_ogg_zfdeb-prot.h"

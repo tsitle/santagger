@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
-#include <santag/common/sys_math.h>
-#include <santag/common/streamrd.h>
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/sys_math.h"
+#include "src/includes/common/streamrd.h"
 /** */
 #define SRC_AC_FLAC_ZRD_C
 #include "ac_flac_zrd-prot.h"

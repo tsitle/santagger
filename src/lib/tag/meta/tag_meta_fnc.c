@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/dynlist.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/tag/tag_meta.h>
+#include "src/includes/common/dynlist.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_meta.h"
 /** */
 #define SRC_TAG_META_FNC_C
 #include "tag_meta_fnc-prot.h"

@@ -25,7 +25,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/tag/tag_basics.h>
+#include "src/includes/tag/tag_basics.h"
 
 
 ST_BEGIN_C_DECLS

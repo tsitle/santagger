@@ -22,17 +22,17 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/streamrd.h>
-#include <santag/common/streamwr.h>
-#include <santag/common/sys_file.h>
-#include <santag/audvid/aud_mpeg1.h>
-#include <santag/audvid/cont_ogg.h>
-#include <santag/tag/tag_basics.h>
-#include <santag/tag/tag_meta.h>
-#include <santag/tag/tag_id3v1.h>
-#include <santag/tag/tag_id3v2.h>
-#include <santag/tag/tag_apev2.h>
-#include <santag/tag/tag_vorbc.h>
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/streamwr.h"
+#include "src/includes/common/sys_file.h"
+#include "src/includes/audvid/aud_mpeg1.h"
+#include "src/includes/audvid/cont_ogg.h"
+#include "src/includes/tag/tag_basics.h"
+#include "src/includes/tag/tag_meta.h"
+#include "src/includes/tag/tag_id3v1.h"
+#include "src/includes/tag/tag_id3v2.h"
+#include "src/includes/tag/tag_apev2.h"
+#include "src/includes/tag/tag_vorbc.h"
 /** */
 #define SRC_MF_EDIT_C
 #include "mf_edit-pp.h"

@@ -22,13 +22,13 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/common/string_mte.h>
-#include <santag/tag/tag_id3v1-defs.h>
-#include <santag/tag/tag_apev2-defs.h>
-#include <santag/tag/tag_vorbc-defs.h>
-#include <santag/tag/tag_fldmap.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/tag/tag_id3v1-defs.h"
+#include "src/includes/tag/tag_apev2-defs.h"
+#include "src/includes/tag/tag_vorbc-defs.h"
+#include "src/includes/tag/tag_fldmap.h"
 /** */
 #define SRC_TAG_FLDMAP_GS_C
 #include "tag_fldmap-prot.h"

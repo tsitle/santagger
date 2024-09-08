@@ -25,7 +25,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj-defs.h>
+#include "src/includes/common/binobj-defs.h"
 /** */
 #include "../cont_ogg/cont_ogg-prot.h"
 

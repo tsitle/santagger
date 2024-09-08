@@ -28,7 +28,7 @@
 #	define ST_TAG_ZFDEB_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
-#include <santag/common/string_mte-defs.h>
+#include "src/includes/common/string_mte-defs.h"
 
 /*
 // System-Includes

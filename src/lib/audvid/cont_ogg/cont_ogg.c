@@ -22,10 +22,10 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/streamrd.h>
-#include <santag/common/streamwr.h>
-#include <santag/audvid/cont_ogg.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/streamwr.h"
+#include "src/includes/audvid/cont_ogg.h"
 /** */
 #define SRC_CONT_OGG_C
 #include "cont_ogg-prot.h"

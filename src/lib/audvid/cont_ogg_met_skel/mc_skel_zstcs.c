@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_math.h>
+#include "src/includes/common/sys_math.h"
 /** */
 #define SRC_MC_SKEL_ZSTCS_C
 #include "mc_skel_zstcs-prot.h"

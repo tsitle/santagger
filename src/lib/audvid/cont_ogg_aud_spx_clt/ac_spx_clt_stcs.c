@@ -22,8 +22,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/audvid/cont_ogg.h>
-#include <santag/audvid/cont_ogg_vorbcomm.h>
+#include "src/includes/audvid/cont_ogg.h"
+#include "src/includes/audvid/cont_ogg_vorbcomm.h"
 /** */
 #define SRC_AC_SPX_CLT_STCS_C
 #include "ac_spx_clt_stcs-prot.h"

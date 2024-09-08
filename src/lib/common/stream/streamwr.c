@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/streamwr.h>
-#include <santag/common/sys_file.h>
-#include <santag/common/sys_math.h>
+#include "src/includes/common/streamwr.h"
+#include "src/includes/common/sys_file.h"
+#include "src/includes/common/sys_math.h"
 /** */
 #define SRC_STREAMWR_C
 #include "streamwr-priv.h"

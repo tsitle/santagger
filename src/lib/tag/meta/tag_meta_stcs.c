@@ -22,14 +22,14 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/dynlist.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/tag/tag_basics.h>
-#include <santag/tag/tag_apev2.h>
-#include <santag/tag/tag_id3v2.h>
-#include <santag/tag/tag_id3v1.h>
-#include <santag/tag/tag_vorbc.h>
-#include <santag/tag/tag_meta.h>
+#include "src/includes/common/dynlist.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_basics.h"
+#include "src/includes/tag/tag_apev2.h"
+#include "src/includes/tag/tag_id3v2.h"
+#include "src/includes/tag/tag_id3v1.h"
+#include "src/includes/tag/tag_vorbc.h"
+#include "src/includes/tag/tag_meta.h"
 /** */
 #define SRC_TAG_META_STCS_C
 #include "tag_meta_stcs-prot.h"

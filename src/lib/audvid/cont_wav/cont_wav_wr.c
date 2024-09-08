@@ -22,10 +22,10 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_file.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/common/sys_math.h>
-#include <santag/audvid/cont_wav.h>
+#include "src/includes/common/sys_file.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/sys_math.h"
+#include "src/includes/audvid/cont_wav.h"
 /** */
 #define SRC_CONT_WAV_WR_C
 #include "cont_wav-prot.h"

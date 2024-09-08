@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_math.h>
-#include <santag/audvid/cont_ogg.h>
-#include <santag/audvid/cont_ogg_vorbcomm.h>
+#include "src/includes/common/sys_math.h"
+#include "src/includes/audvid/cont_ogg.h"
+#include "src/includes/audvid/cont_ogg_vorbcomm.h"
 /** */
 #define SRC_AC_FLAC_STCS_C
 #include "ac_flac_stcs-prot.h"

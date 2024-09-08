@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_math.h>
-#include <santag/audvid/cont_ogg.h>
-#include <santag/audvid/cont_ogg_vorbcomm.h>
+#include "src/includes/common/sys_math.h"
+#include "src/includes/audvid/cont_ogg.h"
+#include "src/includes/audvid/cont_ogg_vorbcomm.h"
 /** */
 #define SRC_VC_DRC_THEO_STCS_C
 #include "vc_drc_theo_stcs-prot.h"

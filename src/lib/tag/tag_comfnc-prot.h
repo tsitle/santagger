@@ -25,10 +25,10 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj-defs.h>
-#include <santag/common/streamrd-defs.h>
-#include <santag/common/streamwr-defs.h>
-#include <santag/common/string_mte-defs.h>
+#include "src/includes/common/binobj-defs.h"
+#include "src/includes/common/streamrd-defs.h"
+#include "src/includes/common/streamwr-defs.h"
+#include "src/includes/common/string_mte-defs.h"
 /** */
 #include "tag_basics-prot.h"
 

@@ -22,11 +22,11 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/dynlist.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/utils/utils_fmt.h>
-#include <santag/tag/tag_id3_helper.h>
-#include <santag/tag/tag_id3v2.h>
+#include "src/includes/common/dynlist.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/utils/utils_fmt.h"
+#include "src/includes/tag/tag_id3_helper.h"
+#include "src/includes/tag/tag_id3v2.h"
 /** */
 #define SRC_CLN_HNDARG_C
 #include "cln_hndarg-pp.h"

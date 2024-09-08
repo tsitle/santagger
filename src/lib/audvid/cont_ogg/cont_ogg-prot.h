@@ -25,13 +25,13 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj-defs.h>
-#include <santag/common/dynlist-defs.h>
-#include <santag/common/sys_math-defs.h>
-#include <santag/common/streamrd-defs.h>
-#include <santag/common/streamwr-defs.h>
-#include <santag/audvid/audvid-defs.h>
-#include <santag/audvid/cont_ogg-defs.h>
+#include "src/includes/common/binobj-defs.h"
+#include "src/includes/common/dynlist-defs.h"
+#include "src/includes/common/sys_math-defs.h"
+#include "src/includes/common/streamrd-defs.h"
+#include "src/includes/common/streamwr-defs.h"
+#include "src/includes/audvid/audvid-defs.h"
+#include "src/includes/audvid/cont_ogg-defs.h"
 /** */
 #include "cont_ogg-common-prot.h"
 

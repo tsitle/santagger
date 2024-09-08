@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/audvid/cont_wav.h>
+#include "src/includes/audvid/cont_wav.h"
 /** */
 #define SRC_MF_READ_DECMPG1_C
 #include "mf_read_decmpg1-pp.h"

@@ -22,12 +22,12 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/string_mte.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/common/sys_file.h>
-#include <santag/utils/utils_fmt.h>
-#include <santag/tag/tag_id3v2.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/sys_file.h"
+#include "src/includes/utils/utils_fmt.h"
+#include "src/includes/tag/tag_id3v2.h"
 /** */
 #define SRC_TAG_ID3V2_FLDADD_C
 #include "tag_id3v2-prot.h"

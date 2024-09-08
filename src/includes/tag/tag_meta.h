@@ -21,10 +21,10 @@
 /*
 // Own-Includes
 */
-#include <santag/common/streamrd-defs.h>
-#include <santag/common/streamwr-defs.h>
-#include <santag/tag/tag_basics-defs.h>
-#include <santag/tag/tag_meta-defs.h>
+#include "src/includes/common/streamrd-defs.h"
+#include "src/includes/common/streamwr-defs.h"
+#include "src/includes/tag/tag_basics-defs.h"
+#include "src/includes/tag/tag_meta-defs.h"
 
 
 ST_BEGIN_C_DECLS

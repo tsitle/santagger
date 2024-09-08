@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/tag/tag_id3_helper-defs.h>
+#include "src/includes/tag/tag_id3_helper-defs.h"
 /** */
 #define SRC_TAG_ID3V1_ZFDEB_C
 #include "tag_id3v1_zfdeb-prot.h"

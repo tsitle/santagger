@@ -22,8 +22,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/streamrd.h>
-#include <santag/common/sys_fnc.h>
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/sys_fnc.h"
 /** */
 #define SRC_AUD_MPEG1_ZRD2_C
 #include "aud_mpeg1_zrd2-pp.h"

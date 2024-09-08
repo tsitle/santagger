@@ -25,11 +25,11 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/string_mte-defs.h>
-#include <santag/common/streamrd-defs.h>
-#include <santag/common/streamwr-defs.h>
-#include <santag/tag/tag_basics-defs.h>
-#include <santag/tag/tag_id3v1-defs.h>
+#include "src/includes/common/string_mte-defs.h"
+#include "src/includes/common/streamrd-defs.h"
+#include "src/includes/common/streamwr-defs.h"
+#include "src/includes/tag/tag_basics-defs.h"
+#include "src/includes/tag/tag_id3v1-defs.h"
 
 
 ST_BEGIN_C_DECLS

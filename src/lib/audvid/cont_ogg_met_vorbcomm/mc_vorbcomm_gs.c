@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/audvid/cont_ogg_vorbcomm.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/audvid/cont_ogg_vorbcomm.h"
 /** */
 #define SRC_MC_VORBCOMM_GS_C
 #include "mc_vorbcomm-prot.h"

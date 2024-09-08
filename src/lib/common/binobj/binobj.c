@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/streamrd.h>
-#include <santag/common/sys_file.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/sys_file.h"
 /** */
 #define SRC_BINOBJ_C
 #include "binobj-prot.h"

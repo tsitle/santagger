@@ -22,12 +22,12 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/dynlist.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/tag/tag_id3_helper.h>
-#include <santag/tag/tag_apev2.h>
-#include <santag/tag/tag_id3v2.h>
-#include <santag/tag/tag_vorbc.h>
+#include "src/includes/common/dynlist.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_id3_helper.h"
+#include "src/includes/tag/tag_apev2.h"
+#include "src/includes/tag/tag_id3v2.h"
+#include "src/includes/tag/tag_vorbc.h"
 /** */
 #define SRC_CLN_HNDHELP_FNC_C
 #include "cln_hndhelp_fnc-prot.h"

@@ -21,10 +21,10 @@
 /*
 // Own-Includes
 */
-#include <santag/common/streamrd-defs.h>
-#include <santag/common/streamwr-defs.h>
-#include <santag/audvid/cont_ogg-defs.h>
-#include <santag/audvid/audvid-defs.h>
+#include "src/includes/common/streamrd-defs.h"
+#include "src/includes/common/streamwr-defs.h"
+#include "src/includes/audvid/cont_ogg-defs.h"
+#include "src/includes/audvid/audvid-defs.h"
 
 
 ST_BEGIN_C_DECLS

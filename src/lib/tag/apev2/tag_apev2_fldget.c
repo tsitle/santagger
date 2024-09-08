@@ -22,8 +22,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/string_mte.h>
-#include <santag/tag/tag_apev2.h>
+#include "src/includes/common/string_mte.h"
+#include "src/includes/tag/tag_apev2.h"
 /** */
 #define SRC_TAG_APEV2_FLDGET_C
 #include "tag_apev2-prot.h"

@@ -22,11 +22,11 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/streamwr.h>
-#include <santag/common/string_mte.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/tag/tag_vorbc.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/streamwr.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_vorbc.h"
 /** */
 #define SRC_TAG_VORBC_ZWR_C
 #include "tag_vorbc_zwr-pp.h"

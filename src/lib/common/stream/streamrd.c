@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_file.h>
-#include <santag/common/sys_math.h>
-#include <santag/common/streamrd.h>
+#include "src/includes/common/sys_file.h"
+#include "src/includes/common/sys_math.h"
+#include "src/includes/common/streamrd.h"
 /** */
 #define SRC_STREAMRD_C
 #include "streamrd-priv.h"

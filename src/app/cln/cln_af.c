@@ -22,10 +22,10 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_file.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/utils/utils_fmt.h>
-#include <santag/tag/tag_id3v2.h>
+#include "src/includes/common/sys_file.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/utils/utils_fmt.h"
+#include "src/includes/tag/tag_id3v2.h"
 /** */
 #define SRC_CLN_AF_C
 #include "cln_af-prot.h"

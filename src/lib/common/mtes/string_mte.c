@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/dynlist.h>
-#include <santag/common/string_mte.h>
-#include <santag/common/sys_fnc.h>
+#include "src/includes/common/dynlist.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/common/sys_fnc.h"
 /** */
 #define SRC_STRING_MTE_C
 #include "string_mte-priv.h"

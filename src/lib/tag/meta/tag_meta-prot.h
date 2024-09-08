@@ -25,15 +25,15 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/dynlist-defs.h>
-#include <santag/common/streamrd-defs.h>
-#include <santag/common/streamwr-defs.h>
-#include <santag/tag/tag_basics-defs.h>
-#include <santag/tag/tag_apev2-defs.h>
-#include <santag/tag/tag_id3v1-defs.h>
-#include <santag/tag/tag_id3v2-defs.h>
-#include <santag/tag/tag_vorbc-defs.h>
-#include <santag/tag/tag_meta-defs.h>
+#include "src/includes/common/dynlist-defs.h"
+#include "src/includes/common/streamrd-defs.h"
+#include "src/includes/common/streamwr-defs.h"
+#include "src/includes/tag/tag_basics-defs.h"
+#include "src/includes/tag/tag_apev2-defs.h"
+#include "src/includes/tag/tag_id3v1-defs.h"
+#include "src/includes/tag/tag_id3v2-defs.h"
+#include "src/includes/tag/tag_vorbc-defs.h"
+#include "src/includes/tag/tag_meta-defs.h"
 
 
 ST_BEGIN_C_DECLS

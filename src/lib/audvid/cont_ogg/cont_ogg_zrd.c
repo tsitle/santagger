@@ -22,14 +22,14 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/dynlist.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/common/sys_math.h>
-#include <santag/common/streamrd.h>
-#include <santag/utils/utils_fmt.h>
-#include <santag/audvid/audvid.h>
-#include <santag/audvid/cont_ogg_vorbcomm.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/dynlist.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/sys_math.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/utils/utils_fmt.h"
+#include "src/includes/audvid/audvid.h"
+#include "src/includes/audvid/cont_ogg_vorbcomm.h"
 /** */
 #define SRC_CONT_OGG_ZRD_C
 #include "cont_ogg_zrd-pp.h"

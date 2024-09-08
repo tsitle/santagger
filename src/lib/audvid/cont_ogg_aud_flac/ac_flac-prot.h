@@ -25,7 +25,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/audvid/cont_ogg-defs.h>
+#include "src/includes/audvid/cont_ogg-defs.h"
 /** */
 #include "../../utils/w-md5-prot.h"
 

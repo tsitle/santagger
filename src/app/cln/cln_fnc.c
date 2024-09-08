@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
+#include "src/includes/common/sys_fnc.h"
 /** */
 #define SRC_CLN_FNC_C
 #include "cln_fnc-prot.h"

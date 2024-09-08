@@ -24,10 +24,10 @@
 #ifdef HAVE_CONFIG_H
 #	include <config.h>
 #endif
-#include <santag/common/streamrd-defs.h>
-#include <santag/common/sys_math-defs.h>
-#include <santag/audvid/audvid-defs.h>
-#include <santag/audvid/aud_mpeg1-defs.h>
+#include "src/includes/common/streamrd-defs.h"
+#include "src/includes/common/sys_math-defs.h"
+#include "src/includes/audvid/audvid-defs.h"
+#include "src/includes/audvid/aud_mpeg1-defs.h"
 
 
 ST_BEGIN_C_DECLS

@@ -22,8 +22,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
-#include <santag/tag/tag_id3_helper.h>
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_id3_helper.h"
 /** */
 #define SRC_TAG_ID3_HELPER_C
 #include "tag_id3_helper-prot.h"

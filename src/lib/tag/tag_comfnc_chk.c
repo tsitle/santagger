@@ -22,10 +22,10 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/string_mte.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/tag/tag_comfnc.h>
-#include <santag/tag/tag_id3_helper.h>
+#include "src/includes/common/string_mte.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_comfnc.h"
+#include "src/includes/tag/tag_id3_helper.h"
 /** */
 #define SRC_TAG_COMFNC_CHK_C
 #include "tag_comfnc_chk-pp.h"

@@ -22,11 +22,11 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/string_mte.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/tag/tag_basics.h>
-#include <santag/tag/tag_id3_helper.h>
-#include <santag/tag/tag_id3v1.h>
+#include "src/includes/common/string_mte.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_basics.h"
+#include "src/includes/tag/tag_id3_helper.h"
+#include "src/includes/tag/tag_id3v1.h"
 /** */
 #define SRC_MF_SHOW_TIV1_C
 #include "mf_show_tiv1-pp.h"

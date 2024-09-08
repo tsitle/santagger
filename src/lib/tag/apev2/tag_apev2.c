@@ -22,13 +22,13 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/string_mte.h>
-#include <santag/common/streamrd.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/tag/tag_basics.h>
-#include <santag/tag/tag_comfnc.h>
-#include <santag/tag/tag_apev2.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_basics.h"
+#include "src/includes/tag/tag_comfnc.h"
+#include "src/includes/tag/tag_apev2.h"
 /** */
 #define SRC_TAG_APEV2_C
 #include "tag_apev2-prot.h"

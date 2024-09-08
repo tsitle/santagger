@@ -25,7 +25,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/lib_defs.h>
+#include "src/includes/lib_defs.h"
 
 /*
 // System-Includes

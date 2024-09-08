@@ -25,7 +25,7 @@
 #	define ST_SYSMATH_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
-#include <santag/common/sys_math.h>
+#include "src/includes/common/sys_math.h"
 
 /*
 // System-Includes

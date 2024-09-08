@@ -22,11 +22,11 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/streamrd.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/common/sys_file.h>
-#include <santag/utils/utils_fmt.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/sys_file.h"
+#include "src/includes/utils/utils_fmt.h"
 /** */
 #define SRC_UTILS_FMT_C
 #include "utils_fmt-priv.h"

@@ -25,7 +25,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/streamrd-defs.h>
+#include "src/includes/common/streamrd-defs.h"
 /** */
 #include "cont_ogg-prot.h"
 

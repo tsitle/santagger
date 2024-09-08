@@ -22,15 +22,15 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
-#include <santag/common/string_mte.h>
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/string_mte.h"
 /** */
 #define SRC_TAG_ZFDEB_C
 #include "tag_zfdeb-prot.h"
 #undef SRC_TAG_ZFDEB_C
 /** */
 #if (ST_TAG_ZFDEB_DEB_ == 1)
-#	include <santag/common/string_mte.h>
+	#include "src/includes/common/string_mte.h"
 #endif
 
 /*

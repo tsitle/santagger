@@ -22,8 +22,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
-#include <santag/audvid/cont_ogg.h>
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/audvid/cont_ogg.h"
 /** */
 #define SRC_CONT_OGG_GS_C
 #include "cont_ogg-prot.h"

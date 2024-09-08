@@ -22,11 +22,11 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/string_mte.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/tag/tag_comfnc.h>
-#include <santag/tag/tag_id3v2.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_comfnc.h"
+#include "src/includes/tag/tag_id3v2.h"
 /** */
 #define SRC_TAG_ID3V2_ZTIDY_C
 #include "tag_id3v2_ztidy-prot.h"

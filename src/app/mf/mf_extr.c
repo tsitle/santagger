@@ -22,15 +22,15 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/streamrd.h>
-#include <santag/common/sys_file.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/utils/utils_fmt.h>
-#include <santag/tag/tag_basics.h>
-#include <santag/tag/tag_id3v2.h>
-#include <santag/tag/tag_meta.h>
-#include <santag/tag/tag_vorbc.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/sys_file.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/utils/utils_fmt.h"
+#include "src/includes/tag/tag_basics.h"
+#include "src/includes/tag/tag_id3v2.h"
+#include "src/includes/tag/tag_meta.h"
+#include "src/includes/tag/tag_vorbc.h"
 /** */
 #define SRC_MF_EXTR_C
 #include "mf_extr-pp.h"

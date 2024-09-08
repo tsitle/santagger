@@ -25,9 +25,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/tag/tag_apev2-defs.h>
-#include <santag/tag/tag_id3v2-defs.h>
-#include <santag/tag/tag_vorbc-defs.h>
+#include "src/includes/tag/tag_apev2-defs.h"
+#include "src/includes/tag/tag_id3v2-defs.h"
+#include "src/includes/tag/tag_vorbc-defs.h"
 /** */
 #include "cln-prot.h"
 

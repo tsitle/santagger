@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/streamrd.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/audvid/cont_ogg.h>
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/audvid/cont_ogg.h"
 /** */
 #define SRC_AC_SPX_CLT_ZRD_C
 #include "ac_spx_clt_zrd-prot.h"

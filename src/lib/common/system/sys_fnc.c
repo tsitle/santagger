@@ -25,7 +25,7 @@
 #	define ST_SYSFNC_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
+#include "src/includes/common/sys_fnc.h"
 
 /*
 // System-Includes

@@ -22,8 +22,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
-#include <santag/audvid/aud_mpeg1.h>
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/audvid/aud_mpeg1.h"
 /** */
 #define SRC_AUD_MPEG1_GS_C
 #include "aud_mpeg1-prot.h"

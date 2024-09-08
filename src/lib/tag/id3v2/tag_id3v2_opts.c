@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/tag/tag_id3v2.h>
+#include "src/includes/tag/tag_id3v2.h"
 /** */
 #define SRC_TAG_ID3V2_OPTS_C
 #include "tag_id3v2-prot.h"

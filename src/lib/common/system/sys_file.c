@@ -25,8 +25,8 @@
 #	define ST_SYSFILE_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
-#include <santag/common/sys_file.h>
-#include <santag/common/sys_fnc.h>
+#include "src/includes/common/sys_file.h"
+#include "src/includes/common/sys_fnc.h"
 
 /*
 // System-Includes

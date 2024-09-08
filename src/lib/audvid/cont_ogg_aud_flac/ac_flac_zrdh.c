@@ -22,11 +22,11 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/streamrd.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/common/sys_math.h>
-#include <santag/utils/utils_fmt.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/sys_math.h"
+#include "src/includes/utils/utils_fmt.h"
 /** */
 #define SRC_AC_FLAC_ZRDH_C
 #include "ac_flac_zrdh-pp.h"

@@ -22,9 +22,9 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
-#include <santag/audvid/audvid.h>
-#include <santag/audvid/aud_mpeg1.h>
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/audvid/audvid.h"
+#include "src/includes/audvid/aud_mpeg1.h"
 /** */
 #define SRC_AUD_MPEG1_STCS_C
 #include "aud_mpeg1_stcs-prot.h"

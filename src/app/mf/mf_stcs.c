@@ -22,11 +22,11 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_file.h>
-#include <santag/common/streamrd.h>
-#include <santag/audvid/aud_mpeg1.h>
-#include <santag/audvid/cont_ogg.h>
-#include <santag/tag/tag_meta.h>
+#include "src/includes/common/sys_file.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/audvid/aud_mpeg1.h"
+#include "src/includes/audvid/cont_ogg.h"
+#include "src/includes/tag/tag_meta.h"
 /** */
 #define SRC_MF_STCS_C
 #include "mf_stcs-pp.h"

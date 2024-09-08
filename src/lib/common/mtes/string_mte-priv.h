@@ -28,8 +28,8 @@
 #	define ST_STRING_MTE_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
-#include <santag/common/string_mte-defs.h>
-#include <santag/common/dynlist-defs.h>
+#include "src/includes/common/string_mte-defs.h"
+#include "src/includes/common/dynlist-defs.h"
 
 
 ST_BEGIN_C_DECLS

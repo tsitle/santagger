@@ -31,7 +31,7 @@
 #	define ST_W_BASE64_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
-#include <santag/common/binobj-defs.h>
+#include "src/includes/common/binobj-defs.h"
 
 
 ST_BEGIN_C_DECLS

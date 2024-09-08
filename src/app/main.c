@@ -39,18 +39,18 @@
 #	define LOC_SHOWLOCALE_  0  /* show locale ? */
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/streamrd.h>
-#include <santag/common/sys_file.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/utils/utils_fmt.h>
-#include <santag/audvid/aud_mpeg1.h>
-#include <santag/audvid/cont_ogg.h>
-#include <santag/tag/tag_apev2.h>
-#include <santag/tag/tag_id3v1.h>
-#include <santag/tag/tag_id3v2.h>
-#include <santag/tag/tag_vorbc.h>
-#include <santag/tag/tag_meta.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/sys_file.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/utils/utils_fmt.h"
+#include "src/includes/audvid/aud_mpeg1.h"
+#include "src/includes/audvid/cont_ogg.h"
+#include "src/includes/tag/tag_apev2.h"
+#include "src/includes/tag/tag_id3v1.h"
+#include "src/includes/tag/tag_id3v2.h"
+#include "src/includes/tag/tag_vorbc.h"
+#include "src/includes/tag/tag_meta.h"
 /** */
 #define SRC_MAIN_C
 #include "mf/mf_cnvmrg-pp.h"
@@ -58,7 +58,7 @@
 #include "mf/mf_read-pp.h"
 #include "mf/mf_extr-pp.h"
 #include "mf/mf_show-pp.h"
-#include "mf/mf_fnc-pp.h"
+//#include "mf/mf_fnc-pp.h"
 #include "mf/mf_outp-pp.h"
 #include "mf/mf_stcs-pp.h"
 /*** */

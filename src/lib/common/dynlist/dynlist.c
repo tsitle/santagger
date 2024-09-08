@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/dynlist.h>
+#include "src/includes/common/dynlist.h"
 /** */
 #define SRC_DYNLIST_C
 #include "dynlist-priv.h"

@@ -22,12 +22,12 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/string_mte.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/audvid/audvid.h>
-#include <santag/audvid/aud_mpeg1.h>
-#include <santag/audvid/cont_ogg.h>
-#include <santag/audvid/cont_ogg_vorbcomm.h>
+#include "src/includes/common/string_mte.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/audvid/audvid.h"
+#include "src/includes/audvid/aud_mpeg1.h"
+#include "src/includes/audvid/cont_ogg.h"
+#include "src/includes/audvid/cont_ogg_vorbcomm.h"
 /** */
 #define SRC_MF_SHOW_AV_C
 #include "mf_show_av-pp.h"

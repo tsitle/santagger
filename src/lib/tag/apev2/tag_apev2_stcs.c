@@ -22,12 +22,12 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/dynlist.h>
-#include <santag/common/sys_fnc.h>
-#include <santag/common/string_mte.h>
-#include <santag/tag/tag_basics.h>
-#include <santag/tag/tag_apev2.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/dynlist.h"
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/tag/tag_basics.h"
+#include "src/includes/tag/tag_apev2.h"
 /** */
 #define SRC_TAG_APEV2_STCS_C
 #include "tag_apev2_stcs-prot.h"

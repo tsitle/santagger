@@ -21,12 +21,12 @@
 /*
 // Own-Includes
 */
-#include <santag/lib_defs.h>
-#include <santag/audvid/ogg_sub/mc_vorbcomm-defs.h>
-#include <santag/audvid/ogg_sub/ac_flac-defs.h>
-#include <santag/audvid/ogg_sub/ac_spx_clt-defs.h>
-#include <santag/audvid/ogg_sub/ac_vorb-defs.h>
-#include <santag/audvid/ogg_sub/vc_drc_theo-defs.h>
+#include "src/includes/lib_defs.h"
+#include "src/includes/audvid/ogg_sub/mc_vorbcomm-defs.h"
+#include "src/includes/audvid/ogg_sub/ac_flac-defs.h"
+#include "src/includes/audvid/ogg_sub/ac_spx_clt-defs.h"
+#include "src/includes/audvid/ogg_sub/ac_vorb-defs.h"
+#include "src/includes/audvid/ogg_sub/vc_drc_theo-defs.h"
 
 
 ST_BEGIN_C_DECLS

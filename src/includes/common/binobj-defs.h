@@ -25,7 +25,7 @@
 /*
 // Own-Includes
 */
-#include <santag/lib_defs.h>
+#include "src/includes/lib_defs.h"
 
 
 ST_BEGIN_C_DECLS

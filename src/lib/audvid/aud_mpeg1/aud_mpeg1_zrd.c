@@ -22,10 +22,10 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/streamrd.h>
-#include <santag/common/sys_math.h>
-#include <santag/audvid/audvid.h>
-#include <santag/utils/utils_fmt.h>
+#include "src/includes/common/streamrd.h"
+#include "src/includes/common/sys_math.h"
+#include "src/includes/audvid/audvid.h"
+#include "src/includes/utils/utils_fmt.h"
 /** */
 #define SRC_AUD_MPEG1_ZRD_C
 #include "aud_mpeg1_zrd-prot.h"

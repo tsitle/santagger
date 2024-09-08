@@ -25,10 +25,10 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_file-defs.h>
-#include <santag/common/sys_math-defs.h>
-#include <santag/common/dynlist-defs.h>
-#include <santag/audvid/cont_wav-defs.h>
+#include "src/includes/common/sys_file-defs.h"
+#include "src/includes/common/sys_math-defs.h"
+#include "src/includes/common/dynlist-defs.h"
+#include "src/includes/audvid/cont_wav-defs.h"
 
 
 ST_BEGIN_C_DECLS

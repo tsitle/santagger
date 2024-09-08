@@ -22,11 +22,11 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
-#include <santag/common/string_mte.h>
-#include <santag/common/streamrd.h>
-#include <santag/tag/tag_id3_helper.h>
-#include <santag/tag/tag_id3v1.h>
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/tag/tag_id3_helper.h"
+#include "src/includes/tag/tag_id3v1.h"
 /** */
 #define SRC_TAG_ID3V1_ZRD_C
 #include "tag_id3v1_zrd-prot.h"

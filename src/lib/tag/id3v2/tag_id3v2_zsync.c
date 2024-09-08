@@ -22,8 +22,8 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/binobj.h>
-#include <santag/common/streamrd.h>
+#include "src/includes/common/binobj.h"
+#include "src/includes/common/streamrd.h"
 /** */
 #define SRC_TAG_ID3V2_ZSYNC_C
 #include "tag_id3v2_zsync-prot.h"

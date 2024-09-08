@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/audvid/cont_ogg.h>
+#include "src/includes/audvid/cont_ogg.h"
 /** */
 #define SRC_CONT_OGG_OPTS_C
 #include "cont_ogg-prot.h"

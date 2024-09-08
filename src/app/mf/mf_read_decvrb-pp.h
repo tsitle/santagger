@@ -25,7 +25,7 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/audvid/audvid-defs.h>
+#include "src/includes/audvid/audvid-defs.h"
 /** */
 #include "mf-prot.h"
 #include "mf_read_dbuf-prot.h"

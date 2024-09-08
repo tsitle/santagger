@@ -22,10 +22,10 @@
 #	include <config.h>
 #endif
 /** */
-#include <santag/common/sys_fnc.h>
-#include <santag/common/sys_math.h>
-#include <santag/common/streamrd.h>
-#include <santag/audvid/cont_ogg.h>
+#include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/sys_math.h"
+#include "src/includes/common/streamrd.h"
+#include "src/includes/audvid/cont_ogg.h"
 /** */
 #define SRC_MC_SKEL_ZRD_C
 #include "mc_skel_zrd-prot.h"

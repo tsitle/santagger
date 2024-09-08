@@ -21,7 +21,7 @@
 /*
 // Own-Includes
 */
-#include <santag/tag/tag_id3_helper-defs.h>
+#include "src/includes/tag/tag_id3_helper-defs.h"
 
 
 ST_BEGIN_C_DECLS
