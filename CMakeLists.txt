@@ -27,11 +27,13 @@ add_subdirectory("src/includes")
 
 # add shared library
 add_library(santagger_lib SHARED)
+set_target_properties(santagger_lib PROPERTIES OUTPUT_NAME "santagger")
 target_include_directories(santagger_lib PRIVATE "${PROJECT_SOURCE_DIR}")
 add_subdirectory("src/lib")
 
 # add executable
 add_executable(santagger_app)
+set_target_properties(santagger_app PROPERTIES OUTPUT_NAME "santagger")
 add_subdirectory("src/app")
 target_link_libraries(santagger_app PRIVATE santagger_lib santagger_includes)
 
