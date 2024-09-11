@@ -969,6 +969,11 @@ ST_TIV2__fa_add_moveToIP(const char *pFnc,
 			break;
 		}
 	}
+	if (! fndFIPC) {
+		st_id3v2_d_err(&pTagI->opts, pFnc, pTagI->pFilen,
+				"could not find index of field at insertPos");
+		return ST_ERR_FAIL;
+	}
 	/* increment field number of all 'bigger' fields */
 	pItFld = NULL;
 	while ((pItFld = st_id3v2_ite_nextFld(pTag, pItFld)) != NULL) {

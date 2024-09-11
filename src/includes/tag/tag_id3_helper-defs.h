@@ -46,7 +46,7 @@ ST_BEGIN_C_DECLS
 typedef enum {
 	ST_ID3_GEN_SPEC_COV,
 	ST_ID3_GEN_SPEC_RMX,
-	ST_ID3_GEN_SPEC_NONE  /* - none, ! this must be the last elem ! */
+	ST_ID3_GEN_SPEC_NONE  /* - none ! this must be the last elem ! */
 } Tst_id3_genre_spec_id;
 
 

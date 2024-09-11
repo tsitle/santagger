@@ -56,14 +56,14 @@ typedef enum {
 	ST_ID3V2_PT_ILLUS   = 0x12, /* Illustration */
 	ST_ID3V2_PT_BLOGO   = 0x13, /* Band/artist logotype */
 	ST_ID3V2_PT_PLOGO   = 0x14, /* Publisher/Studio logotype */
-	ST_ID3V2_PT_NONE    = 0x15  /* none, ! this must be the last elem ! */
+	ST_ID3V2_PT_NONE    = 0x15  /* none ! this must be the last elem ! */
 } Tst_id3v2_picTp;
 
 /** ID3v2 synced lyrics timestamp format */
 typedef enum {
 	ST_ID3V2_SLTTSF_MPEG  = 0x00,  /* MPEG frames based */
 	ST_ID3V2_SLTTSF_MILLI = 0x01,  /* Millisecs based */
-	ST_ID3V2_SLTTSF_NONE  = 0x02   /* none, ! this must be the last elem ! */
+	ST_ID3V2_SLTTSF_NONE  = 0x02   /* none ! this must be the last elem ! */
 } Tst_id3v2_sltTSF;
 
 /** ID3v2 synced lyrics content type */
@@ -77,7 +77,7 @@ typedef enum {
 	ST_ID3V2_SLTCTP_TRIV   = 0x06,  /* Trivia/'Pop up' */
 	ST_ID3V2_SLTCTP_URLWP  = 0x07,  /* URLs to webpages */
 	ST_ID3V2_SLTCTP_URLIMG = 0x08,  /* URLs to images */
-	ST_ID3V2_SLTCTP_NONE   = 0x09   /* none, ! this must be the last elem ! */
+	ST_ID3V2_SLTCTP_NONE   = 0x09   /* none ! this must be the last elem ! */
 } Tst_id3v2_sltCTp;
 
 /** ID3v2 frame types (regarding their structure) */
@@ -96,7 +96,7 @@ typedef enum {
 	ST_ID3V2_FTP_CNT,      /* [P]CNT */
 	ST_ID3V2_FTP_POP,      /* POP[M] */
 	ST_ID3V2_FTP_CPY,      /* copy data */
-	ST_ID3V2_FTP_NONE      /* none, ! this must be the last elem ! */
+	ST_ID3V2_FTP_NONE      /* none ! this must be the last elem ! */
 } Tst_id3v2_frTp;
 
 /** ID3v2 frame data read/write order - type of data */
@@ -114,7 +114,7 @@ typedef enum {
 	ST_ID3V2_TFLD_RWO_TP_CDMF,  /* CDM comprMeth + uncomprSz */
 	ST_ID3V2_TFLD_RWO_TP_SYLT,  /* S[Y]LT timestampfmt + conttp */
 	/* */
-	ST_ID3V2_TFLD_RWO_TP_NONE   /* none, ! this must be the last elem ! */
+	ST_ID3V2_TFLD_RWO_TP_NONE   /* none ! this must be the last elem ! */
 } Tst_id3v2_fldd_rword_typ;
 
 /** ID3v2 frame IDs */
@@ -256,7 +256,7 @@ typedef enum {
 	ST_ID3V2_FID_234_CTXT,  /* Custom text field */
 	ST_ID3V2_FID_234_CURL,  /* Custom URL field */
 	/* */
-	ST_ID3V2_FID_NONE       /* - none, ! this must be the last elem ! */
+	ST_ID3V2_FID_NONE       /* - none ! this must be the last elem ! */
 } Tst_id3v2_frID;
 
 

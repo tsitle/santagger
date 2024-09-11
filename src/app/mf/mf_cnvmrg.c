@@ -131,7 +131,7 @@ ast_mf_cm_mergeTagsOfAkind(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	Tst_tagMeta_mt        *pMT = NULL,
 	                      *pMTfirst;
 	Tst_tagBasics const   *pTBas;
-	Tast_cln_t_tagListIx  tlix;
+	//Tast_cln_t_tagListIx  tlix;
 
 	ST_ASSERTN_IARG(pCmdln == NULL || pMF == NULL ||
 			pMF->pFilen == NULL || pEdInf == NULL)
@@ -145,7 +145,7 @@ ast_mf_cm_mergeTagsOfAkind(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	for (x = 0; x < cMTTPS_N; x++) {
 		pTagD = st_tagMeta_fnc_getTagDesc(cMTTPS[x])[0];
 		pTBas = NULL;
-		tlix  = ast_mf_fnc_getSrcTLIXfromMTTP(cMTTPS[x]);
+		//tlix  = ast_mf_fnc_getSrcTLIXfromMTTP(cMTTPS[x]);
 		pMT   = NULL;
 		/* */
 		cnt       = 0;
@@ -1484,8 +1484,12 @@ AST_MF__cm_mergeCmdln_addOrModFld_file(const Tast_cln_a *pCmdln,
 					}
 					if (pAF->isPTPset) {
 						/* replace picture type */
-						res = st_vorbc_fldSet_attrPicTp((Tst_vorbc_tag*)pTag,
-								ST_VORBC_FID_MBPI, pAF->modFNr, pAF->picTp);
+						res = st_vorbc_fldSet_attrPicTp(
+								(Tst_vorbc_tag*)pTag,
+								ST_VORBC_FID_MBPI,
+								pAF->modFNr,
+								st_tagCFnc_convId3v2ToVorbc_picTp(pAF->picTp)
+							);
 						/* */
 						*pEdited = (res == ST_ERR_SUCC);
 					}

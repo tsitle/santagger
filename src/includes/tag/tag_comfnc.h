@@ -23,6 +23,8 @@
 */
 #include "src/includes/common/string_mte-defs.h"
 #include "src/includes/tag/tag_comfnc-defs.h"
+#include "src/includes/tag/tag_id3v2-defs.h"
+#include "src/includes/tag/tag_vorbc-defs.h"
 
 
 ST_BEGIN_C_DECLS
@@ -36,6 +38,12 @@ st_tagCFnc_iplsMerge(Tst_mtes_strArr *pSArr);
 
 ST_EXPORT Tst_err
 st_tagCFnc_iplsSplit(Tst_mtes_strArr *pSArr);
+
+ST_EXPORT Tst_vorbc_picTp
+st_tagCFnc_convId3v2ToVorbc_picTp(Tst_id3v2_picTp srcPicTp);
+
+ST_EXPORT Tst_id3v2_picTp
+st_tagCFnc_convVorbcToId3v2_picTp(Tst_vorbc_picTp srcPicTp);
 
 /** Structs */
 ST_EXPORT void

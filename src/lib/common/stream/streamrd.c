@@ -588,7 +588,7 @@ st_streamrd_rdMemcmpBytes(Tst_streamrd *pSObj,
 	pSOI = (Tst_streamrd_intn*)pSObj->pObInternal;
 	/* */
 	if (pSOI->sbuf.leftoverBits != 0 && pSOI->sbuf.leftoverBits != 8)
-		return ST_ERR_FAIL;
+		return ST_B_FALSE;
 
 	lob = ST_STREAM_LOBYTES(pSOI);
 	if (lob < nBytes) {
@@ -1479,7 +1479,9 @@ st_streamrd_rdFlacUtf8Encoded_uint64(Tst_streamrd *pSObj,
 	Tst_byte   x      = 0;
 	Tst_uint32 i      = 0,
 	           tmp32  = 0;
-	Tst_bool   full36 = ST_B_FALSE;
+	#if (CONFIG_ST_ALL_HAVE64BIT != 1)
+		Tst_bool full36 = ST_B_FALSE;
+	#endif
 
 	ST_ASSERTN_IARG(! ST_STREAM_CHECK(pSObj) || pVal == NULL)
 
@@ -1511,7 +1513,9 @@ st_streamrd_rdFlacUtf8Encoded_uint64(Tst_streamrd *pSObj,
 		tmp32 = 0;  /* 0 bit */
 		i     = 6;
 		/* */
-		full36 = ST_B_TRUE;
+		#if (CONFIG_ST_ALL_HAVE64BIT != 1)
+			full36 = ST_B_TRUE;
+		#endif
 	} else
 		return ST_ERR_IDAT;
 

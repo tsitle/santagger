@@ -436,9 +436,16 @@ st_contOgg_drcrd_parseHPack(const Tst_contOgg_opts *pOpts,
 				return ST_ERR_IDAT;
 			}
 			/* */
-			/*pNumDen   = &cDIRAC_ASPECT_RATIOS[indexUI];
-			pixAspRatio = (double)pNumDen->numerator /
-					(double)pNumDen->denominator;*/
+			pNumDen = &cDIRAC_ASPECT_RATIOS[indexUI];
+			const double pixAspRatio = (double)pNumDen->numerator / (double)pNumDen->denominator;
+			if (pixAspRatio < 0.0f) {
+				if (ST_AVFDEB_ISVERBAUD_BD(pOpts->basOpts)) {
+					st_contOgg_d_debBS3(pOpts, pBSI, cFNCN,
+							"invalid pixel aspect ratio value found");
+				}
+				++pBSI->errorCnt;
+				return ST_ERR_IDAT;
+			}
 		}
 	} /*else {
 		pixAspRatio = (double)pIdSub->pixelAspectRatio_numerator /
@@ -642,7 +649,7 @@ ST_CONTOGG__theord_parseIdent(const Tst_contOgg_opts *pOpts,
 	Tst_uint32 ui32    = 0,
 	           picW    = 0,
 	           picH    = 0,
-	           picYfin = 0,
+	           //picYfin = 0,
 	           fpsN    = 0,
 	           fpsD    = 0,
 	           aspN    = 0,
@@ -650,7 +657,7 @@ ST_CONTOGG__theord_parseIdent(const Tst_contOgg_opts *pOpts,
 	Tst_byte   ui8     = 0,
 	           picX    = 0,
 	           picYpre = 0;
-	Tst_contOgg__theora_colorspace colSpace;
+	//Tst_contOgg__theora_colorspace colSpace;
 	Tst_contOgg__theora_pixelFmt   pixelFmt;
 	Tst_contOgg_theoIdent          *pTID = &pBSI->pTheo->ident;
 
@@ -719,7 +726,7 @@ ST_CONTOGG__theord_parseIdent(const Tst_contOgg_opts *pOpts,
 	}
 
 	/** correct sense of picY */
-	picYfin = pTID->height - picH - picYpre;
+	//picYfin = pTID->height - picH - picYpre;
 
 	/** aspect_numerator and aspect_denominator */
 	st_streamrd_rdUInt32(pSObj,
@@ -731,7 +738,7 @@ ST_CONTOGG__theord_parseIdent(const Tst_contOgg_opts *pOpts,
 
 	/** colorspace */
 	st_streamrd_rdByte_noCRC(pSObj, 8, &ui8);
-	colSpace = (Tst_contOgg__theora_colorspace)ui8;
+	//colSpace = (Tst_contOgg__theora_colorspace)ui8;
 
 	/** bitrate */
 	st_streamrd_rdUInt32(pSObj,

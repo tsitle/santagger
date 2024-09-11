@@ -643,7 +643,7 @@ ST_TIV2__chk_chkFld_partIV(ST_OPTARG(const Tst_id3v2_opts *pOpts),
 		Tst_id3v2_fldErrs *pFErrs)
 {
 	Tst_err  res    = ST_ERR_SUCC;
-	Tst_bool modded = ST_B_FALSE;
+	//Tst_bool modded = ST_B_FALSE;
 
 	ST_ASSERTN_IARG(pFldI == NULL || pFldPrI == NULL || pFErrs == NULL)
 
@@ -657,7 +657,7 @@ ST_TIV2__chk_chkFld_partIV(ST_OPTARG(const Tst_id3v2_opts *pOpts),
 					(pFldI->fldPrI.id != ST_ID3V2_FID_234_POPM ?
 						"No One" : "no@one.com"), &pFldI->attrDesc);
 			if (res == ST_ERR_SUCC) {
-				modded = ST_B_TRUE;
+				//modded = ST_B_TRUE;
 				if (pOpts != NULL && ST_TFDEB_ISVERBTAG_BD(pOpts->basOpts))
 					st_id3v2_d_fdeb3Str(pOpts, 0, pFnc, pFldI,
 							ST_B_TRUE, "csc", &pFldI->attrDesc, "");
@@ -665,7 +665,8 @@ ST_TIV2__chk_chkFld_partIV(ST_OPTARG(const Tst_id3v2_opts *pOpts),
 		}
 		break;
 	default:
-		modded = ST_B_FALSE;  /* do nothing */
+		//modded = ST_B_FALSE;  /* do nothing */
+		break;
 	}
 	return res;
 }

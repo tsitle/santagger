@@ -105,8 +105,7 @@ st_contWav_opts_getOutputFmt(Tst_contWav_obj *pWObj,
 
 	pWObjI = (Tst_contWav_obj_intn*)pWObj->pObInternal;
 
-	*pIsRIFForAIFF =
-			((Tst_contWav_obj_intn*)pWObj->pObInternal)->opts.wrFmtRIFForAIFF;
+	*pIsRIFForAIFF = pWObjI->opts.wrFmtRIFForAIFF;
 }
 
 /******************************************************************************/

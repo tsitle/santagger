@@ -553,8 +553,8 @@ ST_CONTOGG__rdcod_pP_vorbis(const Tst_contOgg_opts *pOpts,
 	Tst_bool   stopThen     = ST_B_FALSE,
 	           rdCodID      = ST_B_FALSE,
 	           fndCodHd2    = foundCodHd,
-	           isPureHeader = ST_B_TRUE,
-	           isPureAudio  = ST_B_TRUE,
+	           //isPureHeader = ST_B_TRUE,
+	           //isPureAudio  = ST_B_TRUE,
 	           isCmtSet;
 	Tst_uint32 segsxPP      = 0,
 	           outSzPP      = 0;
@@ -594,8 +594,9 @@ ST_CONTOGG__rdcod_pP_vorbis(const Tst_contOgg_opts *pOpts,
 		}
 		/* */
 		if (fndCodHd2 && (packTp & 0x01) != 0) {
-			if (pBSI->pVorb->decObj.decToPCM)
-				isPureAudio = ST_B_FALSE;
+			//if (pBSI->pVorb->decObj.decToPCM) {
+			//	isPureAudio = ST_B_FALSE;
+			//}
 			/* */
 			if (pBSI->pVorb->decObj.decToPCM) {
 				codHdBuf[0] = packTp;
@@ -642,7 +643,7 @@ ST_CONTOGG__rdcod_pP_vorbis(const Tst_contOgg_opts *pOpts,
 				res = st_contOgg_vorbrd_feedDecoderHeader(pOpts, pBSI);
 			}
 		} else {
-			isPureHeader = ST_B_FALSE;
+			//isPureHeader = ST_B_FALSE;
 			/* */
 			/**if (ST_AVFDEB_ISVERBAUD_BD(pOpts->basOpts))
 				st_contOgg_d_debBS3(pOpts, pBSI, LOC_FNCN_,

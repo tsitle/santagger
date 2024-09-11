@@ -282,8 +282,8 @@ AST_MF__extr_extrTag_sub(const Tast_cln_a *pCmdln,
 	Tst_err       res;
 	Tst_str       *pOutFn = NULL;
 	Tst_str const *pInFn  = st_sysFStc_getFilen(pFStcIn);
-	Tst_fsize     cp      = 0,
-	              totCp   = 0;
+	Tst_fsize     cp      = 0
+	              /*totCp   = 0*/;
 	char          debMsg[128],
 	              debMsg2[128];
 	Tst_sys_fstc  fstcOut;
@@ -291,8 +291,9 @@ AST_MF__extr_extrTag_sub(const Tast_cln_a *pCmdln,
 	ST_ASSERTN_IARG(pCmdln == NULL ||
 			pFStcIn == NULL || pTDesc == NULL || pFnExt == NULL)
 
-	if (binSize == 0)
+	if (binSize == 0) {
 		return ST_ERR_SUCC;
+	}
 
 	/* create out-filename */
 	res = ast_mf_fnc_createOutFn(pInFn,
@@ -303,8 +304,9 @@ AST_MF__extr_extrTag_sub(const Tast_cln_a *pCmdln,
 				(vorBsIx == 0 ? 0 : (vorBsSIx == 0 ? 1 : vorBsSIx)) : 0),
 			pCmdln->opts.pOutpdir, pCmdln->opts.owExFiles,
 			&pOutFn);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
 		return res;
+	}
 
 	/* */
 	if (pVor == NULL) {
@@ -357,46 +359,51 @@ AST_MF__extr_extrTag_sub(const Tast_cln_a *pCmdln,
 							"couldn't copy whole tag from file '%s'",
 							pInFn);
 					res = ST_ERR_FAIL;
-				} else if (res == ST_ERR_FCRD)
+				} else if (res == ST_ERR_FCRD) {
 					ast_mf_op_d_fileErr(pInFn, cFNCN,
 							"can't read from file '%s'",
 							pInFn);
-				else if (res == ST_ERR_FCWR)
+				} else if (res == ST_ERR_FCWR) {
 					ast_mf_op_d_fileErr(pInFn, cFNCN,
 							"can't write to file '%s'", pOutFn);
-				else if (res != ST_ERR_SUCC)
+				} else if (res != ST_ERR_SUCC) {
 					ast_mf_op_d_fileErr(pInFn, cFNCN,
 							"copying file failed");
-				else
+				} /*else {
 					totCp += cp;
+				}*/
 			}
 		}
 
 		/* */
-		if (st_sysFStc_isOpen(&fstcOut))
+		if (st_sysFStc_isOpen(&fstcOut)) {
 			st_sysFStc_close(&fstcOut);
+		}
 		st_sys_stc_freeFStc(&fstcOut);
 	} else if (pVor != NULL && ! pCmdln->opts.basOpts.pretWr) {
 		/* copy raw tag(s) to output */
 		res = st_vorbc_gs_getRawTagIntoFile(pVor, pOutFn);
-		if (res != ST_ERR_SUCC)
+		if (res != ST_ERR_SUCC) {
 			ast_mf_op_d_fileErr(pInFn, cFNCN,
 					"extracting raw vorbis tag failed");
+		}
 	}
 
 	/* */
 	if (res == ST_ERR_SUCC) {
 		if (! pCmdln->opts.quiet) {
 			debMsg[0] = 0;
-			if (binSize >= 1024 * 1024)
+			if (binSize >= 1024 * 1024) {
 				sprintf(debMsg, ", %.2f MB",
 						(double)binSize / (double)(1024 * 1024));
-			else if (binSize > 1024)
+			} else if (binSize > 1024) {
 				sprintf(debMsg, ", %.2f KB",
 						(double)binSize / (double)(1024));
+			}
 			debMsg2[0] = 0;
-			if (pCmdln->opts.basOpts.pretWr)
+			if (pCmdln->opts.basOpts.pretWr) {
 				sprintf(debMsg2, "  (pretended)");
+			}
 			ast_mf_op_prMsg("*  extract %s Tag: wrote '%s' ("
 					ST_TFSIZE_PRF_LU" bytes%s)%s",
 					pTDesc, pOutFn,
@@ -451,7 +458,7 @@ AST_MF__extr_extrOther_sub(const Tast_cln_a *pCmdln,
 	              fext1[64],
 	              fext2[64],
 	              *pCh;
-	Tst_str const *pItFldIDstr;
+	//Tst_str const *pItFldIDstr;
 	Tst_uint32    itFldNr;
 	Tst_bool      extrOne = ST_B_FALSE;
 	char const    *pFExtTmp;
@@ -487,7 +494,7 @@ AST_MF__extr_extrOther_sub(const Tast_cln_a *pCmdln,
 		st_id3v2_gs_getField_props(pItFld, &fldPr);
 		itFldType   = st_id3v2_gs_getFieldProp_typ(&fldPr);
 		itFldID     = st_id3v2_gs_getFieldProp_id(&fldPr);
-		pItFldIDstr = st_id3v2_gs_getFieldProp_idStr(&fldPr);
+		//pItFldIDstr = st_id3v2_gs_getFieldProp_idStr(&fldPr);
 		itFldNr     = st_id3v2_gs_getField_nr(pItFld);
 
 		if ((fldType != ST_ID3V2_FTP_NONE && itFldType != fldType) ||

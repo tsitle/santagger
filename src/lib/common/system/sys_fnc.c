@@ -31,19 +31,19 @@
 // System-Includes
 */
 #if defined(WIN32)
-#	include <windows.h>
+	#include <windows.h>
 #else
-#	include <sys/types.h>   /* time_t */
-#	include <time.h>        /* time(),nanosleep(),... */
-#	include <sys/time.h>    /* timeval */
-/*	include <sys/resource.h>*/
+	//#include <sys/types.h>   /* time_t */
+	#include <time.h>        /* time(),nanosleep(),... */
+	#include <sys/time.h>    /* timeval */
+	//#include <sys/resource.h>
 #endif
 #include <stdlib.h>      /* calloc() */
 #include <string.h>      /* memcpy() */
 #include <ctype.h>       /* tolower(), toupper() */
-/*include <netinet/in.h>*/  /* ntohl() */
+//#include <netinet/in.h>  /* ntohl() */
 #if (ST_SYSFNC_DEB_ == 1)
-#	include <stdarg.h>      /* va_list, ... */
+	#include <stdarg.h>      /* va_list, ... */
 #endif
 
 /*----------------------------------------------------------------------------*/
@@ -271,7 +271,7 @@ st_sysReverseByteOrder_LL(Tst_buf *pVal, const Tst_uint32 valSz)
  * Get system time
  */
 double
-st_sysGetTime()
+st_sysGetTime(void)
 {
 #	ifdef WIN32  /* untested */
 	LARGE_INTEGER t,

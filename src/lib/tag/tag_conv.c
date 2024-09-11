@@ -27,7 +27,7 @@
 #include "src/includes/common/sys_fnc.h"
 #include "src/includes/common/string_mte.h"
 #include "src/includes/utils/utils_fmt.h"
-#include "src/includes/tag/tag_basics.h"
+//#include "src/includes/tag/tag_basics.h"
 #include "src/includes/tag/tag_conv.h"
 #include "src/includes/tag/tag_comfnc.h"
 #include "src/includes/tag/tag_fldmap.h"
@@ -40,7 +40,7 @@
 #define SRC_TAG_CONV_C
 #include "tag_conv-priv.h"
 /*** */
-#include "tag_fldmap_zid-prot.h"
+//#include "tag_fldmap_zid-prot.h"
 #include "id3v1/tag_id3v1_stcs-prot.h"
 #include "id3v2/tag_id3v2_gs-prot.h"
 #include "id3v2/tag_id3v2_stcs-prot.h"
@@ -663,7 +663,10 @@ ST_TCNV__cvor_toOther(const Tst_tagConv_tagTp dstTTP, const Tst_byte iv2TargVers
 				if (res == ST_ERR_SUCC)
 					res = st_tagFldMap_gs_setDataBinary(pGTF, &binDat);
 				if (res == ST_ERR_SUCC)
-					res = st_tagFldMap_gs_setAttrPICTtype(pGTF, ptp);
+					res = st_tagFldMap_gs_setAttrPICTtype(
+							pGTF,
+							st_tagCFnc_convVorbcToId3v2_picTp(ptp)
+						);
 				if (res == ST_ERR_SUCC && pPicMime != NULL) {
 					pfmt = st_utilsFmt_getPicFmt_enum_byMime(pPicMime);
 					res  = st_tagFldMap_gs_setAttrPICTformat(pGTF, pfmt);

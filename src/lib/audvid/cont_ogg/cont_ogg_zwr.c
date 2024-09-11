@@ -437,15 +437,15 @@ st_contOgg_wr_wrFrame(Tst_contOgg_obj_intn *pAObjI,
 		 **   if granPos == 0xff..ff -->no packets finish on this frame */
 		if (res == ST_ERR_SUCC)
 			res = st_streamwr_wrUInt64(pStrwrBuf,
-					ST_STREAMRD_IEND_LE, 64, &pFHd->granulePos);  /* ENDIAN: HOST-->LE */
+					ST_STREAMWR_OEND_LE, 64, &pFHd->granulePos);  /* ENDIAN: HOST-->LE */
 		/** BITSTREAM SERIAL */
 		if (res == ST_ERR_SUCC)
 			res = st_streamwr_wrUInt32(pStrwrBuf,
-					ST_STREAMRD_IEND_LE, 32, pFHd->bsSerial);  /* ENDIAN: HOST-->LE */
+					ST_STREAMWR_OEND_LE, 32, pFHd->bsSerial);  /* ENDIAN: HOST-->LE */
 		/** FRAME SEQUENCE NUMBER */
 		if (res == ST_ERR_SUCC) {
 			res = st_streamwr_wrUInt32(pStrwrBuf,
-					ST_STREAMRD_IEND_LE, 32, pBSI->wr.frameCnt);  /* ENDIAN: HOST-->LE */
+					ST_STREAMWR_OEND_LE, 32, pBSI->wr.frameCnt);  /* ENDIAN: HOST-->LE */
 			++pBSI->wr.frameCnt;
 			pFHd->frSequNr = pBSI->wr.frameCnt;
 			pFHd->realNr   = pBSI->wr.frameCnt;
@@ -564,7 +564,7 @@ st_contOgg_wr_wrFrame(Tst_contOgg_obj_intn *pAObjI,
 		/** write CRC32 */
 		if (res == ST_ERR_SUCC && ! pAObjI->opts.basOpts.pretWr)
 			res = st_streamwr_wrUInt32(pAObjI->pStrwr,
-					ST_STREAMRD_IEND_LE, 32, crc32);
+					ST_STREAMWR_OEND_LE, 32, crc32);
 		st_streamrd_rdSkipBytes(pStrrdTmp, 4, ST_B_TRUE);
 		rdTot += 4;
 		tmpUI -= (tmpUI >= 4 ? 4 : tmpUI);

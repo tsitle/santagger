@@ -77,7 +77,7 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 	const char *cFNCN = __FUNCTION__;
 	Tst_err    res    = ST_ERR_SUCC;
 	Tst_int32  /*doi    = 0,*/               /* digit_optind */
-	           tooi   = optind ? optind : 1, /* this_option_optind */
+	           /*tooi   = optind ? optind : 1,*/  /* this_option_optind */
 	           oix    = 0,                   /* option_index */
 	           c;                            /* will hold option char */
 	Tst_uint32 cntarr = 0;                   /* amount of array elems */
@@ -121,7 +121,7 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 	/* parse parameters */
 	/*opterr = 0;*/  /* don't call exit(1) on invalid params */
 	while (res == ST_ERR_SUCC) {
-		tooi = (optind != 0 ? optind : 1);
+		//tooi = (optind != 0 ? optind : 1);
 		oix  = 0;
 		c    = getopt_long(argc, (char**)argv, AST_CLN_SHORTOPTS,
 					AST_CLN_LONGOPTS, &oix);

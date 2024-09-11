@@ -1023,23 +1023,26 @@ ST_SYSFILE__getTmpFilename(const Tst_bool inCurDir, const Tst_bool inSpecDir,
 		Tst_str       locTmpFn[128];
 		Tst_str const *pODir;
 
-		if (inCurDir)
+		if (inCurDir) {
 			pODir = (const Tst_str*)".";
-		else
+		} else {
 			pODir = pInDir_Dirn;
+		}
 		do {
 			tmpVal[0] = st_sysGetRand(0, 999);
 			tmpVal[1] = st_sysGetRand(0, 999);
 			if (tmpVal[0] == tmpVal[1]) {
 				tmpVal[1] = st_sysGetRand(0, 999);
-				if (tmpVal[0] == tmpVal[1])
+				if (tmpVal[0] == tmpVal[1]) {
 					tmpVal[1] = (tmpVal[1] + 1) % 999;
+				}
 			}
 			tmpVal[2] = st_sysGetRand(0, 999);
 			if (tmpVal[0] == tmpVal[2] || tmpVal[1] == tmpVal[2]) {
 				tmpVal[2] = st_sysGetRand(0, 999);
-				if (tmpVal[0] == tmpVal[2] || tmpVal[1] == tmpVal[2])
+				if (tmpVal[0] == tmpVal[2] || tmpVal[1] == tmpVal[2]) {
 					tmpVal[2] = (tmpVal[2] + 2) % 999;
+				}
 			}
 			if (cnt > 0 &&
 					(tmpVal[0] == lastVal[0] || tmpVal[1] == lastVal[1] ||
@@ -1058,17 +1061,24 @@ ST_SYSFILE__getTmpFilename(const Tst_bool inCurDir, const Tst_bool inSpecDir,
 					tmpVal[0], tmpVal[1], tmpVal[2]);
 			ex = ! ST_SYSFILE__concatDirAndFilen(pODir, locTmpFn,
 						pTmpFn, tmpFnMaxSz);
-			if (ex)
+			if (ex) {
 				break;
+			}
 			/* */
 			++cnt;
 			ex = st_sysDoesFileExist(pTmpFn) || st_sysDoesDirExist(pTmpFn);
 		} while (ex && cnt < cMAXTRIES);
 	} else {
-		ex = (tmpnam((char*)pTmpFn) == NULL);
+		snprintf((char*)pTmpFn, tmpFnMaxSz, "tmpfile.XXXXXXXX.tmp");
+		const int tmpHnd = mkstemp((char*)pTmpFn);
+		ex = (tmpHnd < 1);
+		if (tmpHnd > 0) {
+			close(tmpHnd);
+		}
 	}
-	if (ex)
+	if (ex) {
 		pTmpFn[0] = 0x00;
+	}
 	return (! ex);
 }
 

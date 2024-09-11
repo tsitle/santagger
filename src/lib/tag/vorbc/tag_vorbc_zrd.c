@@ -553,7 +553,6 @@ ST_TVORBC__rd_shallAppend(Tst_vorbc_flds *pFlds,
 		Tst_vorbc_fldData **ppFld, Tst_vorbc_fldData_intn **ppFldI)
 {
 	Tst_uint32 x,
-	           idlen,
 	           fcnt;
 	Tst_vorbc_fldData      *pTmpFld;
 	Tst_vorbc_fldData_intn *pTmpFldI;
@@ -561,7 +560,6 @@ ST_TVORBC__rd_shallAppend(Tst_vorbc_flds *pFlds,
 	fcnt = st_dynlist_getElementCount(&pFlds->list);
 	if (fcnt < 2)
 		return ST_B_FALSE;
-	idlen = st_sysStrlen2((*ppFldI)->fldPrI.pVIDstr);
 	for (x = 1; x <= fcnt - 1; x++) {
 		pTmpFld = (Tst_vorbc_fldData*)st_dynlist_getElement(&pFlds->list, x);
 		if (pTmpFld == NULL)

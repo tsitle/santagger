@@ -54,10 +54,10 @@ ST_BEGIN_C_DECLS
 #	if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
 	/** */
 	Tst_err
-	ast_mf_rddec_initExtLibMpg();
+	ast_mf_rddec_initExtLibMpg(void);
 
 	void
-	ast_mf_rddec_freeExtLibMpg();
+	ast_mf_rddec_freeExtLibMpg(void);
 	/** */
 	Tst_err
 	ast_mf_rddec_cbDecMpg_hndNew(void **ppHnd, const Tst_bool printUsedBPS);

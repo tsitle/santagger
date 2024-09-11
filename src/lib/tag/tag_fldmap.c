@@ -37,7 +37,7 @@
 #include "tag_fldmap_zid-prot.h"
 #include "apev2/tag_apev2_gs-prot.h"
 #include "id3v1/tag_id3v1_gs-prot.h"
-#include "id3v1/tag_id3v1-pp_flds.h"
+//#include "id3v1/tag_id3v1-pp_flds.h"
 #include "id3v2/tag_id3v2_gs-prot.h"
 #include "vorbc/tag_vorbc_gs-prot.h"
 #undef SRC_TAG_FLDMAP_C
@@ -264,11 +264,9 @@ st_tagFldMap_mapToAV2(Tst_tfldMap_genTagFld *pFld, Tst_apev2_fldData *pOut,
 	if (res == ST_ERR_SUCC && dstID != ST_APEV2_FID_NONE) {
 		/* set field data/attributes */
 		/** ID and ID-String */
-		if (res == ST_ERR_SUCC) {
-			/**LOC_PRF_(" map2AV2: dstID %3d '%s'\n",
-					dstID, (pDstIDstr ? (const char*)pDstIDstr : ""));**/
-			res = st_apev2_gs_setField_props(pOut, dstID, pDstIDstr);
-		}
+		/**LOC_PRF_(" map2AV2: dstID %3d '%s'\n",
+				dstID, (pDstIDstr ? (const char*)pDstIDstr : ""));**/
+		res = st_apev2_gs_setField_props(pOut, dstID, pDstIDstr);
 		/** data */
 		if (res == ST_ERR_SUCC && pGTFI->isDataStrSet) {
 			res    = st_apev2_gs_setFieldData_stringArr(pOut, &pGTFI->dataStrArr);
@@ -313,11 +311,9 @@ st_tagFldMap_mapToVOR(Tst_tfldMap_genTagFld *pFld, Tst_vorbc_fldData *pOut,
 	if (res == ST_ERR_SUCC && dstID != ST_VORBC_FID_NONE) {
 		/* set field data/attributes */
 		/** ID and ID-String */
-		if (res == ST_ERR_SUCC) {
-			/**LOC_PRF_(" map2VOR: dstID %3d '%s'\n",
-					dstID, (pDstIDstr ? (const char*)pDstIDstr : ""));**/
-			res = st_vorbc_gs_setField_props(pOut, dstID, pDstIDstr);
-		}
+		/**LOC_PRF_(" map2VOR: dstID %3d '%s'\n",
+				dstID, (pDstIDstr ? (const char*)pDstIDstr : ""));**/
+		res = st_vorbc_gs_setField_props(pOut, dstID, pDstIDstr);
 		/** data */
 		if (res == ST_ERR_SUCC && pGTFI->isDataStrSet) {
 			res    = st_vorbc_gs_setFieldData_stringArr(pOut, &pGTFI->dataStrArr);
@@ -332,7 +328,10 @@ st_tagFldMap_mapToVOR(Tst_tfldMap_genTagFld *pFld, Tst_vorbc_fldData *pOut,
 			*pIsOK = (res == ST_ERR_SUCC);
 		}
 		if (res == ST_ERR_SUCC && pGTFI->isAttrPicTpSet) {
-			res    = st_vorbc_gs_setFieldAttr_picTp(pOut, pGTFI->attrPicTp);
+			res = st_vorbc_gs_setFieldAttr_picTp(
+					pOut,
+					st_tagCFnc_convId3v2ToVorbc_picTp(pGTFI->attrPicTp)
+				);
 			*pIsOK = (res == ST_ERR_SUCC);
 		}
 		if (res == ST_ERR_SUCC && pGTFI->isAttrPicFmtSet) {
@@ -768,10 +767,10 @@ static Tst_int32
 ST_TFMAP__getIDfromStr(const Tst_tfldMap_ttp srcTTP, const Tst_str *pFIDstr)
 {
 	Tst_int32 resI = -1;
-	Tst_apev2_frID fidSrcAV2 = ST_APEV2_FID_NONE;
-	Tst_id3v1_frID fidSrcIV1 = ST_ID3V1_FID_NONE;
-	Tst_id3v2_frID fidSrcIV2 = ST_ID3V2_FID_NONE;
-	Tst_vorbc_frID fidSrcVOR = ST_VORBC_FID_NONE;
+	Tst_apev2_frID fidSrcAV2;
+	Tst_id3v1_frID fidSrcIV1;
+	Tst_id3v2_frID fidSrcIV2;
+	Tst_vorbc_frID fidSrcVOR;
 
 	switch (srcTTP) {
 	case ST_TFLDMAP_TTP_IV1:
@@ -805,15 +804,16 @@ static Tst_err
 ST_TFMAP__addIntStr_asInt_toIV1(Tst_tfldMap_genTagFld *pGTF,
 		const Tst_bool isPosStr, Tst_id3v1_fldData *pOut, Tst_bool *pIsOK)
 {
-	Tst_int32 ival = -1;
+	Tst_int32                  ival;
 	Tst_mtes_string            *pStr1;
 	Tst_tfldMap_genTagFld_intn *pGTFI;
 
 	pGTFI = (Tst_tfldMap_genTagFld_intn*)pGTF->pObInternal;
 
 	*pIsOK = ST_B_FALSE;
-	if (! pGTFI->isDataStrSet)
+	if (! pGTFI->isDataStrSet) {
 		return ST_ERR_SUCC;
+	}
 	pStr1 = st_mtes_strArrGetElem(&pGTFI->dataStrArr, 1);
 	if (pStr1 == NULL) {
 		pGTFI->isDataStrSet = ST_B_FALSE;
@@ -826,13 +826,15 @@ ST_TFMAP__addIntStr_asInt_toIV1(Tst_tfldMap_genTagFld *pGTF,
 		           numTot = 0;
 
 		res = st_tagCFnc_chk_getPosStringNums(pStr1, &num, &numTot);
-		if (res != ST_ERR_SUCC || num == 0)
+		if (res != ST_ERR_SUCC || num == 0) {
 			return res;
+		}
 		ival = (Tst_int32)num;
 	} else {
 		ival = st_mtes_toInt32(pStr1);
-		if (ival <= 0)
+		if (ival <= 0) {
 			return ST_ERR_SUCC;
+		}
 	}
 
 	*pIsOK = ST_B_TRUE;
@@ -851,8 +853,9 @@ ST_TFMAP__addGenreStr_asInt_toIV1(Tst_tfldMap_genTagFld *pGTF,
 	pGTFI = (Tst_tfldMap_genTagFld_intn*)pGTF->pObInternal;
 
 	*pIsOK = ST_B_FALSE;
-	if (! pGTFI->isDataStrSet)
+	if (! pGTFI->isDataStrSet) {
 		return ST_ERR_SUCC;
+	}
 	pStr1 = st_mtes_strArrGetElem(&pGTFI->dataStrArr, 1);
 	if (pStr1 == NULL) {
 		pGTFI->isDataStrSet = ST_B_FALSE;

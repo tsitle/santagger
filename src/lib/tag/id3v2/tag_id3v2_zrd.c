@@ -307,9 +307,9 @@ st_id3v2_rd_readEHdAndFlds(Tst_id3v2_tag *pTag, const Tst_uint32 allrRead)
 	Tst_err    res     = ST_ERR_SUCC;
 	Tst_uint32 remsz,
 	           delta   = 0;
-	Tst_bool   revUnsy = ST_B_FALSE,
+	Tst_bool   /*revUnsy = ST_B_FALSE,*/
 	           fsFnd   = ST_B_FALSE;
-	Tst_fsize  amRdBy;
+	/*Tst_fsize  amRdBy;*/
 	Tst_binobj         binDatTag;
 	Tst_streamrd       strrdBDT,
 	                   *pStrrdTag;
@@ -321,7 +321,7 @@ st_id3v2_rd_readEHdAndFlds(Tst_id3v2_tag *pTag, const Tst_uint32 allrRead)
 
 	ST_ASSERTN_NUM(ST_ERR_FAIL, st_tagBas_gs_getSize(&pTagI->tbas) < allrRead)
 	remsz  = st_tagBas_gs_getSize(&pTagI->tbas) - allrRead;
-	amRdBy = st_streamrd_getAmountBytesRead(pTagI->pStrrd);
+	//amRdBy = st_streamrd_getAmountBytesRead(pTagI->pStrrd);
 
 	/* */
 	st_binobj_stc_initBO(&binDatTag);
@@ -354,8 +354,8 @@ st_id3v2_rd_readEHdAndFlds(Tst_id3v2_tag *pTag, const Tst_uint32 allrRead)
 			pTagI->tgErrs.tbHasFalseSyn = ST_B_TRUE;
 			++pTagI->tgErrCnt;
 		}
-		revUnsy = ST_B_TRUE;
-		remsz   = st_binobj_getDataSize(&binDatTag);
+		//revUnsy = ST_B_TRUE;
+		remsz = st_binobj_getDataSize(&binDatTag);
 		/* attach stream reader to the binary object
 		 *   that the remaining tag now resides in  */
 		res = st_binobj_attachStreamrd(&binDatTag, &strrdBDT, 0);
@@ -534,7 +534,7 @@ ST_TIV2__rd_allFlds(Tst_id3v2_tag *pTag,
 	           frhFl,
 	           fcnt,
 	           rdFromStr = 0;
-	Tst_fsize  amRdBy;
+	//Tst_fsize  amRdBy;
 	Tst_bool   stop      = ST_B_FALSE,
 	           skipFld;
 	Tst_uint16 tmpWrd;
@@ -545,7 +545,7 @@ ST_TIV2__rd_allFlds(Tst_id3v2_tag *pTag,
 	pTagI = (Tst_id3v2_tag_intn*)pTag->pObInternal;
 
 	frhIdSz = (pTagI->verMaj == 2 ? 3 : 4);
-	amRdBy  = st_streamrd_getAmountBytesRead(pStrrdTag);
+	//amRdBy = st_streamrd_getAmountBytesRead(pStrrdTag);
 
 	while (*pRemSz > 0) {
 		if (*pRemSz < frhIdSz)
@@ -594,8 +594,9 @@ ST_TIV2__rd_allFlds(Tst_id3v2_tag *pTag,
 			/*stop = ST_B_TRUE;*/
 			skipFld = ST_B_TRUE;  /* field will be skipped later on */
 		}
-		if (stop)
+		if (stop) {
 			break;
+		}
 		/**if (ST_TFDEB_ISVERBTAG_BD(pTagI->opts.basOpts))
 			st_id3v2_d_deb(&pTagI->opts, 0, cFNCN,
 					"tag ID '%s' found", frhId);**/

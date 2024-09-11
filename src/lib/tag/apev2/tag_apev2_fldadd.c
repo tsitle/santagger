@@ -547,6 +547,11 @@ ST_TAV2__fa_add_moveToIP(const char *pFnc,
 			break;
 		}
 	}
+	if (! fndFIPC) {
+		st_apev2_d_err(&pTagI->opts, pFnc, pTagI->pFilen,
+				"could not find index of field at insertPos");
+		return ST_ERR_FAIL;
+	}
 	/* increment field number of all 'bigger' fields */
 	pItFld = NULL;
 	while ((pItFld = st_apev2_ite_nextFld(pTag, pItFld)) != NULL) {
@@ -555,26 +560,30 @@ ST_TAV2__fa_add_moveToIP(const char *pFnc,
 
 		if (pItFldI->fnr == pFldItoMove->fnr || pItFldI->fnr < insertPos ||
 				! st_apev2_fnc_matchFrIDs(pItFldI->fldPrI.id, pItFldI->fldPrI.pVIDstr,
-						pFldItoMove->fldPrI.id, pFldItoMove->fldPrI.pVIDstr))
+						pFldItoMove->fldPrI.id, pFldItoMove->fldPrI.pVIDstr)) {
 			continue;
-		if (ST_TFDEB_ISVERBTAG_BD(pTagI->opts.basOpts))
+		}
+		if (ST_TFDEB_ISVERBTAG_BD(pTagI->opts.basOpts)) {
 			st_apev2_d_fdeb(&pTagI->opts, 0, pFnc, pItFldI,
 					"inc fldNr");
+		}
 		++pItFldI->fnr;
 	}
 	/* change new fields' number */
-	if (ST_TFDEB_ISVERBTAG_BD(pTagI->opts.basOpts))
+	if (ST_TFDEB_ISVERBTAG_BD(pTagI->opts.basOpts)) {
 		st_apev2_d_fdeb(&pTagI->opts, 0, pFnc, pFldItoMove,
 				"set fldNr to %u", insertPos);
+	}
 	pFldItoMove->fnr = insertPos;
 	/* move new field to other position in list and
 	 *   update unique field indices  */
 	ixNF = st_dynlist_getElementCount(&pTagI->flds.list);
 	if (ixNF > ixFIPC) {
 		res = st_apev2_fnc_moveFld(pTag, ixNF, ixFIPC);
-		if (res != ST_ERR_SUCC)
+		if (res != ST_ERR_SUCC) {
 			st_apev2_d_err(&pTagI->opts, pFnc, pTagI->pFilen,
 					"moving field failed");
+		}
 	}
 	return res;
 }

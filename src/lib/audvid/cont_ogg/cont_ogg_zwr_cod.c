@@ -283,8 +283,7 @@ st_contOgg_wrcod_flacHeaders(Tst_contOgg_obj_intn *pAObjI,
 	Tst_err    res    = ST_ERR_SUCC;
 	Tst_byte   byt    = 0;
 	Tst_bool   isLast = ST_B_FALSE,
-	           doSkip,
-	           doCopy;
+	           doSkip;
 	Tst_uint32 mdSz   = 0;
 	Tst_contOgg_flacBlockType bt = ST_CONTOGG_FLAC_BT_NONE;
 	Tst_contOgg_substr_intn   *pBSI;
@@ -306,13 +305,12 @@ st_contOgg_wrcod_flacHeaders(Tst_contOgg_obj_intn *pAObjI,
 		/* copy/skip metadata */
 		/** */
 		doSkip = ST_B_FALSE;
-		doCopy = ST_B_FALSE;
 		switch (bt) {
 		case ST_CONTOGG_FLAC_BT_STRINF:
 			if (ST_AVFDEB_ISVERBAUD_BD(pAObjI->opts.basOpts))
 				st_contOgg_d_debBS1(&pAObjI->opts, pBSI, LOC_FNCN_,
 						"copying Flac ident header");
-			doCopy = ST_B_TRUE;
+			//doCopy = ST_B_TRUE;
 			break;
 		case ST_CONTOGG_FLAC_BT_PADD:
 			if (ST_AVFDEB_ISVERBAUD_BD(pAObjI->opts.basOpts))
@@ -324,13 +322,13 @@ st_contOgg_wrcod_flacHeaders(Tst_contOgg_obj_intn *pAObjI,
 			if (ST_AVFDEB_ISVERBAUD_BD(pAObjI->opts.basOpts))
 				st_contOgg_d_debBS1(&pAObjI->opts, pBSI, LOC_FNCN_,
 						"copying Flac app header");
-			doCopy = ST_B_TRUE;
+			//doCopy = ST_B_TRUE;
 			break;
 		case ST_CONTOGG_FLAC_BT_SEEK:
 			if (ST_AVFDEB_ISVERBAUD_BD(pAObjI->opts.basOpts))
 				st_contOgg_d_debBS1(&pAObjI->opts, pBSI, LOC_FNCN_,
 						"copying Flac seek header");
-			doCopy = ST_B_TRUE;
+			//doCopy = ST_B_TRUE;
 			break;
 		case ST_CONTOGG_FLAC_BT_COMM:
 			if (ST_AVFDEB_ISVERBAUD_BD(pAObjI->opts.basOpts))
@@ -342,7 +340,7 @@ st_contOgg_wrcod_flacHeaders(Tst_contOgg_obj_intn *pAObjI,
 			if (ST_AVFDEB_ISVERBAUD_BD(pAObjI->opts.basOpts))
 				st_contOgg_d_debBS1(&pAObjI->opts, pBSI, LOC_FNCN_,
 						"copying Flac cue header");
-			doCopy = ST_B_TRUE;
+			//doCopy = ST_B_TRUE;
 			break;
 		case ST_CONTOGG_FLAC_BT_PICT:
 			if (ST_AVFDEB_ISVERBAUD_BD(pAObjI->opts.basOpts))
@@ -356,9 +354,9 @@ st_contOgg_wrcod_flacHeaders(Tst_contOgg_obj_intn *pAObjI,
 		if (res != ST_ERR_SUCC)
 			break;
 		/** */
-		if (doSkip)
+		if (doSkip) {
 			st_streamrd_rdSkipBytes(pAObjI->pStrrd, mdSz, ST_B_TRUE);
-		else {
+		} else {
 			Tst_uint32 copied = 0;
 
 			/* write blockheader */
@@ -367,7 +365,7 @@ st_contOgg_wrcod_flacHeaders(Tst_contOgg_obj_intn *pAObjI,
 				res = st_streamwr_wrByte(pAObjI->pStrwr, 8, byt);
 				if (res == ST_ERR_SUCC)
 					res = st_streamwr_wrUInt32(pAObjI->pStrwr,
-							ST_STREAMRD_IEND_BE, 24, mdSz);  /* ENDIAN: HOST-->BE */
+							ST_STREAMWR_OEND_BE, 24, mdSz);  /* ENDIAN: HOST-->BE */
 			}
 			if (res == ST_ERR_SUCC)
 				pAObjI->totSize += 4;

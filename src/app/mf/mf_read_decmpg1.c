@@ -28,7 +28,7 @@
 #include "mf_read_decmpg1-pp.h"
 /*** */
 #include "mf_read_dbuf-prot.h"
-#include "mf_fnc-pp.h"
+//#include "mf_fnc-pp.h"
 #include "mf_outp-pp.h"
 #undef SRC_MF_READ_DECMPG1_C
 
@@ -44,7 +44,7 @@
 #if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
 
 Tst_err
-ast_mf_rddec_initExtLibMpg()
+ast_mf_rddec_initExtLibMpg(void)
 {
 #	if (HAVE_LIBMPG123 == 1)
 	if (mpg123_init() != MPG123_OK)
@@ -55,7 +55,7 @@ ast_mf_rddec_initExtLibMpg()
 }
 
 void
-ast_mf_rddec_freeExtLibMpg()
+ast_mf_rddec_freeExtLibMpg(void)
 {
 #	if (HAVE_LIBMPG123 == 1)
 	mpg123_exit();
@@ -160,7 +160,7 @@ ast_mf_rddec_cbDecMpg_setOutputFmt(void *pHnd,
 	Tst_bool              is32supp = ST_B_FALSE;
 #		endif
 	Tast_mf__rddec_mpg123 *pM123   = (Tast_mf__rddec_mpg123*)pHnd;
-	Tst_uint32            srcBps;
+	//Tst_uint32            srcBps;
 #	elif (HAVE_LIBMAD == 1)
 	Tast_mf__rddec_mad    *pMad = (Tast_mf__rddec_mad*)pHnd;
 #	endif  /* libmpg123 */
@@ -214,7 +214,7 @@ ast_mf_rddec_cbDecMpg_setOutputFmt(void *pHnd,
 	else
 #	endif
 		pM123->encoding = MPG123_ENC_SIGNED_16;
-	srcBps = (pM123->encoding == MPG123_ENC_SIGNED_16 ? 16 : 32);
+	//srcBps = (pM123->encoding == MPG123_ENC_SIGNED_16 ? 16 : 32);
 
 	mpg123_format_none(pM123->pM123hnd);
 	resI = mpg123_format(pM123->pM123hnd,

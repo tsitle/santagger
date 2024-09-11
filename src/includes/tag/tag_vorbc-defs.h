@@ -56,14 +56,14 @@ typedef enum {
 	ST_VORBC_PT_ILLUS   = 0x12, /* Illustration */
 	ST_VORBC_PT_BLOGO   = 0x13, /* Band/artist logotype */
 	ST_VORBC_PT_PLOGO   = 0x14, /* Publisher/Studio logotype */
-	ST_VORBC_PT_NONE    = 0x15  /* none, ! this must be the last elem ! */
+	ST_VORBC_PT_NONE    = 0x15  /* none ! this must be the last elem ! */
 } Tst_vorbc_picTp;
 
 /** Field Types */
 typedef enum {
 	ST_VORBC_FTP_STR,   /* string */
 	ST_VORBC_FTP_PICT,  /* picture */
-	ST_VORBC_FTP_NONE   /* none, ! this must be the last elem ! */
+	ST_VORBC_FTP_NONE   /* none ! this must be the last elem ! */
 } Tst_vorbc_frTp;
 
 /** Field IDs */
@@ -98,7 +98,7 @@ typedef enum {
 	ST_VORBC_FID_IPLS,  /* Involved People (unofficial) */
 	ST_VORBC_FID_TAGG,  /* Tagging application used (unofficial) */
 	ST_VORBC_FID_CTXT,  /* Custom text field */
-	ST_VORBC_FID_NONE   /* none, ! this must be the last elem ! */
+	ST_VORBC_FID_NONE   /* none ! this must be the last elem ! */
 } Tst_vorbc_frID;
 
 

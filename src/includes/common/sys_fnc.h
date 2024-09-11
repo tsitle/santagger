@@ -89,7 +89,7 @@ st_sysReverseByteOrder_LL(Tst_buf *pVal, const Tst_uint32 valSz);
 
 /** */
 ST_EXPORT double
-st_sysGetTime();
+st_sysGetTime(void);
 
 ST_EXPORT void
 st_sysSleepMS(const Tst_uint32 millisecs);

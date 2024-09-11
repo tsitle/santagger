@@ -55,13 +55,13 @@ st_apev2_tidy_mapMergePosFlds(const char *pFnc, Tst_apev2_tag *pTag)
 	           dscnVal = -1,
 	           dsctVal = -1;
 	Tst_mtes_string        *pStr;
-	Tst_apev2_tag_intn     *pTagI;
+	//Tst_apev2_tag_intn     *pTagI;
 	Tst_apev2_fldData      *pItFld    = NULL;
 	Tst_apev2_fldData_intn *pItFldI;
 
 	ST_ASSERTN_IARG(pTag == NULL || pTag->pObInternal == NULL)
 
-	pTagI = (Tst_apev2_tag_intn*)pTag->pObInternal;
+	//pTagI = (Tst_apev2_tag_intn*)pTag->pObInternal;
 
 	while ((pItFld = st_apev2_ite_nextValidFld(pTag, pItFld)) != NULL) {
 		pItFldI = (Tst_apev2_fldData_intn*)pItFld->pObInternal;

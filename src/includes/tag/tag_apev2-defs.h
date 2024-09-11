@@ -43,7 +43,7 @@ typedef enum {
 	ST_APEV2_FTP_LYR,   /* string: lyrics */
 	ST_APEV2_FTP_URL,   /* string: URL */
 	ST_APEV2_FTP_BDAT,  /* binary data */
-	ST_APEV2_FTP_NONE   /* none, ! this must be the last elem ! */
+	ST_APEV2_FTP_NONE   /* none ! this must be the last elem ! */
 } Tst_apev2_frTp;
 
 /** Field IDs */
@@ -88,7 +88,7 @@ typedef enum {
 	ST_APEV2_FID_TAGG,  /* Tagging application used (unofficial) */
 	ST_APEV2_FID_CBIN,  /* Custom binary field */
 	ST_APEV2_FID_CTXT,  /* Custom text field */
-	ST_APEV2_FID_NONE   /* none, ! this must be the last elem ! */
+	ST_APEV2_FID_NONE   /* none ! this must be the last elem ! */
 } Tst_apev2_frID;
 
 

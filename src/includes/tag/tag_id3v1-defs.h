@@ -37,7 +37,7 @@ ST_BEGIN_C_DECLS
 typedef enum {
 	ST_ID3V1_FTP_STR,  /* Text */
 	ST_ID3V1_FTP_INT,  /* Integer */
-	ST_ID3V1_FTP_NONE  /* none, ! this must be the last elem ! */
+	ST_ID3V1_FTP_NONE  /* none ! this must be the last elem ! */
 } Tst_id3v1_frTp;
 
 /** ID3v1 Field IDs */
@@ -49,7 +49,7 @@ typedef enum {
 	ST_ID3V1_FID_COMM,  /* Comment */
 	ST_ID3V1_FID_GENR,  /* Genre */
 	ST_ID3V1_FID_YEAR,  /* Year */
-	ST_ID3V1_FID_NONE   /* none, ! this must be the last elem ! */
+	ST_ID3V1_FID_NONE   /* none ! this must be the last elem ! */
 } Tst_id3v1_frID;
 
 

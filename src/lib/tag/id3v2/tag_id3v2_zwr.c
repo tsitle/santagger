@@ -438,10 +438,11 @@ ST_TIV2__rend_allFlds(Tst_id3v2_tag *pTag,
 		}
 		/* copy ID-String */
 		tmpIDstr[0] = tmpIDstr[3] = 0;
-		if (pTagI->verMaj == 2 && pItFldI->fldPrI.vid02str != NULL)
+		if (pTagI->verMaj == 2) {
 			strncpy((char*)tmpIDstr, pItFldI->fldPrI.vid02str, 3);
-		else if (pTagI->verMaj > 2 && pItFldI->fldPrI.vid34str != NULL)
+		} else if (pTagI->verMaj > 2) {
 			strncpy((char*)tmpIDstr, pItFldI->fldPrI.vid34str, 4);
+		}
 		tmpIDstr[4] = 0;
 
 		/* render it */
@@ -1031,8 +1032,8 @@ ST_TIV2__rend_fd_corrTEs_sylt(Tst_id3v2_fldData_intn *pFldI,
 	           cpTot    = 0,
 	           pchLenIn = 0,
 	           pchSzOut = 0,
-	           cwidSrc,
-	           cwidDst;
+	           cwidSrc
+	           /*cwidDst*/;
 	Tst_str    *pChIn   = NULL,
 	           *pChOut  = NULL;
 	Tst_bool   hadBOM   = ST_B_FALSE;
@@ -1050,7 +1051,7 @@ ST_TIV2__rend_fd_corrTEs_sylt(Tst_id3v2_fldData_intn *pFldI,
 	}
 	blen    = st_binobj_getDataSize(&pFldI->dataBinDat);
 	cwidSrc = st_mtes_getCharWidth(teSrc);
-	cwidDst = st_mtes_getCharWidth(teDst);
+	//cwidDst = st_mtes_getCharWidth(teDst);
 
 	toCpMax = blen;
 	while (copied > 0 && cpTot < blen) {

@@ -858,7 +858,7 @@ AST_MF__sw_printFld_sub(const char *pFnc,
 	           hasFldBDat  = ST_B_FALSE,
 	           hasFldPic   = ST_B_FALSE,
 	           hasFldGeo   = ST_B_FALSE,
-	           prOneStr    = ST_B_FALSE,
+	           //prOneStr    = ST_B_FALSE,
 	           isTSok      = ST_B_FALSE;
 	Tst_mtes_string      *pStr,
 	                     tmps1,
@@ -1105,7 +1105,7 @@ AST_MF__sw_printFld_sub(const char *pFnc,
 			continue;
 		}
 		/** */
-		prOneStr = ST_B_FALSE;
+		//prOneStr = ST_B_FALSE;
 		for (y = 1; y <= optsPFS.stot; y++) {
 			res = st_id3v2_gs_getFieldData_stringArr_elem(pItFld, y, &tmps1);
 			if (res != ST_ERR_SUCC) {
@@ -1162,7 +1162,7 @@ AST_MF__sw_printFld_sub(const char *pFnc,
 			}
 			is1stFld  = ST_B_FALSE;
 			is1stData = ST_B_FALSE;
-			prOneStr  = ST_B_TRUE;
+			//prOneStr  = ST_B_TRUE;
 
 			/* */
 			if (! pOptsPF->pOptsD->fldDetails)

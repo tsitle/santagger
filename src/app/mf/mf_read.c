@@ -540,11 +540,11 @@ AST_MF__rd_readTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	char       debMsg[128];
 	Tst_tagMeta_mt       *pMT;
 	Tst_tagBasics const  *pTBas;
-	Tast_cln_t_tagListIx tlix;
+	//Tast_cln_t_tagListIx tlix;
 
 	pTagD = st_tagMeta_fnc_getTagDesc(tmTagType)[0];
 	pTBas = NULL;
-	tlix  = ast_mf_fnc_getSrcTLIXfromMTTP(tmTagType);
+	//tlix  = ast_mf_fnc_getSrcTLIXfromMTTP(tmTagType);
 
 	/* add a new tag to the array */
 	pMT = st_tagMeta_addNewToArr(&pMF->tagArr, tmTagType, 1, 0);
@@ -1015,13 +1015,13 @@ AST_MF__rd_readAV_addVorbc(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 	Tst_vorbc_tag                    *pVor;
 	Tst_contOgg_substream            *pBS = NULL;
 	Tst_contOgg_vorbCommentRaw const *pVRC;
-	Tst_contOgg_bsType               bsType;
+	//Tst_contOgg_bsType               bsType;
 
 	pTagD = st_tagMeta_fnc_getTagDesc(ST_MTAG_TTP_VOR)[0];
 
 	while ((pBS = st_contOgg_ite_getNextStream_any(&pMF->avOgg, pBS)) != NULL) {
 		st_contOgg_gs_getStr_groupIndex(pBS, &grpIx, &grpSIx);
-		bsType = st_contOgg_gs_getStr_type(pBS);
+		//bsType = st_contOgg_gs_getStr_type(pBS);
 		/* get pointer to raw comment from stream */
 		pVRC = st_contOgg_vorbComm_gs_getRawComment(pBS);
 		if (pVRC == NULL)

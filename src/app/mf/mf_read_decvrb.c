@@ -28,7 +28,7 @@
 #include "mf_read_decvrb-pp.h"
 /*** */
 #include "mf_read_dbuf-prot.h"
-#include "mf_fnc-pp.h"
+//#include "mf_fnc-pp.h"
 #include "mf_outp-pp.h"
 #undef SRC_MF_READ_DECVRB_C
 

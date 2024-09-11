@@ -45,7 +45,6 @@
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-/* Tst_tagCFnc_tstamp */
 void
 st_tagCFnc_stc_rsetTSta(Tst_tagCFnc_tstamp *pTSt)
 {
@@ -62,7 +61,7 @@ st_tagCFnc_stc_rsetTSta(Tst_tagCFnc_tstamp *pTSt)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-/*
+/**
  * Merge IPLS multi-string into one single string
  *   The input array should contain something like this
  *     arr[0]:A, arr[1]:B, arr[2]:C, arr[3]:D, ...
@@ -177,7 +176,7 @@ st_tagCFnc_iplsMerge(Tst_mtes_strArr *pSArr)
 	return res;
 }
 
-/*
+/**
  * Split IPLS string up into multi-string
  *   The input string should have the format
  *     "A:B; C:D; ..." or "A:B;C:D;..." or "A:B| C:D| ..." or "A:B|C:D|..."
@@ -367,10 +366,122 @@ st_tagCFnc_iplsSplit(Tst_mtes_strArr *pSArr)
 	return res;
 }
 
+/**
+ * Convert an ID3v2 Picture Type to a Vorbis Picture Type
+ *
+ * @param srcPicTp Source picture type
+ * @return Converted picture type
+ */
+Tst_vorbc_picTp
+st_tagCFnc_convId3v2ToVorbc_picTp(const Tst_id3v2_picTp srcPicTp) {
+	switch (srcPicTp) {
+		case ST_ID3V2_PT_OTHER:
+			return ST_VORBC_PT_OTHER;
+		case ST_ID3V2_PT_3232:
+			return ST_VORBC_PT_3232;
+		case ST_ID3V2_PT_OFICON:
+			return ST_VORBC_PT_OFICON;
+		case ST_ID3V2_PT_COVFRO:
+			return ST_VORBC_PT_COVFRO;
+		case ST_ID3V2_PT_COVBAC:
+			return ST_VORBC_PT_COVBAC;
+		case ST_ID3V2_PT_LEAFL:
+			return ST_VORBC_PT_LEAFL;
+		case ST_ID3V2_PT_MEDIA:
+			return ST_VORBC_PT_MEDIA;
+		case ST_ID3V2_PT_LEADART:
+			return ST_VORBC_PT_LEADART;
+		case ST_ID3V2_PT_ART:
+			return ST_VORBC_PT_ART;
+		case ST_ID3V2_PT_COND:
+			return ST_VORBC_PT_COND;
+		case ST_ID3V2_PT_BAND:
+			return ST_VORBC_PT_BAND;
+		case ST_ID3V2_PT_COMP:
+			return ST_VORBC_PT_COMP;
+		case ST_ID3V2_PT_LYRIC:
+			return ST_VORBC_PT_LYRIC;
+		case ST_ID3V2_PT_RECLOC:
+			return ST_VORBC_PT_RECLOC;
+		case ST_ID3V2_PT_DURREC:
+			return ST_VORBC_PT_DURREC;
+		case ST_ID3V2_PT_DURPER:
+			return ST_VORBC_PT_DURPER;
+		case ST_ID3V2_PT_SCRCAP:
+			return ST_VORBC_PT_SCRCAP;
+		case ST_ID3V2_PT_FLASH:
+			return ST_VORBC_PT_FLASH;
+		case ST_ID3V2_PT_ILLUS:
+			return ST_VORBC_PT_ILLUS;
+		case ST_ID3V2_PT_BLOGO:
+			return ST_VORBC_PT_BLOGO;
+		case ST_ID3V2_PT_PLOGO:
+			return ST_VORBC_PT_PLOGO;
+		default:  // ST_ID3V2_PT_NONE
+			return ST_VORBC_PT_NONE;
+	}
+}
+
+/**
+ * Convert a Vorbis Picture Type to an ID3v2 Picture Type
+ *
+ * @param srcPicTp Source picture type
+ * @return Converted picture type
+ */
+Tst_id3v2_picTp
+st_tagCFnc_convVorbcToId3v2_picTp(const Tst_vorbc_picTp srcPicTp) {
+	switch (srcPicTp) {
+		case ST_VORBC_PT_OTHER:
+			return ST_ID3V2_PT_OTHER;
+		case ST_VORBC_PT_3232:
+			return ST_ID3V2_PT_3232;
+		case ST_VORBC_PT_OFICON:
+			return ST_ID3V2_PT_OFICON;
+		case ST_VORBC_PT_COVFRO:
+			return ST_ID3V2_PT_COVFRO;
+		case ST_VORBC_PT_COVBAC:
+			return ST_ID3V2_PT_COVBAC;
+		case ST_VORBC_PT_LEAFL:
+			return ST_ID3V2_PT_LEAFL;
+		case ST_VORBC_PT_MEDIA:
+			return ST_ID3V2_PT_MEDIA;
+		case ST_VORBC_PT_LEADART:
+			return ST_ID3V2_PT_LEADART;
+		case ST_VORBC_PT_ART:
+			return ST_ID3V2_PT_ART;
+		case ST_VORBC_PT_COND:
+			return ST_ID3V2_PT_COND;
+		case ST_VORBC_PT_BAND:
+			return ST_ID3V2_PT_BAND;
+		case ST_VORBC_PT_COMP:
+			return ST_ID3V2_PT_COMP;
+		case ST_VORBC_PT_LYRIC:
+			return ST_ID3V2_PT_LYRIC;
+		case ST_VORBC_PT_RECLOC:
+			return ST_ID3V2_PT_RECLOC;
+		case ST_VORBC_PT_DURREC:
+			return ST_ID3V2_PT_DURREC;
+		case ST_VORBC_PT_DURPER:
+			return ST_ID3V2_PT_DURPER;
+		case ST_VORBC_PT_SCRCAP:
+			return ST_ID3V2_PT_SCRCAP;
+		case ST_VORBC_PT_FLASH:
+			return ST_ID3V2_PT_FLASH;
+		case ST_VORBC_PT_ILLUS:
+			return ST_ID3V2_PT_ILLUS;
+		case ST_VORBC_PT_BLOGO:
+			return ST_ID3V2_PT_BLOGO;
+		case ST_VORBC_PT_PLOGO:
+			return ST_ID3V2_PT_PLOGO;
+		default:  // ST_VORBC_PT_NONE
+			return ST_ID3V2_PT_NONE;
+	}
+}
+
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-/*
+/**
  * Read a string from the pStrrd
  *
  * pStrrd      MUST be set
@@ -485,7 +596,7 @@ st_tagCFnc_readStr(const Tst_uint32 charWid,
 
 /*----------------------------------------------------------------------------*/
 
-/*
+/**
  * Does the string in pStr end with three dots ?
  */
 Tst_err
@@ -509,17 +620,18 @@ st_tagCFnc_hasTripleDotEnding(const Tst_mtes_string *pStr, Tst_bool *pHasTD)
 
 /*----------------------------------------------------------------------------*/
 
-/*
+/**
  * Write Tag Buffer to stream
  *
- * pBasOpts    MUST be set
- * pOpts       MUST be set
- * cbDbg       MUST be != NULL
- * cbErr       MUST be != NULL
- * pTagFilen   MUST be != NULL
- * pTBas       MUST be set
- * pStrwr      may be NULL if pBasOpts->pretWr==TRUE
- * pTagBO      MUST be set
+ * @param pBasOpts    MUST be set
+ * @param pOpts       MUST be set
+ * @param cbDbg       MUST be != NULL
+ * @param cbErr       MUST be != NULL
+ * @param pTagFilen   MUST be != NULL
+ * @param pTBas       MUST be set
+ * @param pStrwr      may be NULL if pBasOpts->pretWr==TRUE
+ * @param pTagBO      MUST be set
+ * @return Error code
  */
 Tst_err
 st_tagCFnc_writeTagBOtoStream(const Tst_basOpts *pBasOpts, const void *pOpts,
@@ -608,6 +720,12 @@ st_tagCFnc_writeTagBOtoStream(const Tst_basOpts *pBasOpts, const void *pOpts,
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
+/**
+ * Get a string containing the name of the shared library and its version
+ *
+ * @param pTagger Output string (e.g. 'libsantag x.y.z')
+ * @return Error code
+ */
 Tst_err
 st_tagCFnc_getTaggerStr(Tst_mtes_string *pTagger)
 {
@@ -615,7 +733,6 @@ st_tagCFnc_getTaggerStr(Tst_mtes_string *pTagger)
 
 	ST_ASSERTN_IARG(pTagger == NULL)
 
-	/* --> "libsantag x.y.z" */
 	snprintf(myVend, sizeof(myVend),
 			"%s %s", ST_LIBSANTAG_NAME, ST_LIBSANTAG_VERS_STRING_COMPLETE);
 	return st_mtes_copyFromCharp_iso((const Tst_str*)myVend, pTagger);
@@ -623,10 +740,10 @@ st_tagCFnc_getTaggerStr(Tst_mtes_string *pTagger)
 
 /*----------------------------------------------------------------------------*/
 
-/*
+/**
  * Merge Genre-strings to one string
  *
- * returns: true on success (if value is OK)
+ * @return True on success (if value is OK)
  */
 Tst_bool
 st_tagCFnc_genreMerge(Tst_mtes_strArr *pSArr)

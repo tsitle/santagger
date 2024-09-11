@@ -817,12 +817,12 @@ ST_BINOBJ__appendData_streamrd_pr(Tst_binobj *pBOdst,
 	Tst_uint32 toRd,
 	           rdTot     = 0,
 	           rdFromStr = 0;
-	Tst_binobj_intn *pBOIdst;
+	//Tst_binobj_intn *pBOIdst;
 
 	ST_ASSERTN_IARG(pBOdst == NULL || pBOdst->pObInternal == NULL ||
 			pStrrd == NULL)
 
-	pBOIdst = (Tst_binobj_intn*)pBOdst->pObInternal;
+	//pBOIdst = (Tst_binobj_intn*)pBOdst->pObInternal;
 
 	/* read data from pStrrd and append it to pBOdst */
 	toRd = sizeof(buf);
