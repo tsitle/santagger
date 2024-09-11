@@ -569,7 +569,7 @@ AST_CLN__pa_sc_info(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 	         *pTMsg = msg2;
 	Tst_bool is1st = ST_B_TRUE;
 
-	cbMsg("\nApp     : %s %s", APP_ST_NAME, APP_ST_VERS_STRING_COMPLETE);
+	cbMsg("\nApp     : %s %s", APP_ST_NAME, APP_ST_VERS_STRING);
 	cbMsg("Compiled: %s %s (%s-Endian)", __DATE__, __TIME__,
 #			if (WORDS_BIGENDIAN != 1)
 			"Little"
@@ -611,8 +611,8 @@ AST_CLN__pa_sc_version(const Tast_cln_cbMsg cbMsg)
 	const char *cNA = "n/a";
 	char const *pVer = cNA;
 
-	cbMsg("%s %s", APP_ST_NAME, APP_ST_VERS_STRING_COMPLETE);
-	cbMsg("[%s: %s]", ST_LIBSANTAG_NAME, ST_LIBSANTAG_VERS_STRING_COMPLETE);
+	cbMsg("%s %s", APP_ST_NAME, APP_ST_VERS_STRING);
+	cbMsg("[%s: %s]", ST_LIBSANTAG_NAME, ST_LIBSANTAG_VERS_STRING);
 #	if (HAVE_LIBVORBIS == 1)
 	pVer = vorbis_version_string();
 	if (pVer == NULL)

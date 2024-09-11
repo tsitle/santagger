@@ -23,18 +23,9 @@
 */
 #ifdef HAVE_LIB_VERSION_H
 	#include "src/includes/lib_version.h"
-	#if !(defined(ST_LIBSANTAG_VERS_CUR) && defined(ST_LIBSANTAG_VERS_REV) && \
-				defined(ST_LIBSANTAG_VERS_AGE) && \
-				defined(ST_LIBSANTAG_VERS_STRING) && \
-				defined(ST_LIBSANTAG_VERS_STRING_ADD) && \
-				defined(ST_LIBSANTAG_VERS_STRING_COMPLETE))
+	#if !defined(ST_LIBSANTAG_VERS_STRING)
 		#error No library version defined
 	#endif
-#endif
-#if (ST_LIBSANTAG_VERS_CUR == 0 && ST_LIBSANTAG_VERS_REV == 0 && \
-			ST_LIBSANTAG_VERS_AGE == 0)
-	/* to detect dummy values */
-	#error No library version defined
 #endif
 
 /*

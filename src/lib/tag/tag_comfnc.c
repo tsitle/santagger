@@ -734,7 +734,7 @@ st_tagCFnc_getTaggerStr(Tst_mtes_string *pTagger)
 	ST_ASSERTN_IARG(pTagger == NULL)
 
 	snprintf(myVend, sizeof(myVend),
-			"%s %s", ST_LIBSANTAG_NAME, ST_LIBSANTAG_VERS_STRING_COMPLETE);
+			"%s %s", ST_LIBSANTAG_NAME, ST_LIBSANTAG_VERS_STRING);
 	return st_mtes_copyFromCharp_iso((const Tst_str*)myVend, pTagger);
 }
 

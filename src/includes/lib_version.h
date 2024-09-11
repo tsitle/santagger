@@ -21,13 +21,11 @@
 /*
 // Constants
 */
-/** */
-#define ST_LIBSANTAG_VERS_CUR              1
-#define ST_LIBSANTAG_VERS_REV              0
-#define ST_LIBSANTAG_VERS_AGE              0
-#define ST_LIBSANTAG_VERS_STRING           "1.0.0"
-#define ST_LIBSANTAG_VERS_STRING_ADD       "alpha1"
-#define ST_LIBSANTAG_VERS_STRING_COMPLETE  "1.0.0-alpha1"
+/** these will to be replaced by CMake */
+#define ST_LIBSANTAG_VERS_MAJOR   1
+#define ST_LIBSANTAG_VERS_MINOR   0
+#define ST_LIBSANTAG_VERS_PATCH   0
+#define ST_LIBSANTAG_VERS_STRING  "1.0.0-alpha-9-g0b6d3f0"
 
 
 #endif  /* HEAD_LIB_VERSION_H */

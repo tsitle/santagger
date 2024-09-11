@@ -23,16 +23,9 @@
 */
 #if HAVE_APP_VERSION_H
 	#include "app_version.h"
-	#if !(defined(APP_ST_VERS_MAJ) && defined(APP_ST_VERS_MIN) && \
-				defined(APP_ST_VERS_STRING) && \
-				defined(APP_ST_VERS_STRING_ADD) && \
-				defined(APP_ST_VERS_STRING_COMPLETE))
+	#if !defined(APP_ST_VERS_STRING)
 		#error No application version defined
 	#endif
-#endif
-#if (APP_ST_VERS_MAJ == 0 && APP_ST_VERS_MIN == 0)
-	/* to detect dummy values */
-	#error No application version defined
 #endif
 
 
@@ -43,11 +36,6 @@ ST_BEGIN_C_DECLS
 */
 /** */
 #define APP_ST_NAME    "Sandy Tagger (santagger)"
-/*#define APP_ST_VERS_MAJ              X
-  #define APP_ST_VERS_MIN              Y
-  #define APP_ST_VERS_STRING           "X.Y"
-  #define APP_ST_VERS_STRING_ADD       "dummyZ"
-  #define APP_ST_VERS_STRING_COMPLETE  "X.Y-dummyZ" */
 #define APP_ST_AUTHOR  "Thomas Sandkuehler <technisandk@gmail.com>"
 #define APP_ST_COPYR   "2005-2024 by " APP_ST_AUTHOR
 

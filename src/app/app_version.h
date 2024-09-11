@@ -21,12 +21,11 @@
 /*
 // Constants
 */
-/** */
-#define APP_ST_VERS_MAJ              1
-#define APP_ST_VERS_MIN              0
-#define APP_ST_VERS_STRING           "1.0"
-#define APP_ST_VERS_STRING_ADD       "alpha1"
-#define APP_ST_VERS_STRING_COMPLETE  "1.0-alpha1"
+/** these will to be replaced by CMake */
+#define APP_ST_VERS_MAJOR   1
+#define APP_ST_VERS_MINOR   0
+#define APP_ST_VERS_PATCH   0
+#define APP_ST_VERS_STRING  "1.0.0-alpha-9-g0b6d3f0"
 
 
 #endif  /* HEAD_APP_VERSION_H */
