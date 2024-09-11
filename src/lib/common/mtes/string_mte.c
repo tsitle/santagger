@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* string_mte.c                 [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2011 by Thomas Sandkuehler (santagger@slur97.org)                 */
+/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* strings with multiple text-encoding (Latin1 aka ISO, UTF8, UTF16-LE/BE)    */
 /******************************************************************************/

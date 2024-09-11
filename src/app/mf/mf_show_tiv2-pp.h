@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* mf_show_tiv2-pp.h              [Sandy Tagger]                         tw=4 */
 /*                                                                            */
-/* (C) 2005-2011 by Thomas Sandkuehler (santagger@slur97.org)                 */
+/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Private/Protected functions for displaying ID3v2 Tags                      */
 /******************************************************************************/

@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* app_defs.h                     [Sandy Tagger]                         tw=4 */
 /*                                                                            */
-/* (C) 2005-2011 by Thomas Sandkuehler (santagger@slur97.org)                 */
+/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Application wide definitions                                               */
 /******************************************************************************/
@@ -48,8 +48,8 @@ ST_BEGIN_C_DECLS
   #define APP_ST_VERS_STRING           "X.Y"
   #define APP_ST_VERS_STRING_ADD       "dummyZ"
   #define APP_ST_VERS_STRING_COMPLETE  "X.Y-dummyZ" */
-#define APP_ST_AUTHOR  "Thomas Sandkuehler <santagger@slur97.org>"
-#define APP_ST_COPYR   "2005-2011 by " APP_ST_AUTHOR
+#define APP_ST_AUTHOR  "Thomas Sandkuehler <technisandk@gmail.com>"
+#define APP_ST_COPYR   "2005-2024 by " APP_ST_AUTHOR
 
 
 ST_END_C_DECLS

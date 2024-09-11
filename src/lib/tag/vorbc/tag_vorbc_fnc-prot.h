@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* tag_vorbc_fnc.c              [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2011 by Thomas Sandkuehler (santagger@slur97.org)                 */
+/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Protected sub functions for Vorbis Tag handling                            */
 /******************************************************************************/

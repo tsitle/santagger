@@ -1,11 +1,12 @@
 /******************************************************************************/
 /* main.c                         [Sandy Tagger]                         tw=4 */
 /*                                                                            */
-/* Programversion: v0.5, begun 01.12.2010                                     */
-/*                 v0.4, begun 04.04.2010                                     */
-/*                 v0.3, begun 28.12.2009                                     */
-/*                 v0.1, begun 19.05.2005                                     */
-/* (C) 2005-2011 by Thomas Sandkuehler (santagger@slur97.org)                 */
+/* Program version: v1.0, begun 10.09.2024 (dd.mm.yyyy)                       */
+/*                  v0.5, begun 01.12.2010                                    */
+/*                  v0.4, begun 04.04.2010                                    */
+/*                  v0.3, begun 28.12.2009                                    */
+/*                  v0.1, begun 19.05.2005                                    */
+/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Program start                                                              */
 /******************************************************************************/
