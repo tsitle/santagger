@@ -4,6 +4,9 @@
 #
 # by TS, Sep 2024
 
+echo "NOT REQUIRED ANYMORE"
+exit 1
+
 find . -type f -regex '.*\.[hc]' -print0 |
 		while IFS= read -r -d '' TMP_FN; do
 			echo "-- $TMP_FN"
