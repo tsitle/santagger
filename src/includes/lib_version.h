@@ -22,12 +22,12 @@
 // Constants
 */
 /** */
-#define ST_LIBSANTAG_VERS_CUR              0
-#define ST_LIBSANTAG_VERS_REV              5
+#define ST_LIBSANTAG_VERS_CUR              1
+#define ST_LIBSANTAG_VERS_REV              0
 #define ST_LIBSANTAG_VERS_AGE              0
-#define ST_LIBSANTAG_VERS_STRING           "0.0.5"
-#define ST_LIBSANTAG_VERS_STRING_ADD       "alpha4-pre3"
-#define ST_LIBSANTAG_VERS_STRING_COMPLETE  "0.0.5-alpha4-pre3"
+#define ST_LIBSANTAG_VERS_STRING           "1.0.0"
+#define ST_LIBSANTAG_VERS_STRING_ADD       "alpha1"
+#define ST_LIBSANTAG_VERS_STRING_COMPLETE  "1.0.0-alpha1"
 
 
 #endif  /* HEAD_LIB_VERSION_H */
