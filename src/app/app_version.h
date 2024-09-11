@@ -22,11 +22,11 @@
 // Constants
 */
 /** */
-#define APP_ST_VERS_MAJ              0
-#define APP_ST_VERS_MIN              5
-#define APP_ST_VERS_STRING           "0.5"
-#define APP_ST_VERS_STRING_ADD       "alpha4-pre3"
-#define APP_ST_VERS_STRING_COMPLETE  "0.5-alpha4-pre3"
+#define APP_ST_VERS_MAJ              1
+#define APP_ST_VERS_MIN              0
+#define APP_ST_VERS_STRING           "1.0"
+#define APP_ST_VERS_STRING_ADD       "alpha1"
+#define APP_ST_VERS_STRING_COMPLETE  "1.0-alpha1"
 
 
 #endif  /* HEAD_APP_VERSION_H */
