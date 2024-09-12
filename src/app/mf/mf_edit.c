@@ -821,8 +821,8 @@ AST_MF__ed_checkTags(const char *pFnc,
 		const Tst_bool cmdSkipOrWrite)
 {
 	Tst_bool   resB = ST_B_FALSE;
-	Tst_uint32 uid;
-	Tst_tagMeta_type mttpCur = ST_MTAG_TTP_NONE,
+	Tst_uint32 uid = 0;
+	Tst_tagMeta_type mttpCur,
 	                 mttpOrg = ST_MTAG_TTP_NONE;
 
 	*ppMT   = NULL;
@@ -861,7 +861,7 @@ AST_MF__ed_checkTags(const char *pFnc,
 					! st_tagBas_gs_getHasFields(*ppTBas) ||
 					ast_mf_stc_editInfo_isUIDinObs(pEdInf, uid))
 				continue;
-			/* if the current tag is the main tag of the current tag type
+			/* if the current tag is the main tag of the current tag type,
 			 *   and we're at the correct position in the output stream
 			 *   we accept the current tag to be written  */
 			switch (mttpCur) {
@@ -900,7 +900,7 @@ AST_MF__ed_checkTags(const char *pFnc,
 				}
 				break;
 			default:
-				ST_ASSERTN_NUM(ST_ERR_FAIL, 0 != 1)  /* cause exit() here */
+				ST_ASSERTN_NUM(ST_B_FALSE, 0 != 1)  /* cause exit() here */
 				break;
 			}
 			if (resB)
@@ -1215,9 +1215,8 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	if (pCmdln->opts.showStat)
 		ast_mf_op_prMsg("*(Re-)Writing file...");
 	while ((curOffs = st_streamrd_getCurPos(&strrd)) < (Tst_foffs)fszI) {
-		fndOne = ST_B_FALSE;
-		pTBas  = NULL;
-		pMT    = NULL;
+		pTBas = NULL;
+		pMT   = NULL;
 		/* check whether we have a tag to skip */
 		fndOne = AST_MF__ed_checkTags(cFNCN, pCmdln, pMF,
 				pEdInf, &pMT, &pTBas, curOffs,
@@ -1361,9 +1360,8 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	do {
 		if (! pEdInf->allwNonEmbTags)
 			break;
-		fndOne = ST_B_FALSE;
-		pTBas  = NULL;
-		pMT    = NULL;
+		pTBas = NULL;
+		pMT   = NULL;
 		/* check whether we have a tag to (re-)write */
 		fndOne = AST_MF__ed_checkTags(cFNCN, pCmdln, pMF,
 				pEdInf, &pMT, &pTBas, -1,
