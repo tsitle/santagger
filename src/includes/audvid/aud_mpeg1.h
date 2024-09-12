@@ -21,9 +21,9 @@
 /*
 // Own-Includes
 */
-#include "src/includes/common/streamrd-defs.h"
-#include "src/includes/audvid/aud_mpeg1-defs.h"
-#include "src/includes/audvid/audvid-defs.h"
+#include "../common/streamrd-defs.h"
+#include "../audvid/aud_mpeg1-defs.h"
+#include "../audvid/audvid-defs.h"
 
 
 ST_BEGIN_C_DECLS

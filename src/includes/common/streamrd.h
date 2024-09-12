@@ -21,10 +21,10 @@
 /*
 // Own-Includes
 */
-#include "src/includes/common/sys_math-defs.h"
-#include "src/includes/common/sys_file-defs.h"
+#include "sys_math-defs.h"
+#include "sys_file-defs.h"
 /** */
-#include "src/includes/common/streamrd-defs.h"
+#include "streamrd-defs.h"
 
 
 ST_BEGIN_C_DECLS

@@ -22,7 +22,7 @@
 /*
 // Own-Includes
 */
-#include "src/includes/common/string_mte-defs.h"
+#include "string_mte-defs.h"
 
 
 ST_BEGIN_C_DECLS

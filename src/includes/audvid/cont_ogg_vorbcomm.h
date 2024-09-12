@@ -21,8 +21,8 @@
 /*
 // Own-Includes
 */
-#include "src/includes/common/binobj-defs.h"
-#include "src/includes/audvid/cont_ogg-defs.h"
+#include "../common/binobj-defs.h"
+#include "cont_ogg-defs.h"
 
 
 ST_BEGIN_C_DECLS

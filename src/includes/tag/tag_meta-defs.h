@@ -21,10 +21,10 @@
 /*
 // Own-Includes
 */
-#include "src/includes/tag/tag_id3v1-defs.h"
-#include "src/includes/tag/tag_id3v2-defs.h"
-#include "src/includes/tag/tag_apev2-defs.h"
-#include "src/includes/tag/tag_vorbc-defs.h"
+#include "tag_id3v1-defs.h"
+#include "tag_id3v2-defs.h"
+#include "tag_apev2-defs.h"
+#include "tag_vorbc-defs.h"
 
 
 ST_BEGIN_C_DECLS

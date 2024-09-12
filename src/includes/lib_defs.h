@@ -22,7 +22,7 @@
 // Own-Includes
 */
 #ifdef HAVE_LIB_VERSION_H
-	#include "src/includes/lib_version.h"
+	#include "lib_version.h"
 	#if !defined(ST_LIBSANTAG_VERS_STRING)
 		#error No library version defined
 	#endif

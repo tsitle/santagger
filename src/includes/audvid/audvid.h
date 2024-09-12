@@ -21,7 +21,7 @@
 /*
 // Own-Includes
 */
-#include "src/includes/audvid/audvid-defs.h"
+#include "audvid-defs.h"
 
 
 ST_BEGIN_C_DECLS

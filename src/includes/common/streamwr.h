@@ -21,9 +21,9 @@
 /*
 // Own-Includes
 */
-#include "src/includes/common/sys_file-defs.h"
-#include "src/includes/common/sys_math-defs.h"
-#include "src/includes/common/streamwr-defs.h"
+#include "sys_file-defs.h"
+#include "sys_math-defs.h"
+#include "streamwr-defs.h"
 
 
 ST_BEGIN_C_DECLS

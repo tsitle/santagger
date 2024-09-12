@@ -21,14 +21,14 @@
 /*
 // Own-Includes
 */
-#include "src/includes/common/binobj-defs.h"
-#include "src/includes/common/string_mte-defs.h"
-#include "src/includes/tag/tag_fldmap-defs.h"
-#include "src/includes/tag/tag_apev2-defs.h"
-#include "src/includes/tag/tag_id3v1-defs.h"
-#include "src/includes/tag/tag_id3v2-defs.h"
-#include "src/includes/tag/tag_vorbc-defs.h"
-#include "src/includes/utils/utils_fmt-defs.h"
+#include "../common/binobj-defs.h"
+#include "../common/string_mte-defs.h"
+#include "tag_fldmap-defs.h"
+#include "tag_apev2-defs.h"
+#include "tag_id3v1-defs.h"
+#include "tag_id3v2-defs.h"
+#include "tag_vorbc-defs.h"
+#include "../utils/utils_fmt-defs.h"
 
 
 ST_BEGIN_C_DECLS

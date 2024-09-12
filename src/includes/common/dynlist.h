@@ -25,7 +25,7 @@
 /*
 // Own-Includes
 */
-#include "src/includes/common/dynlist-defs.h"
+#include "dynlist-defs.h"
 
 
 ST_BEGIN_C_DECLS

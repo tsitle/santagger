@@ -21,12 +21,12 @@
 /*
 // Own-Includes
 */
-#include "src/includes/common/binobj-defs.h"
-#include "src/includes/common/string_mte-defs.h"
-#include "src/includes/common/streamrd-defs.h"
-#include "src/includes/common/streamwr-defs.h"
-#include "src/includes/tag/tag_basics-defs.h"
-#include "src/includes/tag/tag_apev2-defs.h"
+#include "../common/binobj-defs.h"
+#include "../common/string_mte-defs.h"
+#include "../common/streamrd-defs.h"
+#include "../common/streamwr-defs.h"
+#include "tag_basics-defs.h"
+#include "tag_apev2-defs.h"
 
 
 ST_BEGIN_C_DECLS

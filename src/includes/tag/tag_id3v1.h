@@ -21,11 +21,11 @@
 /*
 // Own-Includes
 */
-#include "src/includes/common/string_mte-defs.h"
-#include "src/includes/common/streamrd-defs.h"
-#include "src/includes/common/streamwr-defs.h"
-#include "src/includes/tag/tag_basics-defs.h"
-#include "src/includes/tag/tag_id3v1-defs.h"
+#include "../common/string_mte-defs.h"
+#include "../common/streamrd-defs.h"
+#include "../common/streamwr-defs.h"
+#include "tag_basics-defs.h"
+#include "tag_id3v1-defs.h"
 
 
 ST_BEGIN_C_DECLS

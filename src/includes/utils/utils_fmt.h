@@ -21,9 +21,9 @@
 /*
 // Own-Includes
 */
-#include "src/includes/common/binobj-defs.h"
-#include "src/includes/common/streamrd-defs.h"
-#include "src/includes/utils/utils_fmt-defs.h"
+#include "../common/binobj-defs.h"
+#include "../common/streamrd-defs.h"
+#include "utils_fmt-defs.h"
 
 
 ST_BEGIN_C_DECLS
