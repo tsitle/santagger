@@ -43,9 +43,11 @@ createCmakeListsForSubdirectoryEnd() {
 		echo -e "\t\tFILES";
 	} > "$LCFG_CMAKELISTS_FN"
 
-	find . -type f -mindepth 1 -maxdepth 1 -regex '.*\.h' -print0 |
+	find . -type f -mindepth 1 -maxdepth 1 \( -name "*.c" -o -name "*.h" -o -name "*.in" \) -print0 |
 			while IFS= read -r -d '' TMP_FN; do
 				TMP_FN="$(echo -n "$TMP_FN" | sed -e 's;^\./;;')"
+				[ "$TMP_FN" = "lib_version.h" ] && continue
+				[ "$TMP_FN" = "lib_version.h.in" ] && TMP_FN="lib_version.h"
 				{
 					echo -e "\t\t\t${TMP_FN}"
 				} >> "$LCFG_CMAKELISTS_FN"

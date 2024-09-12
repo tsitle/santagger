@@ -1,9 +1,9 @@
 /******************************************************************************/
-/* app_version.h                  [Sandy Tagger]                         tw=4 */
+/* lib_version.h                  [Sandy Tagger]                         tw=4 */
 /*                                                                            */
 /* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
-/* Application version info                                                   */
+/* Library version info                                                       */
 /******************************************************************************/
 /*                                                                            */
 /* This program is free software; you can redistribute it and/or              */
@@ -15,19 +15,19 @@
 /* Creation date: 01.04.2011 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_APP_VERSION_H
-#define HEAD_APP_VERSION_H
+#ifndef HEAD_LIB_VERSION_H
+#define HEAD_LIB_VERSION_H
 
 /*
 // Constants
 */
 /** these will to be replaced by CMake */
-#define APP_ST_VERS_MAJOR   1
-#define APP_ST_VERS_MINOR   0
-#define APP_ST_VERS_PATCH   0
-#define APP_ST_VERS_STRING  "1.0.0-alpha-9-g0b6d3f0"
+#define ST_LIBSANTAG_VERS_MAJOR   ###VERS_MAJOR###
+#define ST_LIBSANTAG_VERS_MINOR   ###VERS_MINOR###
+#define ST_LIBSANTAG_VERS_PATCH   ###VERS_PATCH###
+#define ST_LIBSANTAG_VERS_STRING  "###VERS_STRING###"
 
 
-#endif  /* HEAD_APP_VERSION_H */
+#endif  /* HEAD_LIB_VERSION_H */
 
 /******************************************************************************/

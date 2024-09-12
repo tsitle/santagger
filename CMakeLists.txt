@@ -174,6 +174,10 @@ else ()
 	add_compile_definitions(-DWORDS_BIGENDIAN=0)
 endif ()
 
+# ----------------------------------------------------------------------------
+# Semantic version variables
+# ----------------------------------------------------------------------------
+
 # get the current Git tag description (e.g. '1.0-2-ga12d3ef') for semantic versioning
 execute_process(
 		COMMAND git describe --tags
@@ -200,14 +204,6 @@ string(REGEX REPLACE "^[^\\.]*\\.([^\\.]*).*" "\\1" GIT_VERSION_MINOR "${GIT_VER
 #string(REGEX REPLACE "^.*\\..*\\." "" GIT_VERSION_PATCH "${GIT_VERSION_MMP}")
 string(REGEX REPLACE "^[^\\.]*\\.([^\\.]*)\\.(.*)" "\\2" GIT_VERSION_PATCH "${GIT_VERSION_MMP}")
 
-# add the version as compiler definitions
-#message(STATUS "Compiler defs: Semantic version=${GIT_VERSION_SEM}; Major=${GIT_VERSION_MAJOR}; Minor=${GIT_VERSION_MINOR}; Patch=${GIT_VERSION_PATCH}")
-#add_compile_definitions("-DGIT_VERSION_SEM=\"${GIT_VERSION_SEM}\"")
-#add_compile_definitions("-DGIT_VERSION_MMP=\"${GIT_VERSION_MMP}\"")
-#add_compile_definitions("-DGIT_VERSION_MAJOR=${GIT_VERSION_MAJOR}")
-#add_compile_definitions("-DGIT_VERSION_MINOR=${GIT_VERSION_MINOR}")
-#add_compile_definitions("-DGIT_VERSION_PATCH=${GIT_VERSION_PATCH}")
-
 # ----------------------------------------------------------------------------
 # Replace version strings and numbers in app_version.h and lib_version.h
 # ----------------------------------------------------------------------------
@@ -217,34 +213,24 @@ message(STATUS "Git version: Semantic=${GIT_VERSION_SEM}; Major=${GIT_VERSION_MA
 set(X_FN_APP_VERSION_H "src/app/app_version.h")
 message(STATUS "Rewrite file '${X_FN_APP_VERSION_H}'")
 execute_process(
-		INPUT_FILE "${X_FN_APP_VERSION_H}"
-		COMMAND sed -e "s;^#define APP_ST_VERS_STRING  .*;#define APP_ST_VERS_STRING  \"${GIT_VERSION_SEM}\";g"
-		COMMAND sed -e "s;^#define APP_ST_VERS_MAJOR   .*;#define APP_ST_VERS_MAJOR   ${GIT_VERSION_MAJOR};g"
-		COMMAND sed -e "s;^#define APP_ST_VERS_MINOR   .*;#define APP_ST_VERS_MINOR   ${GIT_VERSION_MINOR};g"
-		COMMAND sed -e "s;^#define APP_ST_VERS_PATCH   .*;#define APP_ST_VERS_PATCH   ${GIT_VERSION_PATCH};g"
-		OUTPUT_FILE "${X_FN_APP_VERSION_H}-tmp"
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	)
-execute_process(
-		COMMAND mv "${X_FN_APP_VERSION_H}-tmp" "${X_FN_APP_VERSION_H}"
-		ERROR_QUIET
+		INPUT_FILE "${X_FN_APP_VERSION_H}.in"
+		COMMAND sed -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
+		COMMAND sed -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
+		COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
+		COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
+		OUTPUT_FILE "${X_FN_APP_VERSION_H}"
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 	)
 
 set(X_FN_LIB_VERSION_H "src/includes/lib_version.h")
 message(STATUS "Rewrite file '${X_FN_LIB_VERSION_H}'")
 execute_process(
-		INPUT_FILE "${X_FN_LIB_VERSION_H}"
-		COMMAND sed -e "s;^#define ST_LIBSANTAG_VERS_STRING  .*;#define ST_LIBSANTAG_VERS_STRING  \"${GIT_VERSION_SEM}\";g"
-		COMMAND sed -e "s;^#define ST_LIBSANTAG_VERS_MAJOR   .*;#define ST_LIBSANTAG_VERS_MAJOR   ${GIT_VERSION_MAJOR};g"
-		COMMAND sed -e "s;^#define ST_LIBSANTAG_VERS_MINOR   .*;#define ST_LIBSANTAG_VERS_MINOR   ${GIT_VERSION_MINOR};g"
-		COMMAND sed -e "s;^#define ST_LIBSANTAG_VERS_PATCH   .*;#define ST_LIBSANTAG_VERS_PATCH   ${GIT_VERSION_PATCH};g"
-		OUTPUT_FILE "${X_FN_LIB_VERSION_H}-tmp"
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	)
-execute_process(
-		COMMAND mv "${X_FN_LIB_VERSION_H}-tmp" "${X_FN_LIB_VERSION_H}"
-		ERROR_QUIET
+		INPUT_FILE "${X_FN_LIB_VERSION_H}.in"
+		COMMAND sed -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
+		COMMAND sed -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
+		COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
+		COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
+		OUTPUT_FILE "${X_FN_LIB_VERSION_H}"
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 	)
 
