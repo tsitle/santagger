@@ -173,6 +173,7 @@ endif ()
 
 if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|aarch64|ppc64|mips64")
 	message(STATUS "Compiler defs: 64-bit host system detected (processor)")
+	add_compile_definitions(-DCONFIG_ST_ALL_NATIVE64BIT=1)
 else ()
 	message(STATUS "Compiler defs: 32-bit host system detected (processor)")
 endif ()
