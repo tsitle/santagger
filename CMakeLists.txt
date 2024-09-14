@@ -157,9 +157,6 @@ endif ()
 # Compiler definitions
 # ----------------------------------------------------------------------------
 
-add_compile_definitions(HAVE_APP_VERSION_H=1)
-add_compile_definitions(HAVE_LIB_VERSION_H=1)
-
 # check for 64 bit host system
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 	message(STATUS "Compiler defs: 64-bit host system detected (pointer size)")

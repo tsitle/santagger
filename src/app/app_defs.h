@@ -21,11 +21,9 @@
 /*
 // Own-Includes
 */
-#if HAVE_APP_VERSION_H
-	#include "app_version.h"
-	#if !defined(APP_ST_VERS_STRING)
-		#error No application version defined
-	#endif
+#include "app_version.h"
+#if !defined(APP_ST_VERS_STRING)
+	#error No application version defined
 #endif
 
 

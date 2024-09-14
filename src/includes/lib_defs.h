@@ -21,11 +21,9 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_LIB_VERSION_H
-	#include "lib_version.h"
-	#if !defined(ST_LIBSANTAG_VERS_STRING)
-		#error No library version defined
-	#endif
+#include "lib_version.h"
+#if !defined(ST_LIBSANTAG_VERS_STRING)
+	#error No library version defined
 #endif
 
 /*
