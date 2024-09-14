@@ -53,7 +53,7 @@ install(TARGETS santagger_app santagger_lib
 	)
 install(DIRECTORY src/includes/
 		COMPONENT Development
-		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/santag
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/santagger
 		FILES_MATCHING PATTERN "*.h")
 
 # ----------------------------------------------------------------------------
@@ -273,6 +273,15 @@ execute_process(
 		COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
 		OUTPUT_FILE "${X_FN_LIB_VERSION_H}"
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	)
+
+# ----------------------------------------------------------------------------
+# Set version of Shared Library
+# ----------------------------------------------------------------------------
+
+set_target_properties(santagger_lib PROPERTIES
+		VERSION ${GIT_VERSION_MAJOR}.${GIT_VERSION_MINOR}.${GIT_VERSION_PATCH}  # Full version
+		SOVERSION ${GIT_VERSION_MAJOR}  # ABI version
 	)
 
 # ----------------------------------------------------------------------------
