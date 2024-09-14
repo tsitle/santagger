@@ -479,6 +479,27 @@ st_tagCFnc_convVorbcToId3v2_picTp(const Tst_vorbc_picTp srcPicTp) {
 }
 
 /*----------------------------------------------------------------------------*/
+
+/**
+ * Get a string containing the name of the shared library and its version
+ *
+ * @param pTagger Output string (e.g. 'libsantag x.y.z' or 'libsantag: x.y.z')
+ * @param withColon Add a colon after the library name?
+ * @return Error code
+ */
+Tst_err
+st_tagCFnc_getTaggerStr(Tst_mtes_string *pTagger, Tst_bool withColon)
+{
+	char myVend[128];
+
+	ST_ASSERTN_IARG(pTagger == NULL)
+
+	snprintf(myVend, sizeof(myVend),
+			"%s%s %s", ST_LIBSANTAG_NAME, withColon ? ":" : "", ST_LIBSANTAG_VERS_STRING);
+	return st_mtes_copyFromCharp_iso((const Tst_str*)myVend, pTagger);
+}
+
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
 /**
@@ -718,26 +739,6 @@ st_tagCFnc_writeTagBOtoStream(const Tst_basOpts *pBasOpts, const void *pOpts,
 }
 
 /*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-
-/**
- * Get a string containing the name of the shared library and its version
- *
- * @param pTagger Output string (e.g. 'libsantag x.y.z')
- * @return Error code
- */
-Tst_err
-st_tagCFnc_getTaggerStr(Tst_mtes_string *pTagger)
-{
-	char myVend[128];
-
-	ST_ASSERTN_IARG(pTagger == NULL)
-
-	snprintf(myVend, sizeof(myVend),
-			"%s %s", ST_LIBSANTAG_NAME, ST_LIBSANTAG_VERS_STRING);
-	return st_mtes_copyFromCharp_iso((const Tst_str*)myVend, pTagger);
-}
-
 /*----------------------------------------------------------------------------*/
 
 /**

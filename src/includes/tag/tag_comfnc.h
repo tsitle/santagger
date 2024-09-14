@@ -45,6 +45,16 @@ st_tagCFnc_convId3v2ToVorbc_picTp(Tst_id3v2_picTp srcPicTp);
 ST_EXPORT Tst_id3v2_picTp
 st_tagCFnc_convVorbcToId3v2_picTp(Tst_vorbc_picTp srcPicTp);
 
+/**
+ * Get a string containing the name of the shared library and its version
+ *
+ * @param pTagger Output string (e.g. 'libsantag x.y.z' or 'libsantag: x.y.z')
+ * @param withColon Add a colon after the library name?
+ * @return Error code
+ */
+ST_EXPORT Tst_err
+st_tagCFnc_getTaggerStr(Tst_mtes_string *pTagger, Tst_bool withColon);
+
 /** Structs */
 ST_EXPORT void
 st_tagCFnc_stc_rsetTSta(Tst_tagCFnc_tstamp *pTSt);

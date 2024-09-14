@@ -22,7 +22,7 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 /** */
 #include "src/includes/common/binobj-defs.h"
@@ -53,14 +53,18 @@ ST_BEGIN_C_DECLS
 				defined(SRC_TAG_VORBC_ZRD_C) || \
 				defined(SRC_TAG_VORBC_ZWR_C)
 	/** */
-	typedef void (*Tst_tagCFnc_cbDbg)(const void *pOpts,
-	                                  const int mode,
-	                                  const char *pFnc,
-	                                  const char *pFmt, ...);
-	typedef void (*Tst_tagCFnc_cbErr)(const void *pOpts,
-	                                  const char *pFnc,
-	                                  const Tst_str *pFn,
-	                                  const char *pFmt, ...);
+	typedef void (*Tst_tagCFnc_cbDbg)(
+			const void *pOpts,
+			const int mode,
+			const char *pFnc,
+			const char *pFmt, ...
+		);
+	typedef void (*Tst_tagCFnc_cbErr)(
+			const void *pOpts,
+			const char *pFnc,
+			const Tst_str *pFn,
+			const char *pFmt, ...
+		);
 #endif  /* protected */
 
 
@@ -83,32 +87,35 @@ ST_BEGIN_C_DECLS
 				defined(SRC_TAG_VORBC_ZWR_C)
 	/** */
 	Tst_err
-	st_tagCFnc_readStr(const Tst_uint32 charWid,
-	                   const Tst_mtes_textEnc textEnc,
-	                   Tst_streamrd *pStrrd,
-	                   const Tst_uint32 maxCopy,
-	                   Tst_uint32 *pCopied,
-	                   Tst_str **ppChar,
-	                   Tst_uint32 *pPCharLen,
-	                   ST_OPTARG(Tst_bool *pHadBOM));
+	st_tagCFnc_readStr(
+			const Tst_uint32 charWid,
+			const Tst_mtes_textEnc textEnc,
+			Tst_streamrd *pStrrd,
+			const Tst_uint32 maxCopy,
+			Tst_uint32 *pCopied,
+			Tst_str **ppChar,
+			Tst_uint32 *pPCharLen,
+			ST_OPTARG(Tst_bool *pHadBOM)
+		);
 	/** */
 	Tst_err
-	st_tagCFnc_hasTripleDotEnding(const Tst_mtes_string *pStr,
-	                              Tst_bool *pHasTD);
+	st_tagCFnc_hasTripleDotEnding(
+			const Tst_mtes_string *pStr,
+			Tst_bool *pHasTD
+		);
 	/** */
 	Tst_err
-	st_tagCFnc_writeTagBOtoStream(const Tst_basOpts *pBasOpts,
-	                              const void *pOpts,
-	                              const char *pFnc,
-	                              Tst_tagCFnc_cbDbg cbDbg,
-	                              Tst_tagCFnc_cbErr cbErr,
-	                              const Tst_str *pTagFilen,
-	                              Tst_tagBasics *pTBas,
-	                              ST_OPTARG(Tst_streamwr *pStrwr),
-	                              Tst_binobj *pTagBO);
-	/** */
-	Tst_err
-	st_tagCFnc_getTaggerStr(Tst_mtes_string *pTagger);
+	st_tagCFnc_writeTagBOtoStream(
+			const Tst_basOpts *pBasOpts,
+			const void *pOpts,
+			const char *pFnc,
+			Tst_tagCFnc_cbDbg cbDbg,
+			Tst_tagCFnc_cbErr cbErr,
+			const Tst_str *pTagFilen,
+			Tst_tagBasics *pTBas,
+			ST_OPTARG(Tst_streamwr *pStrwr),
+			Tst_binobj *pTagBO
+		);
 #endif  /* protected */
 
 
