@@ -22,10 +22,11 @@
 // Constants
 */
 /** these will to be replaced by CMake */
-#define ST_LIBSANTAG_VERS_MAJOR   ###VERS_MAJOR###
-#define ST_LIBSANTAG_VERS_MINOR   ###VERS_MINOR###
-#define ST_LIBSANTAG_VERS_PATCH   ###VERS_PATCH###
-#define ST_LIBSANTAG_VERS_STRING  "###VERS_STRING###"
+#define ST_LIBSANTAG_VERS_MAJOR      ###VERS_MAJOR###
+#define ST_LIBSANTAG_VERS_MINOR      ###VERS_MINOR###
+#define ST_LIBSANTAG_VERS_PATCH      ###VERS_PATCH###
+#define ST_LIBSANTAG_VERS_ALPHABETA  "###VERS_ALPHABETA###"
+#define ST_LIBSANTAG_VERS_STRING     "###VERS_STRING###"
 
 
 #endif  /* HEAD_LIB_VERSION_H */
