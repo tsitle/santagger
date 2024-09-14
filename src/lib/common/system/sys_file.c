@@ -19,7 +19,7 @@
 // Own-Includes
 */
 #if (CONFIG_ST_ALL_DEBUG_ADD == 1)
-#	define ST_SYSFILE_DEB_  0  /* enable additional debugging stuff ? */
+	#define ST_SYSFILE_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
 #include "src/includes/common/sys_file.h"
@@ -35,8 +35,9 @@
 #include <unistd.h>      /* unlink(),readlink(),rename() */
 #include <string.h>      /* memcpy() */
 #include <errno.h>       /* errno */
+#include <stdio.h>       /* fseek(), fseeko(), ftell(), ftello(), ... */
 #if (ST_SYSFILE_DEB_ == 1)
-#	include <stdarg.h>      /* va_list, ... */
+	#include <stdarg.h>      /* va_list, ... */
 #endif
 
 /*----------------------------------------------------------------------------*/
