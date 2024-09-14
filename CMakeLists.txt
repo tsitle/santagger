@@ -10,7 +10,7 @@ set(X_WALL "yes")   # no|yes      (show warnings ?)
 
 # ----------------------------------------------------------------------------
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 17)
 
 #
 if (NOT CMAKE_BUILD_TYPE)
