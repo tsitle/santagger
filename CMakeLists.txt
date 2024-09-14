@@ -166,7 +166,6 @@ if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 	add_compile_definitions(-D_FILE_OFFSET_BITS=64)
 	add_compile_definitions(-D_LARGEFILE_SOURCE)
 	add_compile_definitions(-DCONFIG_ST_ALL_HAVE64BIT=1)
-	add_compile_definitions(-DHAVE_FSEEKO=1)
 else ()
 	message(STATUS "Compiler defs: 32-bit host system detected (pointer size)")
 endif ()
@@ -195,13 +194,22 @@ endif ()
 # include the CheckFunctionExists module
 include(CheckFunctionExists)
 
+# check if fseeko() exists
+check_function_exists(fseeko HAVE_FSEEKO)
+if (HAVE_FSEEKO)
+	message(STATUS "Compiler defs: HAVE_FSEEKO=1")
+	add_compile_definitions(-DHAVE_FSEEKO=1)
+else ()
+	message(STATUS "Compiler defs: no HAVE_FSEEKO")
+endif ()
+
 # check if readlink() exists
 check_function_exists(readlink HAVE_READLINK)
 if (HAVE_READLINK)
 	message(STATUS "Compiler defs: HAVE_READLINK=1")
 	add_compile_definitions(-DHAVE_READLINK=1)
 else ()
-	message(STATUS "Compiler defs: HAVE_READLINK=0")
+	message(STATUS "Compiler defs: no HAVE_READLINK")
 endif ()
 
 # check if gettimeofday() exists
@@ -210,7 +218,7 @@ if (HAVE_GETTIMEOFDAY)
 	message(STATUS "Compiler defs: HAVE_GETTIMEOFDAY=1")
 	add_compile_definitions(-DHAVE_GETTIMEOFDAY=1)
 else ()
-	message(STATUS "Compiler defs: HAVE_GETTIMEOFDAY=0")
+	message(STATUS "Compiler defs: no HAVE_GETTIMEOFDAY")
 endif ()
 
 # include the CheckStructHasMember module
