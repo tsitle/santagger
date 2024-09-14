@@ -239,6 +239,7 @@ execute_process(
 		COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
 		COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
 		COMMAND sed -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
+		COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
 		OUTPUT_FILE "${X_FN_APP_VERSION_H}"
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 	)
@@ -252,6 +253,7 @@ execute_process(
 		COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
 		COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
 		COMMAND sed -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
+		COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
 		OUTPUT_FILE "${X_FN_LIB_VERSION_H}"
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 	)

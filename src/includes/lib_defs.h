@@ -36,13 +36,13 @@
 #include <inttypes.h>   /* PRIu64, PRId64, PRIx64 */
 #include <sys/types.h>  /* off_t */
 #if (CONFIG_ST_ALL_DEBUG == 1)
-#	include <assert.h>
+	#include <assert.h>
 #endif
 
 
 /* directive for inlining functions */
 #ifndef ST_INLINE_S
-#	define ST_INLINE_S  /* empty */
+	#define ST_INLINE_S  /* empty */
 #endif
 #define ST_INLINE_H  /* empty */
 
@@ -51,11 +51,11 @@
 #undef ST_BEGIN_C_DECLS
 #undef ST_END_C_DECLS
 #ifdef __cplusplus
-#	define ST_BEGIN_C_DECLS  extern "C" {
-#	define ST_END_C_DECLS    }
+	#define ST_BEGIN_C_DECLS  extern "C" {
+	#define ST_END_C_DECLS    }
 #else
-#	define ST_BEGIN_C_DECLS  /* empty */
-#	define ST_END_C_DECLS    /* empty */
+	#define ST_BEGIN_C_DECLS  /* empty */
+	#define ST_END_C_DECLS    /* empty */
 #endif
 
 /* ST_PARAMS is a macro used to wrap function prototypes, so that
@@ -65,9 +65,9 @@
 #if defined (__STDC__) || defined (_AIX) || \
 			(defined (__mips) && defined (_SYSTYPE_SVR4)) || \
 			defined(WIN32) || defined(__cplusplus)
-#	define ST_PARAMS(protos)  protos
+	#define ST_PARAMS(protos)  protos
 #else
-#	define ST_PARAMS(protos)  ()
+	#define ST_PARAMS(protos)  ()
 #endif
 
 /**
@@ -79,11 +79,11 @@
 /* ST_EXPORT is used to declare functions etc. in the library
  * as accessible from the outside */
 #if defined(__GNUC__)
-#	define ST_EXPORT __attribute__ ((visibility ("default")))
+	#define ST_EXPORT __attribute__ ((visibility ("default")))
 #elif defined(WIN32)
-#	define ST_EXPORT __declspec(dllexport)
+	#define ST_EXPORT __declspec(dllexport)
 #else
-#	define ST_EXPORT  /* empty */
+	#define ST_EXPORT  /* empty */
 #endif
 
 /*#if !defined(__LITTLE_ENDIAN__) &&
@@ -97,12 +97,6 @@ ST_BEGIN_C_DECLS
 */
 /** Library name and version */
 #define ST_LIBSANTAG_NAME  "libsantag"
-/*#define ST_LIBSANTAG_VERS_CUR              W
-  #define ST_LIBSANTAG_VERS_REV              X
-  #define ST_LIBSANTAG_VERS_AGE              Y
-  #define ST_LIBSANTAG_VERS_STRING           "W.Y.X"
-  #define ST_LIBSANTAG_VERS_STRING_ADD       "dummyZ"
-  #define ST_LIBSANTAG_VERS_STRING_COMPLETE  "W.Y.X-dummyZ" */
 
 /** Error Codes */
 typedef enum {
@@ -231,29 +225,29 @@ typedef int64_t      Tst_int64_native;   /* (64bits) */
 /** Tst_foffs + Tst_fsize */
 /*** (32/64bits) for offsets in files, etc. */
 #if (HAVE_FSEEKO == 1)
-#	if (CONFIG_ST_ALL_NATIVE64BIT == 1)
-#		define Tst_foffs  long int
-#	else
-#		define Tst_foffs  long long int
-#	endif
+	#if (CONFIG_ST_ALL_NATIVE64BIT == 1)
+		#define Tst_foffs  long int
+	#else
+		#define Tst_foffs  long long int
+	#endif
 #else
-#	define Tst_foffs  long int
+	#define Tst_foffs  long int
 #endif
 /*** (64bits) for filesizes */
 #if (HAVE_FSEEKO == 1)
-#	if (CONFIG_ST_ALL_NATIVE64BIT == 1)
-#		define Tst_fsize  unsigned long int
-#	else
-#		define Tst_fsize  unsigned long long int
-#	endif
+	#if (CONFIG_ST_ALL_NATIVE64BIT == 1)
+		#define Tst_fsize  unsigned long int
+	#else
+		#define Tst_fsize  unsigned long long int
+	#endif
 #else
-#	define Tst_fsize  unsigned long int
+	#define Tst_fsize  unsigned long int
 #endif
 /** Tst_bool */
 #ifdef __cplusplus
 	typedef bool Tst_bool;
-#	define ST_B_FALSE  false
-#	define ST_B_TRUE   true
+	#define ST_B_FALSE  false
+	#define ST_B_TRUE   true
 #else
 	typedef enum {
 		ST_B_FALSE = 0,  /* as I always say: "Zero is nothing,    */
@@ -267,10 +261,17 @@ typedef int64_t      Tst_int64_native;   /* (64bits) */
 */
 /** callbacks */
 /*** callback types for debug/error messages */
-typedef void (*Tst_cb_deb_dbg)(const int depth, const char *pFnc,
-                               const char *pMsg);
-typedef void (*Tst_cb_deb_err)(const int depth, const char* pFnc,
-                               const Tst_str *pFn, const char *pMsg);
+typedef void (*Tst_cb_deb_dbg)(
+		const int depth,
+		const char *pFnc,
+		const char *pMsg
+	);
+typedef void (*Tst_cb_deb_err)(
+		const int depth,
+		const char* pFnc,
+		const Tst_str *pFn,
+		const char *pMsg
+	);
 /*** */
 typedef struct {
 	Tst_cb_deb_dbg cbDbgFnc;  /* for debug messages w/ function name */
@@ -297,14 +298,14 @@ typedef struct {
 
 /** Suffixes for integer constants */
 #if (CONFIG_ST_ALL_HAVE64BIT == 1)
-#	define ST_UI64_CONST_SUFX(mac_libdefs_ui64)  mac_libdefs_ui64 ## UL
-#	define ST_SI64_CONST_SUFX(mac_libdefs_si64)  mac_libdefs_si64 ## L
+	#define ST_UI64_CONST_SUFX(mac_libdefs_ui64)  mac_libdefs_ui64 ## UL
+	#define ST_SI64_CONST_SUFX(mac_libdefs_si64)  mac_libdefs_si64 ## L
 #elif defined(__cplusplus)
-#	define ST_UI64_CONST_SUFX(mac_libdefs_ui64)  mac_libdefs_ui64 ## ULL
-#	define ST_SI64_CONST_SUFX(mac_libdefs_si64)  mac_libdefs_si64 ## LL
+	#define ST_UI64_CONST_SUFX(mac_libdefs_ui64)  mac_libdefs_ui64 ## ULL
+	#define ST_SI64_CONST_SUFX(mac_libdefs_si64)  mac_libdefs_si64 ## LL
 #else
-#	define ST_UI64_CONST_SUFX(mac_libdefs_ui64)  mac_libdefs_ui64 ## ULL
-#	define ST_SI64_CONST_SUFX(mac_libdefs_si64)  mac_libdefs_si64 ## LL
+	#define ST_UI64_CONST_SUFX(mac_libdefs_ui64)  mac_libdefs_ui64 ## ULL
+	#define ST_SI64_CONST_SUFX(mac_libdefs_si64)  mac_libdefs_si64 ## LL
 #endif
 
 /** min./max. values */
@@ -322,47 +323,47 @@ typedef struct {
 #define ST_TUINT32_MAX  4294967295
 /*** Tst_foffs */
 #if (HAVE_FSEEKO == 1)
-#	define ST_TFOFFS_MAX  ((Tst_foffs)ST_SI64_CONST_SUFX(9223372036854775807))
+	#define ST_TFOFFS_MAX  ((Tst_foffs)ST_SI64_CONST_SUFX(9223372036854775807))
 #else
-#	define ST_TFOFFS_MAX  ((Tst_foffs)ST_TINT32_MAX)
+	#define ST_TFOFFS_MAX  ((Tst_foffs)ST_TINT32_MAX)
 #endif
 #define ST_TFOFFS_MIN  ((Tst_foffs)(-ST_TFOFFS_MAX - 1))
 /*** Tst_fsize */
 #if (HAVE_FSEEKO == 1)
-#	define ST_TFSIZE_MAX  ((Tst_fsize)ST_UI64_CONST_SUFX(18446744073709551615))
+	#define ST_TFSIZE_MAX  ((Tst_fsize)ST_UI64_CONST_SUFX(18446744073709551615))
 #else
-#	define ST_TFSIZE_MAX  ((Tst_fsize)ST_TUINT32_MAX)
+	#define ST_TFSIZE_MAX  ((Tst_fsize)ST_TUINT32_MAX)
 #endif
 #define ST_TFSIZE_MIN  0
 
 /** for printf & co. */
 /*** 64bit integer */
 #ifndef PRIu64
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
-#		define PRIu64  "llu"
-#	elif defined(__cplusplus)
-#		define PRIu64  "llu"
-#	else
-#		define PRIu64  "llu"
-#	endif
+	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+		#define PRIu64  "llu"
+	#elif defined(__cplusplus)
+		#define PRIu64  "llu"
+	#else
+		#define PRIu64  "llu"
+	#endif
 #endif
 #ifndef PRId64
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
-#		define PRId64  "lld"
-#	elif defined(__cplusplus)
-#		define PRId64  "lld"
-#	else
-#		define PRId64  "lld"
-#	endif
+	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+		#define PRId64  "lld"
+	#elif defined(__cplusplus)
+		#define PRId64  "lld"
+	#else
+		#define PRId64  "lld"
+	#endif
 #endif
 #ifndef PRIx64
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
-#		define PRIx64  "llx"
-#	elif defined(__cplusplus)
-#		define PRIx64  "llx"
-#	else
-#		define PRIx64  "llx"
-#	endif
+	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+		#define PRIx64  "llx"
+	#elif defined(__cplusplus)
+		#define PRIx64  "llx"
+	#else
+		#define PRIx64  "llx"
+	#endif
 #endif
 #define ST_UI64_PRF_LU   "%"PRIu64
 #define ST_UI64_PRF_0X   "0x%016"PRIx64
@@ -371,29 +372,29 @@ typedef struct {
 #define ST_SI64_PRF_0X   ST_UI64_PRF_0X
 /*** Tst_foffs */
 #if (HAVE_FSEEKO == 1)
-#	define ST_TFOFFS_PRF_0X   ST_SI64_PRF_0X
-#	define ST_TFOFFS_PRF_LD   ST_SI64_PRF_LD
-#	define ST_TFOFFS_PRF_PLD  ST_SI64_PRF_PLD
+	#define ST_TFOFFS_PRF_0X   ST_SI64_PRF_0X
+	#define ST_TFOFFS_PRF_LD   ST_SI64_PRF_LD
+	#define ST_TFOFFS_PRF_PLD  ST_SI64_PRF_PLD
 #else
-#	define ST_TFOFFS_PRF_0X   "0x%08x"
-#	define ST_TFOFFS_PRF_LD   "%ld"
-#	define ST_TFOFFS_PRF_PLD  "%+ld"
+	#define ST_TFOFFS_PRF_0X   "0x%08x"
+	#define ST_TFOFFS_PRF_LD   "%ld"
+	#define ST_TFOFFS_PRF_PLD  "%+ld"
 #endif
 /*** Tst_fsize */
 #if (HAVE_FSEEKO == 1)
-#	define ST_TFSIZE_PRF_0X  ST_UI64_PRF_0X
-#	define ST_TFSIZE_PRF_LU  ST_UI64_PRF_LU
+	#define ST_TFSIZE_PRF_0X  ST_UI64_PRF_0X
+	#define ST_TFSIZE_PRF_LU  ST_UI64_PRF_LU
 #else
-#	define ST_TFSIZE_PRF_0X  "0x%08lx"
-#	define ST_TFSIZE_PRF_LU  "%u"
+	#define ST_TFSIZE_PRF_0X  "0x%08lx"
+	#define ST_TFSIZE_PRF_LU  "%u"
 #endif
 
 /** max filesize */
 #if (HAVE_FSEEKO == 1)
-#	define ST_FILESIZE_MAX  \
+	#define ST_FILESIZE_MAX  \
 				(ST_TFSIZE_MAX & ST_UI64_CONST_SUFX(0x7ffffffffff00000))
 #else
-#	define ST_FILESIZE_MAX  (ST_TFSIZE_MAX & 0x7ff00000U)
+	#define ST_FILESIZE_MAX  (ST_TFSIZE_MAX & 0x7ff00000U)
 #endif
 
 
@@ -406,20 +407,21 @@ typedef struct {
 					__FILE__, __func__, __LINE__, \
 					(Tst_uint32)(mac_libdefs_cnt * mac_libdefs_size));**/ \
 			(mac_libdefs_pDest) = (mac_libdefs_type)calloc(mac_libdefs_cnt, mac_libdefs_size); \
-			}
+		}
 #define ST_REALLOC(mac_libdefs_pDest, mac_libdefs_type, mac_libdefs_cnt, mac_libdefs_size)  { \
 			/**fprintf(stderr, "\n__realloc__ '%s':'%s':%d  size %u\n", \
 					__FILE__, __func__, __LINE__, \
 					(Tst_uint32)(mac_libdefs_cnt * mac_libdefs_size));**/ \
 			(mac_libdefs_pDest) = (mac_libdefs_type)realloc(mac_libdefs_pDest, \
 						(mac_libdefs_cnt) * (mac_libdefs_size)); \
-			}
+		}
 
 /** free pointers */
 #define ST_DELPOINT(mac_libdefs_somePointer)  { \
 			if (mac_libdefs_somePointer) { \
 				free(mac_libdefs_somePointer); (mac_libdefs_somePointer) = NULL; \
-			} }
+			} \
+		}
 
 /** check whether some specific verbosity level is activated */
 #define ST_ISVERB(mac_libdefs_verbLevel, mac_libdefs_verbLevelCheck)  \
@@ -428,48 +430,54 @@ typedef struct {
 
 /** assertion */
 #if (CONFIG_ST_ALL_DEBUG == 1)
-#	define ST_ASSERTN_IARG(mac_libdefs_assConds)  { \
+	#define ST_ASSERTN_IARG(mac_libdefs_assConds)  { \
 				if (mac_libdefs_assConds) { \
 					assert(! (mac_libdefs_assConds)); return ST_ERR_IARG; \
-				} }
-#	define ST_ASSERTN_FAIL(mac_libdefs_assConds)  { \
+				} \
+			}
+	#define ST_ASSERTN_FAIL(mac_libdefs_assConds)  { \
 				if (mac_libdefs_assConds) { \
 					assert(! (mac_libdefs_assConds)); return ST_ERR_FAIL; \
-				} }
-#	define ST_ASSERTN_VOID(mac_libdefs_assConds)  { \
+				} \
+			}
+	#define ST_ASSERTN_VOID(mac_libdefs_assConds)  { \
 				if (mac_libdefs_assConds) { \
 					assert(! (mac_libdefs_assConds)); return; \
-				} }
-#	define ST_ASSERTN_NUM(mac_libdefs_assNum, mac_libdefs_assConds)  { \
+				} \
+			}
+	#define ST_ASSERTN_NUM(mac_libdefs_assNum, mac_libdefs_assConds)  { \
 				if (mac_libdefs_assConds) { \
 					assert(! (mac_libdefs_assConds)); return (mac_libdefs_assNum); \
-				} }
-#	define ST_ASSERTN_BOOL(mac_libdefs_assBoo, mac_libdefs_assConds)  { \
+				} \
+			}
+	#define ST_ASSERTN_BOOL(mac_libdefs_assBoo, mac_libdefs_assConds)  { \
 				if (mac_libdefs_assConds) { \
 					assert(! (mac_libdefs_assConds)); return (mac_libdefs_assBoo); \
-				} }
-#	define ST_ASSERTN_NULL(mac_libdefs_assConds)  { \
+				} \
+			}
+	#define ST_ASSERTN_NULL(mac_libdefs_assConds)  { \
 				if (mac_libdefs_assConds) { \
 					assert(! (mac_libdefs_assConds)); return NULL; \
-				} }
+				} \
+			}
 #else
-#	define ST_ASSERTN_IARG(mac_libdefs_assConds)                      /* empty */
-#	define ST_ASSERTN_FAIL(mac_libdefs_assConds)                      /* empty */
-#	define ST_ASSERTN_VOID(mac_libdefs_assConds)                      /* empty */
-#	define ST_ASSERTN_NUM(mac_libdefs_assNum, mac_libdefs_assConds)   /* empty */
-#	define ST_ASSERTN_BOOL(mac_libdefs_assBoo, mac_libdefs_assConds)  /* empty */
-#	define ST_ASSERTN_NULL(mac_libdefs_assConds)                      /* empty */
+	#define ST_ASSERTN_IARG(mac_libdefs_assConds)                      /* empty */
+	#define ST_ASSERTN_FAIL(mac_libdefs_assConds)                      /* empty */
+	#define ST_ASSERTN_VOID(mac_libdefs_assConds)                      /* empty */
+	#define ST_ASSERTN_NUM(mac_libdefs_assNum, mac_libdefs_assConds)   /* empty */
+	#define ST_ASSERTN_BOOL(mac_libdefs_assBoo, mac_libdefs_assConds)  /* empty */
+	#define ST_ASSERTN_NULL(mac_libdefs_assConds)                      /* empty */
 #endif
 
 /** Tst_callbacks_dbg */
 #define ST_RSETSTC_CBSDBG(mac_libdefs_cbs)  { \
 			(mac_libdefs_cbs).cbDbgFnc = NULL; \
 			(mac_libdefs_cbs).cbErrFnc = NULL; \
-			}
+		}
 #define ST_COPYSTC_CBSDBG(mac_libdefs_cbsSrc, mac_libdefs_cbsDst)  { \
 			(mac_libdefs_cbsDst).cbDbgFnc = (mac_libdefs_cbsSrc).cbDbgFnc; \
 			(mac_libdefs_cbsDst).cbErrFnc = (mac_libdefs_cbsSrc).cbErrFnc; \
-			}
+		}
 
 /** Tst_basOpts */
 #define ST_RSETSTC_BASOPTS(mac_libdefs_bopt)  { \
@@ -477,13 +485,13 @@ typedef struct {
 			(mac_libdefs_bopt).pretWr       = ST_B_TRUE; \
 			(mac_libdefs_bopt).allowLnkInpF = ST_B_FALSE; \
 			ST_RSETSTC_CBSDBG((mac_libdefs_bopt).cbsDbg) \
-			}
+		}
 #define ST_COPYSTC_BASOPTS(mac_libdefs_boptSrc, mac_libdefs_boptDst)  { \
 			(mac_libdefs_boptDst).verb         = (mac_libdefs_boptSrc).verb; \
 			(mac_libdefs_boptDst).pretWr       = (mac_libdefs_boptSrc).pretWr; \
 			(mac_libdefs_boptDst).allowLnkInpF = (mac_libdefs_boptSrc).allowLnkInpF; \
 			ST_COPYSTC_CBSDBG((mac_libdefs_boptSrc).cbsDbg, (mac_libdefs_boptDst).cbsDbg) \
-			}
+		}
 
 /** */
 /*define ST_GEN_DEBUG_LEVEL(mac_libdefs_verbLevel, ...)  \

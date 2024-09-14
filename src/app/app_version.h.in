@@ -22,11 +22,11 @@
 // Constants
 */
 /** these will to be replaced by CMake */
-#define APP_ST_VERS_MAJOR      ###VERS_MAJOR###
-#define APP_ST_VERS_MINOR      ###VERS_MINOR###
-#define APP_ST_VERS_PATCH      ###VERS_PATCH###
-#define APP_ST_VERS_ALPHABETA  "###VERS_ALPHABETA###"
-#define APP_ST_VERS_STRING     "###VERS_STRING###"
+#define APP_ST_VERS_MAJOR      (###VERS_MAJOR###)
+#define APP_ST_VERS_MINOR      (###VERS_MINOR###)
+#define APP_ST_VERS_PATCH      (###VERS_PATCH###)
+#define APP_ST_VERS_ALPHABETA  ("###VERS_ALPHABETA###")
+#define APP_ST_VERS_STRING     ("###VERS_STRING###")
 
 
 #endif  /* HEAD_APP_VERSION_H */
