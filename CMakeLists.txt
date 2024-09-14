@@ -280,7 +280,7 @@ execute_process(
 # ----------------------------------------------------------------------------
 
 set_target_properties(santagger_lib PROPERTIES
-		VERSION ${GIT_VERSION_MAJOR}.${GIT_VERSION_MINOR}.${GIT_VERSION_PATCH}  # Full version
+		VERSION ${GIT_VERSION_MAJOR}.${GIT_VERSION_MINOR}.${GIT_VERSION_ALPHABETA}${GIT_VERSION_PATCH}  # Full version
 		SOVERSION ${GIT_VERSION_MAJOR}  # ABI version
 	)
 
