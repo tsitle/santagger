@@ -19,10 +19,10 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 #if (CONFIG_ST_ALL_DEBUG_ADD == 1)
-#	define ST_SYSFNC_DEB_  0  /* enable additional debugging stuff ? */
+	#define ST_SYSFNC_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
 #include "src/includes/common/sys_fnc.h"
@@ -50,47 +50,56 @@
 /*----------------------------------------------------------------------------*/
 
 #if (CONFIG_ST_ALL_DEBUG_ADD == 1)
-const Tst_uint16 st_sysfnc_g_bigEndTest = 0x4321;
+	const Tst_uint16 st_sysfnc_g_bigEndTest = 0x4321;
 #endif  /* CONFIG_ST_ALL_DEBUG_ADD */
 
 /*----------------------------------------------------------------------------*/
 
 static Tst_bool
-ST_SYSFNC__strcmpN(const Tst_bool caseSensitive,
-                   const Tst_bool useMaxlen, const Tst_uint32 maxlen,
-                   ST_OPTARG(const Tst_str *pStr1),
-                   ST_OPTARG(const Tst_str *pStr2));
+ST_SYSFNC__strcmpN(
+		const Tst_bool caseSensitive,
+		const Tst_bool useMaxlen, const Tst_uint32 maxlen,
+		ST_OPTARG(const Tst_str *pStr1),
+		ST_OPTARG(const Tst_str *pStr2)
+	);
 /** */
 #if (ST_SYSFNC_DEB_ == 1)
-static void ST_SYSFNC__prf(char *pFmt, ...);
-static void ST_SYSFNC__prE(char *pFmt, ...);
+	static void ST_SYSFNC__prf(char *pFmt, ...);
+	static void ST_SYSFNC__prE(char *pFmt, ...);
 #endif
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-/*
+/**
  * Get string length (assuming string is ISO-encoded)
  *
- * pStrISO   may be NULL
+ * @param pStrISO String in ISO-encoding (can be NULL)
+ * @return Length of string
  */
 Tst_uint32
 st_sysStrlen(ST_OPTARG(const Tst_str *pStrISO))
 {
 	Tst_str const *pC = pStrISO;
 
-	if (pStrISO == NULL)
+	if (pStrISO == NULL) {
 		return 0;
+	}
 
-	while (*pC)
+	while (*pC) {
 		++pC;
+	}
 	return (pC - pStrISO);
 }
 
 /*----------------------------------------------------------------------------*/
 
-/*
- * Copy pSrc to *ppDst, memory for *ppDst will be allocated
+/**
+ * Copy string
+ *
+ * @param pSrc Source string in ISO-encoding (can be NULL)
+ * @param ppDst Destination string (memory for *ppDst will be re-allocated)
+ * @return Error code
  */
 Tst_err
 st_sysStrcpy(ST_OPTARG(const Tst_str *pSrc), Tst_str **ppDst)
@@ -101,67 +110,129 @@ st_sysStrcpy(ST_OPTARG(const Tst_str *pSrc), Tst_str **ppDst)
 
 	slen = st_sysStrlen(pSrc) + 1;
 	ST_REALLOC(*ppDst, Tst_str*, slen, 1)
-	if (*ppDst == NULL)
+	if (*ppDst == NULL) {
 		return ST_ERR_OMEM;
-	if (pSrc == NULL)
+	}
+	if (pSrc == NULL) {
 		(*ppDst)[0] = 0;
-	else
+	} else {
 		memcpy(*ppDst, pSrc, slen);
+	}
 	return ST_ERR_SUCC;
 }
 
 /*----------------------------------------------------------------------------*/
 
-/*
- * Convert pStr to uppercase
+/**
+ * Append one string to another
+ *
+ * @param pSrc Source string in ISO-encoding (can be NULL)
+ * @param ppDst Destination string (memory for ppDst will be re-allocated)
+ * @return Error code
+ */
+Tst_err
+st_sysStrapp(ST_OPTARG(const Tst_str *pSrc), Tst_str **ppDst)
+{
+	Tst_uint32 slenSrc;
+	Tst_uint32 slenDst;
+	Tst_str    *pTemp;
+
+	ST_ASSERTN_IARG(ppDst == NULL)
+
+	slenSrc = st_sysStrlen(pSrc);
+	slenDst = st_sysStrlen(*ppDst);
+
+	ST_CALLOC(pTemp, Tst_str*, slenSrc + slenDst + 1, 1);
+	if (pTemp == NULL) {
+		return ST_ERR_OMEM;
+	}
+	memcpy(pTemp, *ppDst, slenDst);
+	if (slenSrc != 0) {
+		memcpy(pTemp + slenDst, pSrc, slenSrc);
+	}
+	pTemp[slenSrc + slenDst] = 0x00;
+
+	ST_REALLOC(*ppDst, Tst_str*, slenSrc + slenDst + 1, 1)
+	if (*ppDst == NULL) {
+		return ST_ERR_OMEM;
+	}
+	memcpy(*ppDst, pTemp, slenSrc + slenDst + 1);
+	return ST_ERR_SUCC;
+}
+
+/*----------------------------------------------------------------------------*/
+
+/**
+ * Convert string to uppercase
+ *
+ * @param pStr String to convert
  */
 void
 st_sysStrToUpper(ST_OPTARG(Tst_str *pStr))
 {
 	Tst_str *pCh = pStr;
 
-	if (pStr == NULL)
+	if (pStr == NULL) {
 		return;
+	}
 	while (*pCh) {
 		*pCh = (Tst_str)toupper((int)*pCh);
 		++pCh;
 	}
 }
 
-/*
- * Convert pStr to lowercase
+/**
+ * Convert string to lowercase
+ *
+ * @param pStr String to convert
  */
 void
 st_sysStrToLower(ST_OPTARG(Tst_str *pStr))
 {
 	Tst_str *pCh = pStr;
 
-	if (pStr == NULL)
+	if (pStr == NULL) {
 		return;
+	}
 	while (*pCh) {
 		*pCh = (Tst_str)tolower((int)*pCh);
 		++pCh;
 	}
 }
 
+/**
+ * Convert character to uppercase
+ *
+ * @param ch Character to convert
+ * @return Character
+ */
 Tst_str
-st_sysCharToUpper(Tst_str ch)
+st_sysCharToUpper(const Tst_str ch)
 {
 	return (Tst_str)toupper((int)ch);
 }
 
+/**
+ * Convert character to lowercase
+ *
+ * @param ch Character to convert
+ * @return Character
+ */
 Tst_str
-st_sysCharToLower(Tst_str ch)
+st_sysCharToLower(const Tst_str ch)
 {
 	return (Tst_str)tolower((int)ch);
 }
 
 /*----------------------------------------------------------------------------*/
 
-/*
- * Compare pStr1 and pStr2, case-(in)sensitive
+/**
+ * Compare two strings
  *
- * returns: true if equal
+ * @param caseSensitive Compare case-sensitive?
+ * @param pStr1 First string
+ * @param pStr2 Second string
+ * @return True if equal
  */
 Tst_bool
 st_sysStrcmp(const Tst_bool caseSensitive,
@@ -170,6 +241,15 @@ st_sysStrcmp(const Tst_bool caseSensitive,
 	return ST_SYSFNC__strcmpN(caseSensitive, ST_B_FALSE, 0, pStr1, pStr2);
 }
 
+/**
+ * Compare two strings - but only the first n characters
+ *
+ * @param caseSensitive Compare case-sensitive?
+ * @param maxlen Maximum length to compare
+ * @param pStr1 First string
+ * @param pStr2 Second string
+ * @return True if equal
+ */
 Tst_bool
 st_sysStrcmpN(const Tst_bool caseSensitive, const Tst_uint32 maxlen,
 		ST_OPTARG(const Tst_str *pStr1), ST_OPTARG(const Tst_str *pStr2))
@@ -182,21 +262,26 @@ st_sysStrcmpN(const Tst_bool caseSensitive, const Tst_uint32 maxlen,
 /*
 Tst_uint32 sysBig2LittleEnd(const Tlsize val, const Tst_uint32 valSz)
 {
-	if (valSz < 1 || valSz > 4 || val == 0)
+	if (valSz < 1 || valSz > 4 || val == 0) {
 		return 0;
+	}
 	return (Tst_uint32)ntohl((Tlsize)(val << (32 - (8 * valSz))));
 }
 
 Tst_uint32 sysLittle2BigEnd(const Tlsize val, const Tst_uint32 valSz)
 {
-	if (valSz < 1 || valSz > 4 || val == 0)
+	if (valSz < 1 || valSz > 4 || val == 0) {
 		return 0;
+	}
 	return (Tst_uint32)htonl((Tlsize)val << (32 - 8 * valSz));
 }
 */
 
-/*
- * Reverse Byte-Order for 'short' 2byte type
+/**
+ * Reverse Byte-Order for 'short' 2-byte type
+ *
+ * @param val Value
+ * @return Reversed value
  */
 Tst_uint16
 st_sysReverseByteOrder_UI16(const Tst_uint16 val)
@@ -212,15 +297,18 @@ st_sysReverseByteOrder_UI16(const Tst_uint16 val)
 	return rval;
 }
 
-/*
- * Reverse Byte-Order for 'int' 4byte type
+/**
+ * Reverse Byte-Order for 'int' 4-byte type
+ *
+ * @param val Value
+ * @return Reversed value
  */
 Tst_uint32
 st_sysReverseByteOrder_UI32(const Tst_uint32 val)
 {
 	Tst_uint32 rval;
-	Tst_buf    *pValP = (Tst_buf*)&val,
-	           *pResP = (Tst_buf*)&rval;
+	Tst_buf    *pValP = (Tst_buf*)&val;
+	Tst_buf    *pResP = (Tst_buf*)&rval;
 
 	/* big2little or vice versa */
 	/* abcd --> dcba */
@@ -233,11 +321,12 @@ st_sysReverseByteOrder_UI32(const Tst_uint32 val)
 	return rval;
 }
 
-/*
- * Reverse Byte-Order for 8byte buffer type
+/**
+ * Reverse Byte-Order for 8-byte buffer type
  *
- * pVal   MUST be != NULL
- * valSz  MUST be 8
+ * @param pVal Buffer
+ * @param valSz Size of buffer (must be 8)
+ * @return Reversed buffer
  */
 Tst_buf*
 st_sysReverseByteOrder_LL(Tst_buf *pVal, const Tst_uint32 valSz)
@@ -267,62 +356,67 @@ st_sysReverseByteOrder_LL(Tst_buf *pVal, const Tst_uint32 valSz)
 
 /*----------------------------------------------------------------------------*/
 
-/*
+/**
  * Get system time
+ *
+ * @return System time as double
  */
 double
 st_sysGetTime(void)
 {
-#	ifdef WIN32  /* untested */
-	LARGE_INTEGER t,
-	              f;
+	#ifdef WIN32  /* untested */
+		LARGE_INTEGER t;
+		LARGE_INTEGER f;
 
-	QueryPerformanceCounter(&t);
-	QueryPerformanceFrequency(&f);
-	return (double(t.QuadPart) / double(f.QuadPart));
-#	else
-#		if (HAVE_GETTIMEOFDAY == 1 && HAVE_STRUCT_TIMEVAL_TV_SEC == 1 && \
+		QueryPerformanceCounter(&t);
+		QueryPerformanceFrequency(&f);
+		return (double(t.QuadPart) / double(f.QuadPart));
+	#else
+		#if (HAVE_GETTIMEOFDAY == 1 && HAVE_STRUCT_TIMEVAL_TV_SEC == 1 && \
 				HAVE_STRUCT_TIMEVAL_TV_USEC == 1)
-	struct timeval  t;
-	struct timezone tzp;
+			struct timeval  t;
+			struct timezone tzp;
 
-	gettimeofday(&t, &tzp);
-	return (t.tv_sec + t.tv_usec * (1e-6));
-#		else
-	time_t timeV = 0;  /* time_t seems to be long int */
+			gettimeofday(&t, &tzp);
+			return (t.tv_sec + t.tv_usec * (1e-6));
+		#else
+			time_t timeV = 0;  /* time_t seems to be long int */
 
-	time(&timeV);
-	return (double)timeV;
-#		endif
-#	endif
+			time(&timeV);
+			return (double)timeV;
+		#endif
+	#endif
 }
 
 /*----------------------------------------------------------------------------*/
 
-/*
- * Puts current process at sleep
+/**
+ * Put current process to sleep
+ *
+ * @param millisecs Milliseconds to sleep for
  */
 void
 st_sysSleepMS(const Tst_uint32 millisecs)
 {
-#	if (HAVE_STRUCT_TIMESPEC_TV_SEC == 1 && \
+	#if (HAVE_STRUCT_TIMESPEC_TV_SEC == 1 && \
 			HAVE_STRUCT_TIMESPEC_TV_NSEC == 1)
-	struct timespec ts;
+		struct timespec ts;
 
-	if (millisecs > 0) {
-		ts.tv_sec  = (time_t)((millisecs - millisecs % 1000) / 1000);
-		ts.tv_nsec = (long)((millisecs - ts.tv_sec * 1000) * 1000 * 1000);
-		nanosleep(&ts, NULL);
-	}
-#	endif
+		if (millisecs > 0) {
+			ts.tv_sec  = (time_t)((millisecs - millisecs % 1000) / 1000);
+			ts.tv_nsec = (long)((millisecs - ts.tv_sec * 1000) * 1000 * 1000);
+			nanosleep(&ts, NULL);
+		}
+	#endif
 }
 
 /*----------------------------------------------------------------------------*/
 
-/*
- * Initialize Pseudo-Random-Number generator
- *   The PRNG is init'd with the current time,
- *   but you can use an additional seed
+/**
+ * Initialize Pseudo-Random-Number generator.
+ * The PRNG is initialized with the current time, but you can use an additional seed
+ *
+ * @param optionalSeed Optional seed value
  */
 void
 st_sysInitRand(const Tst_uint32 optionalSeed)
@@ -330,37 +424,42 @@ st_sysInitRand(const Tst_uint32 optionalSeed)
 	srand((Tst_uint32)time(NULL) | optionalSeed);
 }
 
-/*
- * Get Pseudo-Random-Number as UINT
+/**
+ * Get Pseudo-Random-Number as integer
  *
- * returns: value between min and max ( min <= x <= max ) as UINT
+ * @param min Minimum output number
+ * @param max Maximum output number
+ * @return Pseudo-Random-Number between min and max ( min <= x <= max )
  */
 Tst_uint32
 st_sysGetRand(const Tst_uint32 min, const Tst_uint32 max)
 {
-	Tst_uint32 y,
-	           r;
+	Tst_uint32 y;
+	Tst_uint32 r;
 
 	ST_ASSERTN_NUM(0, min > max)  /* ret 0 */
 
 	if (max == 0xffffffff) {
-		if (min == 0)
+		if (min == 0) {
 			r = max;
-		else
+		} else {
 			r = (max - min) + 1;
-	} else
+		}
+	} else {
 		r = (max + 1) - min;
+	}
 	y = (Tst_uint32)(r * ((double)rand() / (double)RAND_MAX));
 	return (min + y);
 }
 
 /*Tst_uint32 st_sysGetRandOLD(const Tst_uint32 min, const Tst_uint32 max)
 {
-	double     x;
+	double x;
 	Tst_uint32 y;
 
-	if (min > max)
+	if (min > max) {
 		return 0;
+	}
 	* return (min +
 			(Tst_uint32)((double)((Tlsize)max + 1 - min * rand()) /
 				(RAND_MAX + (double)min))); *
@@ -369,16 +468,18 @@ st_sysGetRand(const Tst_uint32 min, const Tst_uint32 max)
 	return min + y;
 }*/
 
-/*
- * Get Pseudo-Random-Number as DOUBLE
+/**
+ * Get Pseudo-Random-Number as double
  *
- * returns: value between min and max ( min <= x <= max ) as DOUBLE
+ * @param min Minimum output number
+ * @param max Maximum output number
+ * @return Pseudo-Random-Number between min and max ( min <= x <= max )
  */
 double
 st_sysGetRandDbl(const double min, const double max)
 {
-	double y,
-	       r;
+	double y;
+	double r;
 
 	ST_ASSERTN_NUM(0.0, min > max)  /* ret 0.0 */
 
@@ -414,43 +515,48 @@ st_sysGetRandDbl(const double min, const double max)
 
 /*----------------------------------------------------------------------------*/
 
-/*
- * Search for pRepl in pBuf
+/**
+ * Search for a buffer inside another buffer
  *
- * pBuf      MUST be set
- * pSearch   MUST be set
- * pOffs     may be NULL
- *
- * returns: true if found
+ * @param pBuf Buffer to search in
+ * @param bSz Size of pBuf
+ * @param pSearch Buffer to search for
+ * @param sSz Size of pSearch
+ * @param pOffs Offset from which to start searching (can be NULL)
+ * @return True if found
  */
 Tst_bool
 st_sysBufSearch(const Tst_buf *pBuf, const Tst_uint32 bSz,
-        const Tst_buf *pSearch, const Tst_uint32 sSz,
-        ST_OPTARG(Tst_uint32 *pOffs))
+		const Tst_buf *pSearch, const Tst_uint32 sSz,
+		ST_OPTARG(Tst_uint32 *pOffs))
 {
-	Tst_uint32 y,
-	           z;
+	Tst_uint32 y;
+	Tst_uint32 z;
 	Tst_bool   fnd = ST_B_FALSE;
 
 	ST_ASSERTN_BOOL(ST_B_FALSE, pBuf == NULL || pSearch == NULL)
 
-	if (pOffs != NULL)
+	if (pOffs != NULL) {
 		*pOffs = 0;
+	}
 	if (bSz >= sSz && sSz > 0) {
 		for (y = 0; y < bSz; y++) {
-			if (y + sSz > bSz)
+			if (y + sSz > bSz) {
 				break;
+			}
 			z   = y;
 			fnd = ST_B_TRUE;
 			while (fnd && y + sSz > z) {
-				if (pBuf[z] != pSearch[z - y])
+				if (pBuf[z] != pSearch[z - y]) {
 					fnd = ST_B_FALSE;
-				else
+				} else {
 					++z;
+				}
 			}
 			if (fnd) {
-				if (pOffs != NULL)
+				if (pOffs != NULL) {
 					*pOffs = y;
+				}
 				break;
 			}
 		}
@@ -467,12 +573,13 @@ ST_SYSFNC__strcmpN(const Tst_bool caseSensitive,
 		ST_OPTARG(const Tst_str *pStr1), ST_OPTARG(const Tst_str *pStr2))
 {
 	Tst_bool      resB = ST_B_TRUE;
-	Tst_str const *pS1 = pStr1,
-	              *pS2 = pStr2;
+	Tst_str const *pS1 = pStr1;
+	Tst_str const *pS2 = pStr2;
 	Tst_uint32    x    = 0;
 
-	if (pStr1 == NULL || pStr2 == NULL)
+	if (pStr1 == NULL || pStr2 == NULL) {
 		return ST_B_FALSE;
+	}
 
 	while ((! useMaxlen || x < maxlen) && *pS1) {
 		if (*pS2 == 0x00 ||
@@ -493,23 +600,23 @@ ST_SYSFNC__strcmpN(const Tst_bool caseSensitive,
 /*----------------------------------------------------------------------------*/
 
 #if (ST_SYSFNC_DEB_ == 1)
-static void ST_SYSFNC__prf(char *pFmt, ...)
-{
-	va_list args;
+	static void ST_SYSFNC__prf(char *pFmt, ...)
+	{
+		va_list args;
 
-	va_start(args, pFmt);
-	vprintf(pFmt, args);
-	va_end(args);
-}
+		va_start(args, pFmt);
+		vprintf(pFmt, args);
+		va_end(args);
+	}
 
-static void ST_SYSFNC__prE(char *pFmt, ...)
-{
-	va_list args;
+	static void ST_SYSFNC__prE(char *pFmt, ...)
+	{
+		va_list args;
 
-	va_start(args, pFmt);
-	vfprintf(stderr, pFmt, args);
-	va_end(args);
-}
+		va_start(args, pFmt);
+		vfprintf(stderr, pFmt, args);
+		va_end(args);
+	}
 #endif
 
 /******************************************************************************/
