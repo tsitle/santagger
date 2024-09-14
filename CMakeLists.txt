@@ -115,7 +115,10 @@ endif ()
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	message(STATUS "Compiler flags: w/ Debug")
 	#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb")
-	add_compile_definitions(-DCONFIG_ST_ALL_DEBUG=1 -DCONFIG_ST_ALL_DEBUG_ADD=1)
+	# enable debugging stuff
+	add_compile_definitions(-DCONFIG_ST_ALL_DEBUG=1)
+	# enable additional debugging stuff
+	add_compile_definitions(-DCONFIG_ST_ALL_DEBUG_ADD=1)
 else ()
 	message(STATUS "Compiler flags: w/o Debug")
 endif ()
@@ -186,6 +189,64 @@ if (IS_BIG_ENDIAN)
 else ()
 	message(STATUS "Compiler defs: Little-endian")
 	add_compile_definitions(-DWORDS_BIGENDIAN=0)
+endif ()
+
+# include the CheckFunctionExists module
+include(CheckFunctionExists)
+
+# check if readlink() exists
+check_function_exists(readlink HAVE_READLINK)
+if (HAVE_READLINK)
+	message(STATUS "Compiler defs: HAVE_READLINK=1")
+	add_compile_definitions(-DHAVE_READLINK=1)
+else ()
+	message(STATUS "Compiler defs: HAVE_READLINK=0")
+endif ()
+
+# check if gettimeofday() exists
+check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
+if (HAVE_GETTIMEOFDAY)
+	message(STATUS "Compiler defs: HAVE_GETTIMEOFDAY=1")
+	add_compile_definitions(-DHAVE_GETTIMEOFDAY=1)
+else ()
+	message(STATUS "Compiler defs: HAVE_GETTIMEOFDAY=0")
+endif ()
+
+# include the CheckStructHasMember module
+include(CheckStructHasMember)
+
+# check if 'struct timeval' has the member 'tv_sec'
+check_struct_has_member("struct timeval" tv_sec sys/select.h HAVE_STRUCT_TIMEVAL_TV_SEC LANGUAGE C)
+if (HAVE_STRUCT_TIMEVAL_TV_SEC)
+	message(STATUS "Compiler defs: HAVE_STRUCT_TIMEVAL_TV_SEC=1")
+	add_definitions(-DHAVE_STRUCT_TIMEVAL_TV_SEC=1)
+else ()
+	message(STATUS "Compiler defs: no HAVE_STRUCT_TIMEVAL_TV_SEC")
+endif ()
+# check if 'struct timeval' has the member 'tv_usec'
+check_struct_has_member("struct timeval" tv_usec sys/select.h HAVE_STRUCT_TIMEVAL_TV_USEC LANGUAGE C)
+if (HAVE_STRUCT_TIMEVAL_TV_USEC)
+	message(STATUS "Compiler defs: HAVE_STRUCT_TIMEVAL_TV_USEC=1")
+	add_definitions(-DHAVE_STRUCT_TIMEVAL_TV_USEC=1)
+else ()
+	message(STATUS "Compiler defs: no HAVE_STRUCT_TIMEVAL_TV_USEC")
+endif ()
+
+# check if 'struct timespec' has the member 'tv_sec'
+check_struct_has_member("struct timespec" tv_sec sys/time.h HAVE_STRUCT_TIMESPEC_TV_SEC)
+if (HAVE_STRUCT_TIMESPEC_TV_SEC)
+	message(STATUS "Compiler defs: HAVE_STRUCT_TIMESPEC_TV_SEC=1")
+	add_definitions(-DHAVE_STRUCT_TIMESPEC_TV_SEC=1)
+else ()
+	message(STATUS "Compiler defs: no HAVE_STRUCT_TIMESPEC_TV_SEC")
+endif ()
+# check if 'struct timespec' has the member 'tv_nsec'
+check_struct_has_member("struct timespec" tv_nsec sys/time.h HAVE_STRUCT_TIMESPEC_TV_NSEC)
+if (HAVE_STRUCT_TIMESPEC_TV_NSEC)
+	message(STATUS "Compiler defs: HAVE_STRUCT_TIMESPEC_TV_NSEC=1")
+	add_definitions(-DHAVE_STRUCT_TIMESPEC_TV_NSEC=1)
+else ()
+	message(STATUS "Compiler defs: no HAVE_STRUCT_TIMESPEC_TV_NSEC")
 endif ()
 
 # ----------------------------------------------------------------------------
