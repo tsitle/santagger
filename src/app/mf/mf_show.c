@@ -18,9 +18,6 @@
 /*
 // Own-Includes, Part I
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #include "src/includes/audvid/aud_mpeg1.h"
 #include "src/includes/audvid/cont_ogg.h"

@@ -18,9 +18,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #include "src/includes/tag/tag_id3v1.h"
 /** */

@@ -18,9 +18,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #define SRC_TAG_FLDMAP_ZID_C
 #include "tag_fldmap_zid-prot.h"

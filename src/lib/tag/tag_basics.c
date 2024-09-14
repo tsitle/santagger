@@ -18,9 +18,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #define SRC_TAG_BASICS_C
 #include "tag_basics-prot.h"

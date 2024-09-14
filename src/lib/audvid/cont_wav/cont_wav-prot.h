@@ -21,9 +21,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #include "src/includes/common/sys_file-defs.h"
 #include "src/includes/common/sys_math-defs.h"

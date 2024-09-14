@@ -21,9 +21,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 #if (CONFIG_ST_ALL_DEBUG_ADD == 1)
 #	define ST_TAG_ZFDEB_DEB_  0  /* enable additional debugging stuff ? */
 #endif

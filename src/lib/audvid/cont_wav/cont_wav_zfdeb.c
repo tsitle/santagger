@@ -18,9 +18,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #define SRC_CONT_WAV_ZFDEB_C
 #include "cont_wav_zfdeb-prot.h"

@@ -21,9 +21,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #include "ac_spx_clt-prot.h"
 

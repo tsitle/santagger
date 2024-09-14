@@ -18,9 +18,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #include "src/includes/common/dynlist.h"
 #include "src/includes/common/sys_file.h"

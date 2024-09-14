@@ -18,9 +18,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #define SRC_AUD_MPEG1_ZFDEB_C
 #include "aud_mpeg1_zfdeb-prot.h"

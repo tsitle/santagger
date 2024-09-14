@@ -18,9 +18,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #define SRC_STREAM_CRCS_C
 #include "stream_crcs-prot.h"

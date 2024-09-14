@@ -42,9 +42,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #define SRC_W_UTF_C
 #include "w-utf-prot.h"

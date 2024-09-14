@@ -21,9 +21,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #include "../cont_ogg_met_vorbcomm/mc_vorbcomm-prot.h"
 

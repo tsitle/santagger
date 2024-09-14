@@ -21,9 +21,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #include "ac_flac-prot.h"
 #include "../cont_ogg/cont_ogg-common-prot.h"

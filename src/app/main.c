@@ -33,9 +33,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 #if (CONFIG_ST_ALL_DEBUG_ADD == 1)
 #	define LOC_SHOWLOCALE_  0  /* show locale ? */
 #endif

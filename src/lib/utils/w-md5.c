@@ -49,9 +49,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 /** */
 #define SRC_W_MD5_C
 #include "w-md5-prot.h"

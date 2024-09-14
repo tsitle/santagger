@@ -21,9 +21,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
 #if (CONFIG_ST_ALL_DEBUG_ADD == 1)
 #	define AST_MF_OUTP_DEB_  1  /* enable additional debugging stuff ? */
 #endif
