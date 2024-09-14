@@ -42,8 +42,7 @@
 #include <stdlib.h>      /* calloc() */
 #include <string.h>      /* strcat() */
 #include <ctype.h>       /* isprint() */
-#include <unistd.h>      /* getopt(), char(optarg),           */
-                         /*   int(optind,opterr,optopt), ...  */
+#include <unistd.h>      /* getopt(), char(optarg), int(optind,opterr,optopt), ... */
 #if (HAVE_LIBVORBIS == 1)
 	#include <vorbis/codec.h>
 #endif
@@ -78,11 +77,11 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 {
 	const char *cFNCN = __func__;
 	Tst_err    res    = ST_ERR_SUCC;
-	Tst_int32  /*doi    = 0,*/               /* digit_optind */
-	           /*tooi   = optind ? optind : 1,*/  /* this_option_optind */
-	           oix    = 0,                   /* option_index */
-	           c;                            /* will hold option char */
-	Tst_uint32 cntarr = 0;                   /* amount of array elems */
+	//Tst_int32  doi    = 0,                    /* digit_optind */
+	//Tst_int32  tooi   = optind ? optind : 1,  /* this_option_optind */
+	Tst_int32  oix    = 0;              /* option_index */
+	Tst_int32  c;                       /* will hold option char */
+	Tst_uint32 cntarr = 0;              /* amount of array elems */
 	/* optind comes from getopt.h */
 
 	ST_ASSERTN_IARG(pAppFn == NULL || argv == NULL || pCmdln == NULL ||
@@ -94,16 +93,18 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 
 	/* pre-check args */
 	if (argc < 2 || argc > AST_CLN_MAX_ARGS + 1) {
-		if (argc > AST_CLN_MAX_ARGS + 1)
+		if (argc > AST_CLN_MAX_ARGS + 1) {
 			pCmdln->cbErr(pAppFn, cFNCN,
 					"max. %d parameters permitted", AST_CLN_MAX_ARGS);
-		else
+		} else {
 			AST_CLN__pa_printUsage(pAppFn, pCmdln->cbMsg);
+		}
 		return ST_ERR_ABRT;
 	}
 	res = ast_cln_fnc_checkForAmbig(pAppFn, cFNCN, argc, argv, pCmdln);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
 		return res;
+	}
 	/* */
 	*pParbeg = 0;
 	/* */
@@ -115,8 +116,9 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 	/* init long option cache array */
 	ST_CALLOC(pCmdln->pPAlngoptcArr, Tast_cln_longoptCache*,
 			cntarr, sizeof(Tast_cln_longoptCache))
-	if (pCmdln->pPAlngoptcArr == NULL)
+	if (pCmdln->pPAlngoptcArr == NULL) {
 		return ST_ERR_OMEM;
+	}
 	ast_cln_fnc_setLongoptsCache((const Tast_cln_longopts*)&AST_CLN_LONGOPTS,
 			cntarr, pCmdln->pPAlngoptcArr);
 
@@ -127,8 +129,9 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 		oix  = 0;
 		c    = getopt_long(argc, (char**)argv, AST_CLN_SHORTOPTS,
 					AST_CLN_LONGOPTS, &oix);
-		if (c == -1)
+		if (c == -1) {
 			break;
+		}
 		/** */
 		res = AST_CLN__pa_hndArg(c, oix, cntarr, pCmdln);
 	}
@@ -136,8 +139,9 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 	if (res == ST_ERR_SUCC &&
 			pCmdln->optsTagFlds.attFileArr.cnt > 0) {
 		/* print attach-file array */
-		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_OPTS))
+		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_OPTS)) {
 			ast_cln_af_prAFarr(pCmdln);
+		}
 		/* check files in attach-file array */
 		res = ast_cln_af_checkAFarr(pCmdln);
 	}
@@ -149,9 +153,9 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 
 	if (res == ST_ERR_SUCC) {
 		/* have program params been passed ? */
-		if (optind < 0)
+		if (optind < 0) {
 			res = ST_ERR_FAIL;
-		else if (res == ST_ERR_SUCC && (Tst_uint32)optind < argc) {
+		} else if (res == ST_ERR_SUCC && (Tst_uint32)optind < argc) {
 			/**ast_cln_prf("    parseArgs: non-option ARGV-elements: ");
 			while ((Tst_uint32)optind < argc) {
 				ast_cln_prf("\"%s\"", argv[optind++]);
@@ -194,21 +198,21 @@ static Tst_err
 AST_CLN__pa_sc_help(const Tst_str *pAppFn, const Tast_cln_cbMsg cbMsg,
 		const Tst_bool isInpISOorU8)
 {
-#	define LOC_PR_SL_(op1, op2, va, de) \
+	#define LOC_PR_SL_(op1, op2, va, de) \
 				AST_CLN__pa_sc_help_prOne(cbMsg, op1, op2, NULL, va, de, ST_B_FALSE)
-#	define LOC_PR_S_(op1, va, de) \
+	#define LOC_PR_S_(op1, va, de) \
 				AST_CLN__pa_sc_help_prOne(cbMsg, op1, NULL, NULL, va, de, ST_B_FALSE)
-#	define LOC_PR_L_(op2, va, de) \
+	#define LOC_PR_L_(op2, va, de) \
 				AST_CLN__pa_sc_help_prOne(cbMsg, 0x00, op2, NULL, va, de, ST_B_FALSE)
-#	define LOC_PR_L_AO_(op2, addOp, va, de) \
+	#define LOC_PR_L_AO_(op2, addOp, va, de) \
 				AST_CLN__pa_sc_help_prOne(cbMsg, 0x00, op2, addOp, va, de, ST_B_FALSE)
-#	define LOC_PR_DE_(de) \
+	#define LOC_PR_DE_(de) \
 				AST_CLN__pa_sc_help_prOne(cbMsg, 0x00, NULL, NULL, NULL, de, ST_B_FALSE)
-#	define LOC_PR_DIV_ \
+	#define LOC_PR_DIV_ \
 				AST_CLN__pa_sc_help_prOne(cbMsg, 0x00, NULL, NULL, NULL, NULL, ST_B_TRUE)
-	char scona[128],
-	     sargs[128],
-	     sdesc[128];
+	char scona[128];
+	char sargs[128];
+	char sdesc[128];
 
 	cbMsg("Usage: %s [<commands>...] [<options>...] <file_names>...\n\n", pAppFn);
 
@@ -231,12 +235,12 @@ AST_CLN__pa_sc_help(const Tst_str *pAppFn, const Tast_cln_cbMsg cbMsg,
 			"Decode to WAVE or AIFF");
 		LOC_PR_DE_("Works with the following input:");
 		LOC_PR_DE_(" - Ogg-Flac and pure Flac");
-#		if (HAVE_LIBVORBIS == 1)
-		LOC_PR_DE_(" - Ogg-Vorbis");
-#		endif
-#		if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
-		LOC_PR_DE_(" - MPEG-1 (Layer I-III, e.g. MP3)");
-#		endif
+		#if (HAVE_LIBVORBIS == 1)
+			LOC_PR_DE_(" - Ogg-Vorbis");
+		#endif
+		#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+			LOC_PR_DE_(" - MPEG-1 (Layer I-III, e.g. MP3)");
+		#endif
 		LOC_PR_DE_("See --bps option");
 	cbMsg("\n");
 
@@ -501,12 +505,12 @@ AST_CLN__pa_sc_help(const Tst_str *pAppFn, const Tast_cln_cbMsg cbMsg,
 	cbMsg("\n");
 
 	return ST_ERR_QUIT;
-#	undef LOC_PR_SL_
-#	undef LOC_PR_S_
-#	undef LOC_PR_L_
-#	undef LOC_PR_L_AO_
-#	undef LOC_PR_DE_
-#	undef LOC_PR_DIV_
+	#undef LOC_PR_SL_
+	#undef LOC_PR_S_
+	#undef LOC_PR_L_
+	#undef LOC_PR_L_AO_
+	#undef LOC_PR_DE_
+	#undef LOC_PR_DIV_
 }
 
 static void
@@ -516,27 +520,30 @@ AST_CLN__pa_sc_help_prOne(const Tast_cln_cbMsg cbMsg,
 		const char *pVals, const char *pDesc, const Tst_bool onlyDiv)
 {
 	const Tst_uint32 cOPTWID = 28;
-	char       msg[1024],
-	           tmp[512];
+	char       msg[1024];
+	char       tmp[512];
 	Tst_uint32 x;
 
 	if (onlyDiv) {
 		/* divider */
-		for (x = 0; x < cOPTWID; x++)
+		for (x = 0; x < cOPTWID; x++) {
 			tmp[x] = '*';
+		}
 		tmp[cOPTWID] = 0x00;
-	} else if (opt1 != 0x00 && pOpt2)
+	} else if (opt1 != 0x00 && pOpt2) {
 		/* short and long option */
 		sprintf(tmp, "-%c, --%s%s%s", opt1, pOpt2,
 				(pVals ? "=" : ""), (pVals ? pVals : ""));
-	else if (opt1 != 0x00)  /* short option */
+	} else if (opt1 != 0x00) {
+		/* short option */
 		sprintf(tmp, "-%c %s", opt1, (pVals ? pVals : ""));
-	else if (pOpt2) {
+	} else if (pOpt2) {
 		/* long option */
-		if (pAddOpt)
+		if (pAddOpt) {
 			sprintf(tmp, "--%s %s [%s]", pOpt2, (pVals ? pVals : ""), pAddOpt);
-		else
+		} else {
 			sprintf(tmp, "--%s %s", pOpt2, (pVals ? pVals : ""));
+		}
 	} else {
 		tmp[0] = ' ';
 		tmp[1] = 0x00;
@@ -555,53 +562,39 @@ AST_CLN__pa_sc_help_prOne(const Tast_cln_cbMsg cbMsg,
 static Tst_err
 AST_CLN__pa_sc_info(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 {
-#	define LOC_ADDSOME_(mac_name)  { \
-				if (is1st) \
-					sprintf(pCMsg, mac_name); \
-				else { \
-					sprintf(pTMsg, "%s %s", pCMsg, mac_name); \
-					pCMsg = (pCMsg == msg1 ? msg2 : msg1); \
-					pTMsg = (pTMsg == msg1 ? msg2 : msg1); \
-				} \
-				is1st = ST_B_FALSE; \
-				}
-	char     msg1[512],
-	         msg2[512],
-	         *pCMsg = msg1,
-	         *pTMsg = msg2;
-	Tst_bool is1st = ST_B_TRUE;
+	Tst_str  *pSup = NULL;
 
 	cbMsg("\nApp     : %s %s", APP_ST_NAME, APP_ST_VERS_STRING);
 	cbMsg("Compiled: %s %s (%s-Endian)", __DATE__, __TIME__,
-#			if (WORDS_BIGENDIAN != 1)
-			"Little"
-#			else
-			"Big"
-#			endif
-			);
-	msg1[0] = 0;
-	msg2[0] = 0;
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
-	LOC_ADDSOME_("64bit")
-#	endif
-#	if (HAVE_LIBVORBIS == 1)
-	LOC_ADDSOME_("libvorbis")
-#	endif
-#	if (HAVE_LIBMPG123 == 1)
-	LOC_ADDSOME_("libmpg123")
-#	endif
-#	if (HAVE_LIBMAD == 1)
-	LOC_ADDSOME_("libmad")
-#	endif
-#	if (HAVE_LIBZ == 1)
-	LOC_ADDSOME_("zlib")
-#	endif
-	cbMsg("Supports: %s", pCMsg);
+			#if (WORDS_BIGENDIAN != 1)
+				"Little"
+			#else
+				"Big"
+			#endif
+		);
+	st_sysStrapp((Tst_str*)"", &pSup);
+	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+		st_sysStrapp((Tst_str*)"64bit ", &pSup);
+	#endif
+	#if (HAVE_LIBVORBIS == 1)
+		st_sysStrapp((Tst_str*)"libvorbis ", &pSup);
+	#endif
+	#if (HAVE_LIBMPG123 == 1)
+		st_sysStrapp((Tst_str*)"libmpg123 ", &pSup);
+	#endif
+	#if (HAVE_LIBMAD == 1)
+		st_sysStrapp((Tst_str*)"libmad ", &pSup);
+	#endif
+	#if (HAVE_LIBZ == 1)
+		st_sysStrapp((Tst_str*)"zlib ", &pSup);
+	#endif
+	cbMsg("Supports: %s", pSup);
+	ST_DELPOINT(pSup);
 	cbMsg("Author  : %s", APP_ST_AUTHOR);
 	cbMsg("License : General Public License v3");
 	cbMsg("          (for details try '%s --license')\n\n", pAppFn);
+
 	return ST_ERR_QUIT;
-#	undef LOC_ADDSOME_
 }
 
 /*----------------------------------------------------------------------------*/
@@ -655,6 +648,7 @@ AST_CLN__pa_sc_version(const Tast_cln_cbMsg cbMsg)
 		}
 		cbMsg("[zlib: %s]", pVer);
 	#endif
+
 	return ST_ERR_QUIT;
 }
 
@@ -680,6 +674,7 @@ AST_CLN__pa_sc_license(const Tast_cln_cbMsg cbMsg)
 	cbMsg("   Free Software Foundation Inc.,");
 	cbMsg("   59 Temple Place, Suite 330, Boston, MA 02111-1307 USA");
 	cbMsg(" or visit www.gnu.org\n\n");
+
 	return ST_ERR_QUIT;
 }
 
@@ -689,10 +684,10 @@ AST_CLN__pa_sc_license(const Tast_cln_cbMsg cbMsg)
 static Tst_err
 AST_CLN__pa_sc_examples(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 {
-#	define LOC_PREX_(mac_same, mac_txt)  \
+	#define LOC_PREX_(mac_same, mac_txt)  \
 				cbMsg("  %s%s %s", mac_same, pAppFn, mac_txt);
-	Tst_uint32 slen  = st_sysStrlen(pAppFn),
-	           spadd = 2 + slen + 1;
+	Tst_uint32 slen  = st_sysStrlen(pAppFn);
+	Tst_uint32 spadd = 2 + slen + 1;
 	char       msg[512];
 
 	cbMsg("Usage examples:");
@@ -735,8 +730,9 @@ AST_CLN__pa_sc_examples(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 	LOC_PREX_("", "--dec aiff --bps 24 *.ogg");
 	LOC_PREX_("", "--conv id3v1,apev2-id3v2 --tiv2 v3 *.mp3");
 	LOC_PREX_("", "--fset TBPM=150 song_with_150bpm.ogg");
+
 	return ST_ERR_QUIT;
-#	undef LOC_PREX_
+	#undef LOC_PREX_
 }
 
 /*----------------------------------------------------------------------------*/
@@ -753,61 +749,61 @@ AST_CLN__pa_hndArg(const Tst_int32 ch, const Tst_int32 oix,
 	char debMsg[128];
 
 	switch (ch) {
-	case 0:
-		/* a valid long_opt that doesn't have a shortcut has been found */
-		if (oix < 0 || (Tst_uint32)oix > cntarr ||
-				AST_CLN_LONGOPTS[oix].name == NULL) {
+		case 0:
+			/* a valid long_opt that doesn't have a shortcut has been found */
+			if (oix < 0 || (Tst_uint32)oix > cntarr ||
+					AST_CLN_LONGOPTS[oix].name == NULL) {
+				pCmdln->cbErr(pCmdln->pAppFn, cFNCN,
+						"unknown error occured");
+				return ST_ERR_FAIL;
+			}
+			return AST_CLN__pa_hndArgLong(oix, pCmdln);
+		/** */
+		case AST_CLN_CMD_HLP_SO:     /* help */
+			return AST_CLN__pa_sc_help(pCmdln->pAppFn, pCmdln->cbMsg,
+					pCmdln->opts.disp.asISOorU8);
+		/** */
+		case AST_CLN_OPT_QUIET_SO:   /* be quiet */
+			return ast_cln_hnd_o_quiet(pCmdln);
+		case AST_CLN_OPT_SWSTAT_SO:  /* show status info */
+			return ast_cln_hnd_o_swstat(pCmdln);
+		case AST_CLN_OPT_PRT_SO:     /* pretend */
+			return ast_cln_hnd_o_prt(pCmdln);
+		/** */
+		case AST_CLN_CMD_BND_SO:     /* band */
+			return ast_cln_hnd_c_tfld_bnd(pCmdln);
+		case AST_CLN_CMD_ALB_SO:     /* album */
+			return ast_cln_hnd_c_tfld_alb(pCmdln);
+		case AST_CLN_CMD_SNG_SO:     /* song */
+			return ast_cln_hnd_c_tfld_sng(pCmdln);
+		case AST_CLN_CMD_TRK_SO:     /* tracknr */
+			return ast_cln_hnd_c_tfld_tnr(pCmdln);
+		case AST_CLN_CMD_DSC_SO:     /* discnr */
+			return ast_cln_hnd_c_tfld_dsc(pCmdln);
+		case AST_CLN_CMD_YEA_SO:     /* year */
+			return ast_cln_hnd_c_tfld_yea(pCmdln);
+		case AST_CLN_CMD_COM_SO:     /* comment */
+			return ast_cln_hnd_c_tfld_com(pCmdln);
+		case AST_CLN_CMD_GEN_SO:     /* genre num */
+			return ast_cln_hnd_c_tfld_gen(pCmdln);
+		/** */
+		case AST_CLN_CMD_RD_SO:      /* read */
+			return ast_cln_hnd_c_rd(pCmdln);
+		/** */
+		case '?':
+			/* getopt_long() has already output error msg */
+			/* after unknown option or missing argument of an option
+			 *   we stop processing -> opterr = 0 */
 			pCmdln->cbErr(pCmdln->pAppFn, cFNCN,
-					"unknown error occured");
-			return ST_ERR_FAIL;
-		}
-		return AST_CLN__pa_hndArgLong(oix, pCmdln);
-	/** */
-	case AST_CLN_CMD_HLP_SO:     /* help */
-		return AST_CLN__pa_sc_help(pCmdln->pAppFn, pCmdln->cbMsg,
-				pCmdln->opts.disp.asISOorU8);
-	/** */
-	case AST_CLN_OPT_QUIET_SO:   /* be quiet */
-		return ast_cln_hnd_o_quiet(pCmdln);
-	case AST_CLN_OPT_SWSTAT_SO:  /* show status info */
-		return ast_cln_hnd_o_swstat(pCmdln);
-	case AST_CLN_OPT_PRT_SO:     /* pretend */
-		return ast_cln_hnd_o_prt(pCmdln);
-	/** */
-	case AST_CLN_CMD_BND_SO:     /* band */
-		return ast_cln_hnd_c_tfld_bnd(pCmdln);
-	case AST_CLN_CMD_ALB_SO:     /* album */
-		return ast_cln_hnd_c_tfld_alb(pCmdln);
-	case AST_CLN_CMD_SNG_SO:     /* song */
-		return ast_cln_hnd_c_tfld_sng(pCmdln);
-	case AST_CLN_CMD_TRK_SO:     /* tracknr */
-		return ast_cln_hnd_c_tfld_tnr(pCmdln);
-	case AST_CLN_CMD_DSC_SO:     /* discnr */
-		return ast_cln_hnd_c_tfld_dsc(pCmdln);
-	case AST_CLN_CMD_YEA_SO:     /* year */
-		return ast_cln_hnd_c_tfld_yea(pCmdln);
-	case AST_CLN_CMD_COM_SO:     /* comment */
-		return ast_cln_hnd_c_tfld_com(pCmdln);
-	case AST_CLN_CMD_GEN_SO:     /* genre num */
-		return ast_cln_hnd_c_tfld_gen(pCmdln);
-	/** */
-	case AST_CLN_CMD_RD_SO:      /* read */
-		return ast_cln_hnd_c_rd(pCmdln);
-	/** */
-	case '?':
-		/* getopt_long() has already output error msg */
-		/* after unknown option or missing argument of an option
-		 *   we stop processing -> opterr = 0 */
-		pCmdln->cbErr(pCmdln->pAppFn, cFNCN,
-				"try '%s --help' for more information", pCmdln->pAppFn);
-		return ST_ERR_ABRT;
-	default:
-		/* a valid option hasn't been handled */
-		debMsg[0] = 0;
-		if (isprint(ch) != 0)
-			sprintf(debMsg, " '%c'", ch);
-		pCmdln->cbErr(pCmdln->pAppFn, cFNCN,
-				"char #0%o%s unhandled", ch, debMsg);
+					"try '%s --help' for more information", pCmdln->pAppFn);
+			return ST_ERR_ABRT;
+		default:
+			/* a valid option hasn't been handled */
+			debMsg[0] = 0;
+			if (isprint(ch) != 0)
+				sprintf(debMsg, " '%c'", ch);
+			pCmdln->cbErr(pCmdln->pAppFn, cFNCN,
+					"char #0%o%s unhandled", ch, debMsg);
 	}
 	return ST_ERR_SUCC;
 }
@@ -820,7 +816,7 @@ AST_CLN__pa_hndArg(const Tst_int32 ch, const Tst_int32 oix,
 static Tst_err
 AST_CLN__pa_hndArgLong(const Tst_int32 oix, Tast_cln_a *pCmdln)
 {
-#	define LOC_CMP_(mac_pArg)  \
+	#define LOC_CMP_(mac_pArg)  \
 				(parFC == (mac_pArg)[0] && parSLen == st_sysStrlen2(mac_pArg) && \
 						st_sysStrcmp2(ST_B_TRUE, pParName, mac_pArg))
 	char const *pParName;
@@ -832,8 +828,9 @@ AST_CLN__pa_hndArgLong(const Tst_int32 oix, Tast_cln_a *pCmdln)
 
 	pParName = pCmdln->pPAlngoptcArr[oix].pOptName;  /*AST_CLN_LONGOPTS[oix].name*/
 	parFC    = pParName[0];
-	if (pCmdln->pPAlngoptcArr[oix].slen < 0)
+	if (pCmdln->pPAlngoptcArr[oix].slen < 0) {
 		pCmdln->pPAlngoptcArr[oix].slen = (Tst_int32)st_sysStrlen2(pParName);
+	}
 	parSLen = (Tst_uint32)pCmdln->pPAlngoptcArr[oix].slen;
 
 	/* special commands */
@@ -966,7 +963,7 @@ AST_CLN__pa_hndArgLong(const Tst_int32 oix, Tast_cln_a *pCmdln)
 		return ast_cln_hnd_o_ow(pCmdln);
 
 	return ST_ERR_FAIL;
-#	undef LOC_CMP_
+	#undef LOC_CMP_
 }
 
 /******************************************************************************/
