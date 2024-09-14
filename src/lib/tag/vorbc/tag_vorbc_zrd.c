@@ -62,7 +62,7 @@ st_vorbc_rd_readHeader(Tst_streamrd *pSObjP,
 		Tst_vorbc_tag_intn *pTagI,
 		Tst_bool *pIsOK, Tst_uint32 *pNumFlds, Tst_uint32 *pHeadSz)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 totsize   = 0,
 	           vlen,
@@ -240,7 +240,7 @@ Tst_err
 st_vorbc_rd_readFlds(Tst_streamrd *pSObjP, Tst_vorbc_tag *pTag,
 		const Tst_uint32 headSz, Tst_uint32 numFlds)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err       res    = ST_ERR_SUCC;
 	Tst_uint32    rdf    = 1,
 	              fldSz  = 0,
@@ -466,7 +466,7 @@ ST_TVORBC__rd_readTagFldHd(const Tst_vorbc_opts *pOpts,
 		Tst_str **ppFldKey, Tst_uint32 *pFldKeySz,
 		Tst_uint32 *pRemSz)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 len = 0,
 	           x;

@@ -401,13 +401,13 @@ typedef struct {
 /** alloc mem */
 #define ST_CALLOC(mac_libdefs_pDest, mac_libdefs_type, mac_libdefs_cnt, mac_libdefs_size)  { \
 			/**fprintf(stderr, "\n__calloc__ '%s':'%s':%d  size %u\n", \
-					__FILE__, __FUNCTION__, __LINE__, \
+					__FILE__, __func__, __LINE__, \
 					(Tst_uint32)(mac_libdefs_cnt * mac_libdefs_size));**/ \
 			(mac_libdefs_pDest) = (mac_libdefs_type)calloc(mac_libdefs_cnt, mac_libdefs_size); \
 			}
 #define ST_REALLOC(mac_libdefs_pDest, mac_libdefs_type, mac_libdefs_cnt, mac_libdefs_size)  { \
 			/**fprintf(stderr, "\n__realloc__ '%s':'%s':%d  size %u\n", \
-					__FILE__, __FUNCTION__, __LINE__, \
+					__FILE__, __func__, __LINE__, \
 					(Tst_uint32)(mac_libdefs_cnt * mac_libdefs_size));**/ \
 			(mac_libdefs_pDest) = (mac_libdefs_type)realloc(mac_libdefs_pDest, \
 						(mac_libdefs_cnt) * (mac_libdefs_size)); \
@@ -486,7 +486,7 @@ typedef struct {
 /** */
 /*define ST_GEN_DEBUG_LEVEL(mac_libdefs_verbLevel, ...)  \
 			debug_log ((mac_libdefs_verbLevel), \
-					__FILE__, __FUNCTION__, __LINE__, __VA_ARGS__)*/
+					__FILE__, __func__, __LINE__, __VA_ARGS__)*/
 
 ST_END_C_DECLS
 

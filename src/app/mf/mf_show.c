@@ -58,7 +58,7 @@
 Tst_err
 ast_mf_sw_showFileInfo(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 
 	ST_ASSERTN_IARG(pCmdln == NULL || pMF == NULL)
@@ -156,7 +156,7 @@ AST_MF__sw_tags(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 {
 #	define LOC_PRDIV_  for (xyz = 0; xyz < 7; xyz++) \
 				ast_mf_op_prFInf("-%s", (xyz+1 == 7 ? "\n" : ""));
-	const char             *cFNCN   = __FUNCTION__;
+	const char             *cFNCN   = __func__;
 	const Tst_tagMeta_type cMTTPS[] = {ST_MTAG_TTP_IV1, ST_MTAG_TTP_AV2,
 	                                   ST_MTAG_TTP_IV2, ST_MTAG_TTP_VOR,
 	                                   ST_MTAG_TTP_MRG};

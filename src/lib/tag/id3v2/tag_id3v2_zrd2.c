@@ -61,7 +61,7 @@ st_id3v2_rd2_readFldData(Tst_id3v2_tag *pTag,
 		Tst_id3v2_fldData_intn *pFldI,
 		Tst_streamrd *pStrrdFld, Tst_uint32 frSize)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res      = ST_ERR_SUCC;
 	Tst_uint32 copied   = 0,
 	           rwoX,

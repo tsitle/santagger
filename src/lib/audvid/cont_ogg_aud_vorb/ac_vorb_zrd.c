@@ -63,7 +63,7 @@ Tst_err
 st_contOgg_vorbrd_initDecoder(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res = ST_ERR_SUCC;
 
 	if (pOpts->vorbOpts.decodeFull && pOpts->vorbOpts.isDecoderSet) {
@@ -109,7 +109,7 @@ Tst_err
 st_contOgg_vorbrd_feedDecoderHeader(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res = ST_ERR_SUCC;
 	Tst_contOgg_vorbDecObj *pDecObj = &pBSI->pVorb->decObj;
 
@@ -135,7 +135,7 @@ Tst_err
 st_contOgg_vorbrd_feedDecoderAudio(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err res = ST_ERR_SUCC;
 	Tst_contOgg_vorbDecObj *pDecObj = &pBSI->pVorb->decObj;
 
@@ -168,7 +168,7 @@ st_contOgg_vorbrd_parseHPack(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, const Tst_byte packTp,
 		Tst_streamrd *pSObj, Tst_bool *pStopThen)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res = ST_ERR_SUCC;
 
 	/* */
@@ -238,7 +238,7 @@ static Tst_err
 ST_CONTOGG__vorbrd_parseIdent(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_streamrd *pSObj)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err  res;
 	Tst_byte frBit = 0;
 	Tst_contOgg_vorbIdent *pVID = &pBSI->pVorb->ident;
@@ -369,7 +369,7 @@ static Tst_err
 ST_CONTOGG__vorbrd_setOutputFmt(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_contOgg_vorbDecObj *pDecObj = &pBSI->pVorb->decObj;
 

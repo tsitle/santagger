@@ -382,7 +382,7 @@ ST_CONTOGG__rdcod_pP_sub(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_streamrd *pSObj,
 		const Tst_byte packTp, const Tst_bool foundCodHd)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err res = ST_ERR_SUCC;
 	Tst_contOgg_bsType bsTp = pBSI->bsType;
 
@@ -506,7 +506,7 @@ static Tst_err
 ST_CONTOGG__rdcod_pP_skeleton(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_byte packTp, Tst_streamrd *pSObj)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err  res     = ST_ERR_SUCC;
 	Tst_bool boneFnd = ST_B_FALSE;
 
@@ -548,7 +548,7 @@ ST_CONTOGG__rdcod_pP_vorbis(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_byte packTp, Tst_streamrd *pSObj,
 		const Tst_bool foundCodHd)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res          = ST_ERR_SUCC;
 	Tst_bool   stopThen     = ST_B_FALSE,
 	           rdCodID      = ST_B_FALSE,
@@ -690,7 +690,7 @@ static Tst_err
 ST_CONTOGG__rdcod_pP_flac(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_byte packTp, Tst_streamrd *pSObj)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err  res      = ST_ERR_SUCC;
 	Tst_bool stopThen = ST_B_FALSE;
 
@@ -757,7 +757,7 @@ static Tst_err
 ST_CONTOGG__rdcod_pP_speex(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_byte packTp, Tst_streamrd *pSObj)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err  res      = ST_ERR_SUCC;
 	Tst_bool stopThen = ST_B_FALSE;
 
@@ -814,7 +814,7 @@ static Tst_err
 ST_CONTOGG__rdcod_pP_celt(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_byte packTp, Tst_streamrd *pSObj)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err  res      = ST_ERR_SUCC;
 	Tst_bool stopThen = ST_B_FALSE;
 
@@ -871,7 +871,7 @@ ST_CONTOGG__rdcod_pP_theora(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_byte packTp, Tst_streamrd *pSObj,
 		const Tst_bool foundCodHd)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res       = ST_ERR_SUCC;
 	Tst_bool   stopThen  = ST_B_FALSE,
 	           rdCodID   = ST_B_FALSE,
@@ -955,7 +955,7 @@ ST_CONTOGG__rdcod_pP_dirac(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_byte packTp, Tst_streamrd *pSObj,
 		const Tst_bool foundCodHd)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res       = ST_ERR_SUCC;
 	Tst_bool   rdCodID   = ST_B_FALSE,
 	           fndCodHd2 = foundCodHd;

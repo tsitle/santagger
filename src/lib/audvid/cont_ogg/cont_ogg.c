@@ -61,7 +61,7 @@ ST_CONTOGG__addFlacBS(Tst_contOgg_obj_intn *pAObjI,
 Tst_err
 st_contOgg_readStreams(Tst_contOgg_obj *pAObj)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err  res      = ST_ERR_SUCC;
 	Tst_bool stopThen = ST_B_FALSE;
 	Tst_contOgg_fhd         *pFHd = NULL;
@@ -189,7 +189,7 @@ st_contOgg_readStreams(Tst_contOgg_obj *pAObj)
 Tst_err
 st_contOgg_readFlacStream(Tst_contOgg_obj *pAObj)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err   res;
 	Tst_bool  stopThen = ST_B_FALSE;
 	Tst_foffs offsEnd;
@@ -295,7 +295,7 @@ st_contOgg_readFlacStream(Tst_contOgg_obj *pAObj)
 Tst_err
 st_contOgg_writeStreams(Tst_contOgg_obj *pAObj)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res          = ST_ERR_SUCC;
 	Tst_uint32 frDatSz,
 	           bsSerialLast = 0;
@@ -447,7 +447,7 @@ st_contOgg_writeStreams(Tst_contOgg_obj *pAObj)
 Tst_err
 st_contOgg_writeFlacStream(Tst_contOgg_obj *pAObj)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err   res = ST_ERR_SUCC;
 	Tst_fsize stillToCopy;
 	Tst_contOgg_substream   *pBS  = NULL;

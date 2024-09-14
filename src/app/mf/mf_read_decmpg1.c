@@ -153,7 +153,7 @@ ast_mf_rddec_cbDecMpg_setOutputFmt(void *pHnd,
 {
 	Tast_mf_rddec_dbuf    *pDBuf;
 #	if (HAVE_LIBMPG123 == 1)
-	const char            *cFNCN = __FUNCTION__;
+	const char            *cFNCN = __func__;
 	Tst_err               res;
 	int                   resI = 0;
 #		if (MPG123_API_VERSION >= 25)
@@ -313,7 +313,7 @@ ast_mf_rddec_cbDecMpg_feedInp(void *pHnd,
 {
 	Tst_err               res;
 #	if (HAVE_LIBMPG123 == 1)
-	const char            *cFNCN = __FUNCTION__;
+	const char            *cFNCN = __func__;
 	int                   resI;
 	Tast_mf__rddec_mpg123 *pM123 = (Tast_mf__rddec_mpg123*)pHnd;
 #	elif (HAVE_LIBMAD == 1)
@@ -476,7 +476,7 @@ AST_MF__rddec_cbDecMpg_decodeOnly_mpg123(void *pHnd,
 		const Tst_bool isLastCall, Tst_bool *pNeedMore,
 		const Tst_bool passSamplesToClient)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err res    = ST_ERR_SUCC;
 	int     resI;
 	size_t  done   = 0;
@@ -752,7 +752,7 @@ AST_MF__rddec_cbDecMpg_decodeOnly_mad(void *pHnd,
 		const Tst_bool isLastCall, Tst_bool *pNeedMore,
 		const Tst_bool passSamplesToClient)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res;
 	Tst_fsize  lastPrInp;
 	Tst_uint32 remain;

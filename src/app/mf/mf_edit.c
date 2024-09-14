@@ -98,7 +98,7 @@ ast_mf_ed_editFile(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 					hta[1] |= hta[0]; \
 					edInf.tagEdLst[AST_CLN_T_TAGLIST_##mac_tlix] = hta[0]; \
 				}
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err  res    = ST_ERR_SUCC;
 	Tst_bool cont   = ST_B_TRUE,
 	         hta[2] = {ST_B_FALSE, ST_B_FALSE};
@@ -290,7 +290,7 @@ static Tst_err
 AST_MF__ed_cmdRemTags(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tast_mf_editInfo *pEdInf, Tst_uint32 *pRemTagsCnt)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
 	Tst_uint32 x,
 	           uid;
@@ -493,7 +493,7 @@ static Tst_err
 AST_MF__ed_mergeTagsWithCmdln(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tast_mf_editInfo *pEdInf)
 {
-	const char             *cFNCN   = __FUNCTION__;
+	const char             *cFNCN   = __func__;
 	const Tst_tagMeta_type cMTTPS[] = {ST_MTAG_TTP_IV1, ST_MTAG_TTP_AV2,
 	                                   ST_MTAG_TTP_IV2, ST_MTAG_TTP_VOR};
 	const Tst_uint32       cMTTPS_N = sizeof(cMTTPS) / sizeof(Tst_tagMeta_type);
@@ -645,7 +645,7 @@ static Tst_err
 AST_MF__ed_cmdCnvTags(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tast_mf_editInfo *pEdInf, Tst_uint32 *pCnvTagsCnt)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
 	Tst_uint32 x;
 	Tst_tagMeta_type mttpDest;
@@ -694,7 +694,7 @@ static Tst_err
 AST_MF__ed_cnvremInvalidTags(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tast_mf_editInfo *pEdInf)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res       = ST_ERR_SUCC;
 	Tst_uint32 x,
 	           cntCnvRem = 0;
@@ -784,7 +784,7 @@ static void
 AST_MF__ed_setMainTags(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tast_mf_editInfo *pEdInf)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 
 	ST_ASSERTN_VOID(pCmdln == NULL || pMF == NULL || pEdInf == NULL)
 
@@ -971,7 +971,7 @@ AST_MF__ed_writeTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 							ast_mf_op_prMsg("*  tag is empty, ignoring it (UID 0x%08x)", uid); \
 						return ST_ERR_SUCC; \
 					} }
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
 	void       *pTagTmp;
 	Tst_bool   hasTag;
@@ -1076,7 +1076,7 @@ static Tst_err
 AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tast_mf_editInfo *pEdInf)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err   res         = ST_ERR_SUCC;
 	Tst_fsize fszI,
 	          fszN        = 0,

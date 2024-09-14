@@ -52,7 +52,7 @@ Tst_int32
 st_contOgg_wrcod_fndNextHd(Tst_contOgg_obj_intn *pAObjI,
 		Tst_contOgg_substr_intn *pBSI, Tst_streamrd *pStrrd)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_int32  resI      = -1;
 	Tst_uint32 toRd,
 	           totRd     = 0,
@@ -109,7 +109,7 @@ Tst_err
 st_contOgg_wrcod_appendVCmt(Tst_contOgg_obj_intn *pAObjI,
 		Tst_contOgg_substream *pBS)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res = ST_ERR_SUCC;
 	Tst_uint32 pdSzDelta,
 	           pdSzBeg,
@@ -279,7 +279,7 @@ Tst_err
 st_contOgg_wrcod_flacHeaders(Tst_contOgg_obj_intn *pAObjI,
 		Tst_contOgg_substream *pBS)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res    = ST_ERR_SUCC;
 	Tst_byte   byt    = 0;
 	Tst_bool   isLast = ST_B_FALSE,

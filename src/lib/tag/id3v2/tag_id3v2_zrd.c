@@ -68,7 +68,7 @@ st_id3v2_rd_readHdOrFoot(Tst_id3v2_tag *pTag,
 		const Tst_bool isFooterOrHeader,
 		Tst_bool *pIsOK, Tst_uint32 *pEhdNfraSz, Tst_uint32 *pTotRd)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_buf    tbuf[ST_ID3V2_TAG_HEADFOOT_SZ];
 	Tst_byte   flagByte,
@@ -303,7 +303,7 @@ st_id3v2_rd_readEHdAndFlds(Tst_id3v2_tag *pTag, const Tst_uint32 allrRead)
 				st_streamrd_stc_freeSObj(&strrdBDT); \
 				st_binobj_stc_freeBO(&binDatTag); \
 				}
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res     = ST_ERR_SUCC;
 	Tst_uint32 remsz,
 	           delta   = 0;
@@ -452,7 +452,7 @@ static Tst_err
 ST_TIV2__rd_extHd(Tst_id3v2_tag_intn *pTagI,
 		Tst_streamrd *pStrrdTag, Tst_uint32 *pRemSz)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_uint32 used = 0;
 
 	if (ST_TFDEB_ISVERBTAG_BD(pTagI->opts.basOpts))
@@ -525,7 +525,7 @@ static Tst_err
 ST_TIV2__rd_allFlds(Tst_id3v2_tag *pTag,
 		Tst_streamrd *pStrrdTag, Tst_uint32 *pRemSz)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res       = ST_ERR_SUCC;
 	Tst_str    frhId[4 + 1],
 	           uch       = 0x00;
@@ -748,7 +748,7 @@ ST_TIV2__rd_fld(Tst_id3v2_tag *pTag,
 		const Tst_str *pIDstr, const Tst_uint32 flags,
 		Tst_bool *pSkipField)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res     = ST_ERR_SUCC;
 	Tst_bool   validID = ST_B_TRUE,
 	           skipSil;
@@ -858,7 +858,7 @@ ST_TIV2__rd_fld_sub(Tst_id3v2_tag *pTag,
 		const Tst_uint32 flags,
 		Tst_bool *pSkipField)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res = ST_ERR_SUCC;
 	Tst_streamrd           strrdFldBO,
 	                       *pStrrdFld = pStrrdTag;
@@ -1012,7 +1012,7 @@ ST_TIV2__rd_fld_flagsParse(Tst_id3v2_tag_intn *pTagI,
 		Tst_id3v2_fldData_intn *pFldI, const Tst_uint32 flags,
 		Tst_id3v2_frhdFlags *pFlagsFHd)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 
 	if (pTagI->verMaj == 3) {
 		/* %abc00000 %ijk00000 */
@@ -1081,7 +1081,7 @@ ST_TIV2__rd_fld_flagsHandle(Tst_id3v2_tag_intn *pTagI,
 		Tst_streamrd **ppStrrdFld, Tst_uint32 *pFrSize,
 		Tst_streamrd *pStrrdFldBO, Tst_binobj *pBinDatFld)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 delta = 0;
 	Tst_bool   fsFnd = ST_B_FALSE;

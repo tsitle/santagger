@@ -49,7 +49,7 @@ st_contOgg_spxrd_parseHPack(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_streamrd *pSObj,
 		Tst_contOgg_cbStripStr cbStripStr)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 ui32    = 0,
 	           rdBytes = 0;
@@ -214,7 +214,7 @@ st_contOgg_celtrd_parseHPack(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, Tst_streamrd *pSObj,
 		Tst_contOgg_cbStripStr cbStripStr)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 rdBytes = 0;
 	Tst_contOgg_celtIdent *pCID = &pBSI->pCelt->ident;

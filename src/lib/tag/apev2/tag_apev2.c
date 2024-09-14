@@ -78,7 +78,7 @@ ST_TAV2__disableFld(const char *pFnc, Tst_apev2_tag *pTag,
 Tst_err
 st_apev2_readTagFromStream(Tst_apev2_tag *pTag)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_bool   isOK  = ST_B_FALSE;
 	Tst_uint32 tsizeH = 0,
@@ -223,7 +223,7 @@ Tst_err
 st_apev2_readTagFooterFromStream(Tst_apev2_tag *pTag,
 		Tst_foffs *pRelativeOffsetOfHeader)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_bool   isOK   = ST_B_FALSE;
 	Tst_uint32 tsizeF = 0,
@@ -302,7 +302,7 @@ Tst_err
 st_apev2_disableFld_byID_all(Tst_apev2_tag *pTag,
 		const Tst_apev2_frID frID, ST_OPTARG(const Tst_str *pFrIDstr))
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	return ST_TAV2__disableFld(LOC_FNCN_, pTag,
 			/*useIDorFTP:*/ST_B_TRUE,
@@ -323,7 +323,7 @@ st_apev2_disableFld_byID(Tst_apev2_tag *pTag,
 		const Tst_apev2_frID frID, ST_OPTARG(const Tst_str *pFrIDstr),
 		const Tst_uint32 frNr)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	if (frNr == 0)
 		return ST_ERR_IARG;
@@ -340,7 +340,7 @@ st_apev2_disableFld_byID(Tst_apev2_tag *pTag,
 Tst_err
 st_apev2_disableFld_byFTP_all(Tst_apev2_tag *pTag, const Tst_apev2_frTp frTp)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	return ST_TAV2__disableFld(LOC_FNCN_, pTag,
 			/*useIDorFTP:*/ST_B_FALSE,
@@ -356,7 +356,7 @@ Tst_err
 st_apev2_disableFld_byFTP(Tst_apev2_tag *pTag,
 		const Tst_apev2_frTp frTp, const Tst_uint32 frNr)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	if (frNr == 0)
 		return ST_ERR_IARG;
@@ -375,7 +375,7 @@ st_apev2_disableFld_byFTP(Tst_apev2_tag *pTag,
 Tst_err
 st_apev2_tidyUpTag(Tst_apev2_tag *pTag)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err  res = ST_ERR_SUCC;
 	Tst_bool discardedOne,
 	         discardedOneF;
@@ -500,7 +500,7 @@ st_apev2_tidyUpTag(Tst_apev2_tag *pTag)
 Tst_err
 st_apev2_writeTagToStream(Tst_apev2_tag *pTag)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res   = ST_ERR_SUCC;
 	Tst_uint32 lastTSz;
 	Tst_binobj             tagBO;

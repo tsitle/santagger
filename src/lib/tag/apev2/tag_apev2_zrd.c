@@ -59,7 +59,7 @@ st_apev2_rd_readHdOrFoot(Tst_apev2_tag_intn *pTagI,
 		const Tst_bool isFooterOrHeader,
 		Tst_bool *pIsOK, Tst_uint32 *pTagSz, Tst_uint32 *pNumFlds)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_buf    buf[ST_APEV2_TAG_HEADFOOT_SZ];
 	Tst_uint32 flags     = 0,
@@ -127,7 +127,7 @@ Tst_err
 st_apev2_rd_readTagFlds(Tst_apev2_tag *pTag,
 		Tst_uint32 numFlds, Tst_uint32 *pRemSz)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res          = ST_ERR_SUCC;
 	Tst_uint32 rdf          = 1,
 	           fldSz        = 0,
@@ -305,7 +305,7 @@ ST_TAV2__rd_readHdOrFoot_parse(const Tst_apev2_opts *pOpts,
 		Tst_uint32 *pFlags,
 		Tst_uint32 *pNumFlds)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_uint32    vers = 0;
 	Tst_buf const *pBB = pBuf;
 
@@ -409,7 +409,7 @@ ST_TAV2__rd_readTagFldHd(const Tst_apev2_opts *pOpts,
 		Tst_uint32 *pFldSz, Tst_bool *pBinOrUTF8, Tst_str **ppFldKey,
 		Tst_uint32 *pRemSz)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 len,
 	           flags = 0;
@@ -505,7 +505,7 @@ static Tst_err
 ST_TAV2__rd_copyBinData(Tst_apev2_tag_intn *pTagI,
 		Tst_apev2_fldData_intn *pFldI, const Tst_uint32 fldSz)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 
 	res = st_binobj_setData_streamrd(&pFldI->dataBinDat, pTagI->pStrrd,
@@ -531,7 +531,7 @@ static Tst_err
 ST_TAV2__rd_copyMultStrU8(Tst_apev2_tag_intn *pTagI,
 		Tst_apev2_fldData_intn *pFldI, Tst_uint32 fldSz)
 {
-	const char       *cFNCN = __FUNCTION__;
+	const char       *cFNCN = __func__;
 	const Tst_uint32 cWID   = 1;
 	Tst_err    res    = ST_ERR_SUCC;
 	Tst_uint32 copied = 0,

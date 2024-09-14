@@ -116,7 +116,7 @@ st_vorbc_fldAdd_doesSimiliarFieldExist(Tst_vorbc_tag *pTag,
 		const Tst_bool tolerateDiffSLen, const Tst_vorbc_fldData *pFld,
 		Tst_bool *pHasSimiliarFld)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_bool   areEqu = ST_B_FALSE,
 	           triDot = ST_B_FALSE;
@@ -228,7 +228,7 @@ Tst_err
 st_vorbc_fldIns(Tst_vorbc_tag *pTag, const Tst_uint32 insertPos,
 		const Tst_vorbc_fldData *pFldAdd)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_uint32 ix = 0;
 	Tst_vor__addfldgen     afg;
 	Tst_vorbc_fldData_intn *pFldAddI = NULL;
@@ -296,7 +296,7 @@ st_vorbc_fldIns_text(Tst_vorbc_tag *pTag,
 		const Tst_vorbc_frID frID, ST_OPTARG(const Tst_str *pFrIDstr),
 		const Tst_uint32 insertPos, const Tst_mtes_string *pText)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_vor__addfldgen afg;
 	Tst_vorbc_tag_intn *pTagI;
 
@@ -327,7 +327,7 @@ st_vorbc_fldIns_textArr(Tst_vorbc_tag *pTag,
 		const Tst_vorbc_frID frID, ST_OPTARG(const Tst_str *pFrIDstr),
 		const Tst_uint32 insertPos, Tst_mtes_strArr *pTextArr)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_vor__addfldgen afg;
 	Tst_vorbc_tag_intn *pTagI;
 
@@ -358,7 +358,7 @@ st_vorbc_fldAdd_pict(Tst_vorbc_tag *pTag,
 		const Tst_vorbc_picTp picTpE, const Tst_utilsFmt_picFmt picFmtE,
 		Tst_binobj *pBinDat)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_vor__addfldgen afg;
 	Tst_vorbc_tag_intn *pTagI;
 
@@ -392,7 +392,7 @@ st_vorbc_fldAdd_pict_rdFromFile(Tst_vorbc_tag *pTag,
 		const Tst_vorbc_picTp picTpE, Tst_utilsFmt_picFmt picFmtE,
 		const Tst_mtes_string *pFilen)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_vor__addfldgen afg;
 	Tst_vorbc_tag_intn *pTagI;
 
@@ -703,7 +703,7 @@ ST_TVORBC__fa_add(Tst_vorbc_tag *pTag,
 		Tst_vorbc_frID frID, ST_OPTARG(const Tst_str *pFrIDstr),
 		const Tst_uint32 insertPos, Tst_vor__addfldgen *pAFG)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err       res = ST_ERR_SUCC;
 	Tst_uint32    w;
 	Tst_str const *pFExt,
@@ -875,7 +875,7 @@ ST_TVORBC__fa_fldSet(Tst_vorbc_tag *pTag,
 					st_vorbc_d_deb(&pTagI->opts, 0, cFNCN, \
 							"adding new field"); \
 				}
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err  res = ST_ERR_SUCC;
 	Tst_bool fnd = ST_B_FALSE,
 	         wasHnd;

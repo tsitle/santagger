@@ -293,7 +293,7 @@ st_contOgg_drcrd_parseHPack(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, const Tst_byte packTp,
 		Tst_streamrd *pSObj)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 indexUI       = 0,
 	           tmpUIa        = 0,
@@ -535,7 +535,7 @@ st_contOgg_theord_parseHPack(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, const Tst_byte packTp,
 		Tst_streamrd *pSObj, Tst_bool *pStopThen)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res = ST_ERR_SUCC;
 
 	/**if (ST_AVFDEB_ISVERBAUD_BD(pOpts->basOpts))
@@ -643,7 +643,7 @@ ST_CONTOGG__theord_parseIdent(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, const Tst_byte packTp,
 		Tst_streamrd *pSObj)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint16 ui16    = 0;
 	Tst_uint32 ui32    = 0,

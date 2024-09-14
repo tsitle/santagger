@@ -79,7 +79,7 @@ ST_MPEG1__calcAudioSizeEtc(Tst_mpeg1_obj_intn *pMOI);
 Tst_err
 st_mpeg1_readStream(Tst_mpeg1_obj *pMO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res          = ST_ERR_SUCC;
 	Tst_uint32 **ppBrCnt    = NULL,
 	           orgBrt       = 0;
@@ -622,7 +622,7 @@ ST_MPEG1__calcAvgBitrateEtc(Tst_mpeg1_obj_intn *pMOI,
 static void
 ST_MPEG1__calcAudioSizeEtc(Tst_mpeg1_obj_intn *pMOI)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_uint32 deltaFCnt,
 	           tmpUI;
 	char       debMsg[512];

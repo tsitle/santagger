@@ -90,7 +90,7 @@ ST_TVORBC__writeTag(const char *pFnc, Tst_vorbc_tag *pTag,
 Tst_err
 st_vorbc_readTagFromStream(Tst_vorbc_tag *pTag)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	ST_ASSERTN_IARG(pTag == NULL || pTag->pObInternal == NULL)
 
 	return ST_TVORBC__readTag(LOC_FNCN_,
@@ -112,7 +112,7 @@ st_vorbc_readTagFromStream(Tst_vorbc_tag *pTag)
 Tst_err
 st_vorbc_readTagFromBinObj(Tst_vorbc_tag *pTag, Tst_binobj *pBinDat)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err res;
 	Tst_streamrd strrd;
 
@@ -193,7 +193,7 @@ st_vorbc_mergeTags(Tst_vorbc_tag *pTagDst, Tst_vorbc_tag *pTagSrc,
 Tst_err
 st_vorbc_disableFld_all(Tst_vorbc_tag *pTag)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	return ST_TVORBC__disableFld(LOC_FNCN_, pTag,
 			ST_VORBC_FID_NONE, NULL, /*frNr:*/0, /*silent:*/ST_B_FALSE);
@@ -207,7 +207,7 @@ Tst_err
 st_vorbc_disableFld_byID_all(Tst_vorbc_tag *pTag,
 		const Tst_vorbc_frID frID, ST_OPTARG(const Tst_str *pFrIDstr))
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	return ST_TVORBC__disableFld(LOC_FNCN_, pTag,
 			frID, pFrIDstr, /*frNr:*/0, /*silent:*/ST_B_FALSE);
@@ -222,7 +222,7 @@ st_vorbc_disableFld_byID(Tst_vorbc_tag *pTag,
 		const Tst_vorbc_frID frID, ST_OPTARG(const Tst_str *pFrIDstr),
 		const Tst_uint32 frNr)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	if (frNr == 0)
 		return ST_ERR_IARG;
@@ -239,7 +239,7 @@ st_vorbc_disableFld_byID(Tst_vorbc_tag *pTag,
 Tst_err
 st_vorbc_tidyUpTag(Tst_vorbc_tag *pTag)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err  res = ST_ERR_SUCC;
 	Tst_bool discardedOne,
 	         discardedOneF;
@@ -376,7 +376,7 @@ st_vorbc_tidyUpTag(Tst_vorbc_tag *pTag)
 Tst_err
 st_vorbc_updateRawTag(Tst_vorbc_tag *pTag)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	return ST_TVORBC__writeTag(LOC_FNCN_, pTag, LOC_WRMD_UP, NULL);
 #	undef LOC_FNCN_
@@ -395,7 +395,7 @@ st_vorbc_updateRawTag(Tst_vorbc_tag *pTag)
 Tst_err
 st_vorbc_writeTagToStream(Tst_vorbc_tag *pTag)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	return ST_TVORBC__writeTag(LOC_FNCN_, pTag, LOC_WRMD_SW, NULL);
 #	undef LOC_FNCN_
@@ -413,7 +413,7 @@ st_vorbc_writeTagToStream(Tst_vorbc_tag *pTag)
 Tst_err
 st_vorbc_writeTagToBinObj(Tst_vorbc_tag *pTag, Tst_binobj *pBinDat)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	return ST_TVORBC__writeTag(LOC_FNCN_, pTag, LOC_WRMD_BO, pBinDat);
 #	undef LOC_FNCN_

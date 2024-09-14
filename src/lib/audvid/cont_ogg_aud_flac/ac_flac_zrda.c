@@ -51,7 +51,7 @@ Tst_bool
 st_contOgg_flacrda_searchNextFH(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsA *pDPa)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_bool   res  = ST_B_FALSE;
 	Tst_uint16 sh   = 0;
 	Tst_uint32 skpd = 0;
@@ -89,7 +89,7 @@ Tst_err
 st_contOgg_flacrda_parseFH(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsA *pDPa)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res  = ST_ERR_SUCC;
 	Tst_byte   byt  = 0,
 	           bs1,

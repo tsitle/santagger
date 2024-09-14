@@ -74,7 +74,7 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 		const Tst_uint32 argc, const Tst_str **argv,
 		Tast_cln_a *pCmdln, Tst_uint32 *pParbeg)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res    = ST_ERR_SUCC;
 	Tst_int32  /*doi    = 0,*/               /* digit_optind */
 	           /*tooi   = optind ? optind : 1,*/  /* this_option_optind */
@@ -728,7 +728,7 @@ static Tst_err
 AST_CLN__pa_hndArg(const Tst_int32 ch, const Tst_int32 oix,
 		const Tst_uint32 cntarr, Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	char debMsg[128];
 
 	switch (ch) {

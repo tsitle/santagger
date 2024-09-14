@@ -61,7 +61,7 @@ ast_mf_sw_showTagIV2(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		const Tst_bool onlyHdLn,
 		const Tast_cln_t_tagList_pb(pMergedLst))
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	char const  **ppTagD,
 	            *pTagDtmp;
 	Tst_uint32  x,

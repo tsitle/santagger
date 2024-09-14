@@ -70,7 +70,7 @@ ST_TIV1__wr_rendTF_b(const char *pFnc, const Tst_id3v1_tag_intn *pTagI,
 Tst_err
 st_id3v1_wr_rendTagToBO(const Tst_id3v1_tag_intn *pTagI, Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 #	define LOC_RENDSTR_(mac_id)  \
 				ST_TIV1__wr_rendTF_s(cFNCN, pTagI, pBufPt, mac_id, &wrBytes)
 #	define LOC_RENDBYT_(mac_id)  \

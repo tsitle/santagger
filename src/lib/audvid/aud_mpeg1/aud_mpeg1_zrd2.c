@@ -51,7 +51,7 @@
 Tst_err
 st_mpeg1_rd2_readFrHd(Tst_mpeg1_obj_intn *pMOI, Tst_mpeg1_farnfh *pFar)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_buf    uch;
 	Tst_foffs  offsBeg = -1;

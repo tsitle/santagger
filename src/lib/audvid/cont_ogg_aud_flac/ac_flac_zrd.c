@@ -52,7 +52,7 @@ st_contOgg_flacrd_parseHPack(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, const Tst_byte packTp,
 		Tst_streamrd *pSObj)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res   = ST_ERR_SUCC;
 	Tst_uint16 shVal = 0;
 	Tst_contOgg_flacIdent        *pFID;
@@ -162,7 +162,7 @@ st_contOgg_flacrd_parseAPack(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI, const Tst_byte packTp,
 		Tst_streamrd *pSObj)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res        = ST_ERR_SUCC;
 	Tst_uint32 fraCntLast = pBSI->pFlac->aFramesCnt;
 	Tst_byte   cha,
@@ -420,7 +420,7 @@ void
 st_contOgg_flacrd_finish(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_substr_intn *pBSI)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_bool comp = ST_B_FALSE;
 	Tst_str  numStr1[50],
 	         numStr2[50];

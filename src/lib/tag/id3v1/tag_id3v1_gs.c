@@ -99,7 +99,7 @@ st_id3v1_gs_setTag_filen(Tst_id3v1_tag *pTag, const Tst_str *pFilen)
 Tst_err
 st_id3v1_gs_setField_artist(Tst_id3v1_tag *pTag, const Tst_mtes_string *pStr)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pTag == NULL || pTag->pObInternal == NULL || pStr == NULL)
 
@@ -111,7 +111,7 @@ st_id3v1_gs_setField_artist(Tst_id3v1_tag *pTag, const Tst_mtes_string *pStr)
 Tst_err
 st_id3v1_gs_setField_album(Tst_id3v1_tag *pTag, const Tst_mtes_string *pStr)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pTag == NULL || pTag->pObInternal == NULL || pStr == NULL)
 
@@ -123,7 +123,7 @@ st_id3v1_gs_setField_album(Tst_id3v1_tag *pTag, const Tst_mtes_string *pStr)
 Tst_err
 st_id3v1_gs_setField_title(Tst_id3v1_tag *pTag, const Tst_mtes_string *pStr)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pTag == NULL || pTag->pObInternal == NULL || pStr == NULL)
 
@@ -135,7 +135,7 @@ st_id3v1_gs_setField_title(Tst_id3v1_tag *pTag, const Tst_mtes_string *pStr)
 Tst_err
 st_id3v1_gs_setField_comment(Tst_id3v1_tag *pTag, const Tst_mtes_string *pStr)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pTag == NULL || pTag->pObInternal == NULL || pStr == NULL)
 
@@ -147,7 +147,7 @@ st_id3v1_gs_setField_comment(Tst_id3v1_tag *pTag, const Tst_mtes_string *pStr)
 Tst_err
 st_id3v1_gs_setField_tracknr(Tst_id3v1_tag *pTag, Tst_int32 tnr)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pTag == NULL || pTag->pObInternal == NULL)
 
@@ -159,7 +159,7 @@ st_id3v1_gs_setField_tracknr(Tst_id3v1_tag *pTag, Tst_int32 tnr)
 Tst_err
 st_id3v1_gs_setField_genre(Tst_id3v1_tag *pTag, Tst_int32 gen)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pTag == NULL || pTag->pObInternal == NULL)
 
@@ -171,7 +171,7 @@ st_id3v1_gs_setField_genre(Tst_id3v1_tag *pTag, Tst_int32 gen)
 Tst_err
 st_id3v1_gs_setField_year(Tst_id3v1_tag *pTag, Tst_int32 year)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pTag == NULL || pTag->pObInternal == NULL)
 

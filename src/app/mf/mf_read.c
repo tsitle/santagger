@@ -90,7 +90,7 @@ ast_mf_rd_readFile(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 					ast_mf_op_prMsg("(Stream %s)", debMsg); \
 				}
 
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res    = ST_ERR_SUCC;
 	Tst_bool   cont   = ST_B_TRUE,  /* continue with loop ? */
 	           isEOF  = ST_B_FALSE,
@@ -405,7 +405,7 @@ AST_MF__rd_jumpTo(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 						} \
 					} \
 					}
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err   res   = ST_ERR_SUCC;
 	Tst_bool  isEOF = ST_B_FALSE;
 	Tst_buf   tbuf[20];
@@ -529,7 +529,7 @@ static Tst_err
 AST_MF__rd_readTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		const Tst_tagMeta_type tmTagType)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
 	Tst_uint32 ecnt,
 	           ecntFlds,
@@ -700,7 +700,7 @@ static Tst_err
 AST_MF__rd_readAV(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		const Tst_utilsFmt_mimeTp ufmtStrType)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err   res;
 	Tst_int32 oct;
 	char      debMsg[128];
@@ -781,7 +781,7 @@ AST_MF__rd_readAV(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 static Tst_err
 AST_MF__rd_readAV_mpeg1(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_str    ch;
 	Tst_uint32 ecnt;
@@ -897,7 +897,7 @@ static Tst_err
 AST_MF__rd_readAV_oggOrFlac(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		const Tst_utilsFmt_mimeTp ufmtStrType)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res      = ST_ERR_SUCC;
 	Tst_bool   showErrs = ST_B_FALSE;
 	Tst_uint32 ecnt;
@@ -1004,7 +1004,7 @@ AST_MF__rd_readAV_oggOrFlac(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 static Tst_err
 AST_MF__rd_readAV_addVorbc(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err     res;
 	Tst_uint32  grpIx  = 0,
 	            grpSIx = 0,

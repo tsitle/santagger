@@ -63,7 +63,7 @@ st_id3v2_chk_checkFld(ST_OPTARG(const Tst_id3v2_opts *pOpts),
 		const Tst_bool verbShowMappedStr,
 		Tst_id3v2_fldData *pFld)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err  res;
 	Tst_bool isOK = ST_B_FALSE;
 	Tst_id3v2_fldProp_intn *pFldPrI;

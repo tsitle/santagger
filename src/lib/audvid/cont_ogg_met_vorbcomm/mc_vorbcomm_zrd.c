@@ -96,7 +96,7 @@ st_contOgg_vorbComm_parse(Tst_contOgg_substr_intn *pBSI, Tst_streamrd *pSObj,
 						st_binobj_stc_freeBO(&vcTmp.pEBOarr[x]); \
 					ST_DELPOINT(vcTmp.pEBOarr) \
 				} }
-	const char       *cFNCN     = __FUNCTION__;
+	const char       *cFNCN     = __func__;
 	const Tst_uint32 cVENMAXLEN = 255;
 	Tst_err    res;
 	Tst_uint32 vlenT,
@@ -273,7 +273,7 @@ st_contOgg_vorbComm_addKey(Tst_contOgg_substr_intn *pBSI,
 				st_binobj_detachStreamrd(pVCRI->pRawCmtBO); \
 				st_streamrd_stc_freeSObj(&strrdOld); \
 				LOC_FREEBON_ }
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_buf    *pVend    = NULL;
 	Tst_uint32 keyLen    = st_sysStrlen2(pKey),
@@ -513,14 +513,14 @@ st_contOgg_vorbComm_parseBasics(Tst_contOgg_substr_intn *pBSI,
 				vlen, pVCRI->pVendor, &rdFromStr);
 		pVCRI->pVendor[vlen] = 0x00;
 		/**st_contOgg_prf("%s(): vendor='%s'\n",
-				__FUNCTION__, pVCRI->pVendor);**/
+				__func__, pVCRI->pVendor);**/
 	}
 	if (res == ST_ERR_SUCC) {
 		/* read ELEMENT COUNT */
 		res = st_streamrd_rdUInt32(&strrd,
 				ST_STREAMRD_IEND_LE, 32, &pVCRI->elemCnt);  /* ENDIAN: LE-->HOST */
 		/**st_contOgg_prf("%s(): eCnt=%u\n",
-				__FUNCTION__, pVCRI->elemCnt);**/
+				__func__, pVCRI->elemCnt);**/
 	}
 
 	pVCRI->isSet = (res == ST_ERR_SUCC);
@@ -540,7 +540,7 @@ ST_CONTOGG__vorbComm_parseElems(Tst_contOgg_substr_intn *pBSI,
 		Tst_contOgg_vorbCmtRaw_intn *pVCRI,
 		Tst_streamrd *pSObj, Tst_contOgg__vorbCommTmp *pVCtmp)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 x,
 	           len = 0;

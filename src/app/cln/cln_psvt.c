@@ -86,7 +86,7 @@ ast_cln_psvt_taglist(Tast_cln_a *pCmdln, const Tst_str *pStrLst,
 		Tast_cln_t_tagList_pb(pOutTags),
 		Tst_bool *pAuto, Tst_bool *pNone)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_BOOL(ST_B_FALSE, pCmdln == NULL || pStrLst == NULL ||
 			pAllwTags == NULL || pOutTags == NULL)
@@ -112,7 +112,7 @@ ast_cln_psvt_tagpair(Tast_cln_a *pCmdln, const Tst_str *pStrPair,
 		const Tast_cln_t_tagList_pb(pAllwTagsRight),
 		Tast_cln_t_tagPair *pTP)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_bool   resB    = ST_B_TRUE;
 	Tst_str    *pLeft  = NULL,
 	           *pRight = NULL;
@@ -239,7 +239,7 @@ ast_cln_psvt_numlist(Tast_cln_a *pCmdln,
 		const Tst_str *pStrLst, Tst_uint32 **ppArr,
 		Tst_bool *pAll)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_uint32 arrSz = 0,
 	           fnd   = 0,
 	           x,
@@ -345,7 +345,7 @@ Tst_bool
 ast_cln_psvt_vlevlist(Tast_cln_a *pCmdln, const Tst_str *pStrLst,
 		Tst_int32 *pVerb, Tst_bool *pNon)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_int32 vlE;
 	Tast_cln__psvt_gnle gnle;
 
@@ -382,7 +382,7 @@ ast_cln_psvt_bslist(Tast_cln_a *pCmdln, const Tst_str *pStrLst,
 		Tast_cln_t_ebs **ppEBSarr,
 		Tst_bool *pAll)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_uint32 fnd = 0;
 	Tast_cln__psvt_gnle gnle;
 	Tast_cln_t_ebs      *pCElem;
@@ -433,7 +433,7 @@ Tst_bool
 ast_cln_psvt_pos(Tast_cln_a *pCmdln, const Tst_str *pStrPos,
 		Tst_int32 *pPosNr, Tst_int32 *pPosTot)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_bool   resB     = ST_B_TRUE,
 	           hasLeft  = ST_B_FALSE,
 	           hasRight = ST_B_FALSE;
@@ -503,7 +503,7 @@ Tst_bool
 ast_cln_psvt_fldaddset(Tast_cln_a *pCmdln, const Tst_str *pStrPair,
 		const Tst_bool addOrSet, Tast_cln_t_fldDscAddSet *pFP)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_BOOL(ST_B_FALSE, pCmdln == NULL || pStrPair == NULL ||
 			pFP == NULL)
@@ -528,7 +528,7 @@ Tst_bool
 ast_cln_psvt_dscset(Tast_cln_a *pCmdln, const Tst_str *pStrPair,
 		Tast_cln_t_fldDscAddSet *pDP)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_BOOL(ST_B_FALSE, pCmdln == NULL || pStrPair == NULL ||
 			pDP == NULL)
@@ -551,7 +551,7 @@ Tst_bool
 ast_cln_psvt_tiv2optlist(Tast_cln_a *pCmdln, const Tst_str *pStrLst,
 		Tast_cln_t_tiv2opt *pTOpts)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tast_cln__psvt_gnle gnle;
 
 	ST_ASSERTN_BOOL(ST_B_FALSE, pCmdln == NULL || pStrLst == NULL ||
@@ -759,7 +759,7 @@ AST_CLN__psvt_parseNumlistElem(Tast_cln_a *pCmdln,
 		const Tst_str *pStrElem, const Tst_uint32 len,
 		Tst_uint32 *pNr, Tst_uint32 *pRangeEnd, Tst_bool *pAll)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	char       *pT     = NULL;
 	Tst_str    *pLeft  = NULL,
 	           *pRight = NULL;
@@ -819,7 +819,7 @@ AST_CLN__psvt_parseVlevlistElem(Tast_cln_a *pCmdln,
 		const Tst_str *pStrElem, const Tst_uint32 len, Tst_int32 *pVL,
 		Tst_bool *pNon)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	char       *pT   = NULL;
 	Tst_bool   isOK  = ST_B_FALSE,
 	           isNum = ST_B_TRUE;
@@ -896,7 +896,7 @@ AST_CLN__psvt_parseBslistElem(Tast_cln_a *pCmdln,
 		const Tst_str *pStrElem, const Tst_uint32 len,
 		Tst_bool *pAll, Tast_cln_t_ebs *pEBS)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	char     *pT  = NULL;
 	Tst_bool isOK = ST_B_FALSE;
 
@@ -1153,7 +1153,7 @@ AST_CLN__psvt_parseTiv2optlistElem(Tast_cln_a *pCmdln,
 		const Tst_str *pStrElem, const Tst_uint32 len,
 		Tast_cln_t_tiv2opt *pTOpts)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_bool   isOK = ST_B_FALSE;
 	char       *pT  = NULL;
 	Tast_cln_t_tiv2optList_capDesc const *pCapDesc = AST_CLN_TIV2OPTLIST_CAPDESC;

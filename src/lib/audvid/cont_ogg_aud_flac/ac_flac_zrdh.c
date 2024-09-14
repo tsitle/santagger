@@ -54,7 +54,7 @@ Tst_err
 st_contOgg_flacrdh_parseH_MD(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsH *pDPh)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res    = ST_ERR_SUCC;
 	Tst_bool   isLast = ST_B_FALSE;
 	Tst_uint32 mdSz   = 0;
@@ -170,7 +170,7 @@ static Tst_err
 ST_CONTOGG__flacrdh_parseStrInf(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsH *pDPh, const Tst_uint32 mdSz)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res;
 	Tst_uint16 shVal   = 0;
 	Tst_uint32 rdBytes = 0;
@@ -367,7 +367,7 @@ static Tst_err
 ST_CONTOGG__flacrdh_parseApp(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsH *pDPh, Tst_uint32 mdSz)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 #	if (WORDS_BIGENDIAN != 1)
 #		define LOC_APPUI32_CVEND_(mac_ui32)  \
 					mac_ui32 = st_sysReverseByteOrder_UI32(mac_ui32);  /* ENDIAN: LE-->BE */
@@ -616,7 +616,7 @@ ST_CONTOGG__flacrdh_parseCue(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsH *pDPh, const Tst_uint32 mdSz)
 {
 #	define LOC_DEBMSGSZ_  4096
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_str    medCatNr[128 + 1];
 	Tst_bool   isCDDA;
@@ -698,7 +698,7 @@ ST_CONTOGG__flacrdh_parseCue_track(const Tst_contOgg_opts *pOpts,
 		const Tst_byte curTrkNr, const Tst_bool isCDDA)
 {
 #	define LOC_DEBMSGSZ_  4096
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_byte   trkNr    = 0,
 	           trkIxCnt = 0,

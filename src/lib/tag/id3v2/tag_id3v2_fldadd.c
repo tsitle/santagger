@@ -130,7 +130,7 @@ st_id3v2_fldAdd_doesSimiliarFieldExist(Tst_id3v2_tag *pTag,
 		const Tst_bool tolerateDiffSLen, const Tst_id3v2_fldData *pFld,
 		Tst_bool *pHasSimiliarFld)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res    = ST_ERR_SUCC;
 	Tst_bool   areEqu = ST_B_FALSE,
 	           triDot = ST_B_FALSE;
@@ -294,7 +294,7 @@ Tst_err
 st_id3v2_fldIns(Tst_id3v2_tag *pTag, const Tst_uint32 insertPos,
 		const Tst_id3v2_fldData *pFldAdd)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_iv2__addfldgen     afg;
 	Tst_id3v2_fldData_intn *pFldAddI = NULL;
 	Tst_id3v2_tag_intn     *pTagI;
@@ -372,7 +372,7 @@ st_id3v2_fldIns_text(Tst_id3v2_tag *pTag,
 		const Tst_uint32 insertPos,
 		ST_OPTARG(const Tst_mtes_string *pDesc), const Tst_mtes_string *pText)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_iv2__addfldgen afg;
 	Tst_id3v2_tag_intn *pTagI;
 
@@ -408,7 +408,7 @@ st_id3v2_fldIns_textArr(Tst_id3v2_tag *pTag,
 		const Tst_uint32 insertPos,
 		ST_OPTARG(const Tst_mtes_string *pDesc), Tst_mtes_strArr *pTextArr)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_iv2__addfldgen afg;
 	Tst_id3v2_tag_intn *pTagI;
 
@@ -453,7 +453,7 @@ st_id3v2_fldIns_comm(Tst_id3v2_tag *pTag,
 		ST_OPTARG(const Tst_mtes_string *pDesc),
 		Tst_mtes_strArr *pTextArr)
 {
-	const char           *cFNCN    = __FUNCTION__;
+	const char           *cFNCN    = __func__;
 	const Tst_str        *cLANGXXX = (Tst_str*)"xxx";
 	const Tst_id3v2_frID cFID      = ST_ID3V2_FID_234_COMM;
 	Tst_iv2__addfldgen afg;
@@ -497,7 +497,7 @@ st_id3v2_fldAdd_geob(Tst_id3v2_tag *pTag,
 		ST_OPTARG(const Tst_mtes_string *pFilen),
 		Tst_binobj *pBinDat)
 {
-	const char           *cFNCN = __FUNCTION__;
+	const char           *cFNCN = __func__;
 	const Tst_id3v2_frID cFID   = ST_ID3V2_FID_234_GEOB;
 	Tst_iv2__addfldgen afg;
 	Tst_id3v2_tag_intn *pTagI;
@@ -539,7 +539,7 @@ st_id3v2_fldAdd_geob_rdFromFile(Tst_id3v2_tag *pTag,
 		ST_OPTARG(const Tst_str *pMimeISO),
 		const Tst_mtes_string *pFilen)
 {
-	const char           *cFNCN = __FUNCTION__;
+	const char           *cFNCN = __func__;
 	const Tst_id3v2_frID cFID   = ST_ID3V2_FID_234_GEOB;
 	Tst_err       res  = ST_ERR_SUCC;
 	Tst_str const *pMI = NULL;
@@ -600,7 +600,7 @@ st_id3v2_fldAdd_apic(Tst_id3v2_tag *pTag,
 		const Tst_utilsFmt_picFmt picFmtE,
 		Tst_binobj *pBinDat)
 {
-	const char           *cFNCN = __FUNCTION__;
+	const char           *cFNCN = __func__;
 	const Tst_id3v2_frID cFID   = ST_ID3V2_FID_234_APIC;
 	Tst_iv2__addfldgen afg;
 	Tst_id3v2_tag_intn *pTagI;
@@ -649,7 +649,7 @@ st_id3v2_fldAdd_apic_rdFromFile(Tst_id3v2_tag *pTag,
 		ST_OPTARG(const Tst_mtes_string *pDesc), const Tst_id3v2_picTp picTpE,
 		Tst_utilsFmt_picFmt picFmtE, const Tst_mtes_string *pFilen)
 {
-	const char           *cFNCN = __FUNCTION__;
+	const char           *cFNCN = __func__;
 	const Tst_id3v2_frID cFID   = ST_ID3V2_FID_234_APIC;
 	Tst_iv2__addfldgen afg;
 	Tst_id3v2_tag_intn *pTagI;
@@ -1020,7 +1020,7 @@ ST_TIV2__fa_add(Tst_id3v2_tag *pTag,
 		Tst_id3v2_frID frID, ST_OPTARG(const Tst_str *pFrIDstr),
 		const Tst_uint32 insertPos, const Tst_iv2__addfldgen *pAFG)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err       res = ST_ERR_SUCC;
 	Tst_uint32    w;
 	Tst_str const *pFExt;
@@ -1276,7 +1276,7 @@ ST_TIV2__fa_fldSet(Tst_id3v2_tag *pTag,
 					st_id3v2_d_deb(&pTagI->opts, 0, cFNCN, \
 							"adding new field"); \
 				}
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err  res = ST_ERR_SUCC;
 	Tst_bool fnd = ST_B_FALSE,
 	         wasHnd;

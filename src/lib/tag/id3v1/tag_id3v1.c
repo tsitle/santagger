@@ -71,7 +71,7 @@ ST_TIV1__concatStrFlds(Tst_id3v1_tag_intn *pTagI, const Tst_id3v1ext_frID idExt)
 Tst_err
 st_id3v1_readTagFromStream(Tst_id3v1_tag *pTag)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err     res = ST_ERR_SUCC;
 	Tst_buf     buf[ST_ID3V1_TAG_EXT_SZ + ST_ID3V1_TAG_SZ],
 	            *pBuf;
@@ -257,7 +257,7 @@ st_id3v1_tidyUpTag(Tst_id3v1_tag *pTag)
 Tst_err
 st_id3v1_writeTagToStream(Tst_id3v1_tag *pTag)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res = ST_ERR_SUCC;
 	Tst_binobj         tagBO;
 	Tst_id3v1_tag_intn *pTagI;

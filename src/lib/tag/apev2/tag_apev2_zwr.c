@@ -58,7 +58,7 @@ Tst_err
 st_apev2_wr_rendTagToBO(Tst_apev2_tag *pTag,
 		Tst_tagBasics *pTBasNew, Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_buf    dummyHd[ST_APEV2_TAG_HEADFOOT_SZ];
 	Tst_uint32 numFlds;
@@ -145,7 +145,7 @@ ST_TAV2__rend_headOrFoot(const Tst_bool hdOrFoot, Tst_apev2_tag_intn *pTagI,
 		const Tst_uint32 numFlds, Tst_tagBasics *pTBasNew,
 		Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_buf    buf[ST_APEV2_TAG_HEADFOOT_SZ],
 	           *pBB = buf;
 	Tst_uint32 ui32;
@@ -223,7 +223,7 @@ static Tst_err
 ST_TAV2__rend_allFlds(Tst_apev2_tag *pTag, Tst_tagBasics *pTBasNew,
 		Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
 	Tst_uint32 zeta;
 	Tst_apev2_fldData      *pItFld;
@@ -303,7 +303,7 @@ static Tst_err
 ST_TAV2__rend_fld(Tst_apev2_tag_intn *pTagI, Tst_tagBasics *pTBasNew,
 		Tst_apev2_fldData_intn *pFldI, Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 frBeg,
 	           frSz,
@@ -430,7 +430,7 @@ static Tst_err
 ST_TAV2__rend_multStrU8(Tst_apev2_opts *pOpts, Tst_apev2_fldData_intn *pFldI,
 		Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
 	Tst_uint32 x,
 	           saCnt;
@@ -468,7 +468,7 @@ static Tst_err
 ST_TAV2__rend_binData(Tst_apev2_opts *pOpts, Tst_apev2_fldData_intn *pFldI,
 		Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 
 	if (ST_TFDEB_ISVERBTAG_BD(pOpts->basOpts))
 		st_apev2_d_fdeb(pOpts, 2, cFNCN, pFldI,

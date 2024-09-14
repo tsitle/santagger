@@ -134,7 +134,7 @@ ast_cln_sd_setDefs_tag_swOrWr(Tast_cln_a *pCmdln)
 void
 ast_cln_sd_setOverwr_tag_swOrWr(Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 
 	if (pCmdln->cmds.roTgExtCmds > 0 ||
 			pCmdln->cmds.rwTgRwrCmds > 0 ||
@@ -178,7 +178,7 @@ ast_cln_sd_setOverwr_tag_swOrWr(Tast_cln_a *pCmdln)
 void
 ast_cln_sd_setOverwr_cmds(Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 
 	if (pCmdln->cmds.roMainCmds > 0 && pCmdln->cmds.roTgExtCmds > 0) {
 		pCmdln->cbErr(pCmdln->pAppFn, cFNCN,

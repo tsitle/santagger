@@ -67,7 +67,7 @@ Tst_err
 st_mpeg1_rd_findAndReadNextFrHd(Tst_mpeg1_obj_intn *pMOI,
 		Tst_mpeg1_farnfh *pFar)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err  res     = ST_ERR_SUCC,
 	         rfhRes  = ST_ERR_SUCC;
 	Tst_bool isNewF2 = ST_B_TRUE;
@@ -207,7 +207,7 @@ st_mpeg1_rd_findAndReadNextFrHd(Tst_mpeg1_obj_intn *pMOI,
 Tst_err
 st_mpeg1_rd_checkFrameType(Tst_mpeg1_obj_intn *pMOI, Tst_mpeg1_fhd *pMFH)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err       res;
 	Tst_uint32    bufSz,
 	              rdBytes = 0,

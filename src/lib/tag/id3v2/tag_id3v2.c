@@ -78,7 +78,7 @@ ST_TIV2__disableFld(const char *pFnc, Tst_id3v2_tag *pTag,
 Tst_err
 st_id3v2_readTagFromStream(Tst_id3v2_tag *pTag)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res       = ST_ERR_SUCC;
 	Tst_bool   isOK      = ST_B_FALSE;
 	Tst_uint32 ehdNfraSz = 0,
@@ -278,7 +278,7 @@ Tst_err
 st_id3v2_disableFld_byID_all(Tst_id3v2_tag *pTag,
 		const Tst_id3v2_frID frID, ST_OPTARG(const Tst_str *pFrIDstr))
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	return ST_TIV2__disableFld(LOC_FNCN_, pTag, frID, pFrIDstr,
 			/*frNr:*/0, /*silent:*/ST_B_FALSE);
@@ -293,7 +293,7 @@ st_id3v2_disableFld_byID(Tst_id3v2_tag *pTag,
 		const Tst_id3v2_frID frID, ST_OPTARG(const Tst_str *pFrIDstr),
 		const Tst_uint32 frNr)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	if (frNr == 0)
 		return ST_ERR_IARG;
@@ -315,7 +315,7 @@ st_id3v2_disableFld_byID(Tst_id3v2_tag *pTag,
 Tst_err
 st_id3v2_tidyUpTag(Tst_id3v2_tag *pTag, const Tst_bool discardFields)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err        res = ST_ERR_SUCC;
 	Tst_id3v2_frID srcID2,
 	               srcID3,
@@ -549,7 +549,7 @@ st_id3v2_tidyUpTag(Tst_id3v2_tag *pTag, const Tst_bool discardFields)
 Tst_err
 st_id3v2_writeTagToStream(Tst_id3v2_tag *pTag)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res   = ST_ERR_SUCC;
 	Tst_uint32 lastTSz;
 	Tst_binobj             *pTagBO  = NULL;

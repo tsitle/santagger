@@ -79,7 +79,7 @@ Tst_err
 st_id3v1_rd_readV1(const Tst_bool rdOnlyBasics,
 		Tst_id3v1_tag_intn *pTagI, Tst_buf *pBuf)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err       res;
 	Tst_buf const *pBB = pBuf;
 	Tst_foffs     offs;
@@ -136,7 +136,7 @@ Tst_err
 st_id3v1_rd_readV1Ext(const Tst_bool rdOnlyBasics,
 		Tst_id3v1_tag_intn *pTagI, Tst_buf *pBuf)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err       res;
 	Tst_foffs     offs;
 	Tst_buf const *pBB = pBuf;
@@ -191,7 +191,7 @@ static Tst_err
 ST_TIV1__rd_readV1_flds(Tst_id3v1_tag_intn *pTagI,
 		Tst_buf const *pBufPt)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 #	define LOC_READSTR_(mac_id)  \
 				ST_TIV1__rd_readTF_s(cFNCN, pTagI, pBufPt, \
 						mac_id, ST_ID3V1E_FID_NONE, &rdBytes)
@@ -264,7 +264,7 @@ static Tst_err
 ST_TIV1__rd_readV1Ext_flds(Tst_id3v1_tag_intn *pTagI,
 		Tst_buf const *pBufPt)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 #	define LOC_READSTR_(mac_idExt)  \
 				ST_TIV1__rd_readTF_s(cFNCN, pTagI, pBufPt, \
 						ST_ID3V1_FID_NONE, mac_idExt, &rdBytes)

@@ -64,7 +64,7 @@ Tst_err
 st_id3v2_wr_rendTagToBO(Tst_id3v2_tag *pTag,
 		Tst_tagBasics *pTBasNew, Tst_binobj **ppTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 delta   = 0,
 	           paddLen = 0;
@@ -227,7 +227,7 @@ ST_TIV2__rend_headOrFoot(const Tst_bool hdOrFoot,
 		const Tst_id3v2_tag_intn *pTagI, Tst_tagBasics *pTBasNew,
 		const Tst_id3v2_thdFlags *pTHdFlagsNew, Tst_binobj *pOutp)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_byte   flagByte = 0;
 	Tst_uint32 totTagSz;
 	Tst_buf    buf[ST_ID3V2_TAG_HEADFOOT_SZ],
@@ -407,7 +407,7 @@ ST_TIV2__rend_allFlds(Tst_id3v2_tag *pTag,
 		Tst_tagBasics *pTBasNew, Tst_id3v2_thdFlags *pTHdFlagsNew,
 		Tst_binobj *pOutp)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res  = ST_ERR_SUCC;
 	Tst_uint32 ix   = 0,
 	           rend = 0;
@@ -527,7 +527,7 @@ ST_TIV2__rend_fld(const Tst_id3v2_tag_intn *pTagI,
 		Tst_tagBasics *pTBasNew, Tst_id3v2_thdFlags *pTHdFlagsNew,
 		Tst_id3v2_fldData_intn *pFldI, Tst_binobj **ppOutp)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 frEndBP,
 	           frHdIdSz = (pTagI->verMaj == 2 ? 3 : 4),
@@ -823,7 +823,7 @@ ST_TIV2__rend_fldData(const Tst_id3v2_opts *pOpts, const Tst_byte verMaj,
 		Tst_id3v2_frhdFlags *pFrHdFlags,
 		Tst_binobj *pOutp)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 rwoX,
 	           rwoArrSz;   /* size of rwoArr (=6) */

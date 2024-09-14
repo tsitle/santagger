@@ -57,7 +57,7 @@ void
 st_contOgg_rd_showUsedChecksums(const Tst_contOgg_opts *pOpts,
 		const Tst_bool isSrcOggOrFlac)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	char debMsg[512];
 
 	if (isSrcOggOrFlac) {
@@ -88,7 +88,7 @@ st_contOgg_rd_rdPacket(Tst_contOgg_obj_intn *pAObjI,
 		Tst_contOgg_substr_intn **ppBSI,
 		Tst_contOgg_fhd **ppFHd)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res = ST_ERR_SUCC;
 	Tst_uint32 frDatSz;
 
@@ -301,7 +301,7 @@ Tst_err
 st_contOgg_rd_rdFrameHd(Tst_contOgg_obj_intn *pAObjI,
 		Tst_contOgg_fhd *pFHd)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 #	define LOC_OGGS_  (Tst_buf*)"OggS"
 	Tst_err    res;
 	Tst_byte   byt      = 0;
@@ -466,7 +466,7 @@ st_contOgg_rd_rdFrameDat(Tst_contOgg_obj_intn *pAObjI,
 		Tst_contOgg_fhd *pFHd, Tst_uint32 frDatSz,
 		const Tst_bool appendOrAuto)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err res;
 
 	/**st_contOgg_prf("\nst_contOgg_rd_rdFrameDat(): "
@@ -1030,7 +1030,7 @@ static Tst_err
 ST_CONTOGG__rd_addFHdToStream(Tst_contOgg_obj_intn *pAObjI,
 		Tst_contOgg_fhd *pFHd, Tst_contOgg_substr_intn **ppBSI)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err    res;
 	Tst_uint32 x,
 	           bsIX = pAObjI->bsArr.cnt + 1;  /* out of range index */

@@ -51,7 +51,7 @@
 Tst_err
 ast_cln_hnd_c_rd(Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 
 	if (pCmdln->cmds.roMainCmds > 0) {
 		if (pCmdln->cmds.anlz) {
@@ -80,7 +80,7 @@ ast_cln_hnd_c_rd(Tast_cln_a *pCmdln)
 Tst_err
 ast_cln_hnd_c_ana(Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 
 	if (pCmdln->cmds.rd) {
 		pCmdln->cbErr(pCmdln->pAppFn, cFNCN,
@@ -107,7 +107,7 @@ ast_cln_hnd_c_ana(Tast_cln_a *pCmdln)
 Tst_err
 ast_cln_hnd_c_decAud(Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_str *pFmt = NULL;
 
@@ -323,7 +323,7 @@ ast_cln_hnd_c_tfld_gen(Tast_cln_a *pCmdln)
 Tst_err
 ast_cln_hnd_c_tfld_add_picOrGeo(Tast_cln_a *pCmdln, const Tst_bool isPic)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_str *pFn = NULL;
 	Tst_err res;
 
@@ -395,7 +395,7 @@ ast_cln_hnd_c_tfld_rem_picOrGeo(Tast_cln_a *pCmdln, const Tst_bool isPic)
 Tst_err
 ast_cln_hnd_c_tfld_fadd(Tast_cln_a *pCmdln)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	return AST_CLN__hnd_c_tfld_faddset(LOC_FNCN_, pCmdln, ST_B_TRUE);
 #	undef LOC_FNCN_
@@ -405,7 +405,7 @@ ast_cln_hnd_c_tfld_fadd(Tast_cln_a *pCmdln)
 Tst_err
 ast_cln_hnd_c_tfld_fset(Tast_cln_a *pCmdln)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	return AST_CLN__hnd_c_tfld_faddset(LOC_FNCN_, pCmdln, ST_B_FALSE);
 #	undef LOC_FNCN_
@@ -567,7 +567,7 @@ ast_cln_hnd_c_extr_bd(Tast_cln_a *pCmdln)
 Tst_err
 ast_cln_hnd_c_conv(Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_str *pStr = NULL;
 	Tast_cln_t_tagList_b(allwTagsLeft);
@@ -634,7 +634,7 @@ ast_cln_hnd_o_swstat(Tast_cln_a *pCmdln)
 Tst_err
 ast_cln_hnd_o_verblev(Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err   res   = ST_ERR_SUCC;
 	Tst_int32 tmp   = 0;
 	Tst_str   *pLst = NULL;
@@ -792,7 +792,7 @@ ast_cln_hnd_o_tag_swOrEd(Tast_cln_a *pCmdln, const Tst_int32 which)
 Tst_err
 ast_cln_hnd_o_ebs(Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_str *pLst = NULL;
 
@@ -856,7 +856,7 @@ ast_cln_hnd_o_force_avX(Tast_cln_a *pCmdln, const Tst_int32 av)
 Tst_err
 ast_cln_hnd_o_bps(Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err   res  = ST_ERR_SUCC;
 	Tst_int32 tmpI = -1;
 
@@ -886,7 +886,7 @@ ast_cln_hnd_o_bps(Tast_cln_a *pCmdln)
 Tst_err
 ast_cln_hnd_o_tiv2(Tast_cln_a *pCmdln)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_str *pLst = NULL;
 
@@ -1271,7 +1271,7 @@ AST_CLN__hnd_read_t_taglist(Tast_cln_a *pCmdln, const char *pOptCap,
 		Tast_cln_t_tagList_pb(pOutTags),
 		Tst_bool *pAuto, Tst_bool *pNone)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_str *pLst = NULL;
 
@@ -1304,7 +1304,7 @@ static Tst_err
 AST_CLN__hnd_read_t_numlist(Tast_cln_a *pCmdln, const char *pOptCap,
 	Tst_uint32 **ppILst, Tst_bool *pAll)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_str *pLst = NULL;
 
@@ -1335,7 +1335,7 @@ AST_CLN__hnd_read_t_pos(Tast_cln_a *pCmdln, const char *pOptCap,
 		const char *pOptCapTot,
 		Tst_int32 *pPosNr, Tst_int32 *pPosTot)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_str *pStr = NULL;
 
@@ -1371,7 +1371,7 @@ AST_CLN__hnd_read_t_fldaddset(Tast_cln_a *pCmdln, const char *pOptCap,
 		Tast_cln_t_fldDscAddSet *pFldAddSet,
 		Tst_bool *pShowHelp, Tst_str *pWhichHelp)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_str *pStr = NULL;
 
@@ -1427,7 +1427,7 @@ AST_CLN__hnd_read_t_dscset(Tast_cln_a *pCmdln, const char *pOptCap,
 		Tast_cln_t_fldDscAddSet *pDscSet,
 		Tst_bool *pShowHelpMain, Tst_bool *pShowHelpVals)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_str *pStr = NULL;
 

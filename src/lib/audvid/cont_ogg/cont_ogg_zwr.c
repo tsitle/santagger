@@ -99,7 +99,7 @@ st_contOgg_wr_markBSforVCmtUpd(Tst_contOgg_obj *pAObj)
 void
 st_contOgg_wr_showStats(Tst_contOgg_obj *pAObj)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_contOgg_obj_intn    *pAObjI;
 	Tst_contOgg_substream   *pBS = NULL;
 	Tst_contOgg_substr_intn *pBSI;
@@ -129,7 +129,7 @@ Tst_err
 st_contOgg_wr_replaceVCmt(Tst_contOgg_obj_intn *pAObjI,
 		Tst_contOgg_substream *pBS)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
 	Tst_uint32 packSz;
 	Tst_contOgg__wr_partialPack restPP,
@@ -247,7 +247,7 @@ st_contOgg_wr_replaceVCmt(Tst_contOgg_obj_intn *pAObjI,
 Tst_err
 st_contOgg_wr_addEOS(Tst_contOgg_obj *pAObj)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 	Tst_err res = ST_ERR_SUCC;
 	Tst_contOgg_obj_intn    *pAObjI;
 	Tst_contOgg_substream   *pBS = NULL;
@@ -294,7 +294,7 @@ Tst_err
 st_contOgg_wr_wrPacket(Tst_contOgg_obj_intn *pAObjI,
 		Tst_contOgg_substr_intn *pBSI, const Tst_contOgg_fhd *pFHd)
 {
-#	define LOC_FNCN_     __FUNCTION__
+#	define LOC_FNCN_     __func__
 #	define LOC_DEFFRSZ_  (255 * 16 * 8)  /* ca. 32kb */
 	Tst_err    res     = ST_ERR_SUCC;
 	Tst_uint32 packSz,
@@ -380,7 +380,7 @@ st_contOgg_wr_wrFrame(Tst_contOgg_obj_intn *pAObjI,
 		Tst_contOgg_substr_intn *pBSI, Tst_contOgg_fhd *pFHd,
 		const Tst_uint32 frDatStart, Tst_uint32 frDatSz)
 {
-#	define LOC_FNCN_     __FUNCTION__
+#	define LOC_FNCN_     __func__
 #	define LOC_CRCOFFS_  22
 #	define LOC_OGGS_     (Tst_buf*)"OggS"
 	Tst_err    res;

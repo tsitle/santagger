@@ -67,7 +67,7 @@
 Tst_err
 ast_mf_cm_convAndMerge(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 
 	ST_ASSERTN_IARG(pCmdln == NULL || pMF == NULL ||
@@ -113,7 +113,7 @@ ast_mf_cm_mergeTagsOfAkind(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		const Tst_bool mergeEmbVorbc,
 		Tast_mf_editInfo *pEdInf)
 {
-	const char             *cFNCN   = __FUNCTION__;
+	const char             *cFNCN   = __func__;
 	const Tst_tagMeta_type cMTTPS[] = {ST_MTAG_TTP_IV1, ST_MTAG_TTP_IV2,
 	                                   ST_MTAG_TTP_AV2, ST_MTAG_TTP_VOR};
 	const Tst_uint32       cMTTPS_N = sizeof(cMTTPS) / sizeof(Tst_tagMeta_type);
@@ -310,7 +310,7 @@ Tst_err
 ast_mf_cm_updRawTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tast_mf_editInfo *pEdInf, Tst_tagMeta_mt *pMT)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res   = ST_ERR_SUCC;
 	Tst_uint32 bsIx  = 0,
 	           bsSIx = 0;
@@ -350,7 +350,7 @@ ast_mf_cm_convIv1ToX(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tst_tagBasics const *pTBasSrc,
 		const Tst_tagMeta_type mttpDest)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pCmdln == NULL || pMF == NULL ||
 			 pMF->pFilen == NULL || pTagSrc == NULL)
@@ -371,7 +371,7 @@ ast_mf_cm_convIv2ToX(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tst_tagBasics const *pTBasSrc,
 		const Tst_tagMeta_type mttpDest)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pCmdln == NULL || pMF == NULL ||
 			 pMF->pFilen == NULL || pTagSrc == NULL)
@@ -392,7 +392,7 @@ ast_mf_cm_convAv2ToX(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tst_tagBasics const *pTBasSrc,
 		const Tst_tagMeta_type mttpDest)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pCmdln == NULL || pMF == NULL ||
 			 pMF->pFilen == NULL || pTagSrc == NULL)
@@ -414,7 +414,7 @@ ast_mf_cm_convVorToX(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		const Tst_tagMeta_type mttpDest,
 		const Tst_uint32 bsIxSrc, const Tst_uint32 bsSIxSrc)
 {
-#	define LOC_FNCN_  __FUNCTION__
+#	define LOC_FNCN_  __func__
 
 	ST_ASSERTN_IARG(pCmdln == NULL || pMF == NULL ||
 			 pMF->pFilen == NULL || pTagSrc == NULL)
@@ -536,7 +536,7 @@ static Tst_err
 AST_MF__cm_convAllTagsToIV2(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 {
 #	define LOC_DEBUG_IV1_  0
-	const char             *cFNCN   = __FUNCTION__;
+	const char             *cFNCN   = __func__;
 	const Tst_tagMeta_type cMTTPS[] = {ST_MTAG_TTP_IV1, ST_MTAG_TTP_AV2,
 	                                   ST_MTAG_TTP_VOR};
 	const Tst_uint32       cMTTPS_N = sizeof(cMTTPS) / sizeof(Tst_tagMeta_type);
@@ -622,7 +622,7 @@ AST_MF__cm_convAllTagsToIV2(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 static Tst_err
 AST_MF__cm_mergeTagsIV2_all(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_bool   is1st = ST_B_TRUE;
 	char const *pTagD;
@@ -1000,7 +1000,7 @@ AST_MF__cm_mergeCmdln(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 					break; \
 				} \
 				}
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err       res    = ST_ERR_SUCC;
 	Tst_uint32    x;
 	Tst_str const *pFnTag;
@@ -1377,7 +1377,7 @@ AST_MF__cm_mergeCmdln_addOrModFld_file(const Tast_cln_a *pCmdln,
 		const Tst_bool addOrMod, Tast_cln_attFile *pAF,
 		Tst_bool *pEdited)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err       res   = ST_ERR_SUCC;
 	Tst_str const *pMim = NULL;
 	Tst_mtes_string tmpFn,
@@ -1592,7 +1592,7 @@ AST_MF__cm_updRawVorbTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tst_vorbc_tag *pTag,
 		const Tst_uint32 bsIx, const Tst_uint32 bsSIx)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_contOgg_substream *pBS;
 

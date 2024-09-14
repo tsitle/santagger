@@ -278,7 +278,7 @@ AST_MF__extr_extrTag_sub(const Tast_cln_a *pCmdln,
 		const Tst_foffs offs, const Tst_uint32 binSize,
 		Tst_vorbc_tag *pVor, Tst_uint32 vorBsIx, Tst_uint32 vorBsSIx)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err       res;
 	Tst_str       *pOutFn = NULL;
 	Tst_str const *pInFn  = st_sysFStc_getFilen(pFStcIn);
@@ -452,7 +452,7 @@ AST_MF__extr_extrOther_sub(const Tast_cln_a *pCmdln,
 		const Tst_id3v2_frID fldID, const Tst_id3v2_frTp fldType,
 		Tst_id3v2_tag *pTag, const Tst_uint32 tagNr)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err       res     = ST_ERR_SUCC;
 	Tst_str       *pOutFn = NULL,
 	              fext1[64],

@@ -37,7 +37,7 @@
 Tst_err
 st_id3v1_fldAdd(Tst_id3v1_tag *pTag, const Tst_id3v1_fldData *pFldAdd)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_id3v1_fldData_intn const *pFldI;
 

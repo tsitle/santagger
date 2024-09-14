@@ -60,7 +60,7 @@ Tst_err
 st_vorbc_wr_rendTagToBO(Tst_vorbc_tag *pTag,
 		Tst_tagBasics *pTBasNew, Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 numFlds,
 	           vendLen = 0;
@@ -235,7 +235,7 @@ static Tst_err
 ST_TVORBC__rend_allFlds(Tst_vorbc_tag *pTag, Tst_tagBasics *pTBasNew,
 		Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
 	Tst_uint32 ix  = 0,
 	           zeta;
@@ -315,7 +315,7 @@ static Tst_err
 ST_TVORBC__rend_fld(Tst_vorbc_tag_intn *pTagI, Tst_tagBasics *pTBasNew,
 		Tst_vorbc_fldData_intn *pFldI, Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 frBeg,
 	           frSz,
@@ -438,7 +438,7 @@ static Tst_err
 ST_TVORBC__rend_multStrU8(Tst_vorbc_opts *pOpts, Tst_vorbc_fldData_intn *pFldI,
 		Tst_binobj *pTagBO)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
 	Tst_uint32 x,
 	           saCnt;
@@ -512,7 +512,7 @@ ST_TVORBC__rend_pict(Tst_vorbc_opts *pOpts, Tst_vorbc_fldData_intn *pFldI,
 				res = st_binobj_appendData(&binDatRaw, \
 						(const Tst_buf*)&ui32, 4); \
 				}
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_uint32 ui32 = 0,
 	           mlen = 0,

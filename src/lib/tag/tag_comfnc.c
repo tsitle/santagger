@@ -114,7 +114,7 @@ st_tagCFnc_iplsMerge(Tst_mtes_strArr *pSArr)
 	/**{
 		char dbgmsg[128];
 
-		snprintf(dbgmsg, sizeof(dbgmsg), "%s(): org:", __FUNCTION__);
+		snprintf(dbgmsg, sizeof(dbgmsg), "%s(): org:", __func__);
 		st_tagFDeb_prStrArr(dbgmsg, pSArr);
 	}**/
 
@@ -169,7 +169,7 @@ st_tagCFnc_iplsMerge(Tst_mtes_strArr *pSArr)
 	/**{
 		char dbgmsg[128];
 
-		snprintf(dbgmsg, sizeof(dbgmsg), "%s(): merged:", __FUNCTION__);
+		snprintf(dbgmsg, sizeof(dbgmsg), "%s(): merged:", __func__);
 		st_tagFDeb_prStrArr(dbgmsg, pSArr);
 	}**/
 
@@ -245,7 +245,7 @@ st_tagCFnc_iplsSplit(Tst_mtes_strArr *pSArr)
 		/**{
 			char dbgmsg[128];
 
-			snprintf(dbgmsg, sizeof(dbgmsg), "%s(): org:", __FUNCTION__);
+			snprintf(dbgmsg, sizeof(dbgmsg), "%s(): org:", __func__);
 			st_tagFDeb_prStr(dbgmsg, pSrcElem);
 		}**/
 		do {
@@ -348,7 +348,7 @@ st_tagCFnc_iplsSplit(Tst_mtes_strArr *pSArr)
 		/**{
 			char dbgmsg[128];
 
-			snprintf(dbgmsg, sizeof(dbgmsg), "%s(): splitted:", __FUNCTION__);
+			snprintf(dbgmsg, sizeof(dbgmsg), "%s(): splitted:", __func__);
 			st_tagFDeb_prStrArr(dbgmsg, &newArr);
 		}**/
 	}

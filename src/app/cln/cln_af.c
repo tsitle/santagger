@@ -88,7 +88,7 @@ ast_cln_af_addAttrToAF(Tast_cln_a *pCmdln, const Tst_bool isPicOrGeo,
 		ST_OPTARG(const Tst_str *pMime),
 		ST_OPTARG(const Tst_str *pModFilen))
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tast_cln_attFileArr *pAFarr;
 	Tast_cln_attFile    *pAF = NULL;
@@ -189,7 +189,7 @@ ast_cln_af_prAFarr(const Tast_cln_a *pCmdln)
 Tst_err
 ast_cln_af_checkAFarr(Tast_cln_a *pCmdln)
 {
-	const char       *cFNCN     = __FUNCTION__;
+	const char       *cFNCN     = __func__;
 	const Tst_uint32 cMAXFSZ_MB = 128,
 	                 cMAXFSZ_BY = cMAXFSZ_MB * 1024 * 1024;
 	Tst_err    res         = ST_ERR_SUCC;

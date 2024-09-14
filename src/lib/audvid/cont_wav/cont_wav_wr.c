@@ -93,7 +93,7 @@ st_contWav_wr_prepareWritingCB(void *pWObj,
 		const Tst_bool appendBsIx,
 		void **ppHandle)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_contWav_handle      *pElem = NULL;
 	Tst_contWav_handle_intn *pEI;
@@ -183,7 +183,7 @@ st_contWav_wr_setOutputFmtCB(void *pHandle,
 		const Tst_uint32 channMask, const Tst_uint32 channels)
 {
 #	define LOC_SHIFT_  ((bitsPerSample % 8) > 0 ? 8 - (bitsPerSample % 8) : 0)
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res;
 	Tst_contWav_handle_intn *pEI;
 
@@ -265,7 +265,7 @@ Tst_err
 st_contWav_wr_writeRawSamplesCB(void *pHandle,
 		const Tst_uint32 sampleCnt, const Tst_int32 **ppRawSamples)
 {
-#	define LOC_FNCN_      __FUNCTION__
+#	define LOC_FNCN_      __func__
 #	define LOC_WR_AS_BE_  (! pElemI->pOpts->wrFmtRIFForAIFF)
 #	define LOC_BPS_       (pElemI->hdInfo.bitsPerSample)
 #	define LOC_WR_AS_US_  (pElemI->pOpts->wrFmtRIFForAIFF ? \
@@ -487,7 +487,7 @@ st_contWav_wr_writeRawSamplesCB(void *pHandle,
 Tst_err
 st_contWav_wr_finishWritingCB(void *pHandle)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err res = ST_ERR_SUCC;
 	Tst_str decUI[50];
 	Tst_contWav_handle_intn *pEI;

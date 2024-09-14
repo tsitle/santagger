@@ -180,7 +180,7 @@ ast_mf_rddec_cbDecVorb_feedHeader(void *pHnd,
 		Tst_buf *pInpBuf, const Tst_uint32 inpBufSz,
 		const Tst_bool hdTypeBOS, const Tst_uint64 granulePos)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	int resI;
 	Tast_mf__rddec_vorb *pVrb = (Tast_mf__rddec_vorb*)pHnd;
 
@@ -232,7 +232,7 @@ ast_mf_rddec_cbDecVorb_feedAudioAndDecode(void *pHnd,
 		Tst_av_cbPCM_samplesClient cbPCMclient,
 		void *pPCMclientHandle)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
 	int        resI,
 	           availableSamples;

@@ -236,7 +236,7 @@ Tst_err
 ast_cln_fnc_cpyarg_str(const Tast_cln_a *pCmdln, const char *pCap,
 		const Tst_uint32 maxlen, Tst_str **ppStr)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_uint32 len = st_sysStrlen2(optarg);
 
 	ST_ASSERTN_NUM(ST_ERR_FAIL, pCmdln == NULL || pCap == NULL ||
@@ -277,7 +277,7 @@ ast_cln_fnc_cpyarg_i32(const Tast_cln_a *pCmdln, const char *pCap,
 		const Tst_int32 numMin, const Tst_int32 numMax, const Tst_int32 numNone,
 		Tst_int32 *pInt)
 {
-	const char *cFNCN = __FUNCTION__;
+	const char *cFNCN = __func__;
 	Tst_int32  lres  = numMin - 1;
 	char const *pOA  = optarg;
 	Tst_bool   isNum = ST_B_TRUE;
