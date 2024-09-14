@@ -1186,31 +1186,35 @@ ST_SYSFILE__fOd_exists(const Tst_str *pPath,
 		const Tst_bool fOrD, const Tst_uint32 recursLev,
 		Tst_fsize *pSize, Tst_bool *pErrTooBig)
 {
-#	if (HAVE_READLINK == 1)
-	Tst_bool  resB;
-	Tst_str   *pStr = NULL;
-	Tst_int32 resI;
-#	endif
+	#if (HAVE_READLINK == 1)
+		Tst_bool  resB;
+		Tst_str   *pStr = NULL;
+		Tst_int32 resI;
+	#endif
 	struct stat statBuf;
 
 	ST_ASSERTN_BOOL(ST_B_FALSE, pFStc != NULL && pFStc->pObInternal == NULL)
 
 	*pSize = 0;
-	if (pErrTooBig != NULL)
+	if (pErrTooBig != NULL) {
 		*pErrTooBig = ST_B_FALSE;
-	if (recursLev > 100 || (st_sysStrEmpty(pPath) && pFStc == NULL))
+	}
+	if (recursLev > 100 || (st_sysStrEmpty(pPath) && pFStc == NULL)) {
 		return ST_B_FALSE;
+	}
 	if (pFStc != NULL &&
-			((Tst_sys__fstc_intn*)pFStc->pObInternal)->isVirt)
+			((Tst_sys__fstc_intn*)pFStc->pObInternal)->isVirt) {
 		return ST_B_FALSE;
+	}
 
 	/* check whether file/dir exists */
 	if (pFStc == NULL) {
 		if (stat((const char*)pPath, &statBuf) != 0) {
 			if (errno == EOVERFLOW) {
 				/* file too big for off_t */
-				if (pErrTooBig != NULL)
+				if (pErrTooBig != NULL) {
 					*pErrTooBig = ST_B_TRUE;
+				}
 				return ST_B_TRUE;  /* file exists, it's just too big */
 			}
 			return ST_B_FALSE;
@@ -1218,41 +1222,45 @@ ST_SYSFILE__fOd_exists(const Tst_str *pPath,
 	} else if (fstat(((Tst_sys__fstc_intn*)pFStc->pObInternal)->fd, &statBuf) != 0) {
 		if (errno == EOVERFLOW) {
 			/* file too big for off_t */
-			if (pErrTooBig != NULL)
+			if (pErrTooBig != NULL) {
 				*pErrTooBig = ST_B_TRUE;
+			}
 			return ST_B_TRUE;  /* file exists, it's just too big */
 		}
 		return ST_B_FALSE;
 	}
 
 	/* if it's a symlink, follow it */
-#	if (HAVE_READLINK == 1)
-	if (S_ISLNK(statBuf.st_mode) != 0) {
-		if (statBuf.st_size < 1)
-			return ST_B_FALSE;
-		/** read destination of symlink */
-		ST_CALLOC(pStr, Tst_str*, statBuf.st_size + 4, 1)
-		if (pStr == NULL)
-			return ST_B_FALSE;
-		resI = readlink((const char*)pPath, (const char*)pStr, statBuf.st_size + 2);
-		if (resI < 0) {
+	#if (HAVE_READLINK == 1)
+		if (S_ISLNK(statBuf.st_mode) != 0) {
+			if (statBuf.st_size < 1) {
+				return ST_B_FALSE;
+			}
+			/** read destination of symlink */
+			ST_CALLOC(pStr, Tst_str*, statBuf.st_size + 4, 1)
+			if (pStr == NULL) {
+				return ST_B_FALSE;
+			}
+			resI = readlink((const char*)pPath, (char*)pStr, statBuf.st_size + 2);
+			if (resI < 0) {
+				ST_DELPOINT(pStr)
+				return ST_B_FALSE;
+			}
+			/** check if symlink's dest exists */
+			pStr[resI] = 0;
+			resB       = ST_SYSFILE__fOd_exists(pStr, NULL, fOrD, recursLev + 1,
+					pSize, pErrTooBig);
+			/** */
 			ST_DELPOINT(pStr)
-			return ST_B_FALSE;
+			return resB;
 		}
-		/** check if symlink's dest exists */
-		pStr[resI] = 0;
-		resB       = ST_SYSFILE__fOd_exists(pStr, NULL, fOrD, recursLev + 1,
-				pSize, pErrTooBig);
-		/** */
-		ST_DELPOINT(pStr)
-		return resB;
-	}
-#	endif
+	#endif
 	/* */
 	*pSize = (Tst_fsize)statBuf.st_size /*+
 			(statBuf.st_size < 0) * ((Tst_fsize)ST_TFOFFS_MAX - ST_TFOFFS_MIN + 1)*/;
-	if (fOrD)
+	if (fOrD) {
 		return (S_ISREG(statBuf.st_mode) != 0);  /* is regular file ? */
+	}
 	return (S_ISDIR(statBuf.st_mode) != 0);  /* is directory ? */
 }
 
