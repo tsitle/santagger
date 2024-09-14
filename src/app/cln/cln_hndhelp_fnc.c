@@ -19,7 +19,7 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 /** */
 #include "src/includes/common/dynlist.h"
@@ -48,15 +48,19 @@
 static void
 AST_CLN__hhlpfnc_initElemIV2(Tast_cln_pvalIV2 *pElem);
 static Tst_int32
-AST_CLN__hhlpfnc_cbCmpElemsIV2(const void *pElem1,
-                               const void *pElem2,
-                               void *pOpts);
+AST_CLN__hhlpfnc_cbCmpElemsIV2(
+		const void *pElem1,
+		const void *pElem2,
+		void *pOpts
+	);
 static void
 AST_CLN__hhlpfnc_initElemAV2_or_VOR(Tast_cln_pvalAV2_or_VOR *pElem);
 static Tst_int32
-AST_CLN__hhlpfnc_cbCmpElemsAV2_or_VOR(const void *pElem1,
-                                      const void *pElem2,
-                                      void *pOpts);
+AST_CLN__hhlpfnc_cbCmpElemsAV2_or_VOR(
+		const void *pElem1,
+		const void *pElem2,
+		void *pOpts
+	);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -186,10 +190,10 @@ ast_cln_hhlpfnc_fmt_flddscaddset(Tast_cln_a *pCmdln, const int fmt,
 		const Tst_bool isTagOptional,
 		ST_OPTARG(const char *pTagLong), ST_OPTARG(const char *pTagShort))
 {
-	char msgTagPre[64],
-	     msgTag[64],
-	     msgFmtFLDNAME[256],
-	     msgFmtSTR[256];
+	char msgTagPre[64];
+	char msgTag[64 * 2];
+	char msgFmtFLDNAME[256];
+	char msgFmtSTR[256];
 
 	ST_ASSERTN_VOID(pCmdln == NULL)
 
@@ -328,28 +332,31 @@ Tst_bool
 ast_cln_hhlpfnc_c_faddset_posvalsIV2_genlist(const Tst_bool fldOrDsc,
 		const Tst_bool addOrSet, Tst_dynlist *pPVlist)
 {
-#	define LOC_CPYSTR_(mac_pSrcDstName, mac_len)  { \
+	#define LOC_CPYSTR_(mac_pSrcDstName, mac_len)  { \
 				slen = st_sysStrlen2(mac_pSrcDstName); \
 				ST_CALLOC(pNewElem->mac_pSrcDstName, char*, slen + 4 + 1, 1) \
-				if (pNewElem->mac_pSrcDstName == NULL) \
+				if (pNewElem->mac_pSrcDstName == NULL) { \
 					return ST_B_FALSE; \
+				} \
 				if (mac_pSrcDstName == NULL) { \
 					if (mac_len == 3 || mac_len == 4) { \
 						strcpy(pNewElem->mac_pSrcDstName, \
 								(mac_len == 3 ? "   " : "    ")); \
-					} else \
+					} else { \
 						pNewElem->mac_pSrcDstName[0] = 0; \
-				} else \
+					} \
+				} else { \
 					strcpy(pNewElem->mac_pSrcDstName, mac_pSrcDstName); \
-				}
-	char const *pID02,
-	           *pID34,
-	           *pCap,
-	           *pFTPstr;
-	Tst_uint32 verFl,
-	           slen;
-	Tst_id3v2_fldProp fldPrCur,
-	                  *pFldPrLast = NULL;
+				} \
+			}
+	char const *pID02;
+	char const *pID34;
+	char const *pCap;
+	char const *pFTPstr;
+	Tst_uint32 verFl;
+	Tst_uint32 slen;
+	Tst_id3v2_fldProp fldPrCur;
+	Tst_id3v2_fldProp *pFldPrLast = NULL;
 	Tst_id3v2_frTp    ftp;
 	Tst_id3v2_frID    fid;
 	Tast_cln_pvalIV2  *pNewElem = NULL;
@@ -406,7 +413,7 @@ ast_cln_hhlpfnc_c_faddset_posvalsIV2_genlist(const Tst_bool fldOrDsc,
 
 	return st_dynlist_sortElements(pPVlist, ST_DYNLIST_SA_DEF,
 			AST_CLN__hhlpfnc_cbCmpElemsIV2, NULL, NULL);
-#	undef LOC_CPYSTR_
+	#undef LOC_CPYSTR_
 }
 
 /*----------------------------------------------------------------------------*/
@@ -444,26 +451,29 @@ Tst_bool
 ast_cln_hhlpfnc_c_faddset_posvalsAV2_or_VOR_genlist(Tst_dynlist *pPVlist,
 		const Tst_bool av2OrVor, Tst_uint32 *pFldnMaxlen)
 {
-#	define LOC_CPYSTR_(mac_pSrcDstName, mac_updFML)  { \
+	#define LOC_CPYSTR_(mac_pSrcDstName, mac_updFML)  { \
 				slen = st_sysStrlen2(mac_pSrcDstName); \
-				if (mac_updFML && slen > *pFldnMaxlen) \
+				if (mac_updFML && slen > *pFldnMaxlen) { \
 					*pFldnMaxlen = slen; \
+				} \
 				ST_CALLOC(pNewElem->mac_pSrcDstName, char*, slen + 1, 1) \
-				if (pNewElem->mac_pSrcDstName == NULL) \
+				if (pNewElem->mac_pSrcDstName == NULL) { \
 					return ST_B_FALSE; \
-				if (mac_pSrcDstName == NULL) \
+				} \
+				if (mac_pSrcDstName == NULL) { \
 					pNewElem->mac_pSrcDstName[0] = 0; \
-				else \
+				} else { \
 					strcpy(pNewElem->mac_pSrcDstName, mac_pSrcDstName); \
-				}
-	char const *pID,
-	           *pCap,
-	           *pFTPstr;
+				} \
+			}
+	char const *pID;
+	char const *pCap;
+	char const *pFTPstr;
 	Tst_uint32 slen;
-	Tst_apev2_fldProp       fldPrCurAV2,
-	                        *pFldPrLastAV2 = NULL;
-	Tst_vorbc_fldProp       fldPrCurVOR,
-	                        *pFldPrLastVOR = NULL;
+	Tst_apev2_fldProp       fldPrCurAV2;
+	Tst_apev2_fldProp       *pFldPrLastAV2 = NULL;
+	Tst_vorbc_fldProp       fldPrCurVOR;
+	Tst_vorbc_fldProp       *pFldPrLastVOR = NULL;
 	Tst_apev2_frTp          ftpAV2         = ST_APEV2_FTP_NONE;
 	Tst_vorbc_frTp          ftpVOR         = ST_VORBC_FTP_NONE;
 	Tast_cln_pvalAV2_or_VOR *pNewElem      = NULL;
@@ -520,7 +530,7 @@ ast_cln_hhlpfnc_c_faddset_posvalsAV2_or_VOR_genlist(Tst_dynlist *pPVlist,
 
 	return st_dynlist_sortElements(pPVlist, ST_DYNLIST_SA_DEF,
 			AST_CLN__hhlpfnc_cbCmpElemsAV2_or_VOR, NULL, NULL);
-#	undef LOC_CPYSTR_
+	#undef LOC_CPYSTR_
 }
 
 /*----------------------------------------------------------------------------*/

@@ -70,8 +70,10 @@
 #	define ST_PARAMS(protos)  ()
 #endif
 
-/* ST_OPTARG is a macro used to wrap optional function parameters
- * just to make it clear that those parameters are optional */
+/**
+ * ST_OPTARG is a macro used to wrap optional function parameters
+ * just to make it clear that those parameters are optional
+ */
 #define ST_OPTARG(protos)  /*optional:*/protos
 
 /* ST_EXPORT is used to declare functions etc. in the library

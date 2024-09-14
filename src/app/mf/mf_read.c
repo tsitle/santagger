@@ -19,7 +19,7 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 /** */
 #include "src/includes/common/binobj.h"
@@ -68,34 +68,37 @@
 Tst_err
 ast_mf_rd_readFile(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 {
-#	define LOC_PRDEB_FFMT_MTP_  \
+	#define LOC_PRDEB_FFMT_MTP_  \
 			ast_mf_op_d_deb(cFNCN, \
 					"this file format shouldn't contain this data type");
-#	define LOC_PRDEB_SKPD_  { \
-			if (skpd > 0) \
-				ast_mf_op_d_deb(cFNCN, \
-						"  (had to skip "ST_TFSIZE_PRF_LU" bytes)", \
-						(Tst_fsize)skpd); \
+	#define LOC_PRDEB_SKPD_  { \
+				if (skpd > 0) { \
+					ast_mf_op_d_deb(cFNCN, \
+							"  (had to skip "ST_TFSIZE_PRF_LU" bytes)", \
+							(Tst_fsize)skpd); \
+				} \
 			}
-#	define LOC_PRMULTSTR_  { \
+	#define LOC_PRMULTSTR_  { \
 				snprintf(debMsg, sizeof(debMsg), \
 						"already has audio/video stream, aborting"); \
 				if (pCmdln->cmds.anlz || \
 						ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) { \
-					if (pCmdln->cmds.anlz) \
+					if (pCmdln->cmds.anlz) { \
 						ast_mf_op_cb_anaMsg("STR: %s", debMsg); \
-					else \
+					} else { \
 						ast_mf_op_d_deb(cFNCN, "stream %s", debMsg); \
-				} else if (! pCmdln->opts.quiet) \
+					} \
+				} else if (! pCmdln->opts.quiet) { \
 					ast_mf_op_prMsg("(Stream %s)", debMsg); \
-				}
+				} \
+			}
 
 	const char *cFNCN = __func__;
 	Tst_err    res    = ST_ERR_SUCC;
-	Tst_bool   cont   = ST_B_TRUE,  /* continue with loop ? */
-	           isEOF  = ST_B_FALSE,
-	           doSkip = ST_B_FALSE,
-	           doQuick;
+	Tst_bool   cont   = ST_B_TRUE;  /* continue with loop ? */
+	Tst_bool   isEOF  = ST_B_FALSE;
+	Tst_bool   doSkip = ST_B_FALSE;
+	Tst_bool   doQuick;
 	Tst_fsize  skpd   = 0;     /* amount of skipped bytes */
 	Tst_foffs  lastPos;
 	char       debMsg[512];
@@ -336,9 +339,9 @@ ast_mf_rd_readFile(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 		ast_mf_op_cb_anaMsg("STR: end of input stream");
 
 	return res;
-#	undef LOC_PRDEB_FFMT_MTP_
-#	undef LOC_PRDEB_SKPD_
-#	undef LOC_PRMULTSTR_
+	#undef LOC_PRDEB_FFMT_MTP_
+	#undef LOC_PRDEB_SKPD_
+	#undef LOC_PRMULTSTR_
 }
 
 /*----------------------------------------------------------------------------*/
@@ -385,7 +388,7 @@ static Tst_err
 AST_MF__rd_jumpTo(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tast_mf__rd_jumpState *pJState)
 {
-#	define LOC_UPDSTRRD_GETMTP_(mac_fpos, mac_seekTp, mac_getMime)  { \
+	#define LOC_UPDSTRRD_GETMTP_(mac_fpos, mac_seekTp, mac_getMime)  { \
 					st_sysFStc_setFPos(&pMF->fstc, (Tst_foffs)(mac_fpos), mac_seekTp); \
 					/* */ \
 					res = st_streamrd_setInput_file(&pMF->strrd, &pMF->fstc); \
@@ -399,12 +402,13 @@ AST_MF__rd_jumpTo(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 						res = AST_MF__rd_getNextMimeType(cFNCN, pCmdln, pMF, \
 									tbuf, sizeof(tbuf), &isEOF, &mimeTp); \
 						if (res != ST_ERR_SUCC || isEOF) { \
-							if (isEOF) \
+							if (isEOF) { \
 								res = ST_ERR_FEOF; \
+							} \
 							return res; \
 						} \
 					} \
-					}
+				}
 	const char *cFNCN = __func__;
 	Tst_err   res   = ST_ERR_SUCC;
 	Tst_bool  isEOF = ST_B_FALSE;
@@ -495,7 +499,7 @@ AST_MF__rd_jumpTo(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 				}
 			}
 			/* jump to header */
-			if (res == ST_ERR_SUCC && mimeTp != ST_UTILSFMT_MTP_NONE) {
+			if (mimeTp != ST_UTILSFMT_MTP_NONE) {
 				if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
 					ast_mf_op_d_deb(cFNCN, "jumping to APEv2 tag");
 				/* set filepos and update stream reader */
@@ -515,7 +519,7 @@ AST_MF__rd_jumpTo(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	pJState->jumped = ST_B_TRUE;
 
 	return res;
-#	undef LOC_UPDSTRRD_GETMTP_
+	#undef LOC_UPDSTRRD_GETMTP_
 }
 
 /*----------------------------------------------------------------------------*/
@@ -531,10 +535,10 @@ AST_MF__rd_readTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 {
 	const char *cFNCN = __func__;
 	Tst_err    res = ST_ERR_SUCC;
-	Tst_uint32 ecnt,
-	           ecntFlds,
-	           ecntTag,
-	           skfCnt;
+	Tst_uint32 ecnt;
+	Tst_uint32 ecntFlds;
+	Tst_uint32 ecntTag;
+	Tst_uint32 skfCnt;
 	void       *pRTag;
 	char const *pTagD;
 	char       debMsg[128];
@@ -548,24 +552,27 @@ AST_MF__rd_readTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 
 	/* add a new tag to the array */
 	pMT = st_tagMeta_addNewToArr(&pMF->tagArr, tmTagType, 1, 0);
-	if (pMT == NULL)
+	if (pMT == NULL) {
 		return ST_ERR_FAIL;
+	}
 
 	/* */
 	snprintf(debMsg, sizeof(debMsg),
 			"reading %s tag...", pTagD);
 	if (pCmdln->cmds.anlz || ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
-		char debMsg2[128];
+		char debMsg2[sizeof(debMsg) * 2];
 
 		snprintf(debMsg2, sizeof(debMsg2),
 				"%s (UID 0x%08x)",
 				debMsg, st_tagMeta_gs_getTag_uid(pMT));
-		if (pCmdln->cmds.anlz)
+		if (pCmdln->cmds.anlz) {
 			ast_mf_op_cb_anaMsg("TAG: %s", debMsg2);
-		else
+		} else {
 			ast_mf_op_d_deb(cFNCN, debMsg2);
-	} else if (pCmdln->opts.showStat)
+		}
+	} else if (pCmdln->opts.showStat) {
 		ast_mf_op_prMsg("*  %s", debMsg);
+	}
 
 	/* */
 	pRTag = st_tagMeta_gs_getRealTag_void(pMT);
@@ -614,39 +621,44 @@ AST_MF__rd_readTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	/* */
 	if (pCmdln->cmds.anlz) {
 		ast_mf_op_cb_anaMsg("TAG: end of %s tag", pTagD);
-		if (st_tagBas_gs_getHasTag(pTBas))
+		if (st_tagBas_gs_getHasTag(pTBas)) {
 			ast_mf_op_cb_anaMsg("TAG: %s present  "
 					"[o="ST_TFOFFS_PRF_LD", s=%u]", pTagD,
 					(Tst_foffs)st_tagBas_gs_getOffset(pTBas),
 					st_tagBas_gs_getSize(pTBas));
+		}
 	}
 
 	/* */
 	switch (tmTagType) {
 	case ST_MTAG_TTP_IV1:
 		if (pCmdln->cmds.anlz &&
-				st_id3v1_gs_getTag_hasErrors((Tst_id3v1_tag*)pRTag))
-			ast_mf_op_cb_anaMsg("TAG: ! %s was errorneous", pTagD);
-		else if (pCmdln->opts.showStat &&
-				st_id3v1_gs_getTag_hasErrors((Tst_id3v1_tag*)pRTag))
+				st_id3v1_gs_getTag_hasErrors((Tst_id3v1_tag*)pRTag)) {
+			ast_mf_op_cb_anaMsg("TAG: ! %s was erroneous", pTagD);
+		} else if (pCmdln->opts.showStat &&
+				st_id3v1_gs_getTag_hasErrors((Tst_id3v1_tag*)pRTag)) {
 			ast_mf_op_prMsg("(Read %s Tag contained malformed data)", pTagD);
+		}
 		pRTag = NULL;
 		break;
 	case ST_MTAG_TTP_IV2:
 		ecntTag  = st_id3v2_gs_getTag_tagErrorCount((Tst_id3v2_tag*)pRTag);
 		ecntFlds = st_id3v2_gs_getTag_fldsErrorCount((Tst_id3v2_tag*)pRTag);
 		if (pCmdln->cmds.anlz && st_tagBas_gs_getHasTag(pTBas)) {
-			if (ecntTag > 0 || ecntFlds > 0)
+			if (ecntTag > 0 || ecntFlds > 0) {
 				AST_MF__rd_printID3v2_errs(0, (Tst_id3v2_tag*)pRTag);
+			}
 			skfCnt = st_id3v2_gs_getTag_amountSkippedFields((Tst_id3v2_tag*)pRTag);
-			if (skfCnt > 0)
+			if (skfCnt > 0) {
 				ast_mf_op_cb_anaMsg("     (skipped %u field%s in %s Tag)",
 						skfCnt, (skfCnt == 1 ? "" : "s"), pTagD);
+			}
 		} else if (ecntTag > 0 || ecntFlds > 0) {
 			ecnt = ecntTag + ecntFlds;
-			if (pCmdln->opts.showStat)
+			if (pCmdln->opts.showStat) {
 				ast_mf_op_prMsg("(Read %s Tag produced %u warning%s)",
 						 pTagD, ecnt, (ecnt == 1 ? "" : "s"));
+			}
 		}
 		pRTag = NULL;
 		break;
@@ -680,11 +692,13 @@ AST_MF__rd_readTag(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	/* */
 	if (st_tagBas_gs_getHasTag(pTBas)) {
 		pMF->contTypes |= (Tst_int32)AST_MF_CTP_TAG;
-		if (pMF->ffmt == AST_MF_FFMT_NONE)
+		if (pMF->ffmt == AST_MF_FFMT_NONE) {
 			pMF->ffmt = AST_MF_FFMT_TAGF;
-	} else
+		}
+	} else {
 		st_tagMeta_removeTagFromArr_byUID(&pMF->tagArr,
 				st_tagMeta_gs_getTag_uid(pMT));
+	}
 
 	return ST_ERR_SUCC;
 }
@@ -787,57 +801,57 @@ AST_MF__rd_readAV_mpeg1(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 	Tst_uint32 ecnt;
 	char       debMsg[512];
 	Tst_bool   showErrs = ST_B_FALSE;
-#	if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
-	Tst_contWav_obj *pWavObj = NULL;
-#	endif  /* libmpg123 or libmad */
+	#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+		Tst_contWav_obj *pWavObj = NULL;
+	#endif  /* libmpg123 or libmad */
 
 	/* init external lib */
-#	if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
-	if (pCmdln->cmds.anlz || pCmdln->cmds.decAud) {
-		res = ast_mf_rddec_initExtLibMpg();
-		if (res != ST_ERR_SUCC)
-			return res;
-	}
-#	endif  /* libmpg123 or libmad */
+	#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+		if (pCmdln->cmds.anlz || pCmdln->cmds.decAud) {
+			res = ast_mf_rddec_initExtLibMpg();
+			if (res != ST_ERR_SUCC)
+				return res;
+		}
+	#endif  /* libmpg123 or libmad */
 
 	/* set up options */
 	/** pcm client */
 	if (pCmdln->cmds.decAud) {
-#		if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
-		res = AST_MF__rd_initPCMclient(pCmdln, pMF, cFNCN, &pWavObj);
-		if (res != ST_ERR_SUCC) {
-			ast_mf_rddec_freeExtLibMpg();
-			return res;
-		}
-		st_mpeg1_opts_setCB_pcmClient(&pMF->audMpg1,
-				st_contWav_wr_prepareWritingCB,
-				st_contWav_wr_setOutputFmtCB,
-				st_contWav_wr_writeRawSamplesCB,
-				st_contWav_wr_finishWritingCB,
-				pWavObj);
-#		else
-		if (! pCmdln->opts.quiet)
-			ast_mf_op_prMsg("(Can't decode MPEG-1, no libmpg123/libmad support)");
-#		endif  /* libmpg123 or libmad */
+		#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+			res = AST_MF__rd_initPCMclient(pCmdln, pMF, cFNCN, &pWavObj);
+			if (res != ST_ERR_SUCC) {
+				ast_mf_rddec_freeExtLibMpg();
+				return res;
+			}
+			st_mpeg1_opts_setCB_pcmClient(&pMF->audMpg1,
+					st_contWav_wr_prepareWritingCB,
+					st_contWav_wr_setOutputFmtCB,
+					st_contWav_wr_writeRawSamplesCB,
+					st_contWav_wr_finishWritingCB,
+					pWavObj);
+		#else
+			if (! pCmdln->opts.quiet)
+				ast_mf_op_prMsg("(Can't decode MPEG-1, no libmpg123/libmad support)");
+		#endif  /* libmpg123 or libmad */
 	} else
 		st_mpeg1_opts_setCB_pcmClient(&pMF->audMpg1,
 				NULL, NULL, NULL, NULL, NULL);
 	/** decoder */
-#	if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
-	if (pCmdln->cmds.anlz || pCmdln->cmds.decAud) {
-		st_mpeg1_opts_setCB_decoding(&pMF->audMpg1,
-				ast_mf_rddec_cbDecMpg_hndNew,
-				ast_mf_rddec_cbDecMpg_hndDel,
-				ast_mf_rddec_cbDecMpg_setOutputFmt,
-				ast_mf_rddec_cbDecMpg_openFeed,
-				ast_mf_rddec_cbDecMpg_feedInp,
-				ast_mf_rddec_cbDecMpg_decode,
-				ast_mf_rddec_cbDecMpg_closeFeed);
-	} else {
-		st_mpeg1_opts_setCB_decoding(&pMF->audMpg1,
-				NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-	}
-#	endif  /* libmpg123 or libmad */
+	#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+		if (pCmdln->cmds.anlz || pCmdln->cmds.decAud) {
+			st_mpeg1_opts_setCB_decoding(&pMF->audMpg1,
+					ast_mf_rddec_cbDecMpg_hndNew,
+					ast_mf_rddec_cbDecMpg_hndDel,
+					ast_mf_rddec_cbDecMpg_setOutputFmt,
+					ast_mf_rddec_cbDecMpg_openFeed,
+					ast_mf_rddec_cbDecMpg_feedInp,
+					ast_mf_rddec_cbDecMpg_decode,
+					ast_mf_rddec_cbDecMpg_closeFeed);
+		} else {
+			st_mpeg1_opts_setCB_decoding(&pMF->audMpg1,
+					NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+		}
+	#endif  /* libmpg123 or libmad */
 	/** */
 	if (pCmdln->optsAvMisc.mpeg1_forceMLay == ST_MPEG1_LAYER_NONE) {
 		/* force layer based upon fileextension,
@@ -862,14 +876,14 @@ AST_MF__rd_readAV_mpeg1(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 		showErrs = ST_B_TRUE;
 
 	/* end pcm client and decoding */
-#	if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
-	if (pWavObj != NULL)
-		AST_MF__rd_endPCMclient(pCmdln, pMF, cFNCN, &pWavObj);
+	#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+		if (pWavObj != NULL)
+			AST_MF__rd_endPCMclient(pCmdln, pMF, cFNCN, &pWavObj);
 
-	/* free external lib */
-	if (pCmdln->cmds.anlz || pCmdln->cmds.decAud)
-		ast_mf_rddec_freeExtLibMpg();
-#	endif  /* libmpg123 or libmad */
+		/* free external lib */
+		if (pCmdln->cmds.anlz || pCmdln->cmds.decAud)
+			ast_mf_rddec_freeExtLibMpg();
+	#endif  /* libmpg123 or libmad */
 
 	/* */
 	ecnt = st_mpeg1_gs_getStr_amountWarnings(&pMF->audMpg1);
@@ -908,38 +922,41 @@ AST_MF__rd_readAV_oggOrFlac(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	/** pcm client */
 	if (pCmdln->cmds.decAud) {
 		res = AST_MF__rd_initPCMclient(pCmdln, pMF, cFNCN, &pWavObj);
-		if (res != ST_ERR_SUCC)
+		if (res != ST_ERR_SUCC) {
 			return res;
+		}
 		st_contOgg_opts_setCB_pcmClient(&pMF->avOgg,
 				st_contWav_wr_prepareWritingCB,
 				st_contWav_wr_setOutputFmtCB,
 				st_contWav_wr_writeRawSamplesCB,
 				st_contWav_wr_finishWritingCB,
 				pWavObj);
-	} else
+	} else {
 		st_contOgg_opts_setCB_pcmClient(&pMF->avOgg,
 				NULL, NULL, NULL, NULL, NULL);
+	}
 	/** decoder */
 	if (ufmtStrType == ST_UTILSFMT_MTP_AUDVIDOGG) {
 		if (pCmdln->cmds.anlz || pCmdln->cmds.decAud) {
-#			if (HAVE_LIBVORBIS == 1)
-			st_contOgg_opts_setCB_vorbDecoding(&pMF->avOgg,
-					ast_mf_rddec_cbDecVorb_hndNew,
-					ast_mf_rddec_cbDecVorb_hndDel,
-					ast_mf_rddec_cbDecVorb_setOutputFmt,
-					ast_mf_rddec_cbDecVorb_openFeed,
-					ast_mf_rddec_cbDecVorb_feedHeader,
-					ast_mf_rddec_cbDecVorb_feedAudioAndDecode,
-					ast_mf_rddec_cbDecVorb_closeFeed);
-#			else
-			if (! pCmdln->opts.quiet)
-				ast_mf_op_prMsg("(Can't decode Ogg-Vorbis, no libvorbis support)");
-#			endif  /* libvorbis */
+			#if (HAVE_LIBVORBIS == 1)
+				st_contOgg_opts_setCB_vorbDecoding(&pMF->avOgg,
+						ast_mf_rddec_cbDecVorb_hndNew,
+						ast_mf_rddec_cbDecVorb_hndDel,
+						ast_mf_rddec_cbDecVorb_setOutputFmt,
+						ast_mf_rddec_cbDecVorb_openFeed,
+						ast_mf_rddec_cbDecVorb_feedHeader,
+						ast_mf_rddec_cbDecVorb_feedAudioAndDecode,
+						ast_mf_rddec_cbDecVorb_closeFeed);
+			#else
+				if (! pCmdln->opts.quiet) {
+					ast_mf_op_prMsg("(Can't decode Ogg-Vorbis, no libvorbis support)");
+				}
+			#endif  /* libvorbis */
 		} else {
-#			if (HAVE_LIBVORBIS == 1)
-			st_contOgg_opts_setCB_vorbDecoding(&pMF->avOgg,
-					NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-#			endif  /* libvorbis */
+			#if (HAVE_LIBVORBIS == 1)
+				st_contOgg_opts_setCB_vorbDecoding(&pMF->avOgg,
+						NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+			#endif  /* libvorbis */
 		}
 	}
 	/** */
@@ -956,23 +973,25 @@ AST_MF__rd_readAV_oggOrFlac(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	/* read stream(s) */
 	if (ufmtStrType == ST_UTILSFMT_MTP_AUDFLAC) {
 		res = st_contOgg_readFlacStream(&pMF->avOgg);
-		if (res != ST_ERR_SUCC)
+		if (res != ST_ERR_SUCC) {
 			ast_mf_op_d_mfErr(pMF, cFNCN,
 					"reading Flac stream failed");
-		else {
+		} else {
 			showErrs = ST_B_TRUE;
-			if (st_contOgg_gs_getHasFlacStream(&pMF->avOgg))
+			if (st_contOgg_gs_getHasFlacStream(&pMF->avOgg)) {
 				pMF->ffmt = AST_MF_FFMT_FLAC;
+			}
 		}
 	} else if (ufmtStrType == ST_UTILSFMT_MTP_AUDVIDOGG) {
 		res = st_contOgg_readStreams(&pMF->avOgg);
-		if (res != ST_ERR_SUCC)
+		if (res != ST_ERR_SUCC) {
 			ast_mf_op_d_mfErr(pMF, cFNCN,
 					"reading Ogg stream failed");
-		else {
+		} else {
 			showErrs = ST_B_TRUE;
-			if (st_contOgg_gs_getHasOggStream(&pMF->avOgg))
+			if (st_contOgg_gs_getHasOggStream(&pMF->avOgg)) {
 				pMF->ffmt = AST_MF_FFMT_OGG;
+			}
 		}
 	}
 
@@ -987,10 +1006,11 @@ AST_MF__rd_readAV_oggOrFlac(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 				"(Read %s stream produced %u warning%s)",
 				(ufmtStrType == ST_UTILSFMT_MTP_AUDFLAC ? "Flac" : "OGG"),
 				ecnt, (ecnt == 1 ? "" : "s"));
-		if (pCmdln->cmds.anlz)
+		if (pCmdln->cmds.anlz) {
 			ast_mf_op_cb_anaMsg("AUD: %s", debMsg);
-		else if (pCmdln->opts.showStat)
+		} else if (pCmdln->opts.showStat) {
 			ast_mf_op_prMsg(debMsg);
+		}
 	}
 
 	return res;
@@ -1006,9 +1026,9 @@ AST_MF__rd_readAV_addVorbc(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 {
 	const char *cFNCN = __func__;
 	Tst_err     res;
-	Tst_uint32  grpIx  = 0,
-	            grpSIx = 0,
-	            skfCnt = 0;
+	Tst_uint32  grpIx  = 0;
+	Tst_uint32  grpSIx = 0;
+	Tst_uint32  skfCnt = 0;
 	char const  *pTagD;
 	Tst_binobj                       *pBinDatRT;
 	Tst_tagMeta_mt                   *pMT;
@@ -1115,8 +1135,8 @@ AST_MF__rd_endPCMclient(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	Tst_fsize     fsz      = 0;
 	Tst_bool      isTooBig = ST_B_FALSE;
 	Tst_str const *pFilen  = NULL;
-	Tst_uint32    bsIx     = 0,
-	              bsSIx    = 0;
+	Tst_uint32    bsIx     = 0;
+	Tst_uint32    bsSIx    = 0;
 	Tst_uint64    wrSamps;
 	Tst_contWav_handle *pElem = NULL;
 
@@ -1182,24 +1202,24 @@ AST_MF__rd_cbPCMnewOutpStr(const Tst_uint32 bsIx, const Tst_uint32 bsSIx,
 static void
 AST_MF__rd_printID3v2_errs(const int mode, Tst_id3v2_tag *pV2tag)
 {
-#	define LOC_PRERR1_(str)  {ast_mf_op_cb_anaMsg("       - %s", str);}
-#	define LOC_PRERR2_(str)  { \
+	#define LOC_PRERR1_(str)  {ast_mf_op_cb_anaMsg("       - %s", str);}
+	#define LOC_PRERR2_(str)  { \
 				ast_mf_op_cb_anaMsg("       - %s #%02u: %s", \
 						pFIDstr, fnr, str);}
-#	define LOC_PRERR3_(str)  { \
+	#define LOC_PRERR3_(str)  { \
 				ast_mf_op_cb_anaMsg("         %s #%02u: %s", \
 						pFIDstr, fnr, str);}
-#	define LOC_IF_INCCNT1_H_(val)  (terrs.th##val && ++cntT[1])
-#	define LOC_IF_INCCNT1_B_(val)  (terrs.tb##val && ++cntT[1])
-#	define LOC_IF_INCCNT2_F_(val) \
+	#define LOC_IF_INCCNT1_H_(val)  (terrs.th##val && ++cntT[1])
+	#define LOC_IF_INCCNT1_B_(val)  (terrs.tb##val && ++cntT[1])
+	#define LOC_IF_INCCNT2_F_(val) \
 				(ferrs.fr##val && ++cntF[1] && ++cntF[2])
 	Tst_err       res;
-	Tst_uint32    cntA     = 0,             /* all */
-	              cntT[]   = {0, 0},        /* in header/body */
-	              cntF[]   = {0, 0, 0, 0},  /* fields */
-	              fnr      = 0;
+	Tst_uint32    cntA     = 0;             /* all */
+	Tst_uint32    cntT[]   = {0, 0};        /* in header/body */
+	Tst_uint32    cntF[]   = {0, 0, 0, 0};  /* fields */
+	Tst_uint32    fnr      = 0;
 	int           delta;
-	const Tst_str *pFIDstr = NULL;
+	const Tst_str *pFIDstr    = NULL;
 	Tst_id3v2_fldData *pItFld = NULL;
 	Tst_id3v2_fldProp fldPr;
 	Tst_id3v2_fldErrs ferrs;
@@ -1215,7 +1235,7 @@ AST_MF__rd_printID3v2_errs(const int mode, Tst_id3v2_tag *pV2tag)
 	/* total amount of errs in all frames */
 	cntF[0] = st_id3v2_gs_getTag_fldsErrorCount(pV2tag);
 	cntA    = cntT[0] + cntF[0];
-	ast_mf_op_cb_anaMsg("TAG: ! ID3v2 was errorneous (%u warning%s)",
+	ast_mf_op_cb_anaMsg("TAG: ! ID3v2 was erroneous (%u warning%s)",
 			cntA, (cntA == 1 ? "" : "s"));
 
 	/* */
@@ -1321,12 +1341,12 @@ AST_MF__rd_printID3v2_errs(const int mode, Tst_id3v2_tag *pV2tag)
 		ast_mf_op_cb_anaMsg("       - %+d unknown warning%s",
 				delta, (delta == 1 || delta == -1 ? "" : "s"));
 	}
-#	undef LOC_PRERR1_
-#	undef LOC_PRERR2_
-#	undef LOC_PRERR3_
-#	undef LOC_IF_INCCNT1_H_
-#	undef LOC_IF_INCCNT1_B_
-#	undef LOC_IF_INCCNT2_F_
+	#undef LOC_PRERR1_
+	#undef LOC_PRERR2_
+	#undef LOC_PRERR3_
+	#undef LOC_IF_INCCNT1_H_
+	#undef LOC_IF_INCCNT1_B_
+	#undef LOC_IF_INCCNT2_F_
 }
 
 /******************************************************************************/

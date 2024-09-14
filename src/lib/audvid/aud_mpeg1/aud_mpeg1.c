@@ -237,7 +237,7 @@ st_mpeg1_readStream(Tst_mpeg1_obj *pMO)
 		/* calc total amount of audio bytes and frames
 		 *   and output some analyzing info  */
 		ST_MPEG1__calcAudioSizeEtc(pMOI);
-		/* output amount of errorneous frame offsets */
+		/* output amount of erroneous frame offsets */
 		if (pMOI->frames.errAtWrongOffsCnt > 0 &&
 				ST_AVFDEB_ISVERBAUD_OR_ANA_D(pMOI->opts)) {
 			st_mpeg1_d_debOrAna(&pMOI->opts, ST_B_TRUE, cFNCN,

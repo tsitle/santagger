@@ -597,7 +597,7 @@ ST_BASE64__pton(Tst_str const *src, Tst_base64__outBuf *pOB)
 
 	/*
 	 * We are done decoding Base-64 chars.  Let's see if we ended
-	 * on a byte boundary, and/or with errorneous trailing characters.
+	 * on a byte boundary, and/or with erroneous trailing characters.
 	 */
 
 	if (ch == ST_BASE64_PAD_CHAR) {		/* We got a pad char. */

@@ -19,7 +19,7 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 /** */
 #include "src/includes/common/binobj.h"
@@ -324,8 +324,8 @@ ST_CONTOGG__flacrdh_parsePict(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsH *pDPh, const Tst_uint32 mdSz)
 {
 	Tst_err    res;
-	Tst_binobj boIn,
-	           boOut;
+	Tst_binobj boIn;
+	Tst_binobj boOut;
 
 	if (st_streamrd_getAmountRemainingBitsInCurByte(pDPh->pSObj) != 8)
 		return ST_ERR_IDAT;
@@ -367,23 +367,23 @@ static Tst_err
 ST_CONTOGG__flacrdh_parseApp(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsH *pDPh, Tst_uint32 mdSz)
 {
-#	define LOC_FNCN_  __func__
-#	if (WORDS_BIGENDIAN != 1)
-#		define LOC_APPUI32_CVEND_(mac_ui32)  \
+	#define LOC_FNCN_  __func__
+	#if (WORDS_BIGENDIAN != 1)
+		#define LOC_APPUI32_CVEND_(mac_ui32)  \
 					mac_ui32 = st_sysReverseByteOrder_UI32(mac_ui32);  /* ENDIAN: LE-->BE */
-#	else
-#		define LOC_APPUI32_CVEND_(mac_ui32)  /* empty */
-#	endif
-#	define LOC_APPUI32_(mac_ui32Val)  { \
+	#else
+		#define LOC_APPUI32_CVEND_(mac_ui32)  /* empty */
+	#endif
+	#define LOC_APPUI32_(mac_ui32Val)  { \
 				ui32 = (Tst_uint32)(mac_ui32Val); \
 				LOC_APPUI32_CVEND_(ui32) \
 				res = st_binobj_appendData(&binDatRaw, \
 						(const Tst_buf*)&ui32, 4); \
-				}
+			}
 	Tst_err    res;
-	Tst_str    aid[5]   = {0, 0, 0, 0, 0},
-	           *pRdFn   = NULL;
-	Tst_uint32 rdBytes  = 0;
+	Tst_str    aid[5]  = {0, 0, 0, 0, 0};
+	Tst_str    *pRdFn  = NULL;
+	Tst_uint32 rdBytes = 0;
 	Tst_bool   isPic;
 	Tst_utilsFmt_mimeTp picMimTp = ST_UTILSFMT_MTP_NONE;
 
@@ -548,9 +548,9 @@ ST_CONTOGG__flacrdh_parseApp(const Tst_contOgg_opts *pOpts,
 
 	ST_DELPOINT(pRdFn)
 	return res;
-#	undef LOC_FNCN_
-#	undef LOC_APPUI32_CVEND_
-#	undef LOC_APPUI32_
+	#undef LOC_FNCN_
+	#undef LOC_APPUI32_CVEND_
+	#undef LOC_APPUI32_
 }
 
 /*----------------------------------------------------------------------------*/
@@ -615,78 +615,126 @@ static Tst_err
 ST_CONTOGG__flacrdh_parseCue(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsH *pDPh, const Tst_uint32 mdSz)
 {
-#	define LOC_DEBMSGSZ_  4096
+	#define LOC_DEBMSGSZ_TMP_  256
 	const char *cFNCN = __func__;
 	Tst_err    res;
 	Tst_str    medCatNr[128 + 1];
 	Tst_bool   isCDDA;
-	Tst_byte   trkCnt  = 0,
-	           x       = 0;
+	Tst_byte   trkCnt   = 0;
+	Tst_byte   x        = 0;
 	Tst_uint64 ui64;
-	Tst_uint32 rdBytes = 0;
+	Tst_uint32 rdBytes  = 0;
 	Tst_str    decUI[50];
-	char       debMsg1[LOC_DEBMSGSZ_],
-	           debMsg2[LOC_DEBMSGSZ_];
+	Tst_str    debMsgTmp[LOC_DEBMSGSZ_TMP_];
+	Tst_str    *pDebMsgOut = NULL;
 
-	if (st_streamrd_getAmountRemainingBitsInCurByte(pDPh->pSObj) != 8)
+	if (st_streamrd_getAmountRemainingBitsInCurByte(pDPh->pSObj) != 8) {
 		return ST_ERR_IDAT;
+	}
+
+	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+		ST_CALLOC(pDebMsgOut, Tst_str*, LOC_DEBMSGSZ_TMP_, 1);
+		if (pDebMsgOut == NULL) {
+			return ST_ERR_OMEM;
+		}
+		pDebMsgOut[0] = 0x00;
+	}
 
 	/** MEDIA CATALOG NUMBER, 128*8 bits */
 	res = st_streamrd_rdBuffer(pDPh->pSObj, 128, medCatNr, &rdBytes);
 	if (res != ST_ERR_SUCC || rdBytes != 128) {
-		if (res == ST_ERR_SUCC)
+		if (res == ST_ERR_SUCC) {
 			res = ST_ERR_IDAT;
+		}
+		ST_DELPOINT(pDebMsgOut);
 		return res;
 	}
-	medCatNr[128] = 0;
-	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts))
-		snprintf(debMsg1, LOC_DEBMSGSZ_, "CUE media catalog number='%s'",
+	medCatNr[sizeof(medCatNr) - 1] = 0;
+	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+		snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "CUE media catalog number='%s'",
 				medCatNr);
+		//
+		res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
+			return res;
+		}
+	}
 
 	/** NUMBER OF LEAD-IN SAMPLES, 64 bits */
 	ST_SYSMATH_STC_RSETUI64(ui64)
 	res = st_streamrd_rdUInt64(pDPh->pSObj,
 			ST_STREAMRD_IEND_BE, 64, &ui64);  /* ENDIAN: BE-->HOST */
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
+		ST_DELPOINT(pDebMsgOut);
 		return res;
+	}
 	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
 		st_sysUInt64_toDecStr(&ui64, decUI, sizeof(decUI));
-		snprintf(debMsg2, LOC_DEBMSGSZ_, "%s\n\t\tCUE lead-in samples=%s",
-				debMsg1, decUI);
+		snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "\n\t\tCUE lead-in samples=%s",
+				decUI);
+		//
+		res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
+			return res;
+		}
 	}
 
 	/** does CUESHEET correspond to a Compact Disc ?, 1 bits */
 	res = st_streamrd_rdByte(pDPh->pSObj, 1, &x);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
+		ST_DELPOINT(pDebMsgOut);
 		return res;
+	}
 	isCDDA = (x == 1);
-	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts))
-		snprintf(debMsg1, LOC_DEBMSGSZ_, "%s\n\t\tCUE is CompactDisc=%s",
-				debMsg2, (isCDDA ? "yes" : "no"));
+	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+		snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "\n\t\tCUE is CompactDisc=%s",
+				isCDDA ? "yes" : "no");
+		//
+		res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
+			return res;
+		}
+	}
 
 	/** RESERVED, 7+258*8 bits */
 	st_streamrd_rdSkipBits(pDPh->pSObj, 7 + 258 * 8, ST_B_TRUE);
 
 	/** TRACKCOUNT, 8 bits */
 	res = st_streamrd_rdByte(pDPh->pSObj, 8, &trkCnt);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
+		ST_DELPOINT(pDebMsgOut);
 		return res;
+	}
 	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
-		snprintf(debMsg2, LOC_DEBMSGSZ_, "%s\n\t\tCUE track count=%u",
-				debMsg1, trkCnt);
+		snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "\n\t\tCUE track count=%u",
+				trkCnt);
+		//
+		res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
+			return res;
+		}
+		//
 		st_contOgg_d_debBS3(pOpts, pDPh->pBSI, cFNCN,
-				"\n\t\t%s", debMsg2);
+				"\n\t\t%s", pDebMsgOut);
 	}
 
 	/** CUESHEET_TRACKs */
 	for (x = 0; x < trkCnt; x++) {
 		res = ST_CONTOGG__flacrdh_parseCue_track(pOpts, pDPh, x, isCDDA);
-		if (res != ST_ERR_SUCC)
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
 			return res;
+		}
 	}
 
+	ST_DELPOINT(pDebMsgOut);
+
 	return ST_ERR_SUCC;
-#	undef LOC_DEBMSGSZ_
+	#undef LOC_DEBMSGSZ_TMP_
 }
 
 /*
@@ -697,128 +745,218 @@ ST_CONTOGG__flacrdh_parseCue_track(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsH *pDPh,
 		const Tst_byte curTrkNr, const Tst_bool isCDDA)
 {
-#	define LOC_DEBMSGSZ_  4096
+	#define LOC_DEBMSGSZ_TMP_  256
 	const char *cFNCN = __func__;
 	Tst_err    res;
-	Tst_byte   trkNr    = 0,
-	           trkIxCnt = 0,
-	           trkTp    = 0,
-	           trkEmph  = 0,
-	           ixPnt    = 0,
-	           x        = 0;
+	Tst_byte   trkNr    = 0;
+	Tst_byte   trkIxCnt = 0;
+	Tst_byte   trkTp    = 0;
+	Tst_byte   trkEmph  = 0;
+	Tst_byte   ixPnt    = 0;
+	Tst_byte   x        = 0;
 	Tst_uint64 ui64;
 	Tst_uint32 rdBytes  = 0;
 	Tst_str    decUI[50];
-	char       trkISRC[20],
-	           debMsg1[LOC_DEBMSGSZ_],
-	           debMsg2[LOC_DEBMSGSZ_];
+	char       trkISRC[20];
+	Tst_str    debMsgTmp[LOC_DEBMSGSZ_TMP_];
+	Tst_str    *pDebMsgOut = NULL;
+
+	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+		ST_CALLOC(pDebMsgOut, Tst_str*, LOC_DEBMSGSZ_TMP_, 1);
+		if (pDebMsgOut == NULL) {
+			return ST_ERR_OMEM;
+		}
+		pDebMsgOut[0] = 0x00;
+	}
 
 	/** TRACK OFFSET in samples, 8*8 bits */
 	ST_SYSMATH_STC_RSETUI64(ui64)
 	res = st_streamrd_rdUInt64(pDPh->pSObj,
 			ST_STREAMRD_IEND_BE, 64, &ui64);  /* ENDIAN: BE-->HOST */
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
+		ST_DELPOINT(pDebMsgOut);
 		return res;
+	}
 	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
 		decUI[0] = 0;
 		st_sysUInt64_toDecStr(&ui64, decUI, sizeof(decUI));
-		snprintf(debMsg2, LOC_DEBMSGSZ_, "CUE track[%u]\n\t\t\toffset=%s",
+		snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "CUE track[%u]\n\t\t\toffset=%s",
 				curTrkNr, decUI);
+		//
+		res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
+			return res;
+		}
 	}
 
 	/** TRACK NUMBER, 8 bits */
 	res = st_streamrd_rdByte(pDPh->pSObj, 8, &trkNr);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
+		ST_DELPOINT(pDebMsgOut);
 		return res;
-	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts))
-		snprintf(debMsg1, LOC_DEBMSGSZ_, "%s\n\t\t\ttrack nr=%u%s",
-				debMsg2, trkNr,
+	}
+	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+		snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "\n\t\t\ttrack nr=%u%s",
+				trkNr,
 				(trkNr == 170 || trkNr == 255 ? " (LEAD_OUT)" : ""));
+		//
+		res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
+			return res;
+		}
+	}
 
 	/** TRACK ISRC, 12*8 bits */
 	res = st_streamrd_rdBuffer(pDPh->pSObj, 12, (Tst_buf*)trkISRC, &rdBytes);
 	if (res != ST_ERR_SUCC || rdBytes != 12) {
-		if (res == ST_ERR_SUCC)
+		if (res == ST_ERR_SUCC) {
 			res = ST_ERR_IDAT;
+		}
+		ST_DELPOINT(pDebMsgOut);
 		return res;
 	}
 	trkISRC[12] = 0;
-	if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts))
-		snprintf(debMsg2, LOC_DEBMSGSZ_, "%s\n\t\t\ttrack ISRC='%s'",
-				debMsg1, trkISRC);
+	if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+		snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "\n\t\t\ttrack ISRC='%s'",
+				trkISRC);
+		//
+		res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
+			return res;
+		}
+	}
 
 	/** TRACK TYPE and PRE-EMPHASIS FLAG, 2 bits */
 	st_streamrd_rdByte(pDPh->pSObj, 1, &trkTp);
 	res = st_streamrd_rdByte(pDPh->pSObj, 1, &trkEmph);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
+		ST_DELPOINT(pDebMsgOut);
 		return res;
-	if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts))
-		snprintf(debMsg1, LOC_DEBMSGSZ_,
-				"%s\n\t\t\ttrack type=%saudio, pre-emphasis=%s", debMsg2,
+	}
+	if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+		snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_,
+				"\n\t\t\ttrack type=%saudio, pre-emphasis=%s",
 				(trkTp == 0 ? "" : "non-"), (trkEmph == 0 ? "no" : "yes"));
+		//
+		res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
+			return res;
+		}
+	}
 
 	/** RESERVED, 6+13*8 bits */
 	st_streamrd_rdSkipBits(pDPh->pSObj, 6 + 13 * 8, ST_B_TRUE);
 
 	/** NUMBER OF TRACK INDEX POINTS, 8 bits */
 	res = st_streamrd_rdByte(pDPh->pSObj, 8, &trkIxCnt);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
+		ST_DELPOINT(pDebMsgOut);
 		return res;
+	}
 
 	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
-		if (trkNr < 170)
-			snprintf(debMsg2, LOC_DEBMSGSZ_, "%s\n\t\t\ttrack index points=%u",
-					debMsg1, trkIxCnt);
-		else
-			snprintf(debMsg2, LOC_DEBMSGSZ_, "%s", debMsg1);
+		if (trkNr < 170) {
+			snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "\n\t\t\ttrack index points=%u",
+					trkIxCnt);
+			//
+			res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+			if (res != ST_ERR_SUCC) {
+				ST_DELPOINT(pDebMsgOut);
+				return res;
+			}
+		}
 		st_contOgg_d_debBS3(pOpts, pDPh->pBSI, cFNCN,
-				"\n\t\t%s", debMsg2);
+				"\n\t\t%s", pDebMsgOut);
+	}
+
+	// start a new debug output string
+	if (ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+		pDebMsgOut[0] = 0x00;
 	}
 
 	/** CUESHEET_TRACK_INDEX */
-	if (trkNr < 170 && trkIxCnt > 0 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts))
-		sprintf(debMsg2, "\n\t\t\t");
+	if (trkNr < 170 && trkIxCnt > 0 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+		snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "\n\t\t\t");
+	}
 
 	for (x = 0; x < trkIxCnt; x++) {
-		if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts))
-			snprintf(debMsg1, LOC_DEBMSGSZ_, "%sCUE track index[%u]",
-					debMsg2, x);
+		if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+			snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "CUE track index[%u]",
+					x);
+			//
+			res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+			if (res != ST_ERR_SUCC) {
+				ST_DELPOINT(pDebMsgOut);
+				return res;
+			}
+		}
 
 		/** OFFSET in samples, relative to the track offset,
 		 **   of the index point, 8*8 bits */
 		ST_SYSMATH_STC_RSETUI64(ui64)
 		res = st_streamrd_rdUInt64(pDPh->pSObj,
 				ST_STREAMRD_IEND_BE, 64, &ui64);  /* ENDIAN: BE-->HOST */
-		if (res != ST_ERR_SUCC)
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
 			return res;
+		}
 		if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
 			st_sysUInt64_toDecStr(&ui64, decUI, sizeof(decUI));
-			snprintf(debMsg2, LOC_DEBMSGSZ_, "%s\n\t\t\t\toffset=%s",
-					debMsg1, decUI);
+			snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "\n\t\t\t\toffset=%s",
+					decUI);
+			//
+			res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+			if (res != ST_ERR_SUCC) {
+				ST_DELPOINT(pDebMsgOut);
+				return res;
+			}
 		}
 
 		/** INDEX POINT NUMBER, 8 bits */
 		res = st_streamrd_rdByte(pDPh->pSObj, 8, &ixPnt);
-		if (res != ST_ERR_SUCC)
+		if (res != ST_ERR_SUCC) {
+			ST_DELPOINT(pDebMsgOut);
 			return res;
-		if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts))
-			snprintf(debMsg1, LOC_DEBMSGSZ_, "%s\n\t\t\t\tnumber=%u",
-					debMsg2, ixPnt);
+		}
+		if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+			snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "\n\t\t\t\tnumber=%u",
+					ixPnt);
+			//
+			res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+			if (res != ST_ERR_SUCC) {
+				ST_DELPOINT(pDebMsgOut);
+				return res;
+			}
+		}
 
 		/** RESERVED, 3*8 bits */
 		st_streamrd_rdSkipBytes(pDPh->pSObj, 3, ST_B_TRUE);
 
-		if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts))
-			snprintf(debMsg2, LOC_DEBMSGSZ_, "%s%s",
-					debMsg1, (x + 1 < trkIxCnt ? "\n\t\t\t" : ""));
+		if (trkNr < 170 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
+			snprintf((char*)debMsgTmp, LOC_DEBMSGSZ_TMP_, "%s",
+					x + 1 < trkIxCnt ? "\n\t\t\t" : "");
+			//
+			res = st_sysStrapp(debMsgTmp, &pDebMsgOut);
+			if (res != ST_ERR_SUCC) {
+				ST_DELPOINT(pDebMsgOut);
+				return res;
+			}
+		}
 	}
 
-	if (trkNr < 170 && trkIxCnt > 0 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts))
+	if (trkNr < 170 && trkIxCnt > 0 && ST_AVFDEB_ISVERBAUDDET_BD(pOpts->basOpts)) {
 		st_contOgg_d_debBS3(pOpts, pDPh->pBSI, cFNCN,
-				debMsg2);
+				(char*)pDebMsgOut);
+	}
+
+	ST_DELPOINT(pDebMsgOut);
 
 	return ST_ERR_SUCC;
-#	undef LOC_DEBMSGSZ_
+	#undef LOC_DEBMSGSZ_TMP_
 }
 
 /******************************************************************************/

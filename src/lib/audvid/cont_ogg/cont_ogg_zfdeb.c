@@ -19,7 +19,7 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 /** */
 #include "src/includes/common/sys_math.h"
@@ -34,37 +34,45 @@
 // System-Includes
 */
 #if (ST_CONTOGG_DEB_ == 1)
-#	include <stdarg.h>      /* va_list, ... */
+	#include <stdarg.h>      /* va_list, ... */
 #endif
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
 static void
-ST_CONTOGG__d_debOrAna(const Tst_contOgg_opts *pOpts,
-                       const Tst_bool isSrcOggOrFlac,
-                       const Tst_bool isNormOrWarn,
-                       const char *pFnc,
-                       const char *pFmt, va_list *pArgs);
+ST_CONTOGG__d_debOrAna(
+		const Tst_contOgg_opts *pOpts,
+		const Tst_bool isSrcOggOrFlac,
+		const Tst_bool isNormOrWarn,
+		const char *pFnc,
+		const char *pFmt, va_list *pArgs
+	);
 static void
-ST_CONTOGG__d_debOrAnaBS1(const Tst_contOgg_opts *pOpts,
-                          const Tst_contOgg_substr_intn *pBSI,
-                          const Tst_bool isNormOrWarn,
-                          const char *pFnc,
-                          const char *pFmt, va_list *pArgs);
+ST_CONTOGG__d_debOrAnaBS1(
+		const Tst_contOgg_opts *pOpts,
+		const Tst_contOgg_substr_intn *pBSI,
+		const Tst_bool isNormOrWarn,
+		const char *pFnc,
+		const char *pFmt, va_list *pArgs
+	);
 static void
-ST_CONTOGG__d_debOrAnaBS2(const Tst_contOgg_opts *pOpts,
-                          const Tst_contOgg_substr_intn *pBSI,
-                          const Tst_contOgg_fhd *pFHd,
-                          const Tst_bool isNormOrWarn,
-                          const char *pFnc,
-                          const char *pFmt, va_list *pArgs);
+ST_CONTOGG__d_debOrAnaBS2(
+		const Tst_contOgg_opts *pOpts,
+		const Tst_contOgg_substr_intn *pBSI,
+		const Tst_contOgg_fhd *pFHd,
+		const Tst_bool isNormOrWarn,
+		const char *pFnc,
+		const char *pFmt, va_list *pArgs
+	);
 static void
-ST_CONTOGG__d_debOrAnaBS3(const Tst_contOgg_opts *pOpts,
-                          const Tst_contOgg_substr_intn *pBSI,
-                          const Tst_bool isNormOrWarn,
-                          const char *pFnc,
-                          const char *pFmt, va_list *pArgs);
+ST_CONTOGG__d_debOrAnaBS3(
+		const Tst_contOgg_opts *pOpts,
+		const Tst_contOgg_substr_intn *pBSI,
+		const Tst_bool isNormOrWarn,
+		const char *pFnc,
+		const char *pFmt, va_list *pArgs
+	);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -90,8 +98,8 @@ st_contOgg_d_debBS1(const Tst_contOgg_opts *pOpts,
 		const char *pFnc, const char *pFmt, ...)
 {
 	va_list args;
-	char    msg1[ST_DEBMSG_MAXSZ],
-	        msg2[ST_DEBMSG_MAXSZ];
+	char    msg1[ST_DEBMSG_MAXSZ * 2];
+	char    msg2[ST_DEBMSG_MAXSZ];
 
 	ST_ASSERTN_VOID(pOpts == NULL ||
 			! ST_AVFDEB_HASCBS_DEB_BD(pOpts->basOpts) ||
@@ -112,8 +120,8 @@ st_contOgg_d_debBS2(const Tst_contOgg_opts *pOpts,
 		const char *pFnc, const char *pFmt, ...)
 {
 	va_list args;
-	char    msg1[4096 * 2],
-	        msg2[2048 * 2];
+	char    msg1[4096 * 2];
+	char    msg2[2048 * 2];
 
 	ST_ASSERTN_VOID(pOpts == NULL ||
 			! ST_AVFDEB_HASCBS_DEB_BD(pOpts->basOpts) ||
@@ -133,8 +141,8 @@ st_contOgg_d_debBS3(const Tst_contOgg_opts *pOpts,
 		const char *pFnc, const char *pFmt, ...)
 {
 	va_list args;
-	char    msg1[4096 * 2],
-	        msg2[2048 * 2];
+	char    msg1[4096 * 2];
+	char    msg2[2048 * 2];
 
 	ST_ASSERTN_VOID(pOpts == NULL ||
 			! ST_AVFDEB_HASCBS_DEB_BD(pOpts->basOpts) ||
@@ -155,8 +163,8 @@ st_contOgg_d_debBS3d(const Tst_contOgg_opts *pOpts,
 		const char *pFnc, const char *pFmt, ...)
 {
 	va_list    args;
-	char       msg1[4096 * 2],
-	           msg2[2048 * 2];
+	char       msg1[4096 * 2];
+	char       msg2[2048 * 2];
 	Tst_uint32 frames;
 
 	ST_ASSERTN_VOID(pOpts == NULL ||
@@ -188,8 +196,8 @@ st_contOgg_d_debBS3d_flacSF(const Tst_contOgg_opts *pOpts,
 		const char *pFnc, const char *pFmt, ...)
 {
 	va_list args;
-	char    msg1[4096 * 2],
-	        msg2[2048 * 2];
+	char    msg1[4096 * 2];
+	char    msg2[2048 * 2];
 
 	ST_ASSERTN_VOID(pOpts == NULL ||
 			! ST_AVFDEB_HASCBS_DEB_BD(pOpts->basOpts))
@@ -213,8 +221,8 @@ st_contOgg_d_debBS4(const Tst_contOgg_opts *pOpts,
 		const char *pFnc, const char *pFmt, ...)
 {
 	va_list args;
-	char    msg1[4096 * 2],
-	        msg2[2048 * 2];
+	char    msg1[4096 * 2];
+	char    msg2[2048 * 2];
 
 	ST_ASSERTN_VOID(pOpts == NULL ||
 			! ST_AVFDEB_HASCBS_DEB_BD(pOpts->basOpts) ||
@@ -251,8 +259,8 @@ st_contOgg_d_errBS2(const Tst_contOgg_opts *pOpts,
 		const Tst_str *pFn, const char *pFmt, ...)
 {
 	va_list args;
-	char    msg1[4096 * 2],
-	        msg2[2048 * 2];
+	char    msg1[4096 * 2];
+	char    msg2[2048 * 2];
 
 	ST_ASSERTN_VOID(pOpts == NULL ||
 			! ST_AVFDEB_HASCBS_ERR_BD(pOpts->basOpts) ||
@@ -399,8 +407,8 @@ ST_CONTOGG__d_debOrAna(const Tst_contOgg_opts *pOpts,
 		const Tst_bool isNormOrWarn, const char *pFnc,
 		const char *pFmt, va_list *pArgs)
 {
-	char msg1[4096 * 2],
-	     msg2[2048 * 2];
+	char msg1[4096 * 2];
+	char msg2[2048 * 2];
 
 	vsnprintf(msg2, sizeof(msg2), pFmt, *pArgs);
 	if (pOpts->anlz && ST_AVFDEB_HASCB_ANAL_P(pOpts)) {
@@ -421,8 +429,8 @@ ST_CONTOGG__d_debOrAnaBS1(const Tst_contOgg_opts *pOpts,
 		const Tst_bool isNormOrWarn, const char *pFnc,
 		const char *pFmt, va_list *pArgs)
 {
-	char msg1[4096 * 2],
-	     msg2[2048 * 2];
+	char msg1[4096 * 2];
+	char msg2[2048 * 2];
 
 	vsnprintf(msg2, sizeof(msg2), pFmt, *pArgs);
 	if (pOpts->anlz && ST_AVFDEB_HASCB_ANAL_P(pOpts)) {
@@ -444,8 +452,8 @@ ST_CONTOGG__d_debOrAnaBS2(const Tst_contOgg_opts *pOpts,
 		const Tst_contOgg_fhd *pFHd, const Tst_bool isNormOrWarn,
 		const char *pFnc, const char *pFmt, va_list *pArgs)
 {
-	char msg1[4096 * 2],
-	     msg2[2048 * 2];
+	char msg1[4096 * 2];
+	char msg2[2048 * 2];
 
 	vsnprintf(msg2, sizeof(msg2), pFmt, *pArgs);
 	if (pOpts->anlz && ST_AVFDEB_HASCB_ANAL_P(pOpts)) {
@@ -467,8 +475,8 @@ ST_CONTOGG__d_debOrAnaBS3(const Tst_contOgg_opts *pOpts,
 		const Tst_bool isNormOrWarn, const char *pFnc,
 		const char *pFmt, va_list *pArgs)
 {
-	char msg1[4096 * 2],
-	     msg2[2048 * 2];
+	char msg1[4096 * 2];
+	char msg2[2048 * 2];
 
 	vsnprintf(msg2, sizeof(msg2), pFmt, *pArgs);
 	if (pOpts->anlz && ST_AVFDEB_HASCB_ANAL_P(pOpts)) {
@@ -488,51 +496,53 @@ ST_CONTOGG__d_debOrAnaBS3(const Tst_contOgg_opts *pOpts,
 /*----------------------------------------------------------------------------*/
 
 #if (ST_CONTOGG_DEB_ == 1)
-void st_contOgg_prf(const char *pFmt, ...)
-{
-	va_list args;
+	void st_contOgg_prf(const char *pFmt, ...)
+	{
+		va_list args;
 
-	va_start(args, pFmt);
-	vprintf(pFmt, args);
-	va_end(args);
-}
+		va_start(args, pFmt);
+		vprintf(pFmt, args);
+		va_end(args);
+	}
 
-void st_contOgg_prf64(const char *pMsg, const Tst_uint64 *pUI64)
-{
-	Tst_str ui64hex[50],
-	        ui64dec[50];
+	void st_contOgg_prf64(const char *pMsg, const Tst_uint64 *pUI64)
+	{
+		Tst_str ui64hex[50],
+		Tst_str ui64dec[50];
 
-	ui64hex[0] = 0;
-	ui64dec[0] = 0;
-	st_sysUInt64_toHexStr(pUI64, ui64hex, sizeof(ui64hex));
-	st_sysUInt64_toDecStr(pUI64, ui64dec, sizeof(ui64dec));
-	st_contOgg_prf("%s %s  (%s)\n", pMsg, ui64dec, ui64hex);
-}
+		ui64hex[0] = 0;
+		ui64dec[0] = 0;
+		st_sysUInt64_toHexStr(pUI64, ui64hex, sizeof(ui64hex));
+		st_sysUInt64_toDecStr(pUI64, ui64dec, sizeof(ui64dec));
+		st_contOgg_prf("%s %s  (%s)\n", pMsg, ui64dec, ui64hex);
+	}
 
-void st_contOgg_prE(const char *pFmt, ...)
-{
-	va_list args;
+	void st_contOgg_prE(const char *pFmt, ...)
+	{
+		va_list args;
 
-	va_start(args, pFmt);
-	vfprintf(stderr, pFmt, args);
-	va_end(args);
-}
+		va_start(args, pFmt);
+		vfprintf(stderr, pFmt, args);
+		va_end(args);
+	}
 
-void st_contOgg_prBitsInByte(const Tst_byte byt)
-{
-	Tst_byte x;
+	void st_contOgg_prBitsInByte(const Tst_byte byt)
+	{
+		Tst_byte x;
 
-	for (x = 0; x < 8; x++)
-		st_contOgg_prf("%d", (byt >> (8 - 1 - x)) & 0x01);
-}
+		for (x = 0; x < 8; x++) {
+			st_contOgg_prf("%d", (byt >> (8 - 1 - x)) & 0x01);
+		}
+	}
 
-void st_contOgg_prBuf(const Tst_buf *pBuf, const Tst_uint32 sz)
-{
-	Tst_uint32 x;
+	void st_contOgg_prBuf(const Tst_buf *pBuf, const Tst_uint32 sz)
+	{
+		Tst_uint32 x;
 
-	for (x = 0; x < sz; x++)
-		st_contOgg_prf("%02x", pBuf[x]);
-}
+		for (x = 0; x < sz; x++) {
+			st_contOgg_prf("%02x", pBuf[x]);
+		}
+	}
 #endif
 
 /******************************************************************************/
