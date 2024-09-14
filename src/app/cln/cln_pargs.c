@@ -19,10 +19,12 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 /** */
 #include "src/includes/common/sys_fnc.h"
+#include "src/includes/common/string_mte.h"
+#include "src/includes/tag/tag_comfnc.h"
 #include "src/includes/tag/tag_id3v2.h"
 /** */
 #define SRC_CLN_PARGS_C
@@ -43,16 +45,16 @@
 #include <unistd.h>      /* getopt(), char(optarg),           */
                          /*   int(optind,opterr,optopt), ...  */
 #if (HAVE_LIBVORBIS == 1)
-#	include <vorbis/codec.h>
+	#include <vorbis/codec.h>
 #endif
 #if (HAVE_LIBMPG123 == 1)
-#	include <mpg123.h>
+	#include <mpg123.h>
 #endif
 #if (HAVE_LIBMAD == 1)
-#	include <mad.h>
+	#include <mad.h>
 #endif
 #if (HAVE_LIBZ == 1)
-#	include <zlib.h>
+	#include <zlib.h>
 #endif
 
 /*----------------------------------------------------------------------------*/
@@ -610,30 +612,49 @@ AST_CLN__pa_sc_version(const Tast_cln_cbMsg cbMsg)
 {
 	const char *cNA = "n/a";
 	char const *pVer = cNA;
+	Tst_mtes_string tagger;
+	Tst_str         *pTmp = NULL;
+	Tst_err         tmpRes;
 
 	cbMsg("%s %s", APP_ST_NAME, APP_ST_VERS_STRING);
-	cbMsg("[%s: %s]", ST_LIBSANTAG_NAME, ST_LIBSANTAG_VERS_STRING);
-#	if (HAVE_LIBVORBIS == 1)
-	pVer = vorbis_version_string();
-	if (pVer == NULL)
-		pVer = cNA;
-	cbMsg("[libvorbis: %s]", pVer);
-#	endif
-#	if (HAVE_LIBMPG123 == 1)
-	cbMsg("[libmpg123: API version %d]", MPG123_API_VERSION);
-#	endif
-#	if (HAVE_LIBMAD == 1)
-	pVer = MAD_VERSION;
-	if (pVer == NULL)
-		pVer = cNA;
-	cbMsg("[libmad: %s]", pVer);
-#	endif
-#	if (HAVE_LIBZ == 1)
-	pVer = ZLIB_VERSION;
-	if (pVer == NULL)
-		pVer = cNA;
-	cbMsg("[zlib: %s]", pVer);
-#	endif
+	//
+	st_mtes_stc_initStr(&tagger);
+	tmpRes = st_tagCFnc_getTaggerStr(&tagger, ST_B_TRUE);
+	if (tmpRes != ST_ERR_SUCC) {
+		st_mtes_stc_freeStr(&tagger);
+		return tmpRes;
+	}
+	tmpRes = st_mtes_copyToCharp_iso(&tagger, &pTmp);
+	st_mtes_stc_freeStr(&tagger);
+	if (tmpRes != ST_ERR_SUCC) {
+		return tmpRes;
+	}
+	cbMsg("[%s]", pTmp);
+	//
+	#if (HAVE_LIBVORBIS == 1)
+		pVer = vorbis_version_string();
+		if (pVer == NULL) {
+			pVer = cNA;
+		}
+		cbMsg("[libvorbis: %s]", pVer);
+	#endif
+	#if (HAVE_LIBMPG123 == 1)
+		cbMsg("[libmpg123: API version %d]", MPG123_API_VERSION);
+	#endif
+	#if (HAVE_LIBMAD == 1)
+		pVer = MAD_VERSION;
+		if (pVer == NULL) {
+			pVer = cNA;
+		}
+		cbMsg("[libmad: %s]", pVer);
+	#endif
+	#if (HAVE_LIBZ == 1)
+		pVer = ZLIB_VERSION;
+		if (pVer == NULL) {
+			pVer = cNA;
+		}
+		cbMsg("[zlib: %s]", pVer);
+	#endif
 	return ST_ERR_QUIT;
 }
 
