@@ -19,13 +19,14 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 /** */
 #include "src/includes/common/binobj.h"
 #include "src/includes/common/streamwr.h"
 #include "src/includes/common/string_mte.h"
 #include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_comfnc.h"
 #include "src/includes/tag/tag_vorbc.h"
 /** */
 #define SRC_TAG_VORBC_ZWR_C
@@ -76,7 +77,7 @@ st_vorbc_wr_rendTagToBO(Tst_vorbc_tag *pTag,
 
 	/* add Tagger field */
 	st_mtes_stc_initStr(&taggStr);
-	st_tagCFnc_getTaggerStr(&taggStr);
+	st_tagCFnc_getTaggerStr(&taggStr, ST_B_FALSE);
 	res = st_vorbc_fldAdd_text(pTag, ST_VORBC_FID_TAGG, NULL, &taggStr);
 	st_mtes_stc_freeStr(&taggStr);
 

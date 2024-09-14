@@ -342,7 +342,7 @@ st_vorbc_tidyUpTag(Tst_vorbc_tag *pTag)
 	/* check/set vendor string */
 	if (res == ST_ERR_SUCC && st_mtes_strlenCh(&pTagI->vendor) < 5) {
 		/* --> "libsantag x.y.z" */
-		st_tagCFnc_getTaggerStr(&pTagI->vendor);
+		st_tagCFnc_getTaggerStr(&pTagI->vendor, ST_B_FALSE);
 		if (ST_TFDEB_ISVERBTAG_BD(pTagI->opts.basOpts))
 			st_vorbc_d_fdebStr(&pTagI->opts, 0, cFNCN, NULL,
 					"set vendor to", &pTagI->vendor, "");

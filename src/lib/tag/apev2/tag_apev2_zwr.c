@@ -19,13 +19,14 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 /** */
 #include "src/includes/common/binobj.h"
 #include "src/includes/common/streamwr.h"
 #include "src/includes/common/string_mte.h"
 #include "src/includes/common/sys_fnc.h"
+#include "src/includes/tag/tag_comfnc.h"
 #include "src/includes/tag/tag_apev2.h"
 /** */
 #define SRC_TAG_APEV2_ZWR_C
@@ -74,7 +75,7 @@ st_apev2_wr_rendTagToBO(Tst_apev2_tag *pTag,
 
 	/* add Tagger field */
 	st_mtes_stc_initStr(&taggStr);
-	st_tagCFnc_getTaggerStr(&taggStr);
+	st_tagCFnc_getTaggerStr(&taggStr, ST_B_FALSE);
 	res = st_apev2_fldAdd_text(pTag, ST_APEV2_FID_TAGG, NULL, &taggStr);
 	st_mtes_stc_freeStr(&taggStr);
 

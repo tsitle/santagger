@@ -19,7 +19,7 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 /** */
 #include "src/includes/common/binobj.h"
@@ -29,6 +29,7 @@
 #include "src/includes/common/sys_fnc.h"
 #include "src/includes/common/sys_file.h"
 #include "src/includes/utils/utils_fmt.h"
+#include "src/includes/tag/tag_comfnc.h"
 #include "src/includes/tag/tag_id3_helper.h"
 #include "src/includes/tag/tag_id3v2.h"
 /** */
@@ -91,7 +92,7 @@ st_id3v2_wr_rendTagToBO(Tst_id3v2_tag *pTag,
 
 	/* add Tagger field */
 	st_mtes_stc_initStr(&taggStr);
-	st_tagCFnc_getTaggerStr(&taggStr);
+	st_tagCFnc_getTaggerStr(&taggStr, ST_B_FALSE);
 	res = st_id3v2_fldAdd_text(pTag, ST_ID3V2_FID_234_CTXT,
 			(const Tst_str*)(pTagI->verMaj == 2 ? "TGA" : "TGGA"),
 			NULL, &taggStr);
