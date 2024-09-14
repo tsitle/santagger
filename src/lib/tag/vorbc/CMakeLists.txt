@@ -9,6 +9,7 @@ target_sources(santagger_lib
 			tag_vorbc_zfdeb-prot.h
 			tag_vorbc_fldget.c
 			tag_vorbc_opts.c
+			tag_vorbc-priv_flds.h
 			tag_vorbc_gs.c
 			tag_vorbc_stcs.c
 			tag_vorbc_fnc.c
@@ -19,8 +20,4 @@ target_sources(santagger_lib
 			tag_vorbc_gs-prot.h
 			tag_vorbc_fldadd.c
 			tag_vorbc_ztidy.c
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
-			tag_vorbc-priv_flds.h
 	)

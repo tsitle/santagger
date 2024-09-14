@@ -10,7 +10,4 @@ target_sources(santagger_lib
 			cont_wav_zfdeb.c
 			cont_wav_zfnc.c
 			cont_wav_wr.c
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
 	)

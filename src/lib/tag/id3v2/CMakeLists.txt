@@ -5,6 +5,7 @@ target_sources(santagger_lib
 			tag_id3v2_zfdeb.c
 			tag_id3v2_zsync-prot.h
 			tag_id3v2_fnc-priv.h
+			tag_id3v2-priv_flds.h
 			tag_id3v2_zrd.c
 			tag_id3v2_zfdeb-prot.h
 			tag_id3v2_zrd-pp.h
@@ -26,8 +27,4 @@ target_sources(santagger_lib
 			tag_id3v2_gs-prot.h
 			tag_id3v2.c
 			tag_id3v2_gs.c
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
-			tag_id3v2-priv_flds.h
 	)

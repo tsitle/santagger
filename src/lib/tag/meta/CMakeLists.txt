@@ -7,7 +7,4 @@ target_sources(santagger_lib
 			tag_meta-prot.h
 			tag_meta_fnc.c
 			tag_meta_stcs.c
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
 	)

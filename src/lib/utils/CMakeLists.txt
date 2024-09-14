@@ -6,7 +6,4 @@ target_sources(santagger_lib
 			w-md5-prot.h
 			utils_fmt-priv.h
 			w-md5.c
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
 	)

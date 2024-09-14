@@ -17,7 +17,4 @@ target_sources(santagger_lib
 			cont_ogg_zrd.c
 			cont_ogg_zfdeb-prot.h
 			cont_ogg_zwr.c
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
 	)

@@ -5,7 +5,4 @@ target_sources(santagger_lib
 			dynlist.c
 			dynlist-prot.h
 			dynlist_stcs.c
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
 	)

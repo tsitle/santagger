@@ -10,6 +10,7 @@ target_sources(santagger_lib
 			tag_apev2_stcs.c
 			tag_apev2_zfdeb-prot.h
 			tag_apev2_fldadd.c
+			tag_apev2-priv_flds.h
 			tag_apev2_opts.c
 			tag_apev2_zwr-pp.h
 			tag_apev2_fnc.c
@@ -19,8 +20,4 @@ target_sources(santagger_lib
 			tag_apev2_stcs-prot.h
 			tag_apev2_gs-prot.h
 			tag_apev2_ztidy-prot.h
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
-			tag_apev2-priv_flds.h
 	)

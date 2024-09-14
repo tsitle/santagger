@@ -26,7 +26,7 @@ createCmakeListsForSubdirectoryEnd() {
 			while IFS= read -r -d '' TMP_FN; do
 				echo "$TMP_FN" >> "$TMP_COUNT_FN"
 			done
-	TMP_COUNT_PUBLIC_HEADERS="$(wc -l < "$TMP_COUNT_FN" | tr -d ":[space]:")"
+	TMP_COUNT_PUBLIC_HEADERS="$(wc -l < "$TMP_COUNT_FN" | tr -d "[:space:]")"
 	rm "$TMP_COUNT_FN"
 
 	if [ "$TMP_COUNT_PUBLIC_HEADERS" = "0" ]; then

@@ -10,7 +10,4 @@ target_sources(santagger_lib
 			stream_stcs-prot.h
 			stream_crcs.c
 			streamrd-priv.h
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
 	)

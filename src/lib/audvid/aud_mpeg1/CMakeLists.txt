@@ -12,7 +12,4 @@ target_sources(santagger_lib
 			aud_mpeg1_zrd2-pp.h
 			aud_mpeg1_zfdeb.c
 			aud_mpeg1_zrd.c
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
 	)

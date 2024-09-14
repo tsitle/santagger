@@ -2,9 +2,6 @@ target_sources(santagger_lib
 		PRIVATE
 			av_zfdeb-prot.h
 			av_zfdeb.c
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
 	)
 
 add_subdirectory("cont_ogg_aud_spx_clt")

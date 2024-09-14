@@ -27,7 +27,7 @@ createCmakeListsForSubdirectoryEnd() {
 
 	find . -type f -mindepth 1 -maxdepth 1 -regex '.*\.[hc]' -print0 |
 			while IFS= read -r -d '' TMP_FN; do
-				echo -n "$TMP_FN" | grep -q -e "\.c$" -e "-priv\.h$" -e "\-pp.h$" -e "-prot\.h$" || continue
+				echo -n "$TMP_FN" | grep -q -e "\.c$" -e "-priv\.h$" -e "\-pp.h$" -e "-prot\.h$" -e "-priv_flds\.h$" -e "-pp_flds\.h$" || continue
 				TMP_FN="$(echo -n "$TMP_FN" | sed -e 's;^\./;;')"
 				{
 					echo -e "\t\t\t${TMP_FN}"
@@ -39,10 +39,10 @@ createCmakeListsForSubdirectoryEnd() {
 	touch "$TMP_COUNT_FN"
 	find . -type f -mindepth 1 -maxdepth 1 -regex '.*\.h' -print0 |
 			while IFS= read -r -d '' TMP_FN; do
-				echo -n "$TMP_FN" | grep -q -e "-priv\.h$" -e "\-pp.h$" -e "-prot\.h$" && continue
+				echo -n "$TMP_FN" | grep -q -e "-priv\.h$" -e "\-pp.h$" -e "-prot\.h$" -e "-priv_flds\.h$" -e "-pp_flds\.h$" && continue
 				echo "$TMP_FN" >> "$TMP_COUNT_FN"
 			done
-	TMP_COUNT_PUBLIC_HEADERS="$(wc -l < "$TMP_COUNT_FN" | tr -d ":[space]:")"
+	TMP_COUNT_PUBLIC_HEADERS="$(wc -l < "$TMP_COUNT_FN" | tr -d "[:space:]")"
 	rm "$TMP_COUNT_FN"
 
 	if [ "$TMP_COUNT_PUBLIC_HEADERS" != "0" ]; then
@@ -54,7 +54,7 @@ createCmakeListsForSubdirectoryEnd() {
 
 		find . -type f -mindepth 1 -maxdepth 1 -regex '.*\.h' -print0 |
 				while IFS= read -r -d '' TMP_FN; do
-					echo -n "$TMP_FN" | grep -q -e "-priv\.h$" -e "\-pp.h$" -e "-prot\.h$" && continue
+					echo -n "$TMP_FN" | grep -q -e "-priv\.h$" -e "\-pp.h$" -e "-prot\.h$" -e "-priv_flds\.h$" -e "-pp_flds\.h$" && continue
 					TMP_FN="$(echo -n "$TMP_FN" | sed -e 's;^\./;;')"
 					{
 						echo -e "\t\t\t${TMP_FN}"

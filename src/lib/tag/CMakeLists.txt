@@ -19,9 +19,6 @@ target_sources(santagger_lib
 			tag_comfnc-prot.h
 			tag_comfnc_chk.c
 			tag_id3_helper-prot.h
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
 	)
 
 add_subdirectory("vorbc")

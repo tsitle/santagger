@@ -9,7 +9,4 @@ target_sources(santagger_lib
 			ac_flac_zrd.c
 			ac_flac_zrd-prot.h
 			ac_flac_zrda.c
-		PUBLIC FILE_SET HEADERS
-		BASE_DIRS ${PROJECT_SOURCE_DIR}
-		FILES
 	)
