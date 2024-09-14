@@ -37,7 +37,24 @@ set_target_properties(santagger_app PROPERTIES OUTPUT_NAME "santagger")
 add_subdirectory("src/app")
 target_link_libraries(santagger_app PRIVATE santagger_lib santagger_includes)
 
-install(TARGETS santagger_lib santagger_includes FILE_SET HEADERS)
+# installation
+include(GNUInstallDirs)
+message(STATUS "Install directories: BIN='${CMAKE_INSTALL_BINDIR}', LIB='${CMAKE_INSTALL_LIBDIR}', INC='${CMAKE_INSTALL_INCLUDEDIR}'")
+install(TARGETS santagger_app santagger_lib
+		RUNTIME
+			COMPONENT Runtime
+			DESTINATION ${CMAKE_INSTALL_BINDIR}  # Executables
+		LIBRARY
+			COMPONENT Runtime
+			DESTINATION ${CMAKE_INSTALL_LIBDIR}  # Shared libraries
+		ARCHIVE
+			COMPONENT Runtime
+			DESTINATION ${CMAKE_INSTALL_LIBDIR}  # Static libraries
+	)
+install(DIRECTORY src/includes/
+		COMPONENT Development
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/santag
+		FILES_MATCHING PATTERN "*.h")
 
 # ----------------------------------------------------------------------------
 # Compiler flags and some definitions
