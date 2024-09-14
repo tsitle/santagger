@@ -40,7 +40,7 @@ typedef enum {
 	ST_MTES_TE_UTF16LE,  /* UTF-16 Little-Endian, 0x0000 term */
 	ST_MTES_TE_UTF16BE,  /* UTF-16BE Big-Endian, 0x0000 term, only ID3v2.4 */
 	ST_MTES_TE_UTF8,     /* UTF-8, 0x00 term, only ID3v2.4 */
-	ST_MTES_TE_NONE      /* none, ! this must be the last elem ! */
+	ST_MTES_TE_NONE      /* none ! this must be the last elem ! */
 } Tst_mtes_textEnc;
 
 
@@ -128,16 +128,16 @@ typedef struct {
 	Tst_bool disNotPrint; /* disallow not printable chars ? */
 	Tst_bool disOther;    /* disallow all other chars ? */
 	/* */
-	Tst_uint32 strMaxl;   /* max len of string in ISO represantation,
+	Tst_uint32 strMaxl;   /* max len of string in ISO representation,
 	                       *   0 means infinite */
 } Tst_mtes_strRestr;
 
-/** the master of desaster string itself */
+/** A MTE-String object (MTE=Multi-Text-Encoding) */
 typedef struct {
 	void *pObInternal;  /* pointer to Tst_mtes__string_intn */
 } Tst_mtes_string;
 
-/** array of strings */
+/** Array of MTE-String objects (MTE=Multi-Text-Encoding) */
 typedef struct {
 	void *pObInternal;  /* pointer to Tst_mtes__strArr_intn */
 } Tst_mtes_strArr;
