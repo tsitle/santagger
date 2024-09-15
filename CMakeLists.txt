@@ -269,10 +269,16 @@ execute_process(
 		OUTPUT_VARIABLE GIT_VERSION_SEM
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
+#set(GIT_VERSION_SEM "12.34-gdeadbeef")
 #set(GIT_VERSION_SEM "12.34-56-gdeadbeef")
+#set(GIT_VERSION_SEM "12.34-alpha5-gdeadbeef")
 #set(GIT_VERSION_SEM "12.34-alpha5-67-gdeadbeef")
 #set(GIT_VERSION_SEM "12.34-alpha5-67-gdeadbeef-dirty")
 #set(GIT_VERSION_SEM "1.0-alpha-3-g4fdbbae-dirty")
+#set(GIT_VERSION_SEM "1.0-alpha-g4fdbbae-dirty")
+#set(GIT_VERSION_SEM "1.0-alpha-g4fdbbae")
+#set(GIT_VERSION_SEM "1.0-g4fdbbae-dirty")
+#set(GIT_VERSION_SEM "1.0-g4fdbbae")
 
 # get only the major and minor version
 #   --> extract everything before the first dash (-)
@@ -288,6 +294,7 @@ string(REGEX REPLACE "\\.[0-9]*" "" GIT_VERSION_MAJOR "${GIT_VERSION_MAJMIN}")
 string(REGEX REPLACE "^([^\\.]*)\\.([^\\.]*)" "\\2" GIT_VERSION_MINOR "${GIT_VERSION_MAJMIN}")
 
 # get only the patch level
+#   --> in the example '1.2-ga12d3ef' that would be '0'
 #   --> in the example '1.2-3-ga12d3ef' that would be '3'
 #   --> in the example '1.2-alpha3-4-ga12d3ef' that would be 'alpha3-4'
 #   --> in the example '1.2-alpha3-4-ga12d3ef-dirty' that would be 'alpha3-4'
@@ -295,14 +302,26 @@ string(REGEX REPLACE "-dirty$" "" GIT_VERSION_TMP "${GIT_VERSION_SEM}")
 #message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
 string(REGEX REPLACE "-g[a-z0-9]*$" "" GIT_VERSION_TMP "${GIT_VERSION_TMP}")
 #message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
+string(REGEX REPLACE "^${GIT_VERSION_MAJMIN}-" "" GIT_VERSION_TMP "${GIT_VERSION_TMP}")  # '12.34-5' --> '5'
+string(REGEX REPLACE "^${GIT_VERSION_MAJMIN}$" "0" GIT_VERSION_TMP "${GIT_VERSION_TMP}")  # '12.34' --> '0'
+#message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
+
 string(REGEX REPLACE "^.*-([0-9]*)$" "\\1" GIT_VERSION_PATCH "${GIT_VERSION_TMP}")
+#message(STATUS "Git version: patch '${GIT_VERSION_PATCH}'")
+string(REGEX REPLACE "^alpha.*-" "" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'alpha-3' --> '3'
+string(REGEX REPLACE "^beta.*-" "" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'beta-3' --> '3'
+string(REGEX REPLACE "^alpha.*$" "0" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'alpha' --> '0'
+string(REGEX REPLACE "^beta.*$" "0" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'beta' --> '0'
+#message(STATUS "Git version: patch '${GIT_VERSION_PATCH}'")
 
 # get only the alpha/beta marker
+#   --> in the example '1.2-ga12d3ef' that would be ''
 #   --> in the example '1.2-3-ga12d3ef' that would be ''
 #   --> in the example '1.2-alpha3-4-ga12d3ef' that would be 'alpha3'
 #   --> in the example '1.2-alpha3-4-ga12d3ef-dirty' that would be 'alpha3'
 string(REGEX REPLACE "^[0-9]*\\.[0-9]*-(.*)$" "\\1" GIT_VERSION_ALPHABETA "${GIT_VERSION_TMP}")
 #message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
+
 string(REGEX REPLACE "^(.*)-[0-9]*$" "\\1" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
 #message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
 string(REGEX REPLACE "^${GIT_VERSION_PATCH}$" "" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
@@ -312,7 +331,7 @@ string(REGEX REPLACE "^${GIT_VERSION_PATCH}$" "" GIT_VERSION_ALPHABETA "${GIT_VE
 # Replace version strings and numbers in app_version.h and lib_version.h
 # ----------------------------------------------------------------------------
 
-message(STATUS "Git version: Semantic=${GIT_VERSION_SEM}; Major=${GIT_VERSION_MAJOR}; Minor=${GIT_VERSION_MINOR}; Patch=${GIT_VERSION_PATCH}; A/B=${GIT_VERSION_ALPHABETA}")
+message(STATUS "Git version: Semantic=${GIT_VERSION_SEM}; Major=${GIT_VERSION_MAJOR}; Minor=${GIT_VERSION_MINOR}; A/B=${GIT_VERSION_ALPHABETA}; Patch=${GIT_VERSION_PATCH}")
 
 set(X_FN_APP_VERSION_H "src/app/app_version.h")
 message(STATUS "Rewrite file '${X_FN_APP_VERSION_H}'")
