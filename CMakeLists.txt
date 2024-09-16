@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.23)  # due to 'target_sources(<target> xxx FILE_SET xxx)'
+                                      # see https://cmake.org/cmake/help/latest/command/target_sources.html#file-sets
 project(santagger_app_and_lib C)
 
 # ----------------------------------------------------------------------------
