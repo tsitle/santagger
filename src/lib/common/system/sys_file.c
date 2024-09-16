@@ -1210,7 +1210,7 @@ ST_SYSFILE__fOd_exists(const Tst_str *pPath,
 
 	/* check whether file/dir exists */
 	if (pFStc == NULL) {
-		if (stat((const char*)pPath, &statBuf) != 0) {
+		if (stat((const char*)pPath, &statBuf) != 0) {  // pPath is guaranteed to be != NULL here
 			if (errno == EOVERFLOW) {
 				/* file too big for off_t */
 				if (pErrTooBig != NULL) {
@@ -1242,7 +1242,11 @@ ST_SYSFILE__fOd_exists(const Tst_str *pPath,
 			if (pStr == NULL) {
 				return ST_B_FALSE;
 			}
-			resI = readlink((const char*)pPath, (char*)pStr, statBuf.st_size + 2);
+			if (pPath == NULL) {
+				resI = -1;
+			} else {
+				resI = readlink((const char*)pPath, (char*)pStr, statBuf.st_size + 2);
+			}
 			if (resI < 0) {
 				ST_DELPOINT(pStr)
 				return ST_B_FALSE;
