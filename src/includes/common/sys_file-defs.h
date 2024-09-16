@@ -63,7 +63,7 @@ typedef enum {
 */
 /** file handle */
 typedef struct {
-	void *pObInternal;  /* pointer to Tst_sys_fstc_intn */
+	void *pObInternal;  /* pointer to Tst_sys__fstc_intn */
 } Tst_sys_fstc;
 
 
