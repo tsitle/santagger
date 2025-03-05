@@ -20,7 +20,7 @@ function getOsName() {
 			echo -n "macos"
 			;;
 		*)
-			echo "${VAR_MYNAME}: Error: getOsName(): Unknown OSTYPE '$OSTYPE'" >>/dev/stderr
+			echo "Error: getOsName(): Unknown OSTYPE '$OSTYPE'" >>/dev/stderr
 			return 1
 			;;
 	esac
