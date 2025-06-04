@@ -10,7 +10,7 @@ set(X_PED "nor")    # nor|err|no  (be pedantic (warning level) ?)
 set(X_WALL "yes")   # no|yes      (show warnings ?)
 
 # Shared Library ABI version
-set(X_LIB_AVI_VERSION 1)
+set(X_LIB_ABI_VERSION 1)
 
 # ----------------------------------------------------------------------------
 
@@ -371,7 +371,7 @@ execute_process(
 
 set_target_properties(santagger_lib PROPERTIES
 		VERSION ${GIT_VERSION_MAJOR}.${GIT_VERSION_MINOR}.${GIT_VERSION_ALPHABETA}${GIT_VERSION_PATCH}  # Full version
-		SOVERSION ${X_LIB_AVI_VERSION}  # ABI version
+		SOVERSION ${X_LIB_ABI_VERSION}  # ABI version
 	)
 
 # ----------------------------------------------------------------------------
