@@ -266,6 +266,10 @@ endif ()
 # Semantic version variables
 # ----------------------------------------------------------------------------
 
+if (NOT EXISTS "${CMAKE_SOURCE_DIR}/.git")
+	message(FATAL_ERROR "Git directory not found")
+endif ()
+
 # get the current Git tag description (e.g. '1.0-2-ga12d3ef') for semantic versioning
 execute_process(
 		COMMAND git describe --tags --dirty
