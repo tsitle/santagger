@@ -1212,7 +1212,11 @@ ST_SYSFILE__fOd_exists(const Tst_str *pPath,
 
 	/* check whether file/dir exists */
 	if (pFStc == NULL) {
-		if (stat((const char*)pPath, &statBuf) != 0) {  // pPath is guaranteed to be != NULL here
+		char tmpPathStr[1024 * 4];
+		const size_t tmpPathLen = (sizeof(tmpPathStr) > strlen((const char *)pPath) ? strlen((const char *)pPath) : sizeof(tmpPathStr) - 1);
+		memcpy(tmpPathStr, pPath, tmpPathLen);  // pPath is guaranteed to be != NULL here
+		tmpPathStr[tmpPathLen] = 0x00;
+		if (stat(tmpPathStr, &statBuf) != 0) {
 			if (errno == EOVERFLOW) {
 				/* file too big for off_t */
 				if (pErrTooBig != NULL) {
@@ -1247,7 +1251,7 @@ ST_SYSFILE__fOd_exists(const Tst_str *pPath,
 			if (pPath == NULL) {
 				resI = -1;
 			} else {
-				resI = readlink((const char*)pPath, (char*)pStr, statBuf.st_size + 2);
+				resI = (Tst_int32)readlink((const char*)pPath, (char*)pStr, statBuf.st_size + 2);
 			}
 			if (resI < 0) {
 				ST_DELPOINT(pStr)
