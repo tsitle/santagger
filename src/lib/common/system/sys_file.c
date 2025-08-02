@@ -1010,7 +1010,7 @@ ST_SYSFILE__getTmpFilename(const Tst_bool inCurDir, const Tst_bool inSpecDir,
 	Tst_bool ex = ST_B_TRUE;
 
 
-	ST_ASSERTN_BOOL(ST_B_FALSE, pTmpFn == NULL || tmpFnMaxSz <= L_tmpnam ||
+	ST_ASSERTN_BOOL(ST_B_FALSE, pTmpFn == NULL || tmpFnMaxSz > L_tmpnam ||
 				(inSpecDir && pInDir_Dirn == NULL))
 
 	if (inCurDir || inSpecDir) {
@@ -1067,11 +1067,13 @@ ST_SYSFILE__getTmpFilename(const Tst_bool inCurDir, const Tst_bool inSpecDir,
 			ex = st_sysDoesFileExist(pTmpFn) || st_sysDoesDirExist(pTmpFn);
 		} while (ex && cnt < cMAXTRIES);
 	} else {
-		snprintf((char*)pTmpFn, tmpFnMaxSz, "tmpfile.XXXXXXXX.tmp");
+		snprintf((char*)pTmpFn, tmpFnMaxSz, "tmpfile.XXXXXXXX");
 		const int tmpHnd = mkstemp((char*)pTmpFn);
 		ex = (tmpHnd < 1);
 		if (tmpHnd > 0) {
 			close(tmpHnd);
+			// delete the file to mimic the behavior of the other 'if' branch
+			st_sysUnlinkFile(pTmpFn);
 		}
 	}
 	if (ex) {
