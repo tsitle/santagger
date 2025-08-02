@@ -4,10 +4,13 @@ project(santagger_app_and_lib C)
 
 # ----------------------------------------------------------------------------
 
-set(X_OPT 2)        # 0|1|2|3|s   (Optimization level (s=optimize for size))
-set(X_STATIC "no")  # no|yes      (create static or shared library ?)
-set(X_PED "nor")    # nor|err|no  (be pedantic (warning level) ?)
-set(X_WALL "yes")   # no|yes      (show warnings ?)
+option(BUILD_FOR_VALGRIND "Build for Valgrind" OFF)
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+option(STRIP_AFTER_BUILD "Strip executable after build" OFF)
+
+set(X_OPT 2)       # 0|1|2|3|s   (Optimization level (s=optimize for size))
+set(X_PED "nor")   # nor|err|no  (be pedantic (warning level) ?)
+set(X_WALL "yes")  # no|yes      (show warnings ?)
 
 # Shared Library ABI version
 set(X_LIB_ABI_VERSION 1)
@@ -21,7 +24,44 @@ if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
 endif ()
 
-message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "__ST__: Build Type: ${CMAKE_BUILD_TYPE}")
+
+# ----------------------------------------------------------------------------
+
+set(OUTPUT_NAME_SUFFIX "")
+
+# Check if coverage flags are set
+set(Z_VAR_FORCE_BUILD_STATIC OFF)
+if (CMAKE_CXX_FLAGS MATCHES "(-fprofile-arcs|-ftest-coverage|--coverage|-fprofile-instr-generate|-fcoverage-mapping)")
+	message(STATUS "__ST__: Building with coverage enabled '${CMAKE_CXX_FLAGS}'")
+	set(Z_VAR_FORCE_BUILD_STATIC ON)
+else ()
+	message(STATUS "__ST__: Building without coverage")
+endif ()
+
+if (Z_VAR_FORCE_BUILD_STATIC)
+	message(STATUS "__ST__: Forcing build of static library")
+	set(BUILD_SHARED_LIBS OFF)
+endif ()
+
+#
+set(Z_VAR_EXT_LIBRARY_LINK_TYPE "shared")
+if (NOT BUILD_SHARED_LIBS)
+	set(OUTPUT_NAME_SUFFIX "-static")
+	# for external libraries:
+	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+	set(Z_VAR_EXT_LIBRARY_LINK_TYPE "static")
+endif ()
+
+if (BUILD_FOR_VALGRIND)
+	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+		set(OUTPUT_NAME_SUFFIX "${OUTPUT_NAME_SUFFIX}-vg_debug")
+	else ()
+		set(OUTPUT_NAME_SUFFIX "${OUTPUT_NAME_SUFFIX}-vg_release")
+	endif ()
+elseif (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(OUTPUT_NAME_SUFFIX "${OUTPUT_NAME_SUFFIX}-debug")
+endif ()
 
 # ----------------------------------------------------------------------------
 
@@ -30,8 +70,10 @@ add_library(santagger_includes INTERFACE)
 add_subdirectory("src/includes")
 
 # add shared library
-add_library(santagger_lib SHARED)
-set_target_properties(santagger_lib PROPERTIES OUTPUT_NAME "santagger")
+SET(LIBRARY_ST_PUBLIC_NAME "santagger")
+
+add_library(santagger_lib)
+set_target_properties(santagger_lib PROPERTIES OUTPUT_NAME "${LIBRARY_ST_PUBLIC_NAME}${OUTPUT_NAME_SUFFIX}")
 target_include_directories(santagger_lib PRIVATE "${PROJECT_SOURCE_DIR}")
 add_subdirectory("src/lib")
 
@@ -43,7 +85,7 @@ target_link_libraries(santagger_app PRIVATE santagger_lib santagger_includes)
 
 # installation
 include(GNUInstallDirs)
-message(STATUS "Install directories: BIN='${CMAKE_INSTALL_BINDIR}', LIB='${CMAKE_INSTALL_LIBDIR}', INC='${CMAKE_INSTALL_INCLUDEDIR}'")
+message(STATUS "__ST__: Install directories: PREFIX='${CMAKE_INSTALL_PREFIX}', BIN='${CMAKE_INSTALL_BINDIR}', LIB='${CMAKE_INSTALL_LIBDIR}', INC='${CMAKE_INSTALL_INCLUDEDIR}'")
 install(TARGETS santagger_app santagger_lib
 		RUNTIME
 			COMPONENT Runtime
@@ -61,17 +103,41 @@ install(DIRECTORY src/includes/
 		FILES_MATCHING PATTERN "*.h")
 
 # ----------------------------------------------------------------------------
+# Strip executable
+# ----------------------------------------------------------------------------
+
+if (STRIP_AFTER_BUILD AND NOT BUILD_FOR_VALGRIND)
+	if (CMAKE_BUILD_TYPE STREQUAL "Release")
+		message(STATUS "__ST__: Strip executable/lib")
+		if (APPLE)
+			set(TMP_TARGET_LIST santagger_app;santagger_lib)
+			foreach(target ${TMP_TARGET_LIST})
+				add_custom_command(TARGET ${target} POST_BUILD
+					COMMAND strip -x -S $<TARGET_FILE:${target}>)
+			endforeach ()
+		else ()
+			set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -s")
+			set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} -s")
+		endif ()
+	else ()
+		message(STATUS "__ST__: not stripping executable/lib (!release)")
+	endif ()
+elseif (STRIP_AFTER_BUILD AND BUILD_FOR_VALGRIND)
+	message(STATUS "__ST__: not stripping executable/lib (valgrind)")
+endif ()
+
+# ----------------------------------------------------------------------------
 # Compiler flags and some definitions
 # ----------------------------------------------------------------------------
 
 # Warnings
 if (X_WALL STREQUAL "yes")
-	message(STATUS "Compiler flags: w/ Warnings")
+	message(STATUS "__ST__: Compiler flags: w/ Warnings")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Winline")
 	#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wextra")
 	#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wconversion")
 else ()
-	message(STATUS "Compiler flags: w/o Warnings")
+	message(STATUS "__ST__: Compiler flags: w/o Warnings")
 endif ()
 
 # By default, symbols in shared libraries are "exported," meaning that they are visible to other code that links to
@@ -85,71 +151,77 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
 
 # Optimization Level
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	message(STATUS "Compiler flags: set OptLev=0 (debug)")
+	message(STATUS "__ST__: Compiler flags: set OptLev=0 (debug)")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
 elseif (CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo" OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-	message(STATUS "Compiler flags: w/ implicit OptLev=x (release/relWithDebInfo/minSizeRel)")
+	message(STATUS "__ST__: Compiler flags: w/ implicit OptLev=x (release/relWithDebInfo/minSizeRel)")
 else ()
-	message(STATUS "Compiler flags: set OptLev=${X_OPT} (other)")
+	message(STATUS "__ST__: Compiler flags: set OptLev=${X_OPT} (other)")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O${X_OPT}")
 endif ()
 
 # Inline Functions
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	message(STATUS "Compiler flags: w/o InlineFncs (debug)")
+	message(STATUS "__ST__: Compiler flags: w/o InlineFncs (debug)")
 else ()
 	if (X_OPT GREATER 0)
 		if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
-			message(STATUS "Compiler flags: w/ InlineFncs (gcc)")
+			message(STATUS "__ST__: Compiler flags: w/ InlineFncs (gcc)")
 			set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fkeep-inline-functions")
 			set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -finline-functions")
 			add_compile_definitions(ST_INLINE_S=inline)
 		elseif (CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
 			# Clang does not support the 'keep-inline-functions' flag
-			message(STATUS "Compiler flags: w/o InlineFncs (Clang)")
+			message(STATUS "__ST__: Compiler flags: w/o InlineFncs (Clang)")
 		else ()
-			message(STATUS "Compiler flags: w/o InlineFncs (unknown compiler '${CMAKE_C_COMPILER_ID}')")
+			message(STATUS "__ST__: Compiler flags: w/o InlineFncs (unknown compiler '${CMAKE_C_COMPILER_ID}')")
 		endif ()
 	else ()
-		message(STATUS "Compiler flags: w/o InlineFncs (X_OPT=0)")
+		message(STATUS "__ST__: Compiler flags: w/o InlineFncs (X_OPT=0)")
 	endif ()
 endif ()
 
 # GDB
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	message(STATUS "Compiler flags: w/ Debug")
+	message(STATUS "__ST__: Compiler flags: w/ Debug")
 	#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb")
 	# enable debugging stuff
 	add_compile_definitions(CONFIG_ST_ALL_DEBUG=1)
 	# enable additional debugging stuff
 	add_compile_definitions(CONFIG_ST_ALL_DEBUG_ADD=1)
 else ()
-	message(STATUS "Compiler flags: w/o Debug")
+	message(STATUS "__ST__: Compiler flags: w/o Debug")
 endif ()
 
 # Pedantic
 if (X_PED STREQUAL "err")
-	message(STATUS "Compiler flags: w/ PedanticErrors")
+	message(STATUS "__ST__: Compiler flags: w/ PedanticErrors")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic-errors")
 else ()
 	if (X_PED STREQUAL "nor")
-		message(STATUS "Compiler flags: w/ PedanticNormal")
+		message(STATUS "__ST__: Compiler flags: w/ PedanticNormal")
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic")
 	else ()
-		message(STATUS "Compiler flags: w/o Pedantic")
+		message(STATUS "__ST__: Compiler flags: w/o Pedantic")
 	endif ()
 endif ()
 
 # Static
-if (CMAKE_BUILD_TYPE STREQUAL "Release")
-	message(STATUS "Compiler flags: w/ implicit Static (release)")
-else ()
-	if (X_STATIC STREQUAL "yes")
-		message(STATUS "Compiler flags: w/ Static (!release)")
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+if (NOT BUILD_SHARED_LIBS)
+	message(STATUS "__ST__: Compiler flags for lib: w/ Static")
+	# for santagger_lib:
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+	#
+	if (NOT APPLE)
+		message(STATUS "__ST__: Compiler flags for exe: w/ Static")
+		# for the executable:
+		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+		#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc")
 	else ()
-		message(STATUS "Compiler flags: w/o Static (!release)")
+		message(STATUS "__ST__: Compiler flags for exe: w/o Static")
 	endif ()
+else ()
+	message(STATUS "__ST__: Compiler flags: w/o Static")
 endif ()
 
 #if (X_PROF STREQUAL "yes")
@@ -160,25 +232,32 @@ endif ()
 #	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99")
 #endif ()
 
+if (BUILD_FOR_VALGRIND)
+	# add flags for Valgrind
+	message(STATUS "__ST__: Compiler flags: Valgrind")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fno-inline -O0 -Wno-inline")
+	#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+endif ()
+
 # ----------------------------------------------------------------------------
 # Compiler definitions
 # ----------------------------------------------------------------------------
 
 # check for 64 bit host system
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-	message(STATUS "Compiler defs: 64-bit host system detected (pointer size)")
+	message(STATUS "__ST__: Compiler defs: 64-bit host system detected (pointer size)")
 	add_compile_definitions(_FILE_OFFSET_BITS=64)
 	add_compile_definitions(_LARGEFILE_SOURCE)
 	add_compile_definitions(CONFIG_ST_ALL_HAVE64BIT=1)
 else ()
-	message(STATUS "Compiler defs: 32-bit host system detected (pointer size)")
+	message(STATUS "__ST__: Compiler defs: 32-bit host system detected (pointer size)")
 endif ()
 
 if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|aarch64|ppc64|mips64")
-	message(STATUS "Compiler defs: 64-bit host system detected (processor)")
+	message(STATUS "__ST__: Compiler defs: 64-bit host system detected (processor)")
 	add_compile_definitions(CONFIG_ST_ALL_NATIVE64BIT=1)
 else ()
-	message(STATUS "Compiler defs: 32-bit host system detected (processor)")
+	message(STATUS "__ST__: Compiler defs: 32-bit host system detected (processor)")
 endif ()
 
 # include the built-in TestBigEndian module
@@ -188,10 +267,10 @@ include(TestBigEndian)
 test_big_endian(IS_BIG_ENDIAN)
 
 if (IS_BIG_ENDIAN)
-	message(STATUS "Compiler defs: Big-endian")
+	message(STATUS "__ST__: Compiler defs: Big-endian")
 	add_compile_definitions(WORDS_BIGENDIAN=1)
 else ()
-	message(STATUS "Compiler defs: Little-endian")
+	message(STATUS "__ST__: Compiler defs: Little-endian")
 	add_compile_definitions(WORDS_BIGENDIAN=0)
 endif ()
 
@@ -201,28 +280,28 @@ include(CheckFunctionExists)
 # check if fseeko() exists
 check_function_exists(fseeko HAVE_FSEEKO)
 if (HAVE_FSEEKO)
-	message(STATUS "Compiler defs: HAVE_FSEEKO=1")
+	message(STATUS "__ST__: Compiler defs: HAVE_FSEEKO=1")
 	add_compile_definitions(HAVE_FSEEKO=1)
 else ()
-	message(STATUS "Compiler defs: no HAVE_FSEEKO")
+	message(STATUS "__ST__: Compiler defs: no HAVE_FSEEKO")
 endif ()
 
 # check if readlink() exists
 check_function_exists(readlink HAVE_READLINK)
 if (HAVE_READLINK)
-	message(STATUS "Compiler defs: HAVE_READLINK=1")
+	message(STATUS "__ST__: Compiler defs: HAVE_READLINK=1")
 	add_compile_definitions(HAVE_READLINK=1)
 else ()
-	message(STATUS "Compiler defs: no HAVE_READLINK")
+	message(STATUS "__ST__: Compiler defs: no HAVE_READLINK")
 endif ()
 
 # check if gettimeofday() exists
 check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
 if (HAVE_GETTIMEOFDAY)
-	message(STATUS "Compiler defs: HAVE_GETTIMEOFDAY=1")
+	message(STATUS "__ST__: Compiler defs: HAVE_GETTIMEOFDAY=1")
 	add_compile_definitions(HAVE_GETTIMEOFDAY=1)
 else ()
-	message(STATUS "Compiler defs: no HAVE_GETTIMEOFDAY")
+	message(STATUS "__ST__: Compiler defs: no HAVE_GETTIMEOFDAY")
 endif ()
 
 # include the CheckStructHasMember module
@@ -231,35 +310,35 @@ include(CheckStructHasMember)
 # check if 'struct timeval' has the member 'tv_sec'
 check_struct_has_member("struct timeval" tv_sec sys/select.h HAVE_STRUCT_TIMEVAL_TV_SEC LANGUAGE C)
 if (HAVE_STRUCT_TIMEVAL_TV_SEC)
-	message(STATUS "Compiler defs: HAVE_STRUCT_TIMEVAL_TV_SEC=1")
+	message(STATUS "__ST__: Compiler defs: HAVE_STRUCT_TIMEVAL_TV_SEC=1")
 	add_compile_definitions(HAVE_STRUCT_TIMEVAL_TV_SEC=1)
 else ()
-	message(STATUS "Compiler defs: no HAVE_STRUCT_TIMEVAL_TV_SEC")
+	message(STATUS "__ST__: Compiler defs: no HAVE_STRUCT_TIMEVAL_TV_SEC")
 endif ()
 # check if 'struct timeval' has the member 'tv_usec'
 check_struct_has_member("struct timeval" tv_usec sys/select.h HAVE_STRUCT_TIMEVAL_TV_USEC LANGUAGE C)
 if (HAVE_STRUCT_TIMEVAL_TV_USEC)
-	message(STATUS "Compiler defs: HAVE_STRUCT_TIMEVAL_TV_USEC=1")
+	message(STATUS "__ST__: Compiler defs: HAVE_STRUCT_TIMEVAL_TV_USEC=1")
 	add_compile_definitions(HAVE_STRUCT_TIMEVAL_TV_USEC=1)
 else ()
-	message(STATUS "Compiler defs: no HAVE_STRUCT_TIMEVAL_TV_USEC")
+	message(STATUS "__ST__: Compiler defs: no HAVE_STRUCT_TIMEVAL_TV_USEC")
 endif ()
 
 # check if 'struct timespec' has the member 'tv_sec'
 check_struct_has_member("struct timespec" tv_sec sys/time.h HAVE_STRUCT_TIMESPEC_TV_SEC)
 if (HAVE_STRUCT_TIMESPEC_TV_SEC)
-	message(STATUS "Compiler defs: HAVE_STRUCT_TIMESPEC_TV_SEC=1")
+	message(STATUS "__ST__: Compiler defs: HAVE_STRUCT_TIMESPEC_TV_SEC=1")
 	add_compile_definitions(HAVE_STRUCT_TIMESPEC_TV_SEC=1)
 else ()
-	message(STATUS "Compiler defs: no HAVE_STRUCT_TIMESPEC_TV_SEC")
+	message(STATUS "__ST__: Compiler defs: no HAVE_STRUCT_TIMESPEC_TV_SEC")
 endif ()
 # check if 'struct timespec' has the member 'tv_nsec'
 check_struct_has_member("struct timespec" tv_nsec sys/time.h HAVE_STRUCT_TIMESPEC_TV_NSEC)
 if (HAVE_STRUCT_TIMESPEC_TV_NSEC)
-	message(STATUS "Compiler defs: HAVE_STRUCT_TIMESPEC_TV_NSEC=1")
+	message(STATUS "__ST__: Compiler defs: HAVE_STRUCT_TIMESPEC_TV_NSEC=1")
 	add_compile_definitions(HAVE_STRUCT_TIMESPEC_TV_NSEC=1)
 else ()
-	message(STATUS "Compiler defs: no HAVE_STRUCT_TIMESPEC_TV_NSEC")
+	message(STATUS "__ST__: Compiler defs: no HAVE_STRUCT_TIMESPEC_TV_NSEC")
 endif ()
 
 # ----------------------------------------------------------------------------
@@ -339,10 +418,10 @@ string(REGEX REPLACE "^${GIT_VERSION_PATCH}$" "" GIT_VERSION_ALPHABETA "${GIT_VE
 # Replace version strings and numbers in app_version.h and lib_version.h
 # ----------------------------------------------------------------------------
 
-message(STATUS "Git version: Semantic=${GIT_VERSION_SEM}; Major=${GIT_VERSION_MAJOR}; Minor=${GIT_VERSION_MINOR}; A/B=${GIT_VERSION_ALPHABETA}; Patch=${GIT_VERSION_PATCH}")
+message(STATUS "__ST__: Git version: Semantic=${GIT_VERSION_SEM}; Major=${GIT_VERSION_MAJOR}; Minor=${GIT_VERSION_MINOR}; A/B=${GIT_VERSION_ALPHABETA}; Patch=${GIT_VERSION_PATCH}")
 
 set(X_FN_APP_VERSION_H "src/app/app_version.h")
-message(STATUS "Rewrite file '${X_FN_APP_VERSION_H}'")
+message(STATUS "__ST__: Rewrite file '${X_FN_APP_VERSION_H}'")
 execute_process(
 		INPUT_FILE "${X_FN_APP_VERSION_H}.in"
 		COMMAND sed -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
@@ -356,7 +435,7 @@ execute_process(
 	)
 
 set(X_FN_LIB_VERSION_H "src/includes/lib_version.h")
-message(STATUS "Rewrite file '${X_FN_LIB_VERSION_H}'")
+message(STATUS "__ST__: Rewrite file '${X_FN_LIB_VERSION_H}'")
 execute_process(
 		INPUT_FILE "${X_FN_LIB_VERSION_H}.in"
 		COMMAND sed -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
@@ -382,31 +461,30 @@ set_target_properties(santagger_lib PROPERTIES
 # External Shared Libraries
 # ----------------------------------------------------------------------------
 
-# check for optional shared library 'libmad'
-find_library(LIBMAD NAMES mad)
-find_path(LIBMAD_INCLUDE_DIR NAMES mad.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
+# check for optional shared library 'libmpg123'
+find_library(LIBMPG123 NAMES mpg123)
+find_path(LIBMPG123_INCLUDE_DIR NAMES mpg123.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
 
-if (LIBMAD AND LIBMAD_INCLUDE_DIR)
-	message(STATUS "Found libmad: ${LIBMAD}")
-	add_compile_definitions(HAVE_LIBMAD=1)
+if (LIBMPG123 AND LIBMPG123_INCLUDE_DIR)
+	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libmpg123: ${LIBMPG123}")
+	add_compile_definitions(HAVE_LIBMPG123=1)
 
-	target_link_libraries(santagger_app PRIVATE ${LIBMAD})
-	include_directories(${LIBMAD_INCLUDE_DIR})
+	target_link_libraries(santagger_app PRIVATE ${LIBMPG123})
+	include_directories(${LIBMPG123_INCLUDE_DIR})
 else ()
-	message(STATUS "libmad not found, trying libmpg123")
+	message(STATUS "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libmpg123 not found, trying libmad")
 
-	# check for optional shared library 'libmpg123'
-	find_library(LIBMPG123 NAMES mpg123)
-	find_path(LIBMPG123_INCLUDE_DIR NAMES mpg123.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
+	find_library(LIBMAD NAMES mad)
+	find_path(LIBMAD_INCLUDE_DIR NAMES mad.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
 
-	if (LIBMPG123 AND LIBMPG123_INCLUDE_DIR)
-		message(STATUS "Found libmpg123: ${LIBMPG123}")
-		add_compile_definitions(HAVE_LIBMPG123=1)
+	if (LIBMAD AND LIBMAD_INCLUDE_DIR)
+		message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libmad: ${LIBMAD}")
+		add_compile_definitions(HAVE_LIBMAD=1)
 
-		target_link_libraries(santagger_app PRIVATE ${LIBMPG123})
-		include_directories(${LIBMPG123_INCLUDE_DIR})
+		target_link_libraries(santagger_app PRIVATE ${LIBMAD})
+		include_directories(${LIBMAD_INCLUDE_DIR})
 	else ()
-		message(STATUS "libmpg123 not found, proceeding without it")
+		message(STATUS "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libmad not found, proceeding without it")
 	endif ()
 endif ()
 
@@ -418,26 +496,26 @@ find_library(LIBOGG NAMES ogg)
 find_path(LIBOGG_INCLUDE_DIR NAMES ogg/ogg.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
 
 if (LIBVORBIS AND LIBVORBIS_INCLUDE_DIR AND LIBOGG AND LIBOGG_INCLUDE_DIR)
-	message(STATUS "Found libvorbis: ${LIBVORBIS}")
-	message(STATUS "Found libogg: ${LIBOGG}")
+	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libvorbis: ${LIBVORBIS}")
+	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libogg: ${LIBOGG}")
 	add_compile_definitions(HAVE_LIBVORBIS=1)
 
 	target_link_libraries(santagger_app PRIVATE ${LIBVORBIS} ${LIBOGG})
 	include_directories(${LIBVORBIS_INCLUDE_DIR} ${LIBOGG_INCLUDE_DIR})
 else ()
-	message(STATUS "libvorbis+libogg not found, proceeding without it")
+	message(STATUS "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libvorbis+libogg not found, proceeding without it")
 endif ()
 
-# check for optional shared library 'libz'
-find_library(LIBZ NAMES z)
+# check for optional shared library 'zlib'
+find_library(LIBZ NAMES z PATHS /usr/local/opt/zlib/lib)
 find_path(LIBZ_INCLUDE_DIR NAMES zlib.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
 
 if (LIBZ AND LIBZ_INCLUDE_DIR)
-	message(STATUS "Found libz: ${LIBZ}")
+	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} zlib: ${LIBZ}")
 	add_compile_definitions(HAVE_LIBZ=1)
 
 	target_link_libraries(santagger_app PRIVATE ${LIBZ})
 	include_directories(${LIBZ_INCLUDE_DIR})
 else ()
-	message(STATUS "libz not found, proceeding without it")
+	message(STATUS "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} zlib not found, proceeding without it")
 endif ()
