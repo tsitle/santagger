@@ -3,6 +3,8 @@
 cmake-build-*-debug/
 cmake-build-*-release/
 
+docs-old/
+
 src/app/app_version.h
 src/includes/lib_version.h
 
