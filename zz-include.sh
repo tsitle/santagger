@@ -4,7 +4,14 @@
 # by TS, Sep 2024
 #
 
-LCFG_CMAKE_INSTALL_PREFIX="/opt/santaggg"
+LCFG_PROJECT_NAME="santagger"
+
+LCFG_CMAKE_INSTALL_PREFIX="/opt/${LCFG_PROJECT_NAME}"
+
+LCFG_BIN_LIB_STATIC_BASE_FN="lib${LCFG_PROJECT_NAME}-static"
+LCFG_BIN_LIB_DYN_BASE_FN="lib${LCFG_PROJECT_NAME}"
+
+LCFG_EXECUTABLE_ST_FN="${LCFG_PROJECT_NAME}"
 
 # ----------------------------------------------------------
 

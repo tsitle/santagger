@@ -12,7 +12,7 @@
 
 # param $1: Exit code
 function printUsage() {
-	echo "Usage: $(basename "${0}") [debug|<release>] [all|<bin>|inc]" >>/dev/stderr
+	echo "Usage: $(basename "${0}") [debug|vg_debug|<release>|vg_release] [all|<bin>|inc]" >>/dev/stderr
 	exit ${1}
 }
 
@@ -21,9 +21,9 @@ TMP_HAVE_ARG_BUILDTYPE=false
 LOPT_COMPONENTS="bin"
 TMP_HAVE_ARG_COMPONENTS=false
 while [ $# -ne 0 ]; do
-	if [ "${1}" = "debug" ] || [ "${1}" = "release" ]; then
+	if [ "${1}" = "debug" ] || [ "${1}" = "release" ] || [ "${1}" = "vg_debug" ] || [ "${1}" = "vg_release" ]; then
 		if [ "${TMP_HAVE_ARG_BUILDTYPE}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg 'debug|release'" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg 'debug|...'" >>/dev/stderr
 			printUsage 1
 		fi
 		LOPT_BUILDTYPE="${1}"
@@ -52,43 +52,26 @@ fi
 
 TMP_ARG_BUILD_DIR="$(getCmakeBuildDir "${LOPT_BUILDTYPE}")"
 
-if [ ! -f "${TMP_ARG_BUILD_DIR}/santagger" ]; then
+if [ ! -f "${TMP_ARG_BUILD_DIR}/${LCFG_EXECUTABLE_ST_FN}" ]; then
 	./zb-build.sh "${LOPT_BUILDTYPE}" || exit 1
 fi
 
-if [ -f "${LCFG_CMAKE_INSTALL_PREFIX}/bin/santagger" ]; then
-	if [ "${LOPT_COMPONENTS}" = "inc" ]; then
-		echo "- Note: '${LCFG_CMAKE_INSTALL_PREFIX}/bin/santagger' exists - but leaving it alone"
-	else
-		echo "- Deleting '${LCFG_CMAKE_INSTALL_PREFIX}/bin/santagger'"
-		rm "${LCFG_CMAKE_INSTALL_PREFIX}/bin/santagger"
-	fi
+# adjust install prefix
+if [ "${LOPT_BUILDTYPE}" != "release" ]; then
+	LCFG_CMAKE_INSTALL_PREFIX="${LCFG_CMAKE_INSTALL_PREFIX}-${LOPT_BUILDTYPE}"
 fi
-if [ -f "${LCFG_CMAKE_INSTALL_PREFIX}/lib64/libsantagger.so" ]; then
-	if [ "${LOPT_COMPONENTS}" = "inc" ]; then
-		echo "- Note: '${LCFG_CMAKE_INSTALL_PREFIX}/lib64/libsantagger.*' exists - but leaving it alone"
-	else
-		echo "- Deleting '${LCFG_CMAKE_INSTALL_PREFIX}/lib64/libsantagger.*'"
-		rm "${LCFG_CMAKE_INSTALL_PREFIX}/lib64"/libsantagger.*
-	fi
-fi
-if [ -f "${LCFG_CMAKE_INSTALL_PREFIX}/lib/libsantagger.dylib" ]; then
-	if [ "${LOPT_COMPONENTS}" = "inc" ]; then
-		echo "- Note: '${LCFG_CMAKE_INSTALL_PREFIX}/lib/libsantagger.*' exists - but leaving it alone"
-	else
-		echo "- Deleting '${LCFG_CMAKE_INSTALL_PREFIX}/lib/libsantagger.*'"
-		rm "${LCFG_CMAKE_INSTALL_PREFIX}/lib"/libsantagger.*
-	fi
-fi
-if [ -d "${LCFG_CMAKE_INSTALL_PREFIX}/include/santagger" ]; then
+
+#
+if [ -d "${LCFG_CMAKE_INSTALL_PREFIX}/include/${LCFG_PROJECT_NAME}" ]; then
 	if [ "${LOPT_COMPONENTS}" = "bin" ]; then
-		echo "- Note: '${LCFG_CMAKE_INSTALL_PREFIX}/include/santagger/' exists - but leaving it alone"
+		echo "- Note: '${LCFG_CMAKE_INSTALL_PREFIX}/include/${LCFG_PROJECT_NAME}/' exists - but leaving it alone"
 	else
-		echo "- Deleting '${LCFG_CMAKE_INSTALL_PREFIX}/include/santagger/'"
-		rm -r "${LCFG_CMAKE_INSTALL_PREFIX}/include/santagger"
+		echo "- Deleting '${LCFG_CMAKE_INSTALL_PREFIX}/include/${LCFG_PROJECT_NAME}/'"
+		rm -r "${LCFG_CMAKE_INSTALL_PREFIX}/include/${LCFG_PROJECT_NAME}"
 	fi
 fi
 
+#
 echo "- Installing in '${LCFG_CMAKE_INSTALL_PREFIX}/'"
 
 TMP_ARG_COMP=""

@@ -12,16 +12,16 @@
 
 # param $1: Exit code
 function printUsage() {
-	echo "Usage: $(basename "${0}") [debug|<release>] -- [ARGS FOR SANTAGGER...]" >>/dev/stderr
+	echo "Usage: $(basename "${0}") [debug|vg_debug|<release>|vg_release] -- [ARGS FOR SANTAGGER...]" >>/dev/stderr
 	exit ${1}
 }
 
 LOPT_BUILDTYPE="release"
 TMP_HAVE_ARG_BUILDTYPE=false
 while [ $# -ne 0 ]; do
-	if [ "${1}" = "debug" ] || [ "${1}" = "release" ]; then
+	if [ "${1}" = "debug" ] || [ "${1}" = "release" ] || [ "${1}" = "vg_debug" ] || [ "${1}" = "vg_release" ]; then
 		if [ "${TMP_HAVE_ARG_BUILDTYPE}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg 'debug|release'" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg 'debug|...'" >>/dev/stderr
 			printUsage 1
 		fi
 		LOPT_BUILDTYPE="${1}"
@@ -40,14 +40,14 @@ done
 
 # ----------------------------------------------------------
 
-if [ ! -f "${LCFG_CMAKE_INSTALL_PREFIX}/bin/santagger" ]; then
+if [ ! -f "${LCFG_CMAKE_INSTALL_PREFIX}/bin/${LCFG_EXECUTABLE_ST_FN}" ]; then
 	./zd-install.sh "${LOPT_BUILDTYPE}" || exit 1
 fi
 
 export LD_LIBRARY_PATH=${LCFG_CMAKE_INSTALL_PREFIX}/lib64:${LD_LIBRARY_PATH}
 export DYLD_LIBRARY_PATH=${LCFG_CMAKE_INSTALL_PREFIX}/lib:${DYLD_LIBRARY_PATH}
 
-TMP_BIN="${LCFG_CMAKE_INSTALL_PREFIX}/bin/santagger"
+TMP_BIN="${LCFG_CMAKE_INSTALL_PREFIX}/bin/${LCFG_EXECUTABLE_ST_FN}"
 echo "- Running from '${TMP_BIN}'"
 
-"$TMP_BIN" "${@}"
+"${TMP_BIN}" "${@}"
