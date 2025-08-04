@@ -1074,18 +1074,18 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		Tast_mf_editInfo *pEdInf)
 {
 	const char *cFNCN = __func__;
-	Tst_err   res         = ST_ERR_SUCC;
+	Tst_err   res          = ST_ERR_SUCC;
 	Tst_fsize fszI,
-	          fszN        = 0,
-	          wrb         = 0,
+	          fszN         = 0,
+	          wrb          = 0,
 	          toCp,
-	          cpd         = 0,
-	          skdByt      = 0;
+	          cpd          = 0,
+	          skdByt       = 0;
 	Tst_foffs curOffs;
-	Tst_str   *pTmpOutpFn = NULL;
-	Tst_bool  fndOne      = ST_B_FALSE,
+	Tst_str   *pTmpOutpFn  = NULL;
+	Tst_str   *pTmpOutpDir = NULL;
+	Tst_bool  fndOne       = ST_B_FALSE,
 	          doCopy,
-	          owInpFile,
 	          hasMPEG1,
 	          hasOGG,
 	          hasFLAC;
@@ -1097,9 +1097,10 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 
 	ST_ASSERTN_IARG(pCmdln == NULL || pMF == NULL || pEdInf == NULL)
 
-	if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+	if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
 		ast_mf_op_d_deb(cFNCN, "rewrite file%s...",
 				(pCmdln->opts.basOpts.pretWr ? " (pretend)" : ""));
+	}
 
 	fszI = st_sysFStc_getFileSz(&pMF->fstc, NULL);
 
@@ -1112,29 +1113,29 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	}
 
 	/* eventually overwrite the input/output file ? */
-	owInpFile = st_sysStrEmpty(pCmdln->opts.pOutpdir);
-
-	/* open output stream */
-	/** */
-	if (owInpFile) {
-		/* use temp. file in the current dir (./TEMPFILEN) */
-		ST_CALLOC(pTmpOutpFn, Tst_str*, 512, 1)
-		if (pTmpOutpFn == NULL)
-			return ST_ERR_OMEM;
-		if (! st_sysGetTmpFilename(pTmpOutpFn, 512, /*inCurrentDir:*/ST_B_TRUE)) {
-			ST_DELPOINT(pTmpOutpFn)
+	if (st_sysStrEmpty(pCmdln->opts.pOutpdir)) {
+		if (! st_sysDirname(st_sysFStc_getFilen(&pMF->fstc), &pTmpOutpDir)) {
 			ast_mf_op_d_mfErr(pMF, cFNCN,
-					"can't create temp filename");
+					"can't get directory name of input file '%s'",
+					st_sysFStc_getFilen(&pMF->fstc));
 			return ST_ERR_FAIL;
 		}
 	} else {
-		/* use temp. file in OUTPDIR (OUTPDIR/TEMPFILEN) */
-		if (! st_sysGetTmpFilenameInDir(pCmdln->opts.pOutpdir, &pTmpOutpFn)) {
-			ST_DELPOINT(pTmpOutpFn)
-			ast_mf_op_d_mfErr(pMF, cFNCN,
-					"can't create temp filename");
-			return ST_ERR_FAIL;
+		res = st_sysStrcpy(pCmdln->opts.pOutpdir, &pTmpOutpDir);
+		if (res != ST_ERR_SUCC) {
+			return res;
 		}
+	}
+
+	/* open output stream */
+	/** */
+	// use temp. file in OUTPDIR (OUTPDIR/TEMPFILEN)
+	if (! st_sysGetTmpFilenameInDir(pTmpOutpDir, &pTmpOutpFn)) {
+		ST_DELPOINT(pTmpOutpFn)
+		ST_DELPOINT(pTmpOutpDir)
+		ast_mf_op_d_mfErr(pMF, cFNCN,
+				"can't create temp filename");
+		return ST_ERR_FAIL;
 	}
 	/** */
 	st_sys_stc_initFStc(&fstcOut);
@@ -1146,6 +1147,7 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 					"can't open temp output-file '%s'", pTmpOutpFn);
 			st_sys_stc_freeFStc(&fstcOut);
 			ST_DELPOINT(pTmpOutpFn)
+			ST_DELPOINT(pTmpOutpDir)
 			return res;
 		}
 	}
@@ -1158,6 +1160,7 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 			st_sys_stc_freeFStc(&fstcOut);
 			st_sysUnlinkFile(pTmpOutpFn);
 			ST_DELPOINT(pTmpOutpFn)
+			ST_DELPOINT(pTmpOutpDir)
 			return res;
 		}
 	}
@@ -1173,9 +1176,11 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		st_streamrd_stc_freeSObj(&strrd);
 		st_streamwr_stc_freeSObj(&strwr);
 		st_sys_stc_freeFStc(&fstcOut);
-		if (! pCmdln->opts.basOpts.pretWr)
+		if (! pCmdln->opts.basOpts.pretWr) {
 			st_sysUnlinkFile(pTmpOutpFn);
+		}
 		ST_DELPOINT(pTmpOutpFn)
+		ST_DELPOINT(pTmpOutpDir)
 		return res;
 	}
 	st_contOgg_gs_setStrrd(&pMF->avOgg, &strrd);
@@ -1209,8 +1214,9 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	pEdInf->wroteAudio = ! pEdInf->hasAudio;
 
 	/* (re-)write some tags and rewrite or copy audio  */
-	if (pCmdln->opts.showStat)
+	if (pCmdln->opts.showStat) {
 		ast_mf_op_prMsg("*(Re-)Writing file...");
+	}
 	while ((curOffs = st_streamrd_getCurPos(&strrd)) < (Tst_foffs)fszI) {
 		pTBas = NULL;
 		pMT   = NULL;
@@ -1221,22 +1227,26 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 		if (fndOne) {
 			/* skip tag in input file */
 			toCp = (Tst_fsize)st_tagBas_gs_getSize(pTBas);
-			if (toCp > 0)
+			if (toCp > 0) {
 				st_streamrd_rdSkipBytes(&strrd, (Tst_uint32)toCp, ST_B_TRUE);
+			}
 			/**ast_mf_op_prf(" skipped tag\n");**/
 			continue;
-		} else if (pEdInf->wroteAudio)
+		}
+		if (pEdInf->wroteAudio) {
 			break;
+		}
 		/* check whether we have a tag to (re-)write */
 		fndOne = AST_MF__ed_checkTags(cFNCN, pCmdln, pMF,
 				pEdInf, &pMT, &pTBas, -1,
 				/*cmdSkipOrWrite:*/ST_B_FALSE);
 		if (fndOne) {
 			if (skdByt > 0) {
-				if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+				if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
 					ast_mf_op_d_deb(cFNCN,
 							"skipped "ST_TFSIZE_PRF_LU" byte%s of input",
 							(Tst_fsize)skdByt, (skdByt == 1 ? "" : "s"));
+				}
 				skdByt = 0;
 			}
 			/* (re-)write tag */
@@ -1244,9 +1254,10 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 			res = AST_MF__ed_writeTag(pCmdln, pMF, pTBas, pMT,
 					&strwr, &wrb);
 			if (res != ST_ERR_SUCC) {
-				if (res != ST_ERR_ABRT)
+				if (res != ST_ERR_ABRT) {
 					ast_mf_op_d_mfErr(pMF, cFNCN,
 							"writing tag failed");
+				}
 				break;
 			}
 			fszN += wrb;
@@ -1260,9 +1271,10 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 				if (hasMPEG1 &&
 						curOffs == st_mpeg1_gs_getStr_startOffset(&pMF->audMpg1)) {
 					toCp = st_mpeg1_gs_getStr_size(&pMF->audMpg1);
-					if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+					if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
 						ast_mf_op_d_deb(cFNCN,
 								"copying MPEG1 stream");
+					}
 					pEdInf->wroteAudio = ST_B_TRUE;
 					doCopy             = ST_B_TRUE;
 					/**ast_mf_op_prf(" audVid - MPG1\n");**/
@@ -1270,33 +1282,38 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 						curOffs == st_contOgg_gs_getStartOffset(&pMF->avOgg)) {
 					if (pEdInf->modEmbVorTag ||
 							st_contOgg_opts_getForceRewriteComments(&pMF->avOgg)) {
-						if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+						if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
 							ast_mf_op_d_deb(cFNCN,
 									"rewriting %s stream",
 									(hasOGG ? "OGG" : "Flac"));
-						if (hasOGG)
+						}
+						if (hasOGG) {
 							res = st_contOgg_writeStreams(&pMF->avOgg);
-						else
+						} else {
 							res = st_contOgg_writeFlacStream(&pMF->avOgg);
+						}
 						if (res != ST_ERR_SUCC) {
-							if (res != ST_ERR_ABRT)
+							if (res != ST_ERR_ABRT) {
 								ast_mf_op_d_mfErr(pMF, cFNCN,
 										"writing %s failed",
 										(hasOGG ? "OGG" : "Flac"));
+							}
 							break;
 						}
-						if (! pCmdln->opts.quiet)
+						if (! pCmdln->opts.quiet) {
 							ast_mf_op_prMsg("*  %s stream successfully rewritten%s",
 									(hasOGG ? "OGG" : "Flac"),
 									(pEdInf->modEmbVorTag ?
 										" - with modified Vorbis Tag" : ""));
+						}
 						fszN += st_contOgg_gs_getSize(&pMF->avOgg);
 					} else {
 						toCp = st_contOgg_gs_getSize(&pMF->avOgg);
-						if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+						if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
 							ast_mf_op_d_deb(cFNCN,
 									"copying %s stream",
 									(hasOGG ? "OGG" : "Flac"));
+						}
 						doCopy = ST_B_TRUE;
 					}
 					pEdInf->wroteAudio = ST_B_TRUE;
@@ -1305,24 +1322,26 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 				/* */
 				if (doCopy && toCp > 0 &&
 						ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
-					if (pCmdln->opts.basOpts.pretWr)
+					if (pCmdln->opts.basOpts.pretWr) {
 						ast_mf_op_d_deb(cFNCN,
 								"audio/video stream: sz "ST_TFSIZE_PRF_LU,
 								toCp);
-					else
+					} else {
 						ast_mf_op_d_deb(cFNCN,
 								"audio/video stream: "
 								"o "ST_TFOFFS_PRF_0X", sz "ST_TFSIZE_PRF_LU,
 								curOffs, toCp);
+					}
 				}
 			}
 			/* copy data */
 			if (doCopy && toCp > 0) {
 				if (skdByt > 0) {
-					if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+					if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
 						ast_mf_op_d_deb(cFNCN,
 								"skipped "ST_TFSIZE_PRF_LU" byte%s of input",
 								(Tst_fsize)skdByt, (skdByt == 1 ? "" : "s"));
+					}
 					skdByt = 0;
 				}
 				/* */
@@ -1339,39 +1358,44 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 				/* skip one byte */
 				st_streamrd_rdSkipBytes(&strrd, 1, ST_B_TRUE);
 				++skdByt;
-				if (skdByt % 1024 == 0 && pCmdln->opts.showStat)
+				if (skdByt % 1024 == 0 && pCmdln->opts.showStat) {
 					ast_mf_op_prMsg("   (skipped "ST_TFSIZE_PRF_LU" bytes)",
 							(Tst_fsize)skdByt);
+				}
 			}
 		}
 	}
 	/* */
 	if (skdByt > 0) {
-		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
 			ast_mf_op_d_deb(cFNCN,
 					"skipped "ST_TFSIZE_PRF_LU" byte%s of input",
 					(Tst_fsize)skdByt, (skdByt == 1 ? "" : "s"));
+		}
 		skdByt = 0;
 	}
 	/* write only new tags */
 	do {
-		if (! pEdInf->allwNonEmbTags)
+		if (! pEdInf->allwNonEmbTags) {
 			break;
+		}
 		pTBas = NULL;
 		pMT   = NULL;
 		/* check whether we have a tag to (re-)write */
 		fndOne = AST_MF__ed_checkTags(cFNCN, pCmdln, pMF,
 				pEdInf, &pMT, &pTBas, -1,
 				/*cmdSkipOrWrite:*/ST_B_FALSE);
-		if (! fndOne)
+		if (! fndOne) {
 			continue;
+		}
 		/* (re-)write tag */
 		res = AST_MF__ed_writeTag(pCmdln, pMF, pTBas, pMT,
 				&strwr, &wrb);
 		if (res != ST_ERR_SUCC) {
-			if (res != ST_ERR_ABRT)
+			if (res != ST_ERR_ABRT) {
 				ast_mf_op_d_mfErr(pMF, cFNCN,
 						"writing tag failed");
+			}
 			break;
 		}
 		fszN += wrb;
@@ -1382,57 +1406,31 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	st_streamrd_stc_freeSObj(&strrd);
 	st_streamwr_stc_freeSObj(&strwr);
 	st_sys_stc_freeFStc(&fstcOut);
-	if (res == ST_ERR_SUCC && ! pCmdln->opts.basOpts.pretWr)
+	if (res == ST_ERR_SUCC && ! pCmdln->opts.basOpts.pretWr) {
 		st_sysFStc_close(&pMF->fstc);
+	}
 
 	/* move temp. output file to real output file */
-	if (res == ST_ERR_SUCC && ! pCmdln->opts.basOpts.pretWr && owInpFile) {
-		Tst_str const *pInpFilen = st_sysFStc_getFilen(&pMF->fstc);
-
-		/* temp. file is in the current dir (./TEMPFILEN) and
-		 *   will be moved to input file (./INPFILEN)  */
-		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
-			ast_mf_op_d_deb(cFNCN,
-					"replacing old file with new one");
-		if (! st_sysUnlinkFile(pInpFilen)) {
-			ast_mf_op_d_mfErr(pMF, cFNCN,
-					"can't remove file '%s'", pInpFilen);
-			res = ST_ERR_FAIL;
-		} else {
-			if (! st_sysRenameFile(pTmpOutpFn, pInpFilen)) {
-				ast_mf_op_d_mfErr(pMF, cFNCN,
-						"can't rename temp file '%s' to '%s'",
-						pTmpOutpFn, pInpFilen);
-				res = ST_ERR_FAIL;
-			}
-		}
-	} else if (res == ST_ERR_SUCC && ! pCmdln->opts.basOpts.pretWr) {
+	if (res == ST_ERR_SUCC && ! pCmdln->opts.basOpts.pretWr) {
 		Tst_str *pRealOutpFn = NULL,
 		        *pOrgFBn     = NULL;
 
 		/* temp. file is in OUTPDIR (OUTPDIR/TEMPFILEN) and
 		 *   will be moved to OUTPDIR/INPFILEN  */
 		/** */
-		if (! st_sysFileBasename(st_sysFStc_getFilen(&pMF->fstc), &pOrgFBn))
+		if (! (st_sysFileBasename(st_sysFStc_getFilen(&pMF->fstc), &pOrgFBn) &&
+					st_sysConcatDirAndFilen(pTmpOutpDir, pOrgFBn, &pRealOutpFn))) {
 			res = ST_ERR_FAIL;
-		else if (! st_sysConcatDirAndFilen(pCmdln->opts.pOutpdir,
-					pOrgFBn, &pRealOutpFn))
-			res = ST_ERR_FAIL;
+		}
 		/** */
-		if (res == ST_ERR_SUCC && st_sysDoesFileExist(pRealOutpFn)) {
-			/* remove existing file */
-			if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+		if (res == ST_ERR_SUCC && ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
+			if (st_sysDoesFileExist(pRealOutpFn)) {
 				ast_mf_op_d_deb(cFNCN,
 						"replacing old output file with new one");
-			if (! st_sysUnlinkFile(pRealOutpFn)) {
-				ast_mf_op_d_mfErr(pMF, cFNCN,
-						"can't remove output file '%s'", pRealOutpFn);
-				res = ST_ERR_FAIL;
-			}
-		} else if (res == ST_ERR_SUCC) {
-			if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+			} else {
 				ast_mf_op_d_deb(cFNCN,
 						"renaming filename to new output filename");
+			}
 		}
 		/** */
 		if (res == ST_ERR_SUCC) {
@@ -1443,20 +1441,22 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 				res = ST_ERR_FAIL;
 			} else {
 				st_sysFStc_setFilen(&pMF->fstc, pRealOutpFn);
-				if (pCmdln->opts.showStat && ! pCmdln->opts.basOpts.pretWr)
+				if (pCmdln->opts.showStat) {
 					ast_mf_op_prMsg("*  wrote to '%s'", pRealOutpFn);
+				}
 			}
 		}
 		ST_DELPOINT(pRealOutpFn)
 		ST_DELPOINT(pOrgFBn)
 	}
 
-	if (res == ST_ERR_SUCC && pCmdln->opts.showStat)
+	if (res == ST_ERR_SUCC && pCmdln->opts.showStat) {
 		ast_mf_op_prMsg("*  filesize after rewriting file%s: "
 				ST_TFSIZE_PRF_LU" bytes  (d "ST_TFOFFS_PRF_PLD" bytes)",
 				(pCmdln->opts.basOpts.pretWr ? " would be" : ""),
 				(Tst_fsize)fszN,
 				(Tst_foffs)fszN - (Tst_foffs)fszI);
+	}
 
 	if (res == ST_ERR_SUCC && ! pCmdln->opts.basOpts.pretWr) {
 		/* open freshly created file */
@@ -1468,6 +1468,7 @@ AST_MF__ed_rewriteFile(const Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	}
 
 	ST_DELPOINT(pTmpOutpFn)
+	ST_DELPOINT(pTmpOutpDir)
 	return res;
 }
 
