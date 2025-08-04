@@ -1132,39 +1132,32 @@ ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, const Tst_bool exOrNew,
 
 	st_sys_stc_rsetFStc(pFStc, ST_B_FALSE);
 	pFStcI = (Tst_sys__fstc_intn*)pFStc->pObInternal;
-	if (st_sysStrEmpty(pFStcI->pFilen))
+	if (st_sysStrEmpty(pFStcI->pFilen)) {
 		return ST_ERR_FAIL;
+	}
 
 	if (exOrNew && ! createVirtual) {
 		/* open existing file */
 
-		if (lstat((const char*)pFStcI->pFilen, &lstat_info) != 0) {
-			res = ST_ERR_FCOF;  /* can't open file */
-		} else if (! S_ISREG(lstat_info.st_mode) ||
-				(S_ISLNK(lstat_info.st_mode) && ! allowSymAndHardLinks)) {
-			/* file is irregular or symlink */
+		if (lstat((const char*)pFStcI->pFilen, &lstat_info) != 0 ||
+				(! (S_ISREG(lstat_info.st_mode) || (S_ISLNK(lstat_info.st_mode) && allowSymAndHardLinks)))) {
 			res = ST_ERR_FCOF;  /* can't open file */
 		}
 
 		if (res == ST_ERR_SUCC) {
 			pFStcI->fd = open((const char*)pFStcI->pFilen,
 					(allowWriting ? O_RDWR : O_RDONLY));
-			if (pFStcI->fd == -1)
+			if (pFStcI->fd == -1) {
 				res = ST_ERR_FCOF;  /* can't open file */
+			}
 		}
 
-		if (res == ST_ERR_SUCC && fstat(pFStcI->fd, &fstat_info) != 0)
+		if (res == ST_ERR_SUCC && fstat(pFStcI->fd, &fstat_info) != 0) {
 			res = ST_ERR_FCOF;  /* can't open file */
+		}
 		if (res == ST_ERR_SUCC &&
 				lstat_info.st_nlink > 1 && ! allowSymAndHardLinks) {
 			/* file has multiple hard links */
-			res = ST_ERR_FCOF;  /* can't open file */
-		}
-
-		if (res == ST_ERR_SUCC &&
-				! (lstat_info.st_mode == fstat_info.st_mode &&
-					lstat_info.st_ino == fstat_info.st_ino &&
-					lstat_info.st_dev == fstat_info.st_dev)) {
 			res = ST_ERR_FCOF;  /* can't open file */
 		}
 	} else if (! createVirtual) {
@@ -1176,8 +1169,9 @@ ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, const Tst_bool exOrNew,
 			pFStcI->fd = open((const char*)pFStcI->pFilen,
 					(allowWriting ? O_RDWR : O_RDONLY) |
 					O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
-			if (pFStcI->fd == -1)
+			if (pFStcI->fd == -1) {
 				res = ST_ERR_FCCF;  /* can't create file */
+			}
 		}
 	} else {
 		pFStcI->isVirt = ST_B_TRUE;
@@ -1188,8 +1182,9 @@ ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, const Tst_bool exOrNew,
 	if (res == ST_ERR_SUCC && ! createVirtual) {
 		pFStcI->pFP = fdopen(pFStcI->fd,
 				(allowWriting ? "rb+" : "rb"));
-		if (pFStcI->pFP == NULL)
+		if (pFStcI->pFP == NULL) {
 			res = ST_ERR_FCCF;  /* can't create file */
+		}
 	} else if (res == ST_ERR_SUCC) {
 		pFStcI->pFP = (FILE*)0x1;  /* virtual file pointer */
 	}
@@ -1198,13 +1193,15 @@ ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, const Tst_bool exOrNew,
 		pFStcI->modeWr = allowWriting;
 	} else {
 		if (pFStcI->pFP != NULL) {
-			if (! createVirtual)
+			if (! createVirtual) {
 				fclose(pFStcI->pFP);  /* also closes pFStcI->fd */
+			}
 			pFStcI->pFP = NULL;
 			pFStcI->fd  = -1;
 		} else if (pFStcI->fd >= 0) {
-			if (! createVirtual)
+			if (! createVirtual) {
 				close(pFStcI->fd);
+			}
 			pFStcI->fd = -1;
 		}
 		st_sys_stc_rsetFStc(pFStc, ST_B_FALSE);
