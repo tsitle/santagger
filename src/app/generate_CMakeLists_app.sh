@@ -27,7 +27,7 @@ createCmakeListsForSubdirectoryEnd() {
 			while IFS= read -r -d '' TMP_FN; do
 				TMP_FN="$(echo -n "$TMP_FN" | sed -e 's;^\./;;')"
 				[ "$TMP_FN" = "app_version.h" ] && continue
-				[ "$TMP_FN" = "app_version.h.in" ] && TMP_FN="app_version.h"
+				[ "$TMP_FN" = "app_version.h.in" ] && continue
 				{
 					echo -e "\t\t\t${TMP_FN}"
 				} >> "$LCFG_CMAKELISTS_FN"

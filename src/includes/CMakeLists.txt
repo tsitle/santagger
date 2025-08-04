@@ -3,7 +3,6 @@ target_sources(santagger_includes
 		BASE_DIRS ${PROJECT_SOURCE_DIR}
 		FILES
 			lib_defs.h
-			lib_version.h
 	)
 
 add_subdirectory("audvid")

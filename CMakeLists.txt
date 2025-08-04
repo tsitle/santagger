@@ -345,117 +345,154 @@ endif ()
 # Semantic version variables
 # ----------------------------------------------------------------------------
 
-if (NOT EXISTS "${CMAKE_SOURCE_DIR}/.git")
-	message(FATAL_ERROR "Git directory not found")
+set(X_FN_APP_VERSION_H "src/app/app_version.h")
+set(X_FN_LIB_VERSION_H "src/includes/lib_version.h")
+
+if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
+	# get the current Git tag description (e.g. '1.0-2-ga12d3ef') for semantic versioning
+	execute_process(
+			COMMAND git describe --tags --dirty
+			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+			OUTPUT_VARIABLE GIT_VERSION_SEM
+			OUTPUT_STRIP_TRAILING_WHITESPACE
+		)
+	#set(GIT_VERSION_SEM "12.34-gdeadbeef")
+	#set(GIT_VERSION_SEM "12.34-56-gdeadbeef")
+	#set(GIT_VERSION_SEM "12.34-alpha5-gdeadbeef")
+	#set(GIT_VERSION_SEM "12.34-alpha5-67-gdeadbeef")
+	#set(GIT_VERSION_SEM "12.34-alpha5-67-gdeadbeef-dirty")
+	#set(GIT_VERSION_SEM "1.0-alpha-3-g4fdbbae-dirty")
+	#set(GIT_VERSION_SEM "1.0-alpha-g4fdbbae-dirty")
+	#set(GIT_VERSION_SEM "1.0-alpha-g4fdbbae")
+	#set(GIT_VERSION_SEM "1.0-g4fdbbae-dirty")
+	#set(GIT_VERSION_SEM "1.0-g4fdbbae")
+
+	# get only the major and minor version
+	#   --> extract everything before the first dash (-)
+	string(REGEX REPLACE "-.*" "" GIT_VERSION_MAJMIN "${GIT_VERSION_SEM}")
+	#message(STATUS "Git version: mm '${GIT_VERSION_MAJMIN}'")
+
+	# get only the major version
+	#   --> extract everything before the first dot (.)
+	string(REGEX REPLACE "\\.[0-9]*" "" GIT_VERSION_MAJOR "${GIT_VERSION_MAJMIN}")
+
+	# get only the minor version
+	#   --> extract everything after the first dot (.)
+	string(REGEX REPLACE "^([^\\.]*)\\.([^\\.]*)" "\\2" GIT_VERSION_MINOR "${GIT_VERSION_MAJMIN}")
+
+	# get only the patch level
+	#   --> in the example '1.2-ga12d3ef' that would be '0'
+	#   --> in the example '1.2-3-ga12d3ef' that would be '3'
+	#   --> in the example '1.2-alpha3-4-ga12d3ef' that would be 'alpha3-4'
+	#   --> in the example '1.2-alpha3-4-ga12d3ef-dirty' that would be 'alpha3-4'
+	string(REGEX REPLACE "-dirty$" "" GIT_VERSION_TMP "${GIT_VERSION_SEM}")
+	#message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
+	string(REGEX REPLACE "-g[a-z0-9]*$" "" GIT_VERSION_TMP "${GIT_VERSION_TMP}")
+	#message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
+	string(REGEX REPLACE "^${GIT_VERSION_MAJMIN}-" "" GIT_VERSION_TMP "${GIT_VERSION_TMP}")  # '12.34-5' --> '5'
+	string(REGEX REPLACE "^${GIT_VERSION_MAJMIN}$" "0" GIT_VERSION_TMP "${GIT_VERSION_TMP}")  # '12.34' --> '0'
+	#message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
+
+	string(REGEX REPLACE "^.*-([0-9]*)$" "\\1" GIT_VERSION_PATCH "${GIT_VERSION_TMP}")
+	#message(STATUS "Git version: patch '${GIT_VERSION_PATCH}'")
+	string(REGEX REPLACE "^alpha.*-" "" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'alpha-3' --> '3'
+	string(REGEX REPLACE "^beta.*-" "" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'beta-3' --> '3'
+	string(REGEX REPLACE "^alpha.*$" "0" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'alpha' --> '0'
+	string(REGEX REPLACE "^beta.*$" "0" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'beta' --> '0'
+	#message(STATUS "Git version: patch '${GIT_VERSION_PATCH}'")
+
+	# get only the alpha/beta marker
+	#   --> in the example '1.2-ga12d3ef' that would be ''
+	#   --> in the example '1.2-3-ga12d3ef' that would be ''
+	#   --> in the example '1.2-alpha3-4-ga12d3ef' that would be 'alpha3'
+	#   --> in the example '1.2-alpha3-4-ga12d3ef-dirty' that would be 'alpha3'
+	string(REGEX REPLACE "^[0-9]*\\.[0-9]*-(.*)$" "\\1" GIT_VERSION_ALPHABETA "${GIT_VERSION_TMP}")
+	#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
+
+	string(REGEX REPLACE "^(.*)-[0-9]*$" "\\1" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
+	#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
+	string(REGEX REPLACE "^${GIT_VERSION_PATCH}$" "" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
+	#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
+elseif (EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
+	message(STATUS "__ST__: Using existing lib_version.h")
+	execute_process(COMMAND grep " ST_LIBSANTAG_VERS_STRING " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_SEM WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND grep " ST_LIBSANTAG_VERS_MAJOR " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_MAJOR WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND grep " ST_LIBSANTAG_VERS_MINOR " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_MINOR WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND grep " ST_LIBSANTAG_VERS_PATCH " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_PATCH WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND grep " ST_LIBSANTAG_VERS_ALPHABETA " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_ALPHABETA WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+	# --> extract everything in between the parenthesis - but without the quotation marks
+	string(REGEX REPLACE "(.*)\\(\"(.*)\"\\)(.*)" "\\2" GIT_VERSION_SEM "${GIT_VERSION_SEM}")
+	# --> extract everything in between the parenthesis
+	string(REGEX REPLACE "(.*)\\((.*)\\)(.*)" "\\2" GIT_VERSION_MAJOR "${GIT_VERSION_MAJOR}")
+	# --> extract everything in between the parenthesis
+	string(REGEX REPLACE "(.*)\\((.*)\\)(.*)" "\\2" GIT_VERSION_MINOR "${GIT_VERSION_MINOR}")
+	# --> extract everything in between the parenthesis
+	string(REGEX REPLACE "(.*)\\((.*)\\)(.*)" "\\2" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")
+	# --> extract everything in between the parenthesis - but without the quotation marks
+	string(REGEX REPLACE "(.*)\\(\"(.*)\"\\)(.*)" "\\2" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
 endif ()
-
-# get the current Git tag description (e.g. '1.0-2-ga12d3ef') for semantic versioning
-execute_process(
-		COMMAND git describe --tags --dirty
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		OUTPUT_VARIABLE GIT_VERSION_SEM
-		OUTPUT_STRIP_TRAILING_WHITESPACE
-	)
-#set(GIT_VERSION_SEM "12.34-gdeadbeef")
-#set(GIT_VERSION_SEM "12.34-56-gdeadbeef")
-#set(GIT_VERSION_SEM "12.34-alpha5-gdeadbeef")
-#set(GIT_VERSION_SEM "12.34-alpha5-67-gdeadbeef")
-#set(GIT_VERSION_SEM "12.34-alpha5-67-gdeadbeef-dirty")
-#set(GIT_VERSION_SEM "1.0-alpha-3-g4fdbbae-dirty")
-#set(GIT_VERSION_SEM "1.0-alpha-g4fdbbae-dirty")
-#set(GIT_VERSION_SEM "1.0-alpha-g4fdbbae")
-#set(GIT_VERSION_SEM "1.0-g4fdbbae-dirty")
-#set(GIT_VERSION_SEM "1.0-g4fdbbae")
-
-# get only the major and minor version
-#   --> extract everything before the first dash (-)
-string(REGEX REPLACE "-.*" "" GIT_VERSION_MAJMIN "${GIT_VERSION_SEM}")
-#message(STATUS "Git version: mm '${GIT_VERSION_MAJMIN}'")
-
-# get only the major version
-#   --> extract everything before the first dot (.)
-string(REGEX REPLACE "\\.[0-9]*" "" GIT_VERSION_MAJOR "${GIT_VERSION_MAJMIN}")
-
-# get only the minor version
-#   --> extract everything after the first dot (.)
-string(REGEX REPLACE "^([^\\.]*)\\.([^\\.]*)" "\\2" GIT_VERSION_MINOR "${GIT_VERSION_MAJMIN}")
-
-# get only the patch level
-#   --> in the example '1.2-ga12d3ef' that would be '0'
-#   --> in the example '1.2-3-ga12d3ef' that would be '3'
-#   --> in the example '1.2-alpha3-4-ga12d3ef' that would be 'alpha3-4'
-#   --> in the example '1.2-alpha3-4-ga12d3ef-dirty' that would be 'alpha3-4'
-string(REGEX REPLACE "-dirty$" "" GIT_VERSION_TMP "${GIT_VERSION_SEM}")
-#message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
-string(REGEX REPLACE "-g[a-z0-9]*$" "" GIT_VERSION_TMP "${GIT_VERSION_TMP}")
-#message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
-string(REGEX REPLACE "^${GIT_VERSION_MAJMIN}-" "" GIT_VERSION_TMP "${GIT_VERSION_TMP}")  # '12.34-5' --> '5'
-string(REGEX REPLACE "^${GIT_VERSION_MAJMIN}$" "0" GIT_VERSION_TMP "${GIT_VERSION_TMP}")  # '12.34' --> '0'
-#message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
-
-string(REGEX REPLACE "^.*-([0-9]*)$" "\\1" GIT_VERSION_PATCH "${GIT_VERSION_TMP}")
-#message(STATUS "Git version: patch '${GIT_VERSION_PATCH}'")
-string(REGEX REPLACE "^alpha.*-" "" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'alpha-3' --> '3'
-string(REGEX REPLACE "^beta.*-" "" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'beta-3' --> '3'
-string(REGEX REPLACE "^alpha.*$" "0" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'alpha' --> '0'
-string(REGEX REPLACE "^beta.*$" "0" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'beta' --> '0'
-#message(STATUS "Git version: patch '${GIT_VERSION_PATCH}'")
-
-# get only the alpha/beta marker
-#   --> in the example '1.2-ga12d3ef' that would be ''
-#   --> in the example '1.2-3-ga12d3ef' that would be ''
-#   --> in the example '1.2-alpha3-4-ga12d3ef' that would be 'alpha3'
-#   --> in the example '1.2-alpha3-4-ga12d3ef-dirty' that would be 'alpha3'
-string(REGEX REPLACE "^[0-9]*\\.[0-9]*-(.*)$" "\\1" GIT_VERSION_ALPHABETA "${GIT_VERSION_TMP}")
-#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
-
-string(REGEX REPLACE "^(.*)-[0-9]*$" "\\1" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
-#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
-string(REGEX REPLACE "^${GIT_VERSION_PATCH}$" "" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
-#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
 
 # ----------------------------------------------------------------------------
 # Replace version strings and numbers in app_version.h and lib_version.h
 # ----------------------------------------------------------------------------
 
+if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
+	message(STATUS "__ST__: Rewrite file '${X_FN_APP_VERSION_H}'")
+	execute_process(
+			INPUT_FILE "${X_FN_APP_VERSION_H}.in"
+			COMMAND sed -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
+			COMMAND sed -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
+			COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
+			COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
+			COMMAND sed -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
+			COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
+			OUTPUT_FILE "${X_FN_APP_VERSION_H}"
+			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		)
+
+	message(STATUS "__ST__: Rewrite file '${X_FN_LIB_VERSION_H}'")
+	execute_process(
+			INPUT_FILE "${X_FN_LIB_VERSION_H}.in"
+			COMMAND sed -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
+			COMMAND sed -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
+			COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
+			COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
+			COMMAND sed -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
+			COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
+			OUTPUT_FILE "${X_FN_LIB_VERSION_H}"
+			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		)
+endif ()
+
+if (NOT EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_APP_VERSION_H}")
+	message(FATAL_ERROR "__ST__: Missing app_version.h")
+endif ()
+if (NOT EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
+	message(FATAL_ERROR "__ST__: Missing lib_version.h")
+endif ()
+
 message(STATUS "__ST__: Git version: Semantic=${GIT_VERSION_SEM}; Major=${GIT_VERSION_MAJOR}; Minor=${GIT_VERSION_MINOR}; A/B=${GIT_VERSION_ALPHABETA}; Patch=${GIT_VERSION_PATCH}")
 
-set(X_FN_APP_VERSION_H "src/app/app_version.h")
-message(STATUS "__ST__: Rewrite file '${X_FN_APP_VERSION_H}'")
-execute_process(
-		INPUT_FILE "${X_FN_APP_VERSION_H}.in"
-		COMMAND sed -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
-		COMMAND sed -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
-		COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
-		COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
-		COMMAND sed -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
-		COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
-		OUTPUT_FILE "${X_FN_APP_VERSION_H}"
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	)
-
-set(X_FN_LIB_VERSION_H "src/includes/lib_version.h")
-message(STATUS "__ST__: Rewrite file '${X_FN_LIB_VERSION_H}'")
-execute_process(
-		INPUT_FILE "${X_FN_LIB_VERSION_H}.in"
-		COMMAND sed -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
-		COMMAND sed -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
-		COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
-		COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
-		COMMAND sed -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
-		COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
-		OUTPUT_FILE "${X_FN_LIB_VERSION_H}"
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	)
+target_sources(santagger_app
+	PRIVATE
+		${X_FN_APP_VERSION_H}
+)
+target_sources(santagger_includes
+	INTERFACE FILE_SET HEADERS
+	BASE_DIRS ${PROJECT_SOURCE_DIR}
+	FILES
+		${X_FN_LIB_VERSION_H}
+)
 
 # ----------------------------------------------------------------------------
 # Set version of Shared Library
 # ----------------------------------------------------------------------------
 
 set_target_properties(santagger_lib PROPERTIES
-		VERSION ${GIT_VERSION_MAJOR}.${GIT_VERSION_MINOR}.${GIT_VERSION_ALPHABETA}${GIT_VERSION_PATCH}  # Full version
-		SOVERSION ${X_LIB_ABI_VERSION}  # ABI version
-	)
+	VERSION ${GIT_VERSION_MAJOR}.${GIT_VERSION_MINOR}.${GIT_VERSION_ALPHABETA}${GIT_VERSION_PATCH}  # Full version
+	SOVERSION ${X_LIB_ABI_VERSION}  # ABI version
+)
 
 # ----------------------------------------------------------------------------
 # External Shared Libraries
