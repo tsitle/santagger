@@ -40,14 +40,21 @@ done
 
 # ----------------------------------------------------------
 
-if [ ! -f "${LCFG_CMAKE_INSTALL_PREFIX}/bin/${LCFG_EXECUTABLE_ST_FN}" ]; then
-	./zd-install.sh "${LOPT_BUILDTYPE}" || exit 1
+# adjust install prefix
+if [ "${LOPT_BUILDTYPE}" != "release" ]; then
+	LCFG_CMAKE_INSTALL_PREFIX="${LCFG_CMAKE_INSTALL_PREFIX}-${LOPT_BUILDTYPE}"
 fi
 
-export LD_LIBRARY_PATH=${LCFG_CMAKE_INSTALL_PREFIX}/lib64:${LD_LIBRARY_PATH}
+#
+if [ ! -f "${LCFG_CMAKE_INSTALL_PREFIX}/bin/${LCFG_EXECUTABLE_ST_FN}" ]; then
+	echo "$(basename "${0}"): file '${LCFG_CMAKE_INSTALL_PREFIX}/bin/${LCFG_EXECUTABLE_ST_FN}' not found" >>/dev/stderr
+	exit 1
+fi
+
+export LD_LIBRARY_PATH=${LCFG_CMAKE_INSTALL_PREFIX}/lib64:${LCFG_CMAKE_INSTALL_PREFIX}/lib:${LD_LIBRARY_PATH}
 export DYLD_LIBRARY_PATH=${LCFG_CMAKE_INSTALL_PREFIX}/lib:${DYLD_LIBRARY_PATH}
 
 TMP_BIN="${LCFG_CMAKE_INSTALL_PREFIX}/bin/${LCFG_EXECUTABLE_ST_FN}"
-echo "- Running from '${TMP_BIN}'"
+echo "$(basename "${0}"): Running from '${TMP_BIN}'"
 
 "${TMP_BIN}" "${@}"
