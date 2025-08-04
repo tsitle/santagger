@@ -556,3 +556,6 @@ if (LIBZ AND LIBZ_INCLUDE_DIR)
 else ()
 	message(STATUS "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} zlib not found, proceeding without it")
 endif ()
+
+# link to shared library 'libm' - required only for Debian when using libvorbis
+target_link_libraries(santagger_app PRIVATE m)
