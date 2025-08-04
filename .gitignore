@@ -8,6 +8,8 @@ docs-old/
 src/app/app_version.h
 src/includes/lib_version.h
 
+output-bin-archive/
+
 
 # =========================
 # IDE Files
