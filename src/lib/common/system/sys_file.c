@@ -183,18 +183,52 @@ st_sysUnlinkFile(const Tst_str *pFilename)
 			unlink((const char*)pFilename) == 0);
 }
 
-/*
- * Rename file/directory
- *   pSrc must exist and pDst must not exist
+/**
+ * Rename a file
  *
- * returns: true on success
+ * @returns true on success
  */
 Tst_bool
 st_sysRenameFile(const Tst_str *pSrc, const Tst_str *pDst)
 {
-	return ((st_sysDoesFileExist(pSrc) || st_sysDoesDirExist(pSrc)) &&
-			(! (st_sysDoesFileExist(pDst) || st_sysDoesDirExist(pDst))) &&
-			rename((const char*)pSrc, (const char*)pDst) == 0);
+	if (! st_sysDoesFileExist(pSrc)) {
+		return ST_B_FALSE;
+	}
+	//
+	if (st_sysDoesFileExist(pDst)) {
+		Tst_bool isOnOtherDevice = ST_B_FALSE;
+		struct stat lstat_info,
+		            fstat_info;
+
+		// check if source and destination files reside on the same device
+		if (lstat((const char*)pDst, &lstat_info) != 0) {
+			return ST_B_FALSE;  // can't retrieve file stats
+		}
+
+		const int tmpFd = open((const char*)pSrc, O_RDONLY);
+		if (tmpFd == -1) {
+			return ST_B_FALSE;  // can't open file
+		}
+		if (fstat(tmpFd, &fstat_info) != 0) {
+			close(tmpFd);
+			return ST_B_FALSE;  // can't retrieve file stats
+		}
+
+		if (lstat_info.st_dev != fstat_info.st_dev) {  // st_dev: device inode resides on
+			isOnOtherDevice = ST_B_TRUE;
+		}
+		close(tmpFd);
+
+		if (isOnOtherDevice) {
+			return ST_B_FALSE;  // can't rename file to another device
+		}
+	}
+	//
+	if (st_sysDoesFileExist(pDst) && ! st_sysUnlinkFile(pDst)) {
+		return ST_B_FALSE;
+	}
+	//
+	return (rename((const char*)pSrc, (const char*)pDst) == 0);
 }
 
 /*
