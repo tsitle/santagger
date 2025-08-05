@@ -102,6 +102,19 @@ install(DIRECTORY src/includes/
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/santagger
 		FILES_MATCHING PATTERN "*.h")
 
+# add executables for tests
+add_executable(santagger_tests_binobj)
+add_executable(santagger_tests_dl)
+add_executable(santagger_tests_m64)
+add_executable(santagger_tests_mtes)
+add_executable(santagger_tests_rnd)
+add_executable(santagger_tests_stream)
+add_executable(santagger_tests_strrd)
+add_executable(santagger_tests_strwr)
+add_executable(santagger_tests_tfldmap)
+
+add_subdirectory(src/tests)
+
 # ----------------------------------------------------------------------------
 # Strip executable
 # ----------------------------------------------------------------------------
