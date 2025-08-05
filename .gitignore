@@ -8,6 +8,10 @@ docs-old/
 src/app/app_version.h
 src/includes/lib_version.h
 
+src/tests/data/*
+!src/tests/data/data.txt
+!src/tests/data/data.rnd
+
 output-bin-archive/
 
 
