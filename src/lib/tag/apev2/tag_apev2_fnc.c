@@ -315,8 +315,6 @@ st_apev2_fnc_adjustFrID(Tst_apev2_frID frID, ST_OPTARG(const Tst_str *pFrIDstr),
 		*ppFldPrI = NULL;
 
 	/* search by ID-String */
-	if (isEmpty)
-		frID = ST_APEV2_FID_NONE;
 	if (! isEmpty) {
 		isInArr = st_apev2_fnc_isFldPropInArr_byIDstr(ST_APEV2_FLDPROPS,
 				pFrIDstr, &ix);
