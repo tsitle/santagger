@@ -35,7 +35,7 @@ ST_BEGIN_C_DECLS
 /** */
 #define APP_ST_NAME    "Sandy Tagger (santagger)"
 #define APP_ST_AUTHOR  "Thomas Sandkuehler <technisandk@gmail.com>"
-#define APP_ST_COPYR   "2005-2024 by " APP_ST_AUTHOR
+#define APP_ST_COPYR   "2005-2025 by " APP_ST_AUTHOR
 
 
 ST_END_C_DECLS
