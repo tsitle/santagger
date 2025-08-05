@@ -12,7 +12,23 @@
 
 # param $1: Exit code
 function printUsage() {
-	echo "Usage: $(basename "${0}") [-v|--verbose] [clean] [debug|vg_debug|<release>|vg_release] [strip] [static]" >>/dev/stderr
+	{
+		echo "Usage: $(basename "${0}") [-v|--verbose] [clean] [debug|vg_debug|<release>|vg_release] [strip] [static] TARGET"
+		echo
+		echo "Targets:"
+		echo "  all"
+		echo "  lib"
+		echo "  <app>"
+		echo "  test_binobj"
+		echo "  test_dl"
+		echo "  test_m64"
+		echo "  test_mtes"
+		echo "  test_rnd"
+		echo "  test_stream"
+		echo "  test_strrd"
+		echo "  test_strwr"
+		echo "  test_tfldmap"
+	} >>/dev/stderr;
 	exit ${1}
 }
 
@@ -26,6 +42,8 @@ LOPT_STRIP=""
 TMP_HAVE_ARG_STRIP=false
 LOPT_STATIC=""
 TMP_HAVE_ARG_STATIC=false
+LOPT_BUILDTARGET="app"
+TMP_HAVE_ARG_BUILDTARGET=false
 while [ $# -ne 0 ]; do
 	if [ "${1}" = "clean" ]; then
 		if [ "${TMP_HAVE_ARG_CLEAN}" = "true" ]; then
@@ -62,6 +80,16 @@ while [ $# -ne 0 ]; do
 		fi
 		LOPT_STATIC="static"
 		TMP_HAVE_ARG_STATIC=true
+	elif [ "${1}" = "all" ] || [ "${1}" = "lib" ] || [ "${1}" = "app" ] || \
+			[ "${1}" = "test_binobj" ] || [ "${1}" = "test_dl" ] || [ "${1}" = "test_m64" ] || [ "${1}" = "test_mtes" ] || \
+			[ "${1}" = "test_rnd" ] || [ "${1}" = "test_stream" ] || [ "${1}" = "test_strrd" ] || [ "${1}" = "test_strwr" ] || \
+			[ "${1}" = "test_tfldmap" ]; then
+		if [ "${TMP_HAVE_ARG_BUILDTARGET}" = "true" ]; then
+			echo -e "$(basename "${0}"): Duplicate arg TARGET" >>/dev/stderr
+			printUsage 1
+		fi
+		LOPT_BUILDTARGET="${1}"
+		TMP_HAVE_ARG_BUILDTARGET=true
 	elif [ "${1}" = "--help" ]; then
 		printUsage 0
 	else
@@ -87,11 +115,21 @@ if [ ! -d "${TMP_ARG_BUILD_DIR}" ] || [ "${TMP_TEST_HAVE_BUILD_FILE}" != "true" 
 	./za-cmake.sh "${LOPT_BUILDTYPE}" ${LOPT_STRIP} ${LOPT_STATIC} || exit 1
 fi
 
+TMP_TARGET_ARG=""
+if [ "${LOPT_BUILDTARGET}" = "lib" ]; then
+	TMP_TARGET_ARG="--target ${LCFG_CMAKE_TARGET_LIB}"
+elif [ "${LOPT_BUILDTARGET}" = "app" ]; then
+	TMP_TARGET_ARG="--target ${LCFG_CMAKE_TARGET_APP}"
+elif [ "${LOPT_BUILDTARGET}" != "all" ]; then
+	TMP_TARGET_ARG="--target ${LCFG_PROJECT_NAME}_${LOPT_BUILDTARGET}"
+fi
+
 TMP_ARG=""
 [ "${LOPT_CLEAN}" = "true" ] && TMP_ARG="--clean-first"
 [ "${LOPT_VERBOSE}" = "true" ] && TMP_ARG+=" --verbose"
 "${LCFG_BIN_CMAKE}" \
 	--build "${TMP_ARG_BUILD_DIR}" \
 	--parallel 4 \
+	${TMP_TARGET_ARG} \
 	${TMP_ARG} \
 	|| exit 1
