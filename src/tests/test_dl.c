@@ -61,38 +61,35 @@ typedef enum {
 } Ttest__dir;
 
 #if (RUN_TEST_0 == 1)
-Tst_bool TEST__0();
+Tst_bool TEST__0(void);
 #endif
 #if (RUN_TEST_1 == 1)
-Tst_bool TEST__1();
+Tst_bool TEST__1(void);
 #endif
 #if (RUN_TEST_2 == 1)
-Tst_bool TEST__2();
+Tst_bool TEST__2(void);
 #endif
 #if (RUN_TEST_3 == 1)
-Tst_bool TEST__3();
+Tst_bool TEST__3(void);
 #endif
 #if (RUN_TEST_4 == 1)
-Tst_bool TEST__4();
+Tst_bool TEST__4(void);
 #endif
 #if (RUN_TEST_5 == 1)
-Tst_bool TEST__5();
+Tst_bool TEST__5(void);
 #endif
 #if (RUN_TEST_6 == 1)
-Tst_bool TEST__6();
+Tst_bool TEST__6(void);
 #endif
 #if (RUN_TEST_7 == 1)
-Tst_bool TEST__7();
+Tst_bool TEST__7(void);
 #endif
-Tst_bool TEST__createSortFile(const Tst_str *pPath,
-                              Tst_int32 tp, Tst_uint32 sz);
+Tst_bool TEST__createSortFile(const Tst_str *pPath, Tst_int32 tp, Tst_uint32 sz);
 Tst_bool TEST__printSortFile(const Tst_str *pFn, Tst_dynlist *pDL);
 #if (RUN_BENCH_1 == 1)
-Tst_bool TEST__bench1();
+Tst_bool TEST__bench1(void);
 #endif
-Tst_bool TEST__bench2(const Tst_str *pFn,
-                      Tst_dynlist_sortAlgo algo,
-                      Ttest__dir dir);
+Tst_bool TEST__bench2(const Tst_str *pFn, Tst_dynlist_sortAlgo algo, Ttest__dir dir);
 
 #define TEST__RSET_SORT(macS)  { (macS).asc = ST_B_TRUE; (macS).comps = 0; }
 
@@ -377,7 +374,7 @@ TEST__getIxAndDataUI32(const char *pFnc,
 		RUN_TEST_3 == 1 || RUN_TEST_4 == 1 || RUN_TEST_5 == 1 || \
 		RUN_TEST_6 == 1 || RUN_TEST_7 == 1 || \
 		RUN_BENCH_1 == 1)
-ST_INLINE_S Tst_bool
+Tst_bool
 TEST__addDataUI32(const char *pFnc,
 		Tst_dynlist *pDL, const Tst_uint32 val, Tst_uint32 **ppUI32)
 {
@@ -482,7 +479,7 @@ TEST__checkIxDataUI32(const char *pFnc,
  */
 #if (RUN_TEST_0 == 1)
 Tst_bool
-TEST__0()
+TEST__0(void)
 {
 	const char       *cFNC  = "TEST__0";
 	const Tst_uint32 cELEMS = 20;
@@ -557,7 +554,7 @@ TEST__0()
  */
 #if (RUN_TEST_1 == 1)
 Tst_bool
-TEST__1()
+TEST__1(void)
 {
 	const char       *cFNC  = "TEST__1";
 	const Tst_uint32 cELEMS = 20;
@@ -637,7 +634,7 @@ TEST__1()
  */
 #if (RUN_TEST_2 == 1)
 Tst_bool
-TEST__2()
+TEST__2(void)
 {
 	const char       *cFNC  = "TEST__2";
 	const Tst_uint32 cELEMS = 20;
@@ -790,7 +787,7 @@ TEST__2()
  */
 #if (RUN_TEST_3 == 1)
 Tst_bool
-TEST__3()
+TEST__3(void)
 {
 	const char       *cFNC  = "TEST__3";
 	const Tst_uint32 cELEMS = 3;
@@ -992,7 +989,7 @@ TEST__3()
  */
 #if (RUN_TEST_4 == 1)
 Tst_bool
-TEST__4()
+TEST__4(void)
 {
 	const char       *cFNC  = "TEST__4";
 	const Tst_uint32 cELEMS = 0x3fffff;
@@ -1237,7 +1234,7 @@ TEST__4()
  */
 #if (RUN_TEST_5 == 1)
 Tst_bool
-TEST__5()
+TEST__5(void)
 {
 	const char       *cFNC  = "TEST__5";
 	const Tst_uint32 cELEMS = 6;
@@ -1477,7 +1474,7 @@ TEST__6_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 }
 
 Tst_bool
-TEST__6()
+TEST__6(void)
 {
 	const char *cFNC = "TEST__6";
 	Tst_bool    resB;
@@ -1671,7 +1668,7 @@ TEST__7_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 }
 
 Tst_bool
-TEST__7()
+TEST__7(void)
 {
 	const char *cFNC = "TEST__7";
 	Tst_bool    resB;
@@ -2440,7 +2437,7 @@ TEST__bench_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
  */
 #if (RUN_BENCH_1 == 1)
 Tst_bool
-TEST__bench1()
+TEST__bench1(void)
 {
 #	define LOC_RUN_1  1
 #	define LOC_RUN_2  1

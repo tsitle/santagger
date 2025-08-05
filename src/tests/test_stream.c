@@ -47,9 +47,9 @@
 Tst_bool TEST__I0_cpFile(const char *pInFn);
 Tst_bool TEST__I1_cpFile(const char *pInFn);
 Tst_bool TEST__I2_cpFile(const char *pInFn);
-Tst_bool TEST__I3_varVals();
-Tst_bool TEST__S0_endian();
-Tst_bool TEST__S1_endian();
+Tst_bool TEST__I3_varVals(void);
+Tst_bool TEST__S0_endian(void);
+Tst_bool TEST__S1_endian(void);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -456,7 +456,7 @@ TEST__I1_cpFile(const char *pInFn)
 		res = st_streamwr_wrByte(&sobjWB, rnd, byt);
 		if (res != ST_ERR_SUCC) {
 			bres = ST_B_FALSE;
-			TEST__prf(cFNCN, "st_streamwr_wrByte() failed");
+			TEST__prf(cFNCN, "st_streamwr_wrByte() failed (bits read=%u)", bitsRd);
 			break;
 		}
 
@@ -468,13 +468,13 @@ TEST__I1_cpFile(const char *pInFn)
 			pOutpBuf = st_streamwr_getOutputBuffer(&sobjWB);
 			if (pOutpBuf == NULL) {
 				bres = ST_B_FALSE;
-				TEST__prf(cFNCN, "st_streamwr_getOutputBuffer() failed");
+				TEST__prf(cFNCN, "st_streamwr_getOutputBuffer() failed (bits read=%u)", bitsRd);
 				break;
 			}
 			res = st_streamwr_wrBuffer(&sobjWF, outpBSz, pOutpBuf);
 			if (res != ST_ERR_SUCC) {
 				bres = ST_B_FALSE;
-				TEST__prf(cFNCN, "st_streamwr_wrBuffer() failed");
+				TEST__prf(cFNCN, "st_streamwr_wrBuffer() failed (bits read=%u)", bitsRd);
 				break;
 			}
 			st_streamwr_flush(&sobjWB);
@@ -784,7 +784,7 @@ TEST__I3_varVals_genStr(Tst_str **ppStr, const Tst_uint32 maxLen)
 }
 
 Tst_bool
-TEST__I3_varVals()
+TEST__I3_varVals(void)
 {
 #	define LOC_CHKWRFNC_(mac_fnc)  { \
 				if (res != ST_ERR_SUCC) { \
@@ -1288,7 +1288,7 @@ TEST__SX_endian_subWr(const char *pFnc, Tst_streamwr *pStrwr,
  * Tests the Stream Reader
  */
 Tst_bool
-TEST__S0_endian()
+TEST__S0_endian(void)
 {
 	const char *cFNCN = "TEST__S0_endian";
 	Tst_bool   bres = ST_B_TRUE;
@@ -1577,7 +1577,7 @@ TEST__S1_endian_sub_rdVals(const char *pFnc,
 }
 
 Tst_bool
-TEST__S1_endian()
+TEST__S1_endian(void)
 {
 #	define LOC_ELEMS_  8
 	const char *cFNCN = "TEST__S1_endian";

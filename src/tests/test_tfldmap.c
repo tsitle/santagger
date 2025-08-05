@@ -54,18 +54,18 @@
 #define RUN_TEST_12  0
 #define RUN_TEST_13  0
 
-Tst_bool TEST__00_mapIV2_id();
-Tst_bool TEST__01_mapIV2_idstr();
-Tst_bool TEST__02_mapIV2_cust();
-Tst_bool TEST__03_mapIV2_fromVor();
-Tst_bool TEST__04_mapIV2_fromAv2();
-Tst_bool TEST__05_mapIV2_fromIv1();
-Tst_bool TEST__06_mapAV2_id();
-Tst_bool TEST__07_mapAV2_cust();
-Tst_bool TEST__08_mapAV2_fromIv2();
-Tst_bool TEST__11_mapVOR_id();
-Tst_bool TEST__12_mapVOR_cust();
-Tst_bool TEST__13_mapVOR_fromIv2();
+Tst_bool TEST__00_mapIV2_id(void);
+Tst_bool TEST__01_mapIV2_idstr(void);
+Tst_bool TEST__02_mapIV2_cust(void);
+Tst_bool TEST__03_mapIV2_fromVor(void);
+Tst_bool TEST__04_mapIV2_fromAv2(void);
+Tst_bool TEST__05_mapIV2_fromIv1(void);
+Tst_bool TEST__06_mapAV2_id(void);
+Tst_bool TEST__07_mapAV2_cust(void);
+Tst_bool TEST__08_mapAV2_fromIv2(void);
+Tst_bool TEST__11_mapVOR_id(void);
+Tst_bool TEST__12_mapVOR_cust(void);
+Tst_bool TEST__13_mapVOR_fromIv2(void);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -307,7 +307,7 @@ TEST__mapIV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
  * Tests ...
  */
 Tst_bool
-TEST__00_mapIV2_id()
+TEST__00_mapIV2_id(void)
 {
 	const char *cFNCN = "TEST__00_mapIV2_id";
 	Tst_bool  bres;
@@ -396,7 +396,7 @@ TEST__00_mapIV2_id()
  * Tests ...
  */
 Tst_bool
-TEST__01_mapIV2_idstr()
+TEST__01_mapIV2_idstr(void)
 {
 	const char *cFNCN = "TEST__01_mapIV2_idstr";
 	Tst_bool      bres;
@@ -482,7 +482,7 @@ TEST__01_mapIV2_idstr()
  * Tests ...
  */
 Tst_bool
-TEST__02_mapIV2_cust()
+TEST__02_mapIV2_cust(void)
 {
 	const char *cFNCN = "TEST__02_mapIV2_cust";
 	Tst_bool   bres;
@@ -587,7 +587,7 @@ TEST__02_mapIV2_cust()
  * Tests ...
  */
 Tst_bool
-TEST__03_mapIV2_fromVor()
+TEST__03_mapIV2_fromVor(void)
 {
 	const char *cFNCN = "TEST__03_mapIV2_fromVor";
 	Tst_bool   bres;
@@ -682,7 +682,7 @@ TEST__03_mapIV2_fromVor()
  * Tests ...
  */
 Tst_bool
-TEST__04_mapIV2_fromAv2()
+TEST__04_mapIV2_fromAv2(void)
 {
 	const char *cFNCN = "TEST__04_mapIV2_fromAv2";
 	Tst_bool   bres;
@@ -775,7 +775,7 @@ TEST__04_mapIV2_fromAv2()
  * Tests ...
  */
 Tst_bool
-TEST__05_mapIV2_fromIv1()
+TEST__05_mapIV2_fromIv1(void)
 {
 	const char *cFNCN = "TEST__05_mapIV2_fromIv1";
 	Tst_bool   bres;
@@ -945,7 +945,7 @@ TEST__mapAV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
  * Tests ...
  */
 Tst_bool
-TEST__06_mapAV2_id()
+TEST__06_mapAV2_id(void)
 {
 	const char *cFNCN = "TEST__06_mapAV2_id";
 	Tst_bool  bres;
@@ -1040,7 +1040,7 @@ TEST__06_mapAV2_id()
  * Tests ...
  */
 Tst_bool
-TEST__07_mapAV2_cust()
+TEST__07_mapAV2_cust(void)
 {
 	const char *cFNCN = "TEST__07_mapAV2_cust";
 	Tst_bool   bres;
@@ -1140,7 +1140,7 @@ TEST__07_mapAV2_cust()
  * Tests ...
  */
 Tst_bool
-TEST__08_mapAV2_fromIv2()
+TEST__08_mapAV2_fromIv2(void)
 {
 	const char *cFNCN = "TEST__08_mapAV2_fromIv2";
 	Tst_bool   bres;
@@ -1318,7 +1318,7 @@ TEST__mapVOR_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
  * Tests ...
  */
 Tst_bool
-TEST__11_mapVOR_id()
+TEST__11_mapVOR_id(void)
 {
 	const char *cFNCN = "TEST__11_mapVOR_id";
 	Tst_bool  bres;
@@ -1404,7 +1404,7 @@ TEST__11_mapVOR_id()
  * Tests ...
  */
 Tst_bool
-TEST__12_mapVOR_cust()
+TEST__12_mapVOR_cust(void)
 {
 	const char *cFNCN = "TEST__12_mapVOR_cust";
 	Tst_bool   bres;
@@ -1492,7 +1492,7 @@ TEST__12_mapVOR_cust()
  * Tests ...
  */
 Tst_bool
-TEST__13_mapVOR_fromIv2()
+TEST__13_mapVOR_fromIv2(void)
 {
 	const char *cFNCN = "TEST__13_mapVOR_fromIv2";
 	Tst_bool   bres;

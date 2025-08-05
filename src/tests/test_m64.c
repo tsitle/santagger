@@ -34,31 +34,31 @@
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-Tst_bool TEST__run();
-Tst_bool TEST__0_cmpUI();
-Tst_bool TEST__0_cmpSI();
-Tst_bool TEST__1_addUI();
-Tst_bool TEST__1_addSI();
-Tst_bool TEST__2_subUI();
-Tst_bool TEST__2_subSI();
-Tst_bool TEST__3_mulUI();
-Tst_bool TEST__3_mulSI();
-Tst_bool TEST__4_divUI();
-Tst_bool TEST__4_divSI();
-Tst_bool TEST__5_log();
-Tst_bool TEST__6_addUI();
-Tst_bool TEST__6_addSI();
-Tst_bool TEST__7_subUI();
-Tst_bool TEST__7_subSI();
-Tst_bool TEST__8_mulUI();
-Tst_bool TEST__8_mulSI();
-Tst_bool TEST__9_divUI();
-Tst_bool TEST__9_divSI();
-Tst_bool TEST__10_shiftUI();
-Tst_bool TEST__10_shiftSI();
-Tst_bool TEST__11_restUI();
-Tst_bool TEST__11_restSI();
-Tst_bool TEST__bench();
+Tst_bool TEST__run(void);
+Tst_bool TEST__0_cmpUI(void);
+Tst_bool TEST__0_cmpSI(void);
+Tst_bool TEST__1_addUI(void);
+Tst_bool TEST__1_addSI(void);
+Tst_bool TEST__2_subUI(void);
+Tst_bool TEST__2_subSI(void);
+Tst_bool TEST__3_mulUI(void);
+Tst_bool TEST__3_mulSI(void);
+Tst_bool TEST__4_divUI(void);
+Tst_bool TEST__4_divSI(void);
+Tst_bool TEST__5_log(void);
+Tst_bool TEST__6_addUI(void);
+Tst_bool TEST__6_addSI(void);
+Tst_bool TEST__7_subUI(void);
+Tst_bool TEST__7_subSI(void);
+Tst_bool TEST__8_mulUI(void);
+Tst_bool TEST__8_mulSI(void);
+Tst_bool TEST__9_divUI(void);
+Tst_bool TEST__9_divSI(void);
+Tst_bool TEST__10_shiftUI(void);
+Tst_bool TEST__10_shiftSI(void);
+Tst_bool TEST__11_restUI(void);
+Tst_bool TEST__11_restSI(void);
+Tst_bool TEST__bench(void);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -76,7 +76,7 @@ main(const int argc, const char *argv[])
 }
 
 Tst_bool
-TEST__run()
+TEST__run(void)
 {
 #	define LOC_RUNBENCH    0  /* bench */
 #	define LOC_RUNTESTALL  1
@@ -419,7 +419,7 @@ TEST__prf64SI_sh(const char *pFnc, const Tst_int32 shift,
  *       st_sysUInt64_cmpLoHi()
  */
 Tst_bool
-TEST__0_cmpUI()
+TEST__0_cmpUI(void)
 {
 #	define LOC_COMPARE_(cond)  { \
 				if (cond) TEST__prf("test0_cmpUI", "Correct"); \
@@ -525,17 +525,15 @@ TEST__0_cmpUI()
  *       st_sysSInt64_cmpLoHi()
  */
 Tst_bool
-TEST__0_cmpSI()
+TEST__0_cmpSI(void)
 {
 #	define LOC_COMPARE_(cond)  { \
 				if (cond) TEST__prf("test0_cmpSI", "Correct"); \
 				else { TEST__prf("test0_cmpSI", "! Wrong !"); return ST_B_FALSE; } \
 			}
-	Tst_int64 val64,
-	          valCmp64;
+	Tst_int64 val64;
 
 	ST_SYSMATH_STC_RSETSI64(val64)
-	ST_SYSMATH_STC_RSETSI64(valCmp64)
 
 	/* */
 	st_sysSInt64_setLoHi(&val64, 0, 0);
@@ -611,7 +609,7 @@ TEST__0_cmpSI()
  *       st_sysUInt64_cmpUI64()
  */
 Tst_bool
-TEST__1_addUI()
+TEST__1_addUI(void)
 {
 	Tst_uint64 val64,
 	           valCmp64;
@@ -782,7 +780,7 @@ TEST__1_addSI_sub(const Tst_int32 set, const Tst_int32 add,
 }
 
 Tst_bool
-TEST__1_addSI()
+TEST__1_addSI(void)
 {
 	if (! TEST__1_addSI_sub(0, 0, 0, ST_B_FALSE)) { return ST_B_FALSE; }
 	if (! TEST__1_addSI_sub(0, 1, 1, ST_B_FALSE)) { return ST_B_FALSE; }
@@ -810,7 +808,7 @@ TEST__1_addSI()
  *       st_sysUInt64_cmpUI64()
  */
 Tst_bool
-TEST__2_subUI()
+TEST__2_subUI(void)
 {
 	Tst_uint64 val64,
 	           valCmp64;
@@ -989,7 +987,8 @@ TEST__2_subSI_sub(const Tst_int32 set, const Tst_int32 sub,
 }
 
 Tst_bool
-TEST__2_subSI() {
+TEST__2_subSI(void)
+{
 	if (! TEST__2_subSI_sub(1, 1, 0)) { return ST_B_FALSE; }
 	if (! TEST__2_subSI_sub(1, 0, 1)) { return ST_B_FALSE; }
 	if (! TEST__2_subSI_sub(789, 109, 680)) { return ST_B_FALSE; }
@@ -1042,7 +1041,7 @@ TEST__3_mulUI_sub(const Tst_uint32 factA, const Tst_uint32 factB,
 }
 
 Tst_bool
-TEST__3_mulUI()
+TEST__3_mulUI(void)
 {
 	if (! TEST__3_mulUI_sub(12345, 74553,
 				0x36db87b1, 0)) { return ST_B_FALSE; }
@@ -1095,7 +1094,7 @@ TEST__3_mulSI_sub(const Tst_int32 factA, const Tst_int32 factB,
 }
 
 Tst_bool
-TEST__3_mulSI()
+TEST__3_mulSI(void)
 {
 	if (! TEST__3_mulSI_sub(0, 0, 0, 0)) { return ST_B_FALSE; }
 	if (! TEST__3_mulSI_sub(0, 1, 0, 0)) { return ST_B_FALSE; }
@@ -1195,7 +1194,7 @@ TEST__4_divUI_sub(const Tst_uint32 setLo, const Tst_uint32 setHi,
 }
 
 Tst_bool
-TEST__4_divUI()
+TEST__4_divUI(void)
 {
 	if (! TEST__4_divUI_sub(0x00000000, 0x00000000,
 			0x00000000,
@@ -1305,7 +1304,7 @@ TEST__4_divSI_sub(const Tst_uint32 setLo, const Tst_uint32 setHi,
 }
 
 Tst_bool
-TEST__4_divSI()
+TEST__4_divSI(void)
 {
 	if (! TEST__4_divSI_sub(0x00000000, 0x00000000,
 			0x00000000,
@@ -1394,7 +1393,7 @@ TEST__5_log_sub2(const Tst_uint32 lo, const Tst_uint32 hi,
 }
 
 Tst_bool
-TEST__5_log()
+TEST__5_log(void)
 {
 	/* */
 	if (! TEST__5_log_sub(0, 0)) { return ST_B_FALSE; }
@@ -1529,7 +1528,7 @@ TEST__6_addUI_sub(const Tst_uint32 setLo, const Tst_uint32 setHi,
 }
 
 Tst_bool
-TEST__6_addUI()
+TEST__6_addUI(void)
 {
 	if (! TEST__6_addUI_sub(0x01234567, 0x89abcdef,
 			0x01234567, 0x89abcdef,
@@ -1592,7 +1591,7 @@ TEST__6_addSI_sub(const Tst_uint32 setLo, const Tst_uint32 setHi,
 }
 
 Tst_bool
-TEST__6_addSI()
+TEST__6_addSI(void)
 {
 	if (! TEST__6_addSI_sub(0x01234567, 0x89abcdef,
 			0x01234567, 0x89abcdef,
@@ -1678,7 +1677,7 @@ TEST__7_subUI_sub(const Tst_uint32 setLo, const Tst_uint32 setHi,
 }
 
 Tst_bool
-TEST__7_subUI()
+TEST__7_subUI(void)
 {
 	if (! TEST__7_subUI_sub(0x01234567, 0x89abcdef,
 			0x01234568, 0x89abcdef,
@@ -1768,7 +1767,7 @@ TEST__7_subSI_sub(const Tst_uint32 setLo, const Tst_uint32 setHi,
 }
 
 Tst_bool
-TEST__7_subSI()
+TEST__7_subSI(void)
 {
 	if (! TEST__7_subSI_sub(0x01234567, 0x89abcdef,
 			0x01234568, 0x89abcdef,
@@ -1873,7 +1872,7 @@ TEST__8_mulUI_sub(const Tst_uint32 mulAlo, const Tst_uint32 mulAhi,
 }
 
 Tst_bool
-TEST__8_mulUI()
+TEST__8_mulUI(void)
 {
 	if (! TEST__8_mulUI_sub(0x00000000, 0x00000001,
 			0x00000000, 0x00000001,
@@ -1944,7 +1943,7 @@ TEST__8_mulSI_sub(const Tst_uint32 mulAlo, const Tst_uint32 mulAhi,
 }
 
 Tst_bool
-TEST__8_mulSI()
+TEST__8_mulSI(void)
 {
 	if (! TEST__8_mulSI_sub(0x00000000, 0x00000001,
 			0x00000000, 0x00000001,
@@ -2063,7 +2062,7 @@ TEST__9_divUI_sub(const Tst_uint32 setLo, const Tst_uint32 setHi,
 }
 
 Tst_bool
-TEST__9_divUI()
+TEST__9_divUI(void)
 {
 	if (! TEST__9_divUI_sub(0x00000000, 0x00000000,
 			0x00000000, 0x00000000,
@@ -2196,7 +2195,7 @@ TEST__9_divSI_sub(const Tst_uint32 setLo, const Tst_uint32 setHi,
 }
 
 Tst_bool
-TEST__9_divSI()
+TEST__9_divSI(void)
 {
 	if (! TEST__9_divSI_sub(0x00000000, 0x00000000,
 			0x00000000, 0x00000000,
@@ -2301,7 +2300,7 @@ TEST__10_shiftUI_sub(const Tst_uint32 setLo, const Tst_uint32 setHi,
 }
 
 Tst_bool
-TEST__10_shiftUI()
+TEST__10_shiftUI(void)
 {
 	TEST__prf("test10_shiftUI", "\n\tto left");
 	if (! TEST__10_shiftUI_sub(0x00000000, 0x00000000,
@@ -2439,7 +2438,7 @@ TEST__10_shiftSI_sub(const Tst_uint32 setLo, const Tst_uint32 setHi,
 }
 
 Tst_bool
-TEST__10_shiftSI()
+TEST__10_shiftSI(void)
 {
 	TEST__prf("test10_shiftSI", "\n\tto left");
 	if (! TEST__10_shiftSI_sub(0x00000000, 0x00000000,
@@ -2656,7 +2655,7 @@ TEST__11_restUI_sub4(const char *pStr, const Tst_bool resExp)
 }
 
 Tst_bool
-TEST__11_restUI()
+TEST__11_restUI(void)
 {
 	if (! TEST__11_restUI_sub1(0x00000001, 0x00000000,
 			0x00000001)) { return ST_B_FALSE; }
@@ -2863,7 +2862,7 @@ TEST__11_restSI_sub4(const char *pStr, const Tst_bool resExp)
 }
 
 Tst_bool
-TEST__11_restSI()
+TEST__11_restSI(void)
 {
 	if (! TEST__11_restSI_sub1(0x00000001, 0x00000000,
 			0x00000001, ST_B_FALSE)) { return ST_B_FALSE; }
@@ -2909,7 +2908,7 @@ TEST__11_restSI()
 /*----------------------------------------------------------------------------*/
 
 Tst_bool
-TEST__bench()
+TEST__bench(void)
 {
 #	define LOC_SO_RNDS  4096
 #	define LOC_TEST_ADD  1

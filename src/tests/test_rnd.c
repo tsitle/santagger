@@ -38,11 +38,11 @@ void TEST__prf(const char *pFnc, const char *pMsg, ...);
 void TEST__prf32(const char *pFnc, const char *pMsg, Tst_uint32 v32);
 void TEST__prf32dec(const char *pFnc, const char *pMsg, Tst_uint32 v32);
 /* */
-Tst_bool TEST__0_genInt();
-Tst_bool TEST__1_genDbl();
+Tst_bool TEST__0_genInt(void);
+Tst_bool TEST__1_genDbl(void);
 /** */
-/**void sysTestRand();
-void sysTestRandDbl();**/
+/**void sysTestRand(void);
+void sysTestRandDbl(void);**/
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -103,7 +103,7 @@ TEST__prf32dec(const char *pFnc, const char *pMsg, const Tst_uint32 v32)
  * Tests st_sysGetRand()
  */
 Tst_bool
-TEST__0_genInt()
+TEST__0_genInt(void)
 {
 	const char *cFNCN = __func__;
 	const Tst_uint32 cLOWER = 100;
@@ -132,7 +132,7 @@ TEST__0_genInt()
  * Tests st_sysGetRand()
  */
 Tst_bool
-TEST__1_genDbl()
+TEST__1_genDbl(void)
 {
 	const char *cFNCN = __func__;
 	const double cLOWER = 100.0f;
@@ -233,7 +233,7 @@ __sysTestRand_getRndValsDbl(const double min, const double max,
 }
 
 void
-sysTestRand()
+sysTestRand(void)
 {
 	int        x;
 	Tst_uint32 vals[10000],
@@ -302,7 +302,7 @@ sysTestRand()
 }
 
 void
-sysTestRandDbl()
+sysTestRandDbl(void)
 {
 	const int    RUNS = 40;
 	const double MAXV = 1e5;
