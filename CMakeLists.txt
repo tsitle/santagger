@@ -379,19 +379,33 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	#set(GIT_VERSION_SEM "1.0-alpha-g4fdbbae")
 	#set(GIT_VERSION_SEM "1.0-g4fdbbae-dirty")
 	#set(GIT_VERSION_SEM "1.0-g4fdbbae")
+	#set(GIT_VERSION_SEM "1.0-beta")
+	#set(GIT_VERSION_SEM "1.0")
+	if (GIT_VERSION_SEM MATCHES "^$")
+		message(FATAL_ERROR "__ST__: could not determine Git Semantic version")
+	endif ()
 
 	# get only the major and minor version
 	#   --> extract everything before the first dash (-)
 	string(REGEX REPLACE "-.*" "" GIT_VERSION_MAJMIN "${GIT_VERSION_SEM}")
-	#message(STATUS "Git version: mm '${GIT_VERSION_MAJMIN}'")
+	message(STATUS "Git version: mm '${GIT_VERSION_MAJMIN}'")
+	if (GIT_VERSION_MAJMIN MATCHES "^$")
+		message(FATAL_ERROR "__ST__: could not determine Git Major.Minor version")
+	endif ()
 
 	# get only the major version
 	#   --> extract everything before the first dot (.)
 	string(REGEX REPLACE "\\.[0-9]*" "" GIT_VERSION_MAJOR "${GIT_VERSION_MAJMIN}")
+	if (GIT_VERSION_MAJOR MATCHES "^$")
+		message(FATAL_ERROR "__ST__: could not determine Git Major version")
+	endif ()
 
 	# get only the minor version
 	#   --> extract everything after the first dot (.)
 	string(REGEX REPLACE "^([^\\.]*)\\.([^\\.]*)" "\\2" GIT_VERSION_MINOR "${GIT_VERSION_MAJMIN}")
+	if (GIT_VERSION_MINOR MATCHES "^$")
+		message(FATAL_ERROR "__ST__: could not determine Git Minor version")
+	endif ()
 
 	# get only the patch level
 	#   --> in the example '1.2-ga12d3ef' that would be '0'
@@ -436,6 +450,9 @@ elseif (EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
 
 	# --> extract everything in between the parenthesis - but without the quotation marks
 	string(REGEX REPLACE "(.*)\\(\"(.*)\"\\)(.*)" "\\2" GIT_VERSION_SEM "${GIT_VERSION_SEM}")
+	if (GIT_VERSION_SEM MATCHES "^$")
+		message(FATAL_ERROR "__ST__: could not determine Git Semantic version")
+	endif ()
 	# --> extract everything in between the parenthesis
 	string(REGEX REPLACE "(.*)\\((.*)\\)(.*)" "\\2" GIT_VERSION_MAJOR "${GIT_VERSION_MAJOR}")
 	# --> extract everything in between the parenthesis
