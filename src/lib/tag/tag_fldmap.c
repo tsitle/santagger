@@ -263,6 +263,11 @@ st_tagFldMap_mapToAV2(Tst_tfldMap_genTagFld *pFld, Tst_apev2_fldData *pOut,
 		/** ID and ID-String */
 		/**LOC_PRF_(" map2AV2: dstID %3d '%s'\n",
 				dstID, (pDstIDstr ? (const char*)pDstIDstr : ""));**/
+		if (pGTFI->isDataStrSet && dstID == ST_APEV2_FID_CBIN) {
+			dstID = ST_APEV2_FID_CTXT;
+		} else if (pGTFI->isDataBinSet && dstID == ST_APEV2_FID_CTXT) {
+			dstID = ST_APEV2_FID_CBIN;
+		}
 		res = st_apev2_gs_setField_props(pOut, dstID, pDstIDstr);
 		/** data */
 		if (res == ST_ERR_SUCC && pGTFI->isDataStrSet) {
