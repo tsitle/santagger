@@ -1,9 +1,9 @@
 /******************************************************************************/
 /* string_mte-defs.h            [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
-/* Definitions for strings with multiple text-encoding                        */
+/* Definitions for strings with multiple text-encodings                       */
 /*   (Latin1 aka ISO, UTF8, UTF16-LE/BE)                                      */
 /******************************************************************************/
 /*                                                                            */

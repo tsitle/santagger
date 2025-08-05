@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* tag_apev2-prot.h             [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Protected definitions for APEv2 Tags                                       */
 /******************************************************************************/

@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* av_zfdeb.c                   [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Sub functions for debugging Audio/Video stuff                              */
 /******************************************************************************/

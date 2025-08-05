@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* utils_fmt.c                  [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Some functions for determining file formats etc.                           */
 /******************************************************************************/

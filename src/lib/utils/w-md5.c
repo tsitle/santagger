@@ -1,9 +1,9 @@
 /******************************************************************************/
 /* w-md5.c                      [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
-/* functions for MD5 hashsum creation etc.                                    */
+/* Functions for MD5 hashsum creation etc.                                    */
 /******************************************************************************/
 /*                                                                            */
 /* This program is free software; you can redistribute it and/or              */

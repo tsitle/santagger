@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* cln_hndhelp_fnc.c              [Sandy Tagger]                         tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Sub functions for handling help pages                                      */
 /******************************************************************************/

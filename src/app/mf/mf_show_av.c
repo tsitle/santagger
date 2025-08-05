@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* mf_show_av.c                   [Sandy Tagger]                         tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Functions for displaying Audio/Video info                                  */
 /******************************************************************************/

@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* tag_id3v2_zrd2-pp.h          [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Sub functions for reading ID3v2 Tags                                       */
 /******************************************************************************/

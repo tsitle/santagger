@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* tag_apev2_fnc.c              [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Sub functions for APEv2 Tag handling                                       */
 /******************************************************************************/

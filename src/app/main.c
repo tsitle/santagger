@@ -6,7 +6,7 @@
 /*                  v0.4, begun 04.04.2010                                    */
 /*                  v0.3, begun 28.12.2009                                    */
 /*                  v0.1, begun 19.05.2005                                    */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Program start                                                              */
 /******************************************************************************/

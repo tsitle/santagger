@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* ac_spx_clt_stcs-prot.h       [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Protected functions for Ogg-Speex and Ogg-Celt structures                  */
 /******************************************************************************/

@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* tag_id3v2_gs.c               [Sandy Tagger | Lib]                     tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Getter/Setter functions for ID3v2 Tags                                     */
 /******************************************************************************/
