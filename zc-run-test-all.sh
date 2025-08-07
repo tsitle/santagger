@@ -82,12 +82,6 @@ echo "$(basename "${0}"): TEST '${LTMP_TESTNAME}' ------------------------------
 echo
 
 #
-LTMP_TESTNAME="rnd"
-echo "$(basename "${0}"): TEST '${LTMP_TESTNAME}' ------------------------------------------------"
-./zc-run-test.sh "${LOPT_BUILDTYPE}" "${LTMP_TESTNAME}" || exit 1
-echo
-
-#
 LTMP_TESTNAME="stream"
 echo "$(basename "${0}"): TEST '${LTMP_TESTNAME}' ------------------------------------------------"
 ./zc-run-test.sh "${LOPT_BUILDTYPE}" "${LTMP_TESTNAME}" -- -s || exit 1
@@ -109,6 +103,18 @@ echo "$(basename "${0}"): TEST '${LTMP_TESTNAME}' #1 ---------------------------
 echo
 echo "$(basename "${0}"): TEST '${LTMP_TESTNAME}' #2 ------------------------------------------------"
 ./zc-run-test.sh "${LOPT_BUILDTYPE}" "${LTMP_TESTNAME}" -- "${LTMP_TESTFILE_BIN}" || exit 1
+echo
+
+#
+LTMP_TESTNAME="sysfile"
+echo "$(basename "${0}"): TEST '${LTMP_TESTNAME}' ------------------------------------------------"
+./zc-run-test.sh "${LOPT_BUILDTYPE}" "${LTMP_TESTNAME}" || exit 1
+echo
+
+#
+LTMP_TESTNAME="sysfnc"
+echo "$(basename "${0}"): TEST '${LTMP_TESTNAME}' ------------------------------------------------"
+./zc-run-test.sh "${LOPT_BUILDTYPE}" "${LTMP_TESTNAME}" || exit 1
 echo
 
 #

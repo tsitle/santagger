@@ -23,10 +23,11 @@ function printUsage() {
 		echo "  test_dl"
 		echo "  test_m64"
 		echo "  test_mtes"
-		echo "  test_rnd"
 		echo "  test_stream"
 		echo "  test_strrd"
 		echo "  test_strwr"
+		echo "  test_sysfile"
+		echo "  test_sysfnc"
 		echo "  test_tfldmap"
 	} >>/dev/stderr;
 	exit ${1}
@@ -82,7 +83,8 @@ while [ $# -ne 0 ]; do
 		TMP_HAVE_ARG_STATIC=true
 	elif [ "${1}" = "all" ] || [ "${1}" = "lib" ] || [ "${1}" = "app" ] || \
 			[ "${1}" = "test_binobj" ] || [ "${1}" = "test_dl" ] || [ "${1}" = "test_m64" ] || [ "${1}" = "test_mtes" ] || \
-			[ "${1}" = "test_rnd" ] || [ "${1}" = "test_stream" ] || [ "${1}" = "test_strrd" ] || [ "${1}" = "test_strwr" ] || \
+			[ "${1}" = "test_stream" ] || [ "${1}" = "test_strrd" ] || [ "${1}" = "test_strwr" ] || \
+			[ "${1}" = "test_sysfile" ] || [ "${1}" = "test_sysfnc" ] || \
 			[ "${1}" = "test_tfldmap" ]; then
 		if [ "${TMP_HAVE_ARG_BUILDTARGET}" = "true" ]; then
 			echo -e "$(basename "${0}"): Duplicate arg TARGET" >>/dev/stderr

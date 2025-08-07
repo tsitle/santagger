@@ -22,12 +22,6 @@ target_sources(santagger_test_mtes
 )
 target_link_libraries(santagger_test_mtes PRIVATE santagger_lib santagger_includes)
 
-target_sources(santagger_test_rnd
-	PRIVATE
-		test_rnd.c
-)
-target_link_libraries(santagger_test_rnd PRIVATE santagger_lib santagger_includes)
-
 target_sources(santagger_test_stream
 	PRIVATE
 		test_stream.c
@@ -51,6 +45,12 @@ target_sources(santagger_test_sysfile
 		test_sysfile.c
 )
 target_link_libraries(santagger_test_sysfile PRIVATE santagger_lib santagger_includes)
+
+target_sources(santagger_test_sysfnc
+	PRIVATE
+		test_sysfnc.c
+)
+target_link_libraries(santagger_test_sysfnc PRIVATE santagger_lib santagger_includes)
 
 target_sources(santagger_test_tfldmap
 	PRIVATE

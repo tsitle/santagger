@@ -20,10 +20,11 @@ function printUsage() {
 		echo "  dl"
 		echo "  m64"
 		echo "  mtes"
-		echo "  rnd"
 		echo "  stream"
 		echo "  strrd"
 		echo "  strwr"
+		echo "  sysfile"
+		echo "  sysfnc"
 		echo "  tfldmap"
 	} >>/dev/stderr;
 	exit ${1}
@@ -42,7 +43,8 @@ while [ $# -ne 0 ]; do
 		LOPT_BUILDTYPE="${1}"
 		TMP_HAVE_ARG_BUILDTYPE=true
 	elif [ "${1}" = "binobj" ] || [ "${1}" = "dl" ] || [ "${1}" = "m64" ] || [ "${1}" = "mtes" ] || \
-			[ "${1}" = "rnd" ] || [ "${1}" = "stream" ] || [ "${1}" = "strrd" ] || [ "${1}" = "strwr" ] || \
+			[ "${1}" = "stream" ] || [ "${1}" = "strrd" ] || [ "${1}" = "strwr" ] || \
+			[ "${1}" = "sysfile" ] || [ "${1}" = "sysfnc" ] || \
 			[ "${1}" = "tfldmap" ]; then
 		if [ "${TMP_HAVE_ARG_TESTNAME}" = "true" ]; then
 			echo -e "$(basename "${0}"): Duplicate arg TESTNAME" >>/dev/stderr

@@ -410,6 +410,8 @@ st_sysSleepMS(const Tst_uint32 millisecs)
 			ts.tv_nsec = (long)((millisecs - ts.tv_sec * 1000) * 1000 * 1000);
 			nanosleep(&ts, NULL);
 		}
+	#else
+		#warning No sleep function
 	#endif
 }
 
