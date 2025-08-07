@@ -1,5 +1,5 @@
 /******************************************************************************/
-/* main_dl.c                [Sandy Tagger | Testsuite]                   tw=4 */
+/* test_dl.c                [Sandy Tagger | Testsuite]                   tw=4 */
 /*                                                                            */
 /* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */

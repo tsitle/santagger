@@ -1,9 +1,9 @@
 /******************************************************************************/
-/* main_m64.c               [Sandy Tagger | Testsuite]                   tw=4 */
+/* test_m64.c               [Sandy Tagger | Testsuite]                   tw=4 */
 /*                                                                            */
 /* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
-/* Test routines for 64bit math functions                                     */
+/* Test routines for 64-bit math functions                                    */
 /******************************************************************************/
 /*                                                                            */
 /* This program is free software; you can redistribute it and/or              */
