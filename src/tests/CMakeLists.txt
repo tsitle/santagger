@@ -46,6 +46,12 @@ target_sources(santagger_test_strwr
 )
 target_link_libraries(santagger_test_strwr PRIVATE santagger_lib santagger_includes)
 
+target_sources(santagger_test_sysfile
+	PRIVATE
+		test_sysfile.c
+)
+target_link_libraries(santagger_test_sysfile PRIVATE santagger_lib santagger_includes)
+
 target_sources(santagger_test_tfldmap
 	PRIVATE
 		test_tfldmap.c

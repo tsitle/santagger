@@ -111,6 +111,7 @@ add_executable(santagger_test_rnd)
 add_executable(santagger_test_stream)
 add_executable(santagger_test_strrd)
 add_executable(santagger_test_strwr)
+add_executable(santagger_test_sysfile)
 add_executable(santagger_test_tfldmap)
 
 add_subdirectory(src/tests)
