@@ -40,10 +40,10 @@
 
 static Tst_err
 ST_TIV2__sync_reverseUnsync(ST_OPTARG(Tst_bool *pFalseSyncsFnd),
-                            Tst_buf *pBuf, const Tst_uint32 bufSz,
+                            Tst_buf *pBuf, Tst_uint32 bufSz,
                             Tst_uint32 *pDelta);
 static Tst_err
-ST_TIV2__sync_doUnsync(const Tst_buf *pBufIn, const Tst_uint32 bufSzIn,
+ST_TIV2__sync_doUnsync(const Tst_buf *pBufIn, Tst_uint32 bufSzIn,
                        Tst_buf **ppBuf, Tst_uint32 *pBufSz,
                        Tst_uint32 *pDelta);
 
@@ -431,6 +431,9 @@ ST_TIV2__sync_doUnsync(const Tst_buf *pBufIn, const Tst_uint32 bufSzIn,
 			if (*ppBufOut == NULL)
 				return ST_ERR_OMEM;
 			*pBufSzOut = bufSzIn;
+		}
+		if (*ppBufOut == NULL) {
+			return ST_ERR_IARG;
 		}
 		memcpy(*ppBufOut, pBufIn, bufSzIn);
 		return ST_ERR_SUCC;
