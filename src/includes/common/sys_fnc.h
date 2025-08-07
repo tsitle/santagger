@@ -198,15 +198,6 @@ st_sysSleepMS(const Tst_uint32 millisecs);
 // --------------------------------
 
 /**
- * Initialize Pseudo-Random-Number generator.
- * The PRNG is initialized with the current time, but you can use an additional seed
- *
- * @param optionalSeed Optional seed value
- */
-ST_EXPORT void
-st_sysInitRand(const Tst_uint32 optionalSeed);
-
-/**
  * Get Pseudo-Random-Number as integer
  *
  * @param min Minimum output number

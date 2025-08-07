@@ -27,20 +27,23 @@
 /*
 // System-Includes
 */
-#if defined(WIN32)
+#if defined(_WIN32) || defined (__CYGWIN__)
 	#include <windows.h>
+	#include <bcrypt.h>  /* BCryptGenRandom() */
 #else
-	//#include <sys/types.h>   /* time_t */
-	#include <time.h>        /* time(),nanosleep(),... */
+	// #include <sys/types.h>  /* time_t */
+	// ReSharper disable once CppUnusedIncludeDirective
 	#include <sys/time.h>    /* timeval */
 	//#include <sys/resource.h>
+	#include <sys/random.h>  /* getrandom() */
 #endif
-#include <stdlib.h>      /* calloc() */
-#include <string.h>      /* memcpy() */
-#include <ctype.h>       /* tolower(), toupper() */
+#include <time.h>    /* time(),nanosleep(),... */
+#include <stdlib.h>  /* calloc() */
+#include <string.h>  /* memcpy() */
+#include <ctype.h>   /* tolower(), toupper() */
 //#include <netinet/in.h>  /* ntohl() */
 #if (ST_SYSFNC_DEB_ == 1)
-	#include <stdarg.h>      /* va_list, ... */
+	#include <stdarg.h>  /* va_list, ... */
 #endif
 
 /*----------------------------------------------------------------------------*/
@@ -54,11 +57,14 @@
 
 static Tst_bool
 ST_SYSFNC__strcmpN(
-		const Tst_bool caseSensitive,
-		const Tst_bool useMaxlen, const Tst_uint32 maxlen,
+		Tst_bool caseSensitive,
+		Tst_bool useMaxlen, Tst_uint32 maxlen,
 		ST_OPTARG(const Tst_str *pStr1),
 		ST_OPTARG(const Tst_str *pStr2)
 	);
+/** */
+static Tst_uint32
+ST_SYSFNC__rand(void);
 /** */
 #if (ST_SYSFNC_DEB_ == 1)
 	static void ST_SYSFNC__prf(char *pFmt, ...);
@@ -361,13 +367,13 @@ st_sysReverseByteOrder_LL(Tst_buf *pVal, const Tst_uint32 valSz)
 double
 st_sysGetTime(void)
 {
-	#ifdef WIN32  /* untested */
+	#if defined(_WIN32) || defined (__CYGWIN__)
 		LARGE_INTEGER t;
 		LARGE_INTEGER f;
 
 		QueryPerformanceCounter(&t);
 		QueryPerformanceFrequency(&f);
-		return (double(t.QuadPart) / double(f.QuadPart));
+		return ((double)t.QuadPart / (double)f.QuadPart);
 	#else
 		#if (HAVE_GETTIMEOFDAY == 1 && HAVE_STRUCT_TIMEVAL_TV_SEC == 1 && \
 				HAVE_STRUCT_TIMEVAL_TV_USEC == 1)
@@ -375,7 +381,7 @@ st_sysGetTime(void)
 			struct timezone tzp;
 
 			gettimeofday(&t, &tzp);
-			return (t.tv_sec + t.tv_usec * (1e-6));
+			return ((double)t.tv_sec + (double)t.tv_usec * (1e-6));
 		#else
 			time_t timeV = 0;  /* time_t seems to be long int */
 
@@ -410,18 +416,6 @@ st_sysSleepMS(const Tst_uint32 millisecs)
 /*----------------------------------------------------------------------------*/
 
 /**
- * Initialize Pseudo-Random-Number generator.
- * The PRNG is initialized with the current time, but you can use an additional seed
- *
- * @param optionalSeed Optional seed value
- */
-void
-st_sysInitRand(const Tst_uint32 optionalSeed)
-{
-	srand((Tst_uint32)time(NULL) | optionalSeed);
-}
-
-/**
  * Get Pseudo-Random-Number as integer
  *
  * @param min Minimum output number
@@ -445,25 +439,9 @@ st_sysGetRand(const Tst_uint32 min, const Tst_uint32 max)
 	} else {
 		r = (max + 1) - min;
 	}
-	y = (Tst_uint32)(r * ((double)rand() / (double)RAND_MAX));
+	y = (Tst_uint32)(r * ((double)ST_SYSFNC__rand() / (double)0xffffffff));
 	return (min + y);
 }
-
-/*Tst_uint32 st_sysGetRandOLD(const Tst_uint32 min, const Tst_uint32 max)
-{
-	double x;
-	Tst_uint32 y;
-
-	if (min > max) {
-		return 0;
-	}
-	* return (min +
-			(Tst_uint32)((double)((Tlsize)max + 1 - min * rand()) /
-				(RAND_MAX + (double)min))); *
-	x = (double)((Tlsize)max - min + 1);
-	y = (Tst_uint32)((x * (double)rand()) / (double)(RAND_MAX + min));
-	return min + y;
-}*/
 
 /**
  * Get Pseudo-Random-Number as double
@@ -477,6 +455,7 @@ st_sysGetRandDbl(const double min, const double max)
 {
 	double y;
 	double r;
+	Tst_uint32 retryCnt = 0;
 
 	ST_ASSERTN_NUM(0.0, min > max)  /* ret 0.0 */
 
@@ -484,30 +463,30 @@ st_sysGetRandDbl(const double min, const double max)
 
 	/* --> 0 <= y <= |max-min| */
 	r = (max + 1.0) - min;
-	y = r * ((double)rand() / (double)RAND_MAX);
-	/* --> min <= y <= max */
-	y += min;
-	if (y > max) {  /* because of rounding errors */
-		/**ST_SYSFNC__prE("st_sysGetRandDbl(): y > max (%f > %f) lev1\n",
-				y, max);**/
-		y = min + ((y - max) / r);
-		if (y > max) {  /* well, so be it */
-			/**ST_SYSFNC__prE("st_sysGetRandDbl(): y > max (%f > %f) lev2\n",
-					y, max);**/
-			y = max;
-		} else
-			if (y < min) {  /* because of rounding errors */
-				/**ST_SYSFNC__prE("st_sysGetRandDbl(): y < min (%f < %f) lev2\n",
-						y, min);**/
-				y = min;
+	while (++retryCnt < 1000000) {
+		y = r * ((double)((Tst_int32)ST_SYSFNC__rand()) / (double)0x7fffffff);
+		/* --> min <= y <= max */
+		y += min;
+		if (y > max) {  /* because of rounding errors */
+			/**ST_SYSFNC__prE("st_sysGetRandDbl(): y > max (%f > %f) lev1\n", y, max);**/
+			y = min + ((y - max) / r);
+			if (y > max) {
+				/**ST_SYSFNC__prE("st_sysGetRandDbl(): y > max (%f > %f) lev2\n", y, max);**/
+				continue;
 			}
-	} else
-		if (y < min) {  /* because of rounding errors */
-			/**ST_SYSFNC__prE("st_sysGetRandDbl(): y < min (%f < %f) lev1\n",
-					y, min);**/
-			y = min;
+			if (y < min) {  /* because of rounding errors */
+				/**ST_SYSFNC__prE("st_sysGetRandDbl(): y < min (%f < %f) lev2\n", y, min);**/
+				continue;
+			}
+			return y;
 		}
-	return y;
+		if (y < min) {  /* because of rounding errors */
+			/**ST_SYSFNC__prE("st_sysGetRandDbl(): y < min (%f < %f) lev1\n", y, min);**/
+			continue;
+		}
+		return y;
+	}
+	return -1.0f;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -591,6 +570,40 @@ ST_SYSFNC__strcmpN(const Tst_bool caseSensitive,
 	}
 
 	return (resB && (useMaxlen || (*pS1 == 0 && *pS2 == 0)));
+}
+
+/*----------------------------------------------------------------------------*/
+
+static Tst_uint32
+ST_SYSFNC__rand(void) {
+	Tst_uint32 resI;
+	#if ! defined(__APPLE__)
+		Tst_bool tmpRes;
+	#endif
+	unsigned char buffer[4];
+
+	#if defined(_WIN32) || defined (__CYGWIN__)
+		tmpRes = (Tst_bool)BCRYPT_SUCCESS(
+				BCryptGenRandom(NULL, (PUCHAR)buffer, (ULONG)sizeof(buffer), BCRYPT_USE_SYSTEM_PREFERRED_RNG)
+			);
+	#elif defined(__APPLE__)
+		arc4random_buf(buffer, sizeof(buffer));
+	#else
+		tmpRes = (getrandom(buffer, sizeof(buffer), 0) == sizeof(buffer));
+	#endif
+	#if ! defined(__APPLE__)
+		if (tmpRes) {
+	#endif
+			resI = *(Tst_uint32*)buffer;
+	#if ! defined(__APPLE__)
+		} else {
+			// fallback
+			srand((Tst_uint32)time(NULL));
+			resI = (Tst_uint32)rand();
+		}
+	#endif
+
+	return resI;
 }
 
 /*----------------------------------------------------------------------------*/
