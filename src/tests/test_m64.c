@@ -2947,7 +2947,6 @@ TEST__bench(void)
 	TEST__prf("test12_bench", "Init...");
 	ST_SYSMATH_STC_RSETUI64(val64a)
 	ST_SYSMATH_STC_RSETUI64(val64b)
-	st_sysInitRand(0);
 	for (x = 0; x < LOC_SO_RNDS; x++) {
 		rnds[x] = st_sysGetRand(0, 0xfffffff);
 	}

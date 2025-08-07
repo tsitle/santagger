@@ -274,7 +274,6 @@ TEST__1_sort(void)
 	Tst_mtes_strArr  sArr;
 	Tst_mtes_textEnc te;
 
-	st_sysInitRand(0);
 	st_mtes_stc_initSA(&sArr);
 	TEST__prf("test1_sort", "Generate strings...  (cnt=%u, len=%u)",
 			cCNT, cLEN);

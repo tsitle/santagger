@@ -2065,7 +2065,6 @@ TEST__createSortFile(const Tst_str *pPath,
 	}
 	if (resB) {
 		printf("Generating random values...\n");
-		st_sysInitRand(0);
 		for (x = 0; x < sz; x++) {
 			if (x % 10000 == 0 || x + 1 == sz) {
 				fprintf(stderr, "\r  gen prog %.2f%%",
@@ -2455,8 +2454,6 @@ TEST__bench1(void)
 	            div;
 	Tst_dynlist dl;
 	char        msg[512];
-
-	st_sysInitRand(0);
 
 	res = st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
 			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);

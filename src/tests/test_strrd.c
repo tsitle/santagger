@@ -495,7 +495,6 @@ TEST__3_cpFile(const char *pInFn)
 	}
 
 	/* */
-	st_sysInitRand(0);
 	TEST__prf(cFNCN, "Copying file...");
 	while (res == ST_ERR_SUCC) {
 		rnd = st_sysGetRand(1, 100);

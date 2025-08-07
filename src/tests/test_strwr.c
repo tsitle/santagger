@@ -56,8 +56,6 @@ main(const int argc, const char *argv[])
 		return 1;
 	}
 
-	st_sysInitRand(0);
-
 #	if (RUN_TEST_0 == 1)
 	if (! TEST__0_cpFile(argv[1])) {
 		printf("! Test failed !\n");

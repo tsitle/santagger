@@ -77,8 +77,6 @@ main(const int argc, const char *argv[])
 		printUsage(argv[0]);
 	}
 
-	st_sysInitRand(0);
-
 	if (argI) {  /* run tests with inputfile */
 #		if (RUN_TEST_I0 == 1)
 		for (x = 0; x < 3; x++) {

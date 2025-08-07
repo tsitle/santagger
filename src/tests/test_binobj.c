@@ -60,8 +60,6 @@ main(const int argc, const char *argv[])
 		return 1;
 	}
 
-	st_sysInitRand(0);
-
 	srcCRC32 = TEST__getCRC32((const Tst_str*)argv[1]);
 
 #	if (RUN_TEST_0 == 1)

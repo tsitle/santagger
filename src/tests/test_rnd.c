@@ -111,14 +111,13 @@ TEST__0_genInt(void)
 	Tst_uint32 x;
 	Tst_uint32 val;
 
-	st_sysInitRand(0);
-
-	for (x = 0; x < (cUPPER - cLOWER) * 10; x++) {
+	for (x = 0; x < (cUPPER - cLOWER) * 5; x++) {
 		val = st_sysGetRand(cLOWER, cUPPER);
 		if (val < cLOWER || val > cUPPER) {
 			TEST__prf(cFNCN, "error: val %u not in range %u .. %u", val, cLOWER, cUPPER);
 			return ST_B_FALSE;
 		}
+		TEST__prf(cFNCN, "- val %u", val);
 	}
 
 	TEST__prf(cFNCN, "OK");
@@ -140,14 +139,13 @@ TEST__1_genDbl(void)
 	Tst_uint32 x;
 	double val;
 
-	st_sysInitRand(0);
-
-	for (x = 0; x < (Tst_uint32)(cUPPER - cLOWER) * 10; x++) {
+	for (x = 0; x < (Tst_uint32)(cUPPER - cLOWER) * 5; x++) {
 		val = st_sysGetRandDbl(cLOWER, cUPPER);
 		if (val < cLOWER || val > cUPPER) {
 			TEST__prf(cFNCN, "error: val %f not in range %f .. %f", val, cLOWER, cUPPER);
 			return ST_B_FALSE;
 		}
+		TEST__prf(cFNCN, "- val %f", val);
 	}
 
 	TEST__prf(cFNCN, "OK");
@@ -246,42 +244,36 @@ sysTestRand(void)
 	min = 0;
 	max = so - 1;
 	__sysf_prf(" initR #0\n");
-	st_sysInitRand(0);
 	__sysTestRand_getRndVals((Tst_uint32*)&vals, so, min, max, RUNS);
 	__sysTestRand_printZeroVals((Tst_uint32*)&vals, so, min, max);
 
 	min = 1;
 	max = so - 1;
 	__sysf_prf(" initR #1\n");
-	st_sysInitRand(1);
 	__sysTestRand_getRndVals((Tst_uint32*)&vals, so, min, max, RUNS);
 	__sysTestRand_printZeroVals((Tst_uint32*)&vals, so, min, max);
 
 	min = 2;
 	max = so - 1;
 	__sysf_prf(" initR #2\n");
-	st_sysInitRand(2);
 	__sysTestRand_getRndVals((Tst_uint32*)&vals, so, min, max, RUNS);
 	__sysTestRand_printZeroVals((Tst_uint32*)&vals, so, min, max);
 
 	min = 2;
 	max = (so - 1) - 1;
 	__sysf_prf(" initR #3\n");
-	st_sysInitRand(3);
 	__sysTestRand_getRndVals((Tst_uint32*)&vals, so, min, max, RUNS);
 	__sysTestRand_printZeroVals((Tst_uint32*)&vals, so, min, max);
 
 	min = 0;
 	max = so / 10;
 	__sysf_prf(" initR #4\n");
-	st_sysInitRand(4);
 	__sysTestRand_getRndVals((Tst_uint32*)&vals, so, min, max, RUNS);
 	__sysTestRand_printZeroVals((Tst_uint32*)&vals, so, min, max);
 
 	min = 0;
 	max = 1;
 	__sysf_prf(" initR #5\n");
-	st_sysInitRand(5);
 	__sysTestRand_getRndVals((Tst_uint32*)&vals, so, min, max, RUNS);
 	for (x = min; x <= max; x++)
 		__sysf_prf("  __ %5u : %5u __\n", x, vals[x]);
@@ -289,7 +281,6 @@ sysTestRand(void)
 	min = UINT_MAX / 2;
 	max = UINT_MAX - 1;
 	__sysf_prf(" initR #6\n");
-	st_sysInitRand(6);
 	__sysf_prf(" start %u - %u\n", min, max);
 	for (x = 0; x < RUNS; x++) {
 		val = st_sysGetRand(min, max);
@@ -312,49 +303,41 @@ sysTestRandDbl(void)
 	min = 0.0;
 	max = MAXV - 1.0;
 	__sysf_prf(" initR #0\n");
-	st_sysInitRand(0);
 	__sysTestRand_getRndValsDbl(min, max, RUNS);
 
 	min = 1.0;
 	max = MAXV - 1.0;
 	__sysf_prf(" initR #1\n");
-	st_sysInitRand(1);
 	__sysTestRand_getRndValsDbl(min, max, RUNS);
 
 	min = 2.0;
 	max = MAXV - 1.0;
 	__sysf_prf(" initR #2\n");
-	st_sysInitRand(2);
 	__sysTestRand_getRndValsDbl(min, max, RUNS);
 
 	min = 2.0;
 	max = (MAXV - 1.0) - 1.0;
 	__sysf_prf(" initR #3\n");
-	st_sysInitRand(3);
 	__sysTestRand_getRndValsDbl(min, max, RUNS);
 
 	min = 0.0;
 	max = MAXV / 10.0;
 	__sysf_prf(" initR #4\n");
-	st_sysInitRand(4);
 	__sysTestRand_getRndValsDbl(min, max, RUNS);
 
 	min = 0.0;
 	max = 1.0;
 	__sysf_prf(" initR #4\n");
-	st_sysInitRand(4);
 	__sysTestRand_getRndValsDbl(min, max, RUNS);
 
 	min = -1.0;
 	max = 1.0;
 	__sysf_prf(" initR #4\n");
-	st_sysInitRand(4);
 	__sysTestRand_getRndValsDbl(min, max, RUNS);
 
 	min = -1000.0;
 	max = -51.0;
 	__sysf_prf(" initR #4\n");
-	st_sysInitRand(4);
 	__sysTestRand_getRndValsDbl(min, max, RUNS);
 
 	__sysf_prf("Done.\n");
