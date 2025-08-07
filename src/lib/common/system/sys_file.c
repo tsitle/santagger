@@ -56,19 +56,19 @@ typedef struct {
 
 static Tst_bool
 ST_SYSFILE__concatDirAndFilen(const Tst_str *pDirn, const Tst_str *pFilen,
-                              Tst_str *pFullPath, const Tst_uint32 fpSz);
+                              Tst_str *pFullPath, Tst_uint32 fpSz);
 static Tst_bool
-ST_SYSFILE__getTmpFilename(const Tst_bool inCurDir, const Tst_bool inSpecDir,
+ST_SYSFILE__getTmpFilename(Tst_bool inCurDir, Tst_bool inSpecDir,
                            ST_OPTARG(const Tst_str *pInDir_Dirn),
-                           Tst_str *pTmpFn, const Tst_uint32 tmpFnMaxSz);
+                           Tst_str *pTmpFn, Tst_uint32 tmpFnMaxSz);
 static Tst_err
-ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, const Tst_bool exOrNew,
-                     const Tst_bool allowSymAndHardLinks,
-                     const Tst_bool allowWriting,
-                     const Tst_bool createVirtual);
+ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, Tst_bool exOrNew,
+                     Tst_bool allowSymAndHardLinks,
+                     Tst_bool allowWriting,
+                     Tst_bool createVirtual);
 static Tst_bool
 ST_SYSFILE__fOd_exists(const Tst_str *pPath, Tst_sys_fstc *pFStc,
-                       const Tst_bool fOrD, const Tst_uint32 recursLev,
+                       Tst_bool fOrD, Tst_uint32 recursLev,
                        Tst_fsize *pSize, Tst_bool *pErrTooBig);
 
 /** */
@@ -201,11 +201,19 @@ st_sysRenameFile(const Tst_str *pSrc, const Tst_str *pDst)
 		            fstat_info;
 
 		// check if source and destination files reside on the same device
-		if (lstat((const char*)pDst, &lstat_info) != 0) {
-			return ST_B_FALSE;  // can't retrieve file stats
-		}
+		#if ! (defined(_WIN32) || defined (__CYGWIN__))
+			if (lstat((const char*)pDst, &lstat_info) != 0) {
+				return ST_B_FALSE;  // can't retrieve file stats
+			}
+		#endif
 
-		const int tmpFd = open((const char*)pSrc, O_RDONLY);
+		const int tmpFd = open(
+				(const char*)pSrc,
+				O_RDONLY
+				#if defined(_WIN32) || defined (__CYGWIN__)
+					| O_BINARY
+				#endif
+			);
 		if (tmpFd == -1) {
 			return ST_B_FALSE;  // can't open file
 		}
@@ -213,6 +221,10 @@ st_sysRenameFile(const Tst_str *pSrc, const Tst_str *pDst)
 			close(tmpFd);
 			return ST_B_FALSE;  // can't retrieve file stats
 		}
+		#if defined(_WIN32) || defined (__CYGWIN__)
+			// there are no symlinks/hardlinks under MS Windows, so we just fake [lstat_info]
+			fstat(tmpFd, &lstat_info);
+		#endif
 
 		if (lstat_info.st_dev != fstat_info.st_dev) {  // st_dev: device inode resides on
 			isOnOtherDevice = ST_B_TRUE;
@@ -239,26 +251,30 @@ st_sysRenameFile(const Tst_str *pSrc, const Tst_str *pDst)
 Tst_bool
 st_sysCreateDir(const Tst_str *pDir, const Tst_sys_setFilePerm perms)
 {
-#	define LOC_MAP_(mac_myPerm, mac_sysPerm)  { \
+	#if defined(_WIN32) || defined (__CYGWIN__)
+		return (mkdir((const char*)pDir) == 0);
+	#else
+		#define LOC_MAP_(mac_myPerm, mac_sysPerm)  { \
 				if ((perms & (ST_SYS_SETPERM_##mac_myPerm)) != 0) ndMode |= (S_I##mac_sysPerm); }
-	mode_t ndMode = 0;
+		mode_t ndMode = 0;
 
-	if (perms != ST_SYS_SETPERM_NONE) {
-		LOC_MAP_(OTHX, XOTH)
-		LOC_MAP_(OTHW, WOTH)
-		LOC_MAP_(OTHR, ROTH)
-		LOC_MAP_(GRPX, XGRP)
-		LOC_MAP_(GRPW, WGRP)
-		LOC_MAP_(GRPR, RGRP)
-		LOC_MAP_(USRX, XUSR)
-		LOC_MAP_(USRW, WUSR)
-		LOC_MAP_(USRR, RUSR)
-		LOC_MAP_(SVTX, SVTX)
-		LOC_MAP_(SGID, SGID)
-		LOC_MAP_(SUID, SUID)
-	}
-	return (mkdir((const char*)pDir, ndMode) == 0);
-#	undef LOC_MAP_
+		if (perms != ST_SYS_SETPERM_NONE) {
+			LOC_MAP_(OTHX, XOTH)
+			LOC_MAP_(OTHW, WOTH)
+			LOC_MAP_(OTHR, ROTH)
+			LOC_MAP_(GRPX, XGRP)
+			LOC_MAP_(GRPW, WGRP)
+			LOC_MAP_(GRPR, RGRP)
+			LOC_MAP_(USRX, XUSR)
+			LOC_MAP_(USRW, WUSR)
+			LOC_MAP_(USRR, RUSR)
+			LOC_MAP_(SVTX, SVTX)
+			LOC_MAP_(SGID, SGID)
+			LOC_MAP_(SUID, SUID)
+		}
+		return (mkdir((const char*)pDir, ndMode) == 0);
+		#undef LOC_MAP_
+	#endif
 }
 
 /*----------------------------------------------------------------------------*/
@@ -564,48 +580,54 @@ st_sysFStc_changeMode(Tst_sys_fstc *pFStc, const Tst_bool allowWriting)
 			pFStc->pObInternal == NULL)
 	pFStcI = (Tst_sys__fstc_intn*)pFStc->pObInternal;
 
-	if (pFStcI->fd < 0 || st_sysStrEmpty(pFStcI->pFilen))
+	if (pFStcI->fd < 0 || st_sysStrEmpty(pFStcI->pFilen)) {
 		return ST_ERR_FAIL;
-	if (pFStcI->modeWr == allowWriting)
+	}
+	if (pFStcI->modeWr == allowWriting) {
 		return ST_ERR_SUCC;
+	}
 
 	if (! pFStcI->isVirt) {
-		if (fstat(pFStcI->fd, &fstat_info1) != 0)
+		if (fstat(pFStcI->fd, &fstat_info1) != 0) {
 			res = ST_ERR_FCOF;  /* can't open file */
-		else {
+		} else {
 			fclose(pFStcI->pFP);  /* also closes pFStcI->fd */
 			pFStcI->pFP = NULL;
 			/* */
-			pFStcI->fd = open((const char*)pFStcI->pFilen,
-					(allowWriting ? O_RDWR : O_RDONLY));
-			if (pFStcI->fd == -1)
+			pFStcI->fd = open(
+					(const char*)pFStcI->pFilen,
+					(allowWriting ? O_RDWR : O_RDONLY)
+					#if defined(_WIN32) || defined (__CYGWIN__)
+						| O_BINARY
+					#endif
+				);
+			if (pFStcI->fd == -1) {
 				res = ST_ERR_FCOF;  /* can't open file */
+			}
 
-			if (res == ST_ERR_SUCC && fstat(pFStcI->fd, &fstat_info2) != 0)
-				res = ST_ERR_FCOF;  /* can't open file */
-			else if (res == ST_ERR_SUCC &&
-					! (fstat_info1.st_mode == fstat_info2.st_mode &&
-						fstat_info1.st_ino == fstat_info2.st_ino &&
-						fstat_info1.st_dev == fstat_info2.st_dev)) {
+			if (res == ST_ERR_SUCC &&
+					((fstat(pFStcI->fd, &fstat_info2) != 0) ||
+						! (fstat_info1.st_mode == fstat_info2.st_mode &&
+							fstat_info1.st_ino == fstat_info2.st_ino &&
+							fstat_info1.st_dev == fstat_info2.st_dev))) {
 				res = ST_ERR_FCOF;  /* can't open file */
 			}
 		}
 
 		/* associate pFP with fd */
 		if (res == ST_ERR_SUCC) {
-			pFStcI->pFP = fdopen(pFStcI->fd,
-					(allowWriting ? "rb+" : "rb"));
-			if (pFStcI->pFP == NULL)
+			pFStcI->pFP = fdopen(pFStcI->fd, allowWriting ? "rb+" : "rb");
+			if (pFStcI->pFP == NULL) {
 				res = ST_ERR_FCCF;  /* can't create file */
+			}
 		}
 	}
 
-	if (res == ST_ERR_SUCC)
+	if (res == ST_ERR_SUCC) {
 		pFStcI->modeWr = allowWriting;
-	else {
+	} else {
 		if (pFStcI->fd >= 0) {
-			if (! pFStcI->isVirt)
-				close(pFStcI->fd);
+			close(pFStcI->fd);
 			pFStcI->fd  = -1;
 			pFStcI->pFP = NULL;
 		}
@@ -866,32 +888,34 @@ st_sysFStc_copyFromAndToFile(const Tst_bool pretendWriting,
 	if (! pretendWriting) {
 		pFPout = ((Tst_sys__fstc_intn*)pFStcOut->pObInternal)->pFP;
 		ST_ASSERTN_IARG(pFPout == NULL)
-		if (! ((Tst_sys__fstc_intn*)pFStcOut->pObInternal)->modeWr)
+		if (! ((Tst_sys__fstc_intn*)pFStcOut->pObInternal)->modeWr) {
 			return ST_ERR_FAIL;
+		}
 	}
 
-	if (pCopiedFS != NULL)
+	if (pCopiedFS != NULL) {
 		*pCopiedFS = 0;
+	}
 	if (maxCopyFS == 0 ||
 			((Tst_sys__fstc_intn*)pFStcIn->pObInternal)->isVirt ||
-			((Tst_sys__fstc_intn*)pFStcOut->pObInternal)->isVirt)
+			(pFStcOut != NULL && pFStcOut->pObInternal != NULL && ((Tst_sys__fstc_intn*)pFStcOut->pObInternal)->isVirt)) {
 		return ST_ERR_SUCC;
+	}
 
 	toRd = (Tst_fsize)sizeof(buf);
 	memset(buf, 0, sizeof(buf));
 	while (feof(pFPin) == 0) {
 		if (rdTot + toRd > maxCopyFS) {
 			toRd = maxCopyFS - rdTot;
-			if (toRd == 0)
+			if (toRd == 0) {
 				break;
+			}
 		}
 		/* */
 		rd = (Tst_fsize)fread(buf, 1, (size_t)toRd, pFPin);
-		if (rd != toRd) {
-			if (ferror(pFPin) != 0 && feof(pFPin) == 0) {
-				clearerr(pFPin);
-				return ST_ERR_FCRD;
-			}
+		if (rd != toRd && ferror(pFPin) != 0 && feof(pFPin) == 0) {
+			clearerr(pFPin);
+			return ST_ERR_FCRD;
 		}
 		if (rd > 0) {
 			rdTot += rd;
@@ -901,11 +925,13 @@ st_sysFStc_copyFromAndToFile(const Tst_bool pretendWriting,
 				clearerr(pFPout);
 				return ST_ERR_FCWR;
 			}
-			if (pCopiedFS != NULL)
+			if (pCopiedFS != NULL) {
 				*pCopiedFS += rd;
+			}
 		}
-		if (rd != toRd)
+		if (rd != toRd) {
 			break;
+		}
 	}
 	return ST_ERR_SUCC;
 }
@@ -1041,10 +1067,10 @@ ST_SYSFILE__getTmpFilename(const Tst_bool inCurDir, const Tst_bool inSpecDir,
 		ST_OPTARG(const Tst_str *pInDir_Dirn),
 		Tst_str *pTmpFn, const Tst_uint32 tmpFnMaxSz)
 {
-	Tst_bool ex = ST_B_TRUE;
+	Tst_bool ex;
 
 
-	ST_ASSERTN_BOOL(ST_B_FALSE, pTmpFn == NULL || tmpFnMaxSz > L_tmpnam ||
+	ST_ASSERTN_BOOL(ST_B_FALSE, pTmpFn == NULL || tmpFnMaxSz > 1024 * 4 ||
 				(inSpecDir && pInDir_Dirn == NULL))
 
 	if (inCurDir || inSpecDir) {
@@ -1124,8 +1150,10 @@ ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, const Tst_bool exOrNew,
 		const Tst_bool createVirtual)
 {
 	Tst_err res = ST_ERR_SUCC;
-	struct stat        lstat_info,
-	                   fstat_info;
+	#if ! (defined(_WIN32) || defined (__CYGWIN__))
+		struct stat lstat_info;
+	#endif
+	struct stat        fstat_info;
 	Tst_sys__fstc_intn *pFStcI;
 
 	ST_ASSERTN_IARG(pFStc == NULL || pFStc->pObInternal == NULL)
@@ -1139,14 +1167,21 @@ ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, const Tst_bool exOrNew,
 	if (exOrNew && ! createVirtual) {
 		/* open existing file */
 
-		if (lstat((const char*)pFStcI->pFilen, &lstat_info) != 0 ||
-				(! (S_ISREG(lstat_info.st_mode) || (S_ISLNK(lstat_info.st_mode) && allowSymAndHardLinks)))) {
-			res = ST_ERR_FCOF;  /* can't open file */
-		}
+		#if ! (defined(_WIN32) || defined (__CYGWIN__))
+			if (lstat((const char*)pFStcI->pFilen, &lstat_info) != 0 ||
+					(! (S_ISREG(lstat_info.st_mode) || (S_ISLNK(lstat_info.st_mode) && allowSymAndHardLinks)))) {
+				res = ST_ERR_FCOF;  /* can't open file */
+			}
+		#endif
 
 		if (res == ST_ERR_SUCC) {
-			pFStcI->fd = open((const char*)pFStcI->pFilen,
-					(allowWriting ? O_RDWR : O_RDONLY));
+			pFStcI->fd = open(
+					(const char*)pFStcI->pFilen,
+					(allowWriting ? O_RDWR : O_RDONLY)
+					#if defined(_WIN32) || defined (__CYGWIN__)
+						| O_BINARY
+					#endif
+				);
 			if (pFStcI->fd == -1) {
 				res = ST_ERR_FCOF;  /* can't open file */
 			}
@@ -1155,20 +1190,27 @@ ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, const Tst_bool exOrNew,
 		if (res == ST_ERR_SUCC && fstat(pFStcI->fd, &fstat_info) != 0) {
 			res = ST_ERR_FCOF;  /* can't open file */
 		}
-		if (res == ST_ERR_SUCC &&
-				lstat_info.st_nlink > 1 && ! allowSymAndHardLinks) {
-			/* file has multiple hard links */
-			res = ST_ERR_FCOF;  /* can't open file */
-		}
+		#if ! (defined(_WIN32) || defined (__CYGWIN__))
+			if (res == ST_ERR_SUCC &&
+					lstat_info.st_nlink > 1 && ! allowSymAndHardLinks) {
+				/* file has multiple hard links */
+				res = ST_ERR_FCOF;  /* can't open file */
+			}
+		#endif
 	} else if (! createVirtual) {
 		/* create new file */
 
-		if (lstat((const char*)pFStcI->pFilen, &lstat_info) == 0) {
+		if (st_sysDoesFileExist(pFStcI->pFilen)) {
 			res = ST_ERR_FCCF;  /* can't create file */
 		} else {
-			pFStcI->fd = open((const char*)pFStcI->pFilen,
-					(allowWriting ? O_RDWR : O_RDONLY) |
-					O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+			pFStcI->fd = open(
+					(const char*)pFStcI->pFilen,
+					(allowWriting ? O_RDWR : O_RDONLY) | O_CREAT | O_EXCL
+					#if defined(_WIN32) || defined (__CYGWIN__)
+						| O_BINARY
+					#endif
+					, S_IRUSR | S_IWUSR
+				);
 			if (pFStcI->fd == -1) {
 				res = ST_ERR_FCCF;  /* can't create file */
 			}
@@ -1180,8 +1222,7 @@ ST_SYSFILE__fileOpen(Tst_sys_fstc *pFStc, const Tst_bool exOrNew,
 
 	/* associate pFP with fd */
 	if (res == ST_ERR_SUCC && ! createVirtual) {
-		pFStcI->pFP = fdopen(pFStcI->fd,
-				(allowWriting ? "rb+" : "rb"));
+		pFStcI->pFP = fdopen(pFStcI->fd, allowWriting ? "rb+" : "rb");
 		if (pFStcI->pFP == NULL) {
 			res = ST_ERR_FCCF;  /* can't create file */
 		}
