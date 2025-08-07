@@ -29,8 +29,7 @@
 /*
 // System-Includes
 */
-#include <string.h>      /* memcpy(), ... */
-#include <strings.h>     /* index() */
+#include <string.h>      /* memcpy(), strchr() ... */
 #include <stdlib.h>      /* calloc() */
 
 /*----------------------------------------------------------------------------*/
@@ -142,17 +141,20 @@ st_id3_genreExists_int(const Tst_byte gennr, ST_OPTARG(Tst_int32 *pIx))
 	          *pIIX = pIx;
 	Tst_id3_genre *pGens = (Tst_id3_genre*)&ST_ID3_GENRES;
 
-	if (pIx != NULL)
+	if (pIx != NULL) {
 		*pIx = 0;
-	else
+	} else {
 		pIIX = &iix;
+	}
 	while (pGens->pCap != NULL) {
-		if (pGens->nr == gennr)
+		if (pGens->nr == gennr) {
 			return ST_B_TRUE;
+	}
 		pGens = (Tst_id3_genre*)&ST_ID3_GENRES[++(*pIIX)];
 	}
-	if (pIx != NULL)
+	if (pIx != NULL) {
 		*pIx = -1;
+	}
 	return ST_B_FALSE;
 }
 
@@ -173,20 +175,24 @@ st_id3_genreExists_str(const Tst_str *pCap, ST_OPTARG(Tst_int32 *pIx))
 	          *pIIX = pIx;
 	Tst_id3_genre const *pGens = (Tst_id3_genre*)&ST_ID3_GENRES;
 
-	if (pCap == NULL)
+	if (pCap == NULL) {
 		return ST_B_FALSE;
+	}
 
-	if (pIx != NULL)
+	if (pIx != NULL) {
 		*pIx = 0;
-	else
+	} else {
 		pIIX = &iix;
+	}
 	while (pGens->pCap != NULL) {
-		if (st_sysStrcmp(ST_B_FALSE, (Tst_str*)pGens->pCap, pCap))
+		if (st_sysStrcmp(ST_B_FALSE, (Tst_str*)pGens->pCap, pCap)) {
 			return ST_B_TRUE;
+		}
 		pGens = (Tst_id3_genre*)&ST_ID3_GENRES[++(*pIIX)];
 	}
-	if (pIx != NULL)
+	if (pIx != NULL) {
 		*pIx = -1;
+	}
 	return ST_B_FALSE;
 }
 
@@ -196,8 +202,9 @@ st_id3_genreExists_str(const Tst_str *pCap, ST_OPTARG(Tst_int32 *pIx))
 const char*
 st_id3_getGenreCap(const Tst_int32 ix)
 {
-	if (ix < 0 || ix > ST_ID3_GENRE_DEFMAXNR)
+	if (ix < 0 || ix > ST_ID3_GENRE_DEFMAXNR) {
 		return NULL;
+	}
 
 	return ST_ID3_GENRES[ix].pCap;
 }
@@ -208,8 +215,9 @@ st_id3_getGenreCap(const Tst_int32 ix)
 Tst_bool
 st_id3_isStandardGenre(const Tst_int32 ix)
 {
-	if (ix < 0 || ix > ST_ID3_GENRE_DEFMAXNR)
+	if (ix < 0 || ix > ST_ID3_GENRE_DEFMAXNR) {
 		return ST_B_FALSE;
+	}
 
 	return ST_ID3_GENRES[ix].isStd;
 }
@@ -236,20 +244,23 @@ st_id3_isSpecGenre(const Tst_str *pIDandorCap, ST_OPTARG(Tst_int32 *pIx))
 	           sub2len;
 	Tst_id3_genre_spec const *pGens = (Tst_id3_genre_spec*)&ST_ID3_GENRES_SPEC;
 
-	if (pIDandorCap == NULL)
+	if (pIDandorCap == NULL) {
 		return ST_B_FALSE;
+	}
 
-	if (pIx != NULL)
+	if (pIx != NULL) {
 		*pIx = 0;
-	else
+	} else {
 		pIIX = &iix;
-	if ((pSpa = (Tst_str*)index((char*)pIDandorCap, ST_CSET_ISO_SPA)) != NULL) {
+	}
+	if ((pSpa = (Tst_str*)strchr((char*)pIDandorCap, ST_CSET_ISO_SPA)) != NULL) {
 		idlen   = st_sysStrlen2(pIDandorCap);
 		sub1len = (Tst_uint32)(pSpa - pIDandorCap);
 		sub2len = idlen - sub1len - 1;
 		ST_CALLOC(pSub1, Tst_str*, sub1len + 1, 1)
-		if (pSub1 == NULL)
+		if (pSub1 == NULL) {
 			return ST_B_FALSE;
+		}
 		ST_CALLOC(pSub2, Tst_str*, sub2len + 1, 1)
 		if (pSub2 == NULL) {
 			ST_DELPOINT(pSub1)
@@ -277,8 +288,9 @@ st_id3_isSpecGenre(const Tst_str *pIDandorCap, ST_OPTARG(Tst_int32 *pIx))
 		}
 		pGens = (Tst_id3_genre_spec*)&ST_ID3_GENRES_SPEC[++(*pIIX)];
 	}
-	if (pIx != NULL)
+	if (pIx != NULL) {
 		*pIx = -1;
+	}
 	ST_DELPOINT(pSub1)
 	ST_DELPOINT(pSub2)
 	return ST_B_FALSE;
