@@ -113,7 +113,7 @@ ST_BEGIN_C_DECLS
 			defined(SRC_MF_CNVMRG_C)
 	/** */
 	Tst_bool
-	ast_cln_fnc_isAnySetInTaglist(Tast_cln_t_tagList_pb(pList));
+	ast_cln_fnc_isAnySetInTaglist(const Tast_cln_t_tagList_pb(pList));
 #endif  /* protected */
 
 

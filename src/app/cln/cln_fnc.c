@@ -34,7 +34,7 @@
 #include <string.h>      /* memcpy(), ... */
 #include <unistd.h>      /* getopt(), char(optarg),           */
                          /*   int(optind,opterr,optopt), ...  */
-#ifndef _GNU_SOURCE
+#ifndef _GNU_SOURCE  // NOLINT(*-reserved-identifier)
 #	define DO_UNDEF_GNU_SRC  1
 #	define _GNU_SOURCE
 #else
@@ -275,7 +275,7 @@ ast_cln_fnc_cpyarg_i32(const Tast_cln_a *pCmdln, const char *pCap,
 		Tst_int32 *pInt)
 {
 	const char *cFNCN = __func__;
-	Tst_int32  lres  = numMin - 1;
+	Tst_int32  lres;
 	char const *pOA  = optarg;
 	Tst_bool   isNum = ST_B_TRUE;
 
@@ -310,8 +310,8 @@ ast_cln_fnc_cpyarg_i32(const Tast_cln_a *pCmdln, const char *pCap,
 				"argument for %s isn't a number, aborting", pCap);
 		return ST_ERR_ABRT;
 	}
-	lres = (Tst_int32)strtol(optarg, (char**)NULL, 10);
 
+	lres = (Tst_int32)strtol(optarg, (char**)NULL, 10);
 	if (lres < numMin && lres != numNone) {
 		pCmdln->cbErr(pCmdln->pAppFn, cFNCN,
 				"min. for %s is %d, aborting", pCap, numMin);
@@ -406,15 +406,17 @@ ast_cln_fnc_strcmp2xN(ST_OPTARG(const char *pArg), const Tst_uint32 lenArg,
 /*----------------------------------------------------------------------------*/
 
 Tst_bool
-ast_cln_fnc_isAnySetInTaglist(Tast_cln_t_tagList_pb(pList))
+ast_cln_fnc_isAnySetInTaglist(const Tast_cln_t_tagList_pb(pList))
 {
 	Tst_uint32 x;
 
 	ST_ASSERTN_BOOL(ST_B_FALSE, pList == NULL)
 
-	for (x = 0; x < AST_CLN_T_TAGLIST_CNT; x++)
-		if (pList[x])
+	for (x = 0; x < AST_CLN_T_TAGLIST_CNT; x++) {
+		if (pList[x]) {
 			return ST_B_TRUE;
+		}
+	}
 	return ST_B_FALSE;
 }
 
