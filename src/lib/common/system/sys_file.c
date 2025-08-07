@@ -112,12 +112,14 @@ st_sys_stc_rsetFStc(Tst_sys_fstc *pFStc, const Tst_bool resetFilen)
 	ST_ASSERTN_VOID(pFStc == NULL || pFStc->pObInternal == NULL)
 
 	pFStcI = (Tst_sys__fstc_intn*)pFStc->pObInternal;
-	if (resetFilen && pFStcI->pFilen != NULL)
+	if (resetFilen && pFStcI->pFilen != NULL) {
 		ST_DELPOINT(pFStcI->pFilen)
-	if (pFStcI->pFP != NULL && ! pFStcI->isVirt)
+	}
+	if (pFStcI->pFP != NULL && ! pFStcI->isVirt) {
 		fclose(pFStcI->pFP);  /* also closes pFStcI->fd */
-	else if (pFStcI->fd >= 0 && ! pFStcI->isVirt)
+	} else if (pFStcI->fd >= 0 && ! pFStcI->isVirt) {
 		close(pFStcI->fd);
+	}
 	pFStcI->pFP    = NULL;
 	pFStcI->fd     = -1;
 	pFStcI->modeWr = ST_B_FALSE;
@@ -307,10 +309,12 @@ st_sysFileBasename(const Tst_str *pFilen, Tst_str **ppFBn)
 		len -= (len < pos ? len : pos);
 	}
 	ST_REALLOC(*ppFBn, Tst_str*, len + 1, 1)
-	if (*ppFBn == NULL)
+	if (*ppFBn == NULL) {
 		return ST_B_FALSE;
-	if (len > 0)
+	}
+	if (len > 0) {
 		memcpy(*ppFBn, &pFilen[pos], len);
+	}
 	(*ppFBn)[len] = 0;
 	return ST_B_TRUE;
 }
@@ -345,18 +349,20 @@ st_sysFileExt(const Tst_str *pFilen, Tst_str **ppFExt)
 	len = st_sysStrlen(pB);
 	if (len > 0 && (pD = strrchr((const char*)pB, '.')) != NULL) {
 		pos = (Tst_uint32)(pD - (const char*)pB) + 1;
-		if (len < pos)
+		if (len < pos) {
 			len = 0;
-		else
+		} else {
 			len -= pos;
+		}
 	}
 	ST_REALLOC(*ppFExt, Tst_str*, len + 1, 1)
 	if (*ppFExt == NULL) {
 		ST_DELPOINT(pB)
 		return ST_B_FALSE;
 	}
-	if (len > 0)
+	if (len > 0) {
 		memcpy(*ppFExt, &pB[pos], len);
+	}
 	(*ppFExt)[len] = 0;
 	ST_DELPOINT(pB)
 	return ST_B_TRUE;
@@ -389,18 +395,22 @@ st_sysDirname(const Tst_str *pPath, Tst_str **ppDirn)
 		Tst_uint32 pos;
 
 		pos = (Tst_uint32)(pS - (const char*)pPath);
-		if (pos > 0)
+		if (pos > 0) {
 			--pos;
+		}
 		len = pos + 1;
-	} else
+	} else {
 		len = 0;
+	}
 	ST_REALLOC(*ppDirn, Tst_str*, len + 2, 1)
-	if (*ppDirn == NULL)
+	if (*ppDirn == NULL) {
 		return ST_B_FALSE;
-	if (len > 0)
+	}
+	if (len > 0) {
 		memcpy(*ppDirn, pPath, len);
-	else
+	} else {
 		(*ppDirn)[len++] = '.';
+	}
 	(*ppDirn)[len] = 0;
 	return ST_B_TRUE;
 }
@@ -433,8 +443,9 @@ st_sysConcatDirAndFilen(const Tst_str *pDirn, const Tst_str *pFilen,
 
 	fpSz = st_sysStrlen(pDirn) + 2 + st_sysStrlen(pFilen) + 1;
 	ST_REALLOC(*ppFullPath, Tst_str*, fpSz, 1)
-	if (*ppFullPath == NULL)
+	if (*ppFullPath == NULL) {
 		return ST_B_FALSE;
+	}
 	return ST_SYSFILE__concatDirAndFilen(pDirn, pFilen, *ppFullPath, fpSz);
 }
 
@@ -468,8 +479,9 @@ st_sysGetTmpFilenameInDir(const Tst_str *pDirn, Tst_str **ppTmpFn)
 
 	tmpFnMaxSz = st_sysStrlen(pDirn) + 8 + 256;
 	ST_REALLOC(*ppTmpFn, Tst_str*, tmpFnMaxSz, 1)
-	if (*ppTmpFn == NULL)
+	if (*ppTmpFn == NULL) {
 		return ST_B_FALSE;
+	}
 	return ST_SYSFILE__getTmpFilename(/*inCurDir:*/ST_B_FALSE, /*inSpecDir:*/ST_B_TRUE,
 				pDirn, *ppTmpFn, tmpFnMaxSz);
 }
@@ -488,8 +500,9 @@ st_sysFStc_setFilen(Tst_sys_fstc *pFStc, const Tst_str *pFilename)
 
 	/* copy pFilename to pFStc */
 	ST_REALLOC(pFStcI->pFilen, Tst_str*, st_sysStrlen(pFilename) + 1, 1)
-	if (pFStcI->pFilen == NULL)
+	if (pFStcI->pFilen == NULL) {
 		return ST_ERR_OMEM;
+	}
 	strcpy((char*)pFStcI->pFilen, (const char*)pFilename);
 
 	return ST_ERR_SUCC;
@@ -675,8 +688,9 @@ st_sysGetFileSz_byFn(const Tst_str *pFilename, ST_OPTARG(Tst_bool *pErrTooBig))
 
 	if (st_sysStrEmpty(pFilename) ||
 			! ST_SYSFILE__fOd_exists(pFilename, NULL,
-					ST_B_TRUE, 0, &size, pErrTooBig))
+					ST_B_TRUE, 0, &size, pErrTooBig)) {
 		return 0;
+	}
 	return size;
 }
 
@@ -696,8 +710,9 @@ st_sysFStc_getFileSz(Tst_sys_fstc *pFStc, ST_OPTARG(Tst_bool *pErrTooBig))
 	ST_ASSERTN_NUM(0, pFStc == NULL || pFStc->pObInternal == NULL)
 
 	if (! ST_SYSFILE__fOd_exists(NULL, pFStc,
-			ST_B_TRUE, 0, &size, pErrTooBig))
+			ST_B_TRUE, 0, &size, pErrTooBig)) {
 		return 0;
+	}
 	return size;
 }
 
@@ -732,13 +747,14 @@ st_sysFStc_getFPos(Tst_sys_fstc *pFStc)
 
 	if (! ((Tst_sys__fstc_intn*)pFStc->pObInternal)->isVirt) {
 		if (((Tst_sys__fstc_intn*)pFStc->pObInternal)->pFP == NULL ||
-#				if (HAVE_FSEEKO == 1)
-				(pos = ftello(((Tst_sys__fstc_intn*)pFStc->pObInternal)->pFP)) < 0
-#				else
-				(pos = ftell(((Tst_sys__fstc_intn*)pFStc->pObInternal)->pFP)) < 0
-#				endif
-				)
+					#if (HAVE_FSEEKO == 1)
+						(pos = ftello(((Tst_sys__fstc_intn*)pFStc->pObInternal)->pFP)) < 0
+					#else
+						(pos = ftell(((Tst_sys__fstc_intn*)pFStc->pObInternal)->pFP)) < 0
+					#endif
+				) {
 			return (-1);
+		}
 	}
 	return pos;
 }
@@ -755,7 +771,6 @@ st_sysFStc_setFPos(Tst_sys_fstc *pFStc,
 		const Tst_foffs offs, const Tst_sys_setFilePos fromWhere)
 {
 	Tst_bool resB;
-	int      whence;
 	Tst_sys__fstc_intn *pFStcI;
 
 	ST_ASSERTN_BOOL(ST_B_FALSE, pFStc == NULL || pFStc->pObInternal == NULL)
@@ -763,23 +778,26 @@ st_sysFStc_setFPos(Tst_sys_fstc *pFStc,
 	pFStcI = (Tst_sys__fstc_intn*)pFStc->pObInternal;
 	ST_ASSERTN_BOOL(ST_B_FALSE, pFStcI->pFP == NULL)
 
-	if (pFStcI->isVirt)
+	if (pFStcI->isVirt) {
 		resB = ST_B_TRUE;
-	else {
+	} else {
+		int whence;
+
 		switch (fromWhere) {
-		case ST_SYS_SETFPOS_BEG: whence = SEEK_SET; break;
-		case ST_SYS_SETFPOS_CUR: whence = SEEK_CUR; break;
-		case ST_SYS_SETFPOS_END: whence = SEEK_END; break;
-		default:
-			return ST_B_FALSE;
+			case ST_SYS_SETFPOS_BEG: whence = SEEK_SET; break;
+			case ST_SYS_SETFPOS_CUR: whence = SEEK_CUR; break;
+			case ST_SYS_SETFPOS_END: whence = SEEK_END; break;
+			default:
+				return ST_B_FALSE;
 		}
-#		if (HAVE_FSEEKO == 1)
-		resB = (fseeko(pFStcI->pFP, offs, whence) == 0);
-#		else
-		resB = (fseek(pFStcI->pFP, offs, whence) == 0);
-#		endif
-		if (resB && feof(pFStcI->pFP) != 0)
+		#if (HAVE_FSEEKO == 1)
+			resB = (fseeko(pFStcI->pFP, offs, whence) == 0);
+		#else
+			resB = (fseek(pFStcI->pFP, offs, whence) == 0);
+		#endif
+		if (resB && feof(pFStcI->pFP) != 0) {
 			clearerr(pFStcI->pFP);
+		}
 	}
 	return resB;
 }
@@ -796,44 +814,51 @@ st_sysFStc_skipBytes(Tst_sys_fstc *pFStc, const Tst_fsize skipFS)
 {
 	Tst_foffs cpos,
 	          cposN;
-	Tst_fsize toRd,
-	          rdTot = 0,
-	          rd;
-	Tst_buf   buf[4096];
 	FILE      *pFP;
 
 	ST_ASSERTN_NUM(0, pFStc == NULL || pFStc->pObInternal == NULL)
 	pFP = ((Tst_sys__fstc_intn*)pFStc->pObInternal)->pFP;
 	ST_ASSERTN_NUM(0, pFP == NULL)
-	if (skipFS == 0)
+	if (skipFS == 0) {
 		return 0;
+	}
 
-	if (((Tst_sys__fstc_intn*)pFStc->pObInternal)->isVirt)
+	if (((Tst_sys__fstc_intn*)pFStc->pObInternal)->isVirt) {
 		return 0;
+	}
 	cpos = st_sysFStc_getFPos(pFStc);
-	if (cpos < 0)
+	if (cpos < 0) {
 		return 0;
+	}
 
 	/*fseeko(pFP, (Tst_foffs)skipFS, SEEK_CUR);*/
 	{
+		Tst_fsize toRd,
+				  rdTot = 0,
+				  rd;
+		Tst_buf   buf[4096];
+
 		toRd = (Tst_fsize)sizeof(toRd);
 		while (ST_B_TRUE) {
 			if (rdTot + toRd > skipFS) {
 				toRd = skipFS - rdTot;
-				if (toRd == 0)
+				if (toRd == 0) {
 					break;
+				}
 			}
 			/* */
 			rd = (Tst_fsize)fread(buf, 1, (size_t)toRd, pFP);
-			if (rd != toRd)
+			if (rd != toRd) {
 				break;
+			}
 			rdTot += rd;
 		}
 	}
 
 	cposN = st_sysFStc_getFPos(pFStc);
-	if (cposN < cpos)
+	if (cposN < cpos) {
 		return 0;
+	}
 	return (Tst_fsize)(cposN - cpos);
 }
 
@@ -848,8 +873,9 @@ st_sysFStc_flush(Tst_sys_fstc *pFStc)
 	ST_ASSERTN_VOID(pFStc == NULL || pFStc->pObInternal == NULL)
 
 	if (! ((Tst_sys__fstc_intn*)pFStc->pObInternal)->modeWr ||
-			((Tst_sys__fstc_intn*)pFStc->pObInternal)->isVirt)
+			((Tst_sys__fstc_intn*)pFStc->pObInternal)->isVirt) {
 		return;
+	}
 
 	ST_ASSERTN_VOID(((Tst_sys__fstc_intn*)pFStc->pObInternal)->pFP == NULL)
 
@@ -959,12 +985,14 @@ st_sysFStc_writeBuf(Tst_sys_fstc *pFStcOut,
 	ST_ASSERTN_IARG(pFPout == NULL)
 
 	if (bufSz == 0 ||
-			((Tst_sys__fstc_intn*)pFStcOut->pObInternal)->isVirt)
+			((Tst_sys__fstc_intn*)pFStcOut->pObInternal)->isVirt) {
 		return ST_ERR_SUCC;
+	}
 
 	wr = (Tst_uint32)fwrite(pBuf, 1, (size_t)bufSz, pFPout);
-	if (wr != bufSz)
+	if (wr != bufSz) {
 		return ST_ERR_FCWR;
+	}
 	return ST_ERR_SUCC;
 }
 
@@ -992,15 +1020,14 @@ st_sysFStc_readBuf(Tst_sys_fstc *pFStcIn,
 
 	*pCopied = 0;
 	if (maxCopy == 0 ||
-			((Tst_sys__fstc_intn*)pFStcIn->pObInternal)->isVirt)
+			((Tst_sys__fstc_intn*)pFStcIn->pObInternal)->isVirt) {
 		return ST_ERR_SUCC;
+	}
 
 	rd = (Tst_uint32)fread(pBufOut, 1, (size_t)maxCopy, pFPin);
-	if (rd != maxCopy) {
-		if (ferror(pFPin) != 0 && feof(pFPin) == 0) {
-			clearerr(pFPin);
-			return ST_ERR_FCRD;
-		}
+	if (rd != maxCopy && ferror(pFPin) != 0 && feof(pFPin) == 0) {
+		clearerr(pFPin);
+		return ST_ERR_FCRD;
 	}
 	*pCopied = rd;
 
@@ -1025,35 +1052,42 @@ ST_SYSFILE__concatDirAndFilen(const Tst_str *pDirn, const Tst_str *pFilen,
 	lenD = st_sysStrlen(pDirn);
 	lenF = st_sysStrlen(pFilen);
 	if (lenF > 0 && strrchr((const char*)pFilen, '/') != NULL) {
-		if (! st_sysFileBasename(pFilen, &pFBn))
+		if (! st_sysFileBasename(pFilen, &pFBn)) {
 			return ST_B_FALSE;
+		}
 		pIntFilen = pFBn;
 		lenF      = st_sysStrlen(pFBn);
-	} else
+	} else {
 		pIntFilen = pFilen;
+	}
 
 	if (lenD > 0) {
-		if (lenD > fpSz)
+		if (lenD > fpSz) {
 			return ST_B_FALSE;
+		}
 		memcpy(pFullPath, pDirn, lenD);
 		if (pDirn[lenD - 1] != '/') {
-			if (lenD + 1 > fpSz)
+			if (lenD + 1 > fpSz) {
 				return ST_B_FALSE;
+			}
 			pFullPath[lenD++] = '/';
 		}
 	} else {
-		if (2 > fpSz)
+		if (2 > fpSz) {
 			return ST_B_FALSE;
+		}
 		pFullPath[lenD++] = '.';
 		pFullPath[lenD++] = '/';
 	}
 	if (lenF > 0) {
-		if (lenD + lenF > fpSz)
+		if (lenD + lenF > fpSz) {
 			return ST_B_FALSE;
+		}
 		memcpy(&pFullPath[lenD], pIntFilen, lenF);
 	}
-	if (lenD + lenF + 1 > fpSz)
+	if (lenD + lenF + 1 > fpSz) {
 		return ST_B_FALSE;
+	}
 	pFullPath[lenD + lenF] = 0x00;
 
 	ST_DELPOINT(pFBn)
