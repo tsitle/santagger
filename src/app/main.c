@@ -56,7 +56,7 @@
 #include "mf/mf_read-pp.h"
 #include "mf/mf_extr-pp.h"
 #include "mf/mf_show-pp.h"
-#include "mf/mf_fnc-pp.h"
+//#include "mf/mf_fnc-pp.h"
 #include "mf/mf_outp-pp.h"
 #include "mf/mf_stcs-pp.h"
 /*** */
@@ -69,10 +69,12 @@
 // System-Includes
 */
 #include <stdlib.h>      /* exit(), calloc(), getenv() */
-#include <string.h>      /* memset() */
+//#include <string.h>      /* memset() */
 #include <locale.h>      /* setlocale() */
 #include <unistd.h>      /* isatty() */
-#include <sys/ioctl.h>   /* TIOCGWINSZ */
+#if ! (defined(_WIN32) || defined (__CYGWIN__))
+	#include <sys/ioctl.h>   /* TIOCGWINSZ */
+#endif
 #if (LOC_SHOWLOCALE_ == 1)
 #	include <langinfo.h>    /* nl_langinfo() */
 #endif
@@ -112,13 +114,13 @@ static Tst_err
 AST_MAIN__updInput(Tast_mf_finfo *pMF);
 /** */
 #if (HAVE_LIBZ == 1)
-static Tst_err
-AST_MAIN__cbZLibDecompress(Tst_binobj *pBinDatIn,
-                           const Tst_uint32 uncomprSzShould,
-                           Tst_binobj *pBinDatOut);
-static Tst_err
-AST_MAIN__cbZLibCompress(Tst_binobj *pBinDatIn,
-                         Tst_binobj *pBinDatOut);
+	static Tst_err
+	AST_MAIN__cbZLibDecompress(Tst_binobj *pBinDatIn,
+	                           Tst_uint32 uncomprSzShould,
+	                           Tst_binobj *pBinDatOut);
+	static Tst_err
+	AST_MAIN__cbZLibCompress(Tst_binobj *pBinDatIn,
+	                         Tst_binobj *pBinDatOut);
 #endif
 
 /*----------------------------------------------------------------------------*/
@@ -131,9 +133,9 @@ AST_MAIN__cbZLibCompress(Tst_binobj *pBinDatIn,
  *          1=error
  */
 int
-main(int argc, char *argv[])
+main(const int argc, const char *argv[])
 {
-#	define LOC_PRNLN_  { \
+	#define LOC_PRNLN_  { \
 					if (x < (Tst_uint32)(argc - 1) && \
 							! cmdln.opts.quiet) \
 						ast_mf_op_prMsg("\n"); \
@@ -152,29 +154,29 @@ main(int argc, char *argv[])
 	Tast_mf_finfo mf;
 
 	/* check endianess */
-#	if (CONFIG_ST_ALL_DEBUG_ADD == 1)
-	if (ST_SYSFNC_ISBIGEND) {
-#		if (WORDS_BIGENDIAN != 1)
-		ast_mf_op_d_mainErrApp((Tst_str*)argv[0],
-				"App was compiled for Little-Endian but system is Big-Endian\n");
-		exit(1);  /* error */
-#		endif
-	} else {
-#		if (WORDS_BIGENDIAN == 1)
-		ast_mf_op_d_mainErrApp((Tst_str*)argv[0],
-				"App was compiled for Big-Endian but system is Little-Endian\n");
-		exit(1);  /* error */
-#		endif
-	}
-	/* TODO */
-	/**ast_mf_op_d_mainDeb("sizeof(Tst_fsize): %u, "
-			"sizeof(Tst_foffs): %u, sizeof(off_t): %u\n",
-			(Tst_uint32)sizeof(Tst_fsize), (Tst_uint32)sizeof(Tst_foffs),
-			(Tst_uint32)sizeof(off_t));
-	ast_mf_op_d_mainDeb("sizeof(long): %u, "
-			"sizeof(long long): %u\n",
-			(Tst_uint32)sizeof(long), (Tst_uint32)sizeof(long long));**/
-#	endif
+	#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+		if (ST_SYSFNC_ISBIGEND) {
+			#if (WORDS_BIGENDIAN != 1)
+				ast_mf_op_d_mainErrApp((Tst_str*)argv[0],
+						"App was compiled for Little-Endian but system is Big-Endian\n");
+				exit(1);  /* error */
+			#endif
+		} else {
+			#if (WORDS_BIGENDIAN == 1)
+				ast_mf_op_d_mainErrApp((Tst_str*)argv[0],
+						"App was compiled for Big-Endian but system is Little-Endian\n");
+				exit(1);  /* error */
+			#endif
+		}
+		/* TODO */
+		/**ast_mf_op_d_mainDeb("sizeof(Tst_fsize): %u, "
+				"sizeof(Tst_foffs): %u, sizeof(off_t): %u\n",
+				(Tst_uint32)sizeof(Tst_fsize), (Tst_uint32)sizeof(Tst_foffs),
+				(Tst_uint32)sizeof(off_t));
+		ast_mf_op_d_mainDeb("sizeof(long): %u, "
+				"sizeof(long long): %u\n",
+				(Tst_uint32)sizeof(long), (Tst_uint32)sizeof(long long));**/
+	#endif
 
 	ast_cln_stc_initCln(&cmdln);
 
@@ -200,10 +202,10 @@ main(int argc, char *argv[])
 	}
 	/* is in-/output UTF8-encoded ? */
 	cmdln.opts.isInpISOorU8 = ! ast_mf_op_isLocaleUTF8(pLocaleStr);
-#	if (LOC_SHOWLOCALE_ == 1 && AST_MF_OUTP_DEB_ == 1)
-	ast_mf_op_prE("locale='%s', cs='%s', isISOorU8=%d\n",
-			pLocaleStr, nl_langinfo(CODESET), cmdln.opts.isInpISOorU8);
-#	endif
+	#if (LOC_SHOWLOCALE_ == 1 && AST_MF_OUTP_DEB_ == 1)
+		ast_mf_op_prE("locale='%s', cs='%s', isISOorU8=%d\n",
+				pLocaleStr, nl_langinfo(CODESET), cmdln.opts.isInpISOorU8);
+	#endif
 
 	/* set callbacks */
 	cmdln.cbDbg = ast_mf_op_cb_clnDbg;
@@ -219,9 +221,10 @@ main(int argc, char *argv[])
 			ST_DELPOINT(pAppFn)
 			exit(0);  /* succ */
 		}
-		if (resF != ST_ERR_ABRT)
+		if (resF != ST_ERR_ABRT) {
 			ast_mf_op_d_mainErrApp(pAppFn,
 					"parsing args failed, res=%d", resF);
+		}
 		ST_DELPOINT(pAppFn)
 		exit(1);  /* error */
 	}
@@ -241,9 +244,10 @@ main(int argc, char *argv[])
 	}
 
 	/* check options */
-	if (cmdln.opts.isInpISOorU8 && ! cmdln.opts.disp.asISOorU8)
+	if (cmdln.opts.isInpISOorU8 && ! cmdln.opts.disp.asISOorU8) {
 		ast_mf_op_d_mainErrApp(pAppFn,
 				"Notice: Locale is not UTF-8, but --disp-u8 was used");
+	}
 
 	/* create output directory */
 	if (! st_sysStrEmpty(cmdln.opts.pOutpdir) &&
@@ -255,8 +259,9 @@ main(int argc, char *argv[])
 			ST_DELPOINT(pAppFn)
 			exit(1);  /* error */
 		}
-		if (cmdln.opts.basOpts.verb != 0)
+		if (cmdln.opts.basOpts.verb != 0) {
 			ast_mf_op_d_mainDeb("created output dir \"%s\"", cmdln.opts.pOutpdir);
+		}
 		wasDCreated = ST_B_TRUE;
 	}
 
@@ -270,15 +275,13 @@ main(int argc, char *argv[])
 		exit(1);  /* error */
 	}
 
-	/* initialize pseudo-random-number-generator */
-	st_sysInitRand(0);
-
 	/* take care of all files given as argument */
 	resF = ST_ERR_SUCC;
 	for (x = parbeg; x < (Tst_uint32)argc; x++) {
 		/* close file */
-		if (st_sysFStc_isOpen(&mf.fstc))
+		if (st_sysFStc_isOpen(&mf.fstc)) {
 			st_sysFStc_close(&mf.fstc);
+		}
 
 		/* reset main object */
 		/** */
@@ -297,35 +300,38 @@ main(int argc, char *argv[])
 		AST_MAIN__setOptsInSubObjs(&mf, &cmdln);
 
 		/* check filesize */
-		if (! AST_MAIN__get_n_chk_fsz(&mf, pAppFn, &cmdln, &fsz))
+		if (! AST_MAIN__get_n_chk_fsz(&mf, pAppFn, &cmdln, &fsz)) {
 			continue;
+		}
 		/* */
 		if (! cmdln.opts.quiet) {
 			char cmdType;
 
-			if (cmdln.cmds.roTgExtCmds > 0)
+			if (cmdln.cmds.roTgExtCmds > 0) {
 				cmdType = 'X';
-			else if (cmdln.cmds.rwTgRwrCmds > 0)
+			} else if (cmdln.cmds.rwTgRwrCmds > 0) {
 				cmdType = 'W';
-			else if (cmdln.cmds.rwTgEdtCmds > 0)
+			} else if (cmdln.cmds.rwTgEdtCmds > 0) {
 				cmdType = 'E';
-			else if (cmdln.cmds.rwTgRemCmds > 0)
-				cmdType = 'E';
-			else if (cmdln.cmds.rwTgCnvCmds > 0)
-				cmdType = 'C';
-			else if (cmdln.cmds.anlz)
-				cmdType = 'A';
-			else if (cmdln.cmds.decAud)
-				cmdType = 'D';
-			else if (cmdln.opts.quickScan)
-				cmdType = 'Q';
-			else
+			} else if (cmdln.cmds.rwTgRemCmds > 0) {
 				cmdType = 'R';
+			} else if (cmdln.cmds.rwTgCnvCmds > 0) {
+				cmdType = 'C';
+			} else if (cmdln.cmds.anlz) {
+				cmdType = 'A';
+			} else if (cmdln.cmds.decAud) {
+				cmdType = 'D';
+			} else if (cmdln.opts.quickScan) {
+				cmdType = 'Q';
+			} else {
+				cmdType = '-';  // read
+			}
 			ast_mf_op_prMsg("File [%c]: %s", cmdType, mf.pFilen);
 		}
 		/* mime / fileformat */
-		if (! AST_MAIN__getFFmt(&mf, pAppFn, &cmdln))
+		if (! AST_MAIN__getFFmt(&mf, pAppFn, &cmdln)) {
 			continue;
+		}
 
 		/* ***********
 		 * READ-ONLY  none of the following commands change the input file
@@ -333,8 +339,9 @@ main(int argc, char *argv[])
 
 		/* read file and output info */
 		if (fsz > 0) {
-			if (cmdln.opts.basOpts.verb != 0)
+			if (cmdln.opts.basOpts.verb != 0) {
 				ast_mf_op_d_mainDeb("read \"%s\"...", mf.pFilen);
+			}
 			/* open file for reading */
 			resF = st_sysFStc_openExisting(&mf.fstc,
 					cmdln.opts.basOpts.allowLnkInpF, ST_B_FALSE);
@@ -375,10 +382,11 @@ main(int argc, char *argv[])
 				Tst_bool fndAudioToDec;
 
 				fndAudioToDec = AST_MF_HASCONTTYPE(&mf, AST_MF_CTP_AUD);
-				if (fndAudioToDec)
+				if (fndAudioToDec) {
 					fndAudioToDec = (mf.ffmt == AST_MF_FFMT_FLAC ||
 								mf.ffmt == AST_MF_FFMT_MPG1 ||
 								mf.ffmt == AST_MF_FFMT_OGG);
+				}
 				if (fndAudioToDec && mf.ffmt == AST_MF_FFMT_OGG) {
 					Tst_int32 fndOggBSTPs;
 
@@ -387,8 +395,9 @@ main(int argc, char *argv[])
 							((fndOggBSTPs & ST_CONTOGG_BSTP_FLAC) != 0) ||
 							((fndOggBSTPs & ST_CONTOGG_BSTP_VORB) != 0);
 				}
-				if (! fndAudioToDec && ! cmdln.opts.quiet)
+				if (! fndAudioToDec && ! cmdln.opts.quiet) {
 					ast_mf_op_prMsg("*  No audio found to decode");
+				}
 			}
 
 			/* convert & merge tags */
@@ -406,8 +415,9 @@ main(int argc, char *argv[])
 
 			/* output file info */
 			if (cmdln.cmds.rd && mf.contTypes != (Tst_int32)AST_MF_CTP_NONE) {
-				if (cmdln.opts.basOpts.verb != 0)
+				if (cmdln.opts.basOpts.verb != 0) {
 					ast_mf_op_d_mainDeb("show \"%s\"...", mf.pFilen);
+				}
 				resF = ast_mf_sw_showFileInfo(&cmdln, &mf);
 				if (resF != ST_ERR_SUCC) {
 					ast_mf_op_d_mainErrFile(mf.pFilen,
@@ -421,8 +431,9 @@ main(int argc, char *argv[])
 
 		/* extract data from file */
 		if (cmdln.cmds.roTgExtCmds > 0 && fsz > 0) {
-			if (cmdln.opts.basOpts.verb != 0)
+			if (cmdln.opts.basOpts.verb != 0) {
 				ast_mf_op_d_mainDeb("extract from \"%s\"...", mf.pFilen);
+			}
 			resF = ast_mf_extr_extrData(&cmdln, &mf);
 			if (resF != ST_ERR_SUCC) {
 				ast_mf_op_d_mainErrFile(mf.pFilen,
@@ -461,39 +472,45 @@ main(int argc, char *argv[])
 			continue;
 		}
 
-		if (cmdln.opts.basOpts.verb != 0)
+		if (cmdln.opts.basOpts.verb != 0) {
 			ast_mf_op_d_mainDeb("edit \"%s\"...", mf.pFilen);
+		}
 
 		wasFCreated = ST_B_FALSE;
 		if (st_sysFStc_isOpen(&mf.fstc)) {
 			/* re-open file for reading+writing */
 			resF = st_sysFStc_changeMode(&mf.fstc, ST_B_TRUE);
-			if (resF != ST_ERR_SUCC)
+			if (resF != ST_ERR_SUCC) {
 				ast_mf_op_d_mainErrFile(mf.pFilen,
 						"can't re-open file for writing, res=%d", resF);
+			}
 		} else if (st_sysDoesFileExist(mf.pFilen)) {
 			/* open file for reading+writing */
 			resF = st_sysFStc_openExisting(&mf.fstc,
 					cmdln.opts.basOpts.allowLnkInpF, ST_B_TRUE);
-			if (resF != ST_ERR_SUCC)
+			if (resF != ST_ERR_SUCC) {
 				ast_mf_op_d_mainErrFile(mf.pFilen,
 						"can't open file for writing, res=%d", resF);
+			}
 		} else if (! cmdln.opts.basOpts.pretWr) {
 			/* create&open file for writing */
 			resF = st_sysFStc_openNew(&mf.fstc);
-			if (resF != ST_ERR_SUCC)
+			if (resF != ST_ERR_SUCC) {
 				ast_mf_op_d_mainErrFile(mf.pFilen,
 						"can't create file, res=%d", resF);
+			}
 			wasFCreated = ST_B_TRUE;
 		} else {
 			/* create&open 'virtual' file for writing */
 			resF = st_sysFStc_openNewVirtual(&mf.fstc);
-			if (resF != ST_ERR_SUCC)
+			if (resF != ST_ERR_SUCC) {
 				ast_mf_op_d_mainErrFile(mf.pFilen,
 						"can't create virtual file, res=%d", resF);
+			}
 		}
-		if (resF != ST_ERR_SUCC)
+		if (resF != ST_ERR_SUCC) {
 			break;
+		}
 		/* attach mf.fstc with mf.strrd
 		 *   --> this affects the current file position etc.
 		 *       while the streamreader is attached to mf.fstc
@@ -515,8 +532,9 @@ main(int argc, char *argv[])
 		/* close file */
 		st_sysFStc_close(&mf.fstc);
 		/* remove empty file */
-		if (wasFCreated && st_sysGetFileSz_byFn(mf.pFilen, NULL) == 0)
+		if (wasFCreated && st_sysGetFileSz_byFn(mf.pFilen, NULL) == 0) {
 			st_sysUnlinkFile(mf.pFilen);
+		}
 		wasFCreated = ST_B_FALSE;
 		/* */
 		LOC_PRNLN_
@@ -525,12 +543,14 @@ main(int argc, char *argv[])
 	/* remove empty file */
 	if (wasFCreated && st_sysFStc_isOpen(&mf.fstc)) {
 		st_sysFStc_close(&mf.fstc);
-		if (st_sysGetFileSz_byFn(mf.pFilen, NULL) == 0)
+		if (st_sysGetFileSz_byFn(mf.pFilen, NULL) == 0) {
 			st_sysUnlinkFile(mf.pFilen);
+		}
 	}
 	/* close file */
-	if (st_sysFStc_isOpen(&mf.fstc))
+	if (st_sysFStc_isOpen(&mf.fstc)) {
 		st_sysFStc_close(&mf.fstc);
+	}
 
 	/* if output directory is empty, remove it */
 	if (wasDCreated) {
@@ -544,24 +564,27 @@ main(int argc, char *argv[])
 					(cmdln.cmds.roMainCmds > 0 || cmdln.cmds.roTgExtCmds > 0 ?
 						"read" : "edit"));
 			resF = ST_ERR_FAIL;
-		} else if (cmdln.opts.basOpts.pretWr && ! cmdln.opts.quiet)
+		} else if (cmdln.opts.basOpts.pretWr && ! cmdln.opts.quiet) {
 			ast_mf_op_prMsg("%s: only pretended writing (%u files)",
 					pAppFn, fcnt);
+		}
 	}
 	/* */
 	if (resF == ST_ERR_SUCC) {
-		if (cmdln.opts.showStat)
+		if (cmdln.opts.showStat) {
 			ast_mf_op_prMsg("*Done.");
+		}
 		resA = 0;  /* succ */
-	} else
+	} else {
 		resA = 1;  /* error */
+	}
 	/* */
 	ast_mf_stc_freeMF(&mf);
 	ast_cln_stc_freeCln(&cmdln);
 	ST_DELPOINT(pAppFn)
 
 	return resA;
-#	undef LOC_PRNLN_
+	#undef LOC_PRNLN_
 }
 
 /*----------------------------------------------------------------------------*/
@@ -572,24 +595,26 @@ AST_MAIN__getTermCap(const Tst_str *pAppFn)
 {
 	char const        *p = getenv("COLUMNS");
 	unsigned long int tmp_ulong;
-#	ifdef TIOCGWINSZ
-	struct winsize ws;
-#	endif
+	#ifdef TIOCGWINSZ
+		struct winsize ws;
+	#endif
 
 	if (p && *p) {
-		if (sscanf(p, "%lu", &tmp_ulong) == 1 &&
-				tmp_ulong >= 65 && tmp_ulong <= 2048)
+		if (sscanf(p, "%lu", &tmp_ulong) == 1 &&  // NOLINT(*-err34-c)
+				tmp_ulong >= 65 && tmp_ulong <= 2048) {
 			ast_g_mf_op_termLnLen = tmp_ulong;
-		else
+		} else {
 			ast_mf_op_d_mainErrApp(pAppFn,
 					"ignoring invalid width in env variable COLUMNS: '%s'",
 					p);
+		}
 	}
-#	ifdef TIOCGWINSZ
-	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) != -1 &&
-			ws.ws_col >= 65 && ws.ws_col <= 2048)
-		ast_g_mf_op_termLnLen = ws.ws_col;
-#	endif
+	#ifdef TIOCGWINSZ
+		if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) != -1 &&
+				ws.ws_col >= 65 && ws.ws_col <= 2048) {
+			ast_g_mf_op_termLnLen = ws.ws_col;
+		}
+	#endif
 }
 
 /*----------------------------------------------------------------------------*/
@@ -625,12 +650,12 @@ AST_MAIN__cbSetOpts_tagIV2(void *pSetOptsData, Tst_id3v2_tag *pTag)
 
 	/* unsync'ing currently breaks compatibility with iTunes 10.1 */
 	st_id3v2_opts_setDoUnsyncing(pTag, pSOD->pCmdln->optsTagIV2.allwUnsynch);
-#	if (HAVE_LIBZ == 1)
-	/* compression currently breaks compatibility with iTunes 10.1 */
-	st_id3v2_opts_setCompressBigFrames(pTag, pSOD->pCmdln->optsTagIV2.allwCompr);
-	st_id3v2_opts_setCB_cbZLib(pTag, AST_MAIN__cbZLibDecompress,
-			AST_MAIN__cbZLibCompress);
-#	endif
+	#if (HAVE_LIBZ == 1)
+		/* compression currently breaks compatibility with iTunes 10.1 */
+		st_id3v2_opts_setCompressBigFrames(pTag, pSOD->pCmdln->optsTagIV2.allwCompr);
+		st_id3v2_opts_setCB_cbZLib(pTag, AST_MAIN__cbZLibDecompress,
+				AST_MAIN__cbZLibCompress);
+	#endif
 }
 
 /*
@@ -774,52 +799,58 @@ AST_MAIN__getFFmt(Tast_mf_finfo *pMF, const Tst_str *pAppFn,
 	/* get/set mime-type */
 	mimTp = st_utilsFmt_getMime_enum_byFn(pMF->pFilen);
 	if (mimTp != ST_UTILSFMT_MTP_NONE) {
-		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
+		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
 			ast_mf_op_d_mainDeb("mime: %s",
 					st_utilsFmt_getMime_defMime_byEnum(mimTp));
+		}
 		switch (mimTp) {
-		case ST_UTILSFMT_MTP_AUDFLAC:   /* Flac audio */
-			pMF->ffmt = AST_MF_FFMT_FLAC; break;
-		case ST_UTILSFMT_MTP_AUDMPEG1:  /* MPEG-1 Layer I-III audio */
-			pMF->ffmt = AST_MF_FFMT_MPG1; break;
-		case ST_UTILSFMT_MTP_AUDOGG:    /* OGG audio */
-		case ST_UTILSFMT_MTP_VIDOGG:    /* OGG video */
-		case ST_UTILSFMT_MTP_AUDVIDOGG: /* OGG audio/video */
-		case ST_UTILSFMT_MTP_APPOGG:    /* OGG app */
-			pMF->ffmt = AST_MF_FFMT_OGG; break;
-		case ST_UTILSFMT_MTP_APPTAG:    /* Tag file */
-		case ST_UTILSFMT_MTP_APPTAGIV1: /* ID3v1 Tag file */
-		case ST_UTILSFMT_MTP_APPTAGIV2: /* ID3v2 Tag file */
-		case ST_UTILSFMT_MTP_APPTAGAV2: /* APEv2 Tag file */
-		case ST_UTILSFMT_MTP_APPTAGVOR: /* Pseudo Vorbis Tag file */
-			pMF->ffmt = AST_MF_FFMT_TAGF; break;
-		default:
-			mimTp = ST_UTILSFMT_MTP_NONE;  /* do nothing */
+			case ST_UTILSFMT_MTP_AUDFLAC:   /* Flac audio */
+				pMF->ffmt = AST_MF_FFMT_FLAC; break;
+			case ST_UTILSFMT_MTP_AUDMPEG1:  /* MPEG-1 Layer I-III audio */
+				pMF->ffmt = AST_MF_FFMT_MPG1; break;
+			case ST_UTILSFMT_MTP_AUDOGG:    /* OGG audio */
+			case ST_UTILSFMT_MTP_VIDOGG:    /* OGG video */
+			case ST_UTILSFMT_MTP_AUDVIDOGG: /* OGG audio/video */
+			case ST_UTILSFMT_MTP_APPOGG:    /* OGG app */
+				pMF->ffmt = AST_MF_FFMT_OGG; break;
+			case ST_UTILSFMT_MTP_APPTAG:    /* Tag file */
+			case ST_UTILSFMT_MTP_APPTAGIV1: /* ID3v1 Tag file */
+			case ST_UTILSFMT_MTP_APPTAGIV2: /* ID3v2 Tag file */
+			case ST_UTILSFMT_MTP_APPTAGAV2: /* APEv2 Tag file */
+			case ST_UTILSFMT_MTP_APPTAGVOR: /* Pseudo Vorbis Tag file */
+				pMF->ffmt = AST_MF_FFMT_TAGF; break;
+			default:
+				// do nothing
+				break;
 		}
 	}
 	switch (pMF->ffmt) {
-	case AST_MF_FFMT_FLAC:   /* Flac audio */
-		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
-			ast_mf_op_d_mainDeb("ffmt: FLAC");
-		break;
-	case AST_MF_FFMT_MPG1:   /* MPEG-1 Layer I-III audio */
-		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
-			ast_mf_op_d_mainDeb("ffmt: MPEG1");
-		break;
-	case AST_MF_FFMT_OGG:    /* OGG audio/video/app */
-		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
-			ast_mf_op_d_mainDeb("ffmt: OGG");
-		break;
-	case AST_MF_FFMT_TAGF:   /* Tag file */
-		if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN))
-			ast_mf_op_d_mainDeb("ffmt: TAG");
-		break;
-	default:
-		/**ast_mf_op_d_mainDeb("ffmt: Other");**/
-		pMF->ffmt = AST_MF_FFMT_NONE;
-		ast_mf_op_d_mainErrFile(pMF->pFilen,
-				"unsupported file-format, ignoring file...\n\n");
-		return ST_B_FALSE;
+		case AST_MF_FFMT_FLAC:   /* Flac audio */
+			if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
+				ast_mf_op_d_mainDeb("ffmt: FLAC");
+			}
+			break;
+		case AST_MF_FFMT_MPG1:   /* MPEG-1 Layer I-III audio */
+			if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
+				ast_mf_op_d_mainDeb("ffmt: MPEG1");
+			}
+			break;
+		case AST_MF_FFMT_OGG:    /* OGG audio/video/app */
+			if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
+				ast_mf_op_d_mainDeb("ffmt: OGG");
+			}
+			break;
+		case AST_MF_FFMT_TAGF:   /* Tag file */
+			if (ST_ISVERB(pCmdln->opts.basOpts.verb, ST_VL_GEN)) {
+				ast_mf_op_d_mainDeb("ffmt: TAG");
+			}
+			break;
+		default:
+			/**ast_mf_op_d_mainDeb("ffmt: Other");**/
+			pMF->ffmt = AST_MF_FFMT_NONE;
+			ast_mf_op_d_mainErrFile(pMF->pFilen,
+					"unsupported file-format, ignoring file...\n\n");
+			return ST_B_FALSE;
 	}
 	return ST_B_TRUE;
 }
@@ -842,20 +873,23 @@ AST_MAIN__updInput(Tast_mf_finfo *pMF)
 	/* tag array */
 	st_tagMeta_gs_setArr_strrdForAllTags(&pMF->tagArr, &pMF->strrd);
 	res = st_tagMeta_gs_setArr_filenForAllTags(&pMF->tagArr, pMF->pFilen);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
 		return res;
+	}
 
 	/* mpeg */
 	st_mpeg1_gs_setStr_strrd(&pMF->audMpg1, &pMF->strrd);
 	res = st_mpeg1_gs_setStr_filen(&pMF->audMpg1, pMF->pFilen);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
 		return res;
+	}
 
 	/* ogg/flac */
 	st_contOgg_gs_setStrrd(&pMF->avOgg, &pMF->strrd);
 	res = st_contOgg_gs_setFilen(&pMF->avOgg, pMF->pFilen);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
 		return res;
+	}
 
 	return ST_ERR_SUCC;
 }
@@ -891,8 +925,9 @@ AST_MAIN__cbZLibDecompress(Tst_binobj *pBinDatIn,
 	st_binobj_stc_rsetData(pBinDatOut);
 	/* */
 	res = st_binobj_copyIntoBuffer(pBinDatIn, &pTmpIn, &inSz);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
 		return res;
+	}
 
 	ST_CALLOC(pTmpOut, Tst_buf*, uncomprSzShould + 1, 1)
 	if (pTmpOut == NULL) {
@@ -902,12 +937,14 @@ AST_MAIN__cbZLibDecompress(Tst_binobj *pBinDatIn,
 
 	out = (unsigned long)uncomprSzShould;
 	if (uncompress(pTmpOut, &out, pTmpIn, inSz) != Z_OK ||
-			out != (unsigned long)uncomprSzShould)
+			out != (unsigned long)uncomprSzShould) {
 		res = ST_ERR_FAIL;
+	}
 	ST_DELPOINT(pTmpIn)
 
-	if (res == ST_ERR_SUCC)
+	if (res == ST_ERR_SUCC) {
 		res = st_binobj_setData(pBinDatOut, pTmpOut, (Tst_uint32)out);
+	}
 
 	ST_DELPOINT(pTmpOut)
 	return res;
@@ -936,8 +973,9 @@ AST_MAIN__cbZLibCompress(Tst_binobj *pBinDatIn,
 	st_binobj_stc_rsetData(pBinDatOut);
 	/* */
 	res = st_binobj_copyIntoBuffer(pBinDatIn, &pTmpIn, &inSz);
-	if (res != ST_ERR_SUCC)
+	if (res != ST_ERR_SUCC) {
 		return res;
+	}
 	out = compressBound((unsigned long int)inSz);
 
 	ST_CALLOC(pTmpOut, Tst_buf*, (Tst_uint32)out + 512, 1)
@@ -946,12 +984,14 @@ AST_MAIN__cbZLibCompress(Tst_binobj *pBinDatIn,
 		return ST_ERR_OMEM;
 	}
 
-	if (compress(pTmpOut, &out, pTmpIn, (unsigned long int)inSz) != Z_OK)
+	if (compress(pTmpOut, &out, pTmpIn, (unsigned long int)inSz) != Z_OK) {
 		res = ST_ERR_FAIL;
+	}
 	ST_DELPOINT(pTmpIn)
 
-	if (res == ST_ERR_SUCC)
+	if (res == ST_ERR_SUCC) {
 		res = st_binobj_setData(pBinDatOut, pTmpOut, (Tst_uint32)out);
+	}
 
 	ST_DELPOINT(pTmpOut)
 	return res;
