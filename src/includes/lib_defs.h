@@ -62,7 +62,8 @@
 #undef ST_PARAMS
 #if defined (__STDC__) || defined (_AIX) || \
 			(defined (__mips) && defined (_SYSTYPE_SVR4)) || \
-			defined(WIN32) || defined(__cplusplus)
+			defined(_WIN32) || defined (__CYGWIN__) || \
+			defined(__cplusplus)
 	#define ST_PARAMS(protos)  protos
 #else
 	#define ST_PARAMS(protos)  ()
@@ -78,7 +79,7 @@
  * as accessible from the outside */
 #if defined(__GNUC__)
 	#define ST_EXPORT __attribute__ ((visibility ("default")))
-#elif defined(WIN32)
+#elif defined(_WIN32) || defined (__CYGWIN__)
 	#define ST_EXPORT __declspec(dllexport)
 #else
 	#define ST_EXPORT  /* empty */
