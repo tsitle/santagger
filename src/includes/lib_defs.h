@@ -411,7 +411,7 @@ typedef struct {
 			/**fprintf(stderr, "\n__realloc__ '%s':'%s':%d  size %u\n", \
 					__FILE__, __func__, __LINE__, \
 					(Tst_uint32)(mac_libdefs_cnt * mac_libdefs_size));**/ \
-			(mac_libdefs_pDest) = (mac_libdefs_type)realloc(mac_libdefs_pDest, \
+			(mac_libdefs_pDest) = (mac_libdefs_type)reallocf(mac_libdefs_pDest, \
 						(mac_libdefs_cnt) * (mac_libdefs_size)); \
 		}
 
