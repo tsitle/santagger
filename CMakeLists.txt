@@ -358,10 +358,15 @@ endif ()
 # Semantic version variables
 # ----------------------------------------------------------------------------
 
-set(X_FN_APP_VERSION_H "src/app/app_version.h")
-set(X_FN_LIB_VERSION_H "src/includes/lib_version.h")
+if (WIN32)
+	set(X_FN_APP_VERSION_H "src\\app\\app_version.h")
+	set(X_FN_LIB_VERSION_H "src\\includes\\lib_version.h")
+else ()
+	set(X_FN_APP_VERSION_H "src/app/app_version.h")
+	set(X_FN_LIB_VERSION_H "src/includes/lib_version.h")
+endif ()
 
-if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
+if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	# get the current Git tag description (e.g. '1.0-2-ga12d3ef') for semantic versioning
 	execute_process(
 			COMMAND git describe --tags --dirty
@@ -442,11 +447,16 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
 elseif (EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
 	message(STATUS "__ST__: Using existing lib_version.h")
-	execute_process(COMMAND grep " ST_LIBSANTAG_VERS_STRING " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_SEM WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND grep " ST_LIBSANTAG_VERS_MAJOR " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_MAJOR WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND grep " ST_LIBSANTAG_VERS_MINOR " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_MINOR WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND grep " ST_LIBSANTAG_VERS_PATCH " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_PATCH WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND grep " ST_LIBSANTAG_VERS_ALPHABETA " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_ALPHABETA WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+	if (WIN32)
+		set(Z_VAR_CMD_GREP "findstr")
+	else ()
+		set(Z_VAR_CMD_GREP "grep")
+	endif ()
+	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_STRING " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_SEM WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_MAJOR " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_MAJOR WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_MINOR " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_MINOR WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_PATCH " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_PATCH WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_ALPHABETA " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_ALPHABETA WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 	# --> extract everything in between the parenthesis - but without the quotation marks
 	string(REGEX REPLACE "(.*)\\(\"(.*)\"\\)(.*)" "\\2" GIT_VERSION_SEM "${GIT_VERSION_SEM}")
@@ -467,7 +477,7 @@ endif ()
 # Replace version strings and numbers in app_version.h and lib_version.h
 # ----------------------------------------------------------------------------
 
-if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
+if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	message(STATUS "__ST__: Rewrite file '${X_FN_APP_VERSION_H}'")
 	execute_process(
 			INPUT_FILE "${X_FN_APP_VERSION_H}.in"
@@ -589,3 +599,8 @@ endif ()
 
 # link to shared library 'libm' - required only for Debian when using libvorbis
 target_link_libraries(santagger_app PRIVATE m)
+
+if (WIN32)
+	# link to shared library 'libbcrypt' - required only for MS Windows
+	target_link_libraries(santagger_lib PRIVATE bcrypt)
+endif ()
