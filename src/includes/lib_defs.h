@@ -405,14 +405,20 @@ typedef struct {
 			/**fprintf(stderr, "\n__calloc__ '%s':'%s':%d  size %u\n", \
 					__FILE__, __func__, __LINE__, \
 					(Tst_uint32)(mac_libdefs_cnt * mac_libdefs_size));**/ \
-			(mac_libdefs_pDest) = (mac_libdefs_type)calloc(mac_libdefs_cnt, mac_libdefs_size); \
+			(mac_libdefs_pDest) = (mac_libdefs_type)calloc((mac_libdefs_cnt), (mac_libdefs_size)); \
 		}
 #define ST_REALLOC(mac_libdefs_pDest, mac_libdefs_type, mac_libdefs_cnt, mac_libdefs_size)  { \
 			/**fprintf(stderr, "\n__realloc__ '%s':'%s':%d  size %u\n", \
 					__FILE__, __func__, __LINE__, \
 					(Tst_uint32)(mac_libdefs_cnt * mac_libdefs_size));**/ \
-			(mac_libdefs_pDest) = (mac_libdefs_type)reallocf(mac_libdefs_pDest, \
+			void *pMacTempPtrXxx = (mac_libdefs_type)realloc((mac_libdefs_pDest), \
 						(mac_libdefs_cnt) * (mac_libdefs_size)); \
+			if (pMacTempPtrXxx == NULL) { \
+				free(mac_libdefs_pDest); \
+				(mac_libdefs_pDest) = NULL; \
+			} else { \
+				(mac_libdefs_pDest) = pMacTempPtrXxx; \
+			} \
 		}
 
 /** free pointers */
