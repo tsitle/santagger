@@ -52,6 +52,12 @@ typedef struct {
 	Tst_bool isVirt;   /* is virtual (empty non-existing file) ? */
 } Tst_sys__fstc_intn;
 
+#if defined(_WIN32) || defined (__CYGWIN__)
+	const char ST_SYSFILE_PATH_DELIMITER = '\\';
+#else
+	const char ST_SYSFILE_PATH_DELIMITER = '/';
+#endif
+
 /*----------------------------------------------------------------------------*/
 
 static Tst_bool
@@ -304,7 +310,7 @@ st_sysFileBasename(const Tst_str *pFilen, Tst_str **ppFBn)
 	ST_ASSERTN_BOOL(ST_B_FALSE, pFilen == NULL || ppFBn == NULL)
 
 	len = st_sysStrlen(pFilen);
-	if (len > 0 && (pS = strrchr((const char*)pFilen, '/')) != NULL) {
+	if (len > 0 && (pS = strrchr((const char*)pFilen, ST_SYSFILE_PATH_DELIMITER)) != NULL) {
 		pos  = (Tst_uint32)(pS - (const char*)pFilen) + 1;
 		len -= (len < pos ? len : pos);
 	}
@@ -391,7 +397,7 @@ st_sysDirname(const Tst_str *pPath, Tst_str **ppDirn)
 	ST_ASSERTN_BOOL(ST_B_FALSE, pPath == NULL || ppDirn == NULL)
 
 	len = st_sysStrlen(pPath);
-	if (len > 0 && (pS = strrchr((const char*)pPath, '/')) != NULL) {
+	if (len > 0 && (pS = strrchr((const char*)pPath, ST_SYSFILE_PATH_DELIMITER)) != NULL) {
 		Tst_uint32 pos;
 
 		pos = (Tst_uint32)(pS - (const char*)pPath);
@@ -1051,7 +1057,7 @@ ST_SYSFILE__concatDirAndFilen(const Tst_str *pDirn, const Tst_str *pFilen,
 
 	lenD = st_sysStrlen(pDirn);
 	lenF = st_sysStrlen(pFilen);
-	if (lenF > 0 && strrchr((const char*)pFilen, '/') != NULL) {
+	if (lenF > 0 && strrchr((const char*)pFilen, ST_SYSFILE_PATH_DELIMITER) != NULL) {
 		if (! st_sysFileBasename(pFilen, &pFBn)) {
 			return ST_B_FALSE;
 		}
@@ -1066,18 +1072,18 @@ ST_SYSFILE__concatDirAndFilen(const Tst_str *pDirn, const Tst_str *pFilen,
 			return ST_B_FALSE;
 		}
 		memcpy(pFullPath, pDirn, lenD);
-		if (pDirn[lenD - 1] != '/') {
+		if (pDirn[lenD - 1] != ST_SYSFILE_PATH_DELIMITER) {
 			if (lenD + 1 > fpSz) {
 				return ST_B_FALSE;
 			}
-			pFullPath[lenD++] = '/';
+			pFullPath[lenD++] = ST_SYSFILE_PATH_DELIMITER;
 		}
 	} else {
 		if (2 > fpSz) {
 			return ST_B_FALSE;
 		}
 		pFullPath[lenD++] = '.';
-		pFullPath[lenD++] = '/';
+		pFullPath[lenD++] = ST_SYSFILE_PATH_DELIMITER;
 	}
 	if (lenF > 0) {
 		if (lenD + lenF > fpSz) {
