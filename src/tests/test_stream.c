@@ -18,10 +18,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
-/** */
 #include "src/includes/common/streamrd.h"
 #include "src/includes/common/streamwr.h"
 #include "src/includes/common/sys_file.h"

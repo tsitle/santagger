@@ -18,10 +18,6 @@
 /*
 // Own-Includes
 */
-#ifdef HAVE_CONFIG_H
-#	include <config.h>
-#endif
-/** */
 #include "src/includes/common/sys_fnc.h"
 #include "fncs_test_common.h"
 
