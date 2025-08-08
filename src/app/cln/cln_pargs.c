@@ -127,7 +127,7 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 	while (res == ST_ERR_SUCC) {
 		//tooi = (optind != 0 ? optind : 1);
 		oix  = 0;
-		c    = getopt_long(argc, (char**)argv, AST_CLN_SHORTOPTS,
+		c    = getopt_long((int)argc, (char**)argv, AST_CLN_SHORTOPTS,
 					AST_CLN_LONGOPTS, &oix);
 		if (c == -1) {
 			break;
@@ -155,7 +155,7 @@ ast_cln_pa_parseArgs(const Tst_str *pAppFn,
 		/* have program params been passed ? */
 		if (optind < 0) {
 			res = ST_ERR_FAIL;
-		} else if (res == ST_ERR_SUCC && (Tst_uint32)optind < argc) {
+		} else if ((Tst_uint32)optind < argc) {
 			/**ast_cln_prf("    parseArgs: non-option ARGV-elements: ");
 			while ((Tst_uint32)optind < argc) {
 				ast_cln_prf("\"%s\"", argv[optind++]);
@@ -395,11 +395,13 @@ AST_CLN__pa_sc_help(const Tst_str *pAppFn, const Tast_cln_cbMsg cbMsg,
 	LOC_PR_L_(AST_CLN_OPT_QSCAN_LO, NULL,
 			"Perform only a quick scan");
 	/** */
-	LOC_PR_DIV_;
-	LOC_PR_L_(AST_CLN_OPT_ALLWLNKS_LO, NULL,
-			"Allow sym-/hardlinks as input files");
-	LOC_PR_L_(AST_CLN_OPT_DISALLWLNKS_LO, NULL,
-			"Disallow sym-/hardlinks as input files  [default]");
+	#if ! (defined(_WIN32) || defined (__CYGWIN__))
+		LOC_PR_DIV_;
+		LOC_PR_L_(AST_CLN_OPT_ALLWLNKS_LO, NULL,
+				"Allow sym-/hardlinks as input files");
+		LOC_PR_L_(AST_CLN_OPT_DISALLWLNKS_LO, NULL,
+				"Disallow sym-/hardlinks as input files  [default]");
+	#endif
 	/** */
 	LOC_PR_DIV_;
 	LOC_PR_L_(AST_CLN_OPT_DISP_ALL_LO, NULL,
@@ -474,14 +476,14 @@ AST_CLN__pa_sc_help(const Tst_str *pAppFn, const Tast_cln_cbMsg cbMsg,
 			AST_CLN_SVT_FMT_NUM, AST_CLN_SVT_FMT_PICTP);
 	LOC_PR_L_(AST_CLN_OPT_PIC_TP_LO, sargs, sdesc);
 	snprintf(sdesc, sizeof(sdesc),
-			"Format of piture to attach  [default:%s]",
+			"Format of picture to attach  [default:%s]",
 			AST_CLN_DEF_PIC_FM_STR);
 	snprintf(sargs, sizeof(sargs), "help|<%s|%s>",
 			AST_CLN_SVT_FMT_NUM, AST_CLN_SVT_FMT_PICFM);
 	LOC_PR_L_(AST_CLN_OPT_PIC_FM_LO, sargs, sdesc);
 	snprintf(sargs, sizeof(sargs), "<%s>", AST_CLN_SVT_FMT_STR);
 	LOC_PR_L_(AST_CLN_OPT_PIC_DE_LO, sargs,
-			"Description of piture to attach");
+			"Description of picture to attach");
 	snprintf(sargs, sizeof(sargs), "<%s>", AST_CLN_SVT_FMT_MIME);
 	LOC_PR_L_(AST_CLN_OPT_GEO_MI_LO, sargs,
 			"MIME-Type of file to attach");
@@ -605,7 +607,7 @@ AST_CLN__pa_sc_version(const Tast_cln_cbMsg cbMsg)
 {
 	#if (HAVE_LIBVORBIS == 1) || (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1) || (HAVE_LIBZ == 1)
 		const char *cNA = "n/a";
-		char const *pVer = cNA;
+		char const *pVer;
 	#endif
 	Tst_mtes_string tagger;
 	Tst_str         *pTmp = NULL;
@@ -638,16 +640,10 @@ AST_CLN__pa_sc_version(const Tast_cln_cbMsg cbMsg)
 	#endif
 	#if (HAVE_LIBMAD == 1)
 		pVer = MAD_VERSION;
-		if (pVer == NULL) {
-			pVer = cNA;
-		}
 		cbMsg("[libmad: %s]", pVer);
 	#endif
 	#if (HAVE_LIBZ == 1)
 		pVer = ZLIB_VERSION;
-		if (pVer == NULL) {
-			pVer = cNA;
-		}
 		cbMsg("[zlib: %s]", pVer);
 	#endif
 
