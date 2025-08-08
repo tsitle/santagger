@@ -24,24 +24,20 @@
 /** */
 #include "src/includes/common/sys_fnc.h"
 #include "src/includes/common/sys_file.h"
+#include "fncs_test_common.h"
 
 /*
 // System-Includes
 */
 #include <stdlib.h>       /* exit(), calloc(), getenv() */
-#include <stdarg.h>       /* va_list, ... */
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-void TEST__prf(const char *pFnc, const char *pMsg, ...);
-void TEST__prf32(const char *pFnc, const char *pMsg, Tst_uint32 v32);
-void TEST__prf32dec(const char *pFnc, const char *pMsg, Tst_uint32 v32);
-/* */
-Tst_bool TEST__0_base(void);
-Tst_bool TEST__1_base(void);
-Tst_bool TEST__2_concat(void);
-Tst_bool TEST__3_concat(void);
+Tst_bool TEST_SYSFILE__0_base(void);
+Tst_bool TEST_SYSFILE__1_base(void);
+Tst_bool TEST_SYSFILE__2_concat(void);
+Tst_bool TEST_SYSFILE__3_concat(void);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -49,48 +45,32 @@ Tst_bool TEST__3_concat(void);
 int
 main(const int argc, const char *argv[])
 {
-	if (! TEST__0_base()) {
+	if (! TEST_SYSFILE__0_base()) {
 		printf("! Test failed !\n");
 		return 1;
 	}
 	printf("\n");
 
-	if (! TEST__1_base()) {
+	if (! TEST_SYSFILE__1_base()) {
 		printf("! Test failed !\n");
 		return 1;
 	}
 	printf("\n");
 
-	if (! TEST__2_concat()) {
+	if (! TEST_SYSFILE__2_concat()) {
 		printf("! Test failed !\n");
 		return 1;
 	}
 	printf("\n");
 
-	if (! TEST__3_concat()) {
+	if (! TEST_SYSFILE__3_concat()) {
 		printf("! Test failed !\n");
 		return 1;
 	}
 	printf("\n");
 
-	printf("All tests passed :-)\n");
+	printf("TEST_SYSFILE -- All tests passed :-)\n");
 	return 0;
-}
-
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-
-void
-TEST__prf(const char *pFnc, const char *pMsg, ...)
-{
-	char    msgBuf[1024];
-	va_list args;
-
-	va_start(args, pMsg);
-
-	vsnprintf(msgBuf, sizeof(msgBuf), pMsg, args);
-	printf("%s(): %s\n", pFnc, msgBuf);
-	va_end(args);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -101,7 +81,7 @@ TEST__prf(const char *pFnc, const char *pMsg, ...)
  *       st_sysDirname()
  */
 Tst_bool
-TEST__0_base(void)
+TEST_SYSFILE__0_base(void)
 {
 	const char *cFNCN = __func__;
 	#if defined(_WIN32) || defined (__CYGWIN__)
@@ -123,30 +103,30 @@ TEST__0_base(void)
 
 	resB = st_sysFileBasename(pFull, &pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysFileBasename() failed");
+		TEST_FCOM__prf(cFNCN, "error: st_sysFileBasename() failed");
 		return ST_B_FALSE;
 	}
 
 	resB = st_sysStrcmp(ST_B_TRUE, pTemp, cFN);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: base filename does not match: is '%s' != exp '%s'", pTemp, cFN);
+		TEST_FCOM__prf(cFNCN, "error: base filename does not match: is '%s' != exp '%s'", pTemp, cFN);
 		return ST_B_FALSE;
 	}
 
 	//
 	resB = st_sysDirname(pFull, &pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysDirname() failed");
+		TEST_FCOM__prf(cFNCN, "error: st_sysDirname() failed");
 		return ST_B_FALSE;
 	}
 
 	resB = st_sysStrcmp(ST_B_TRUE, pTemp, cDN);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: dirname does not match: is '%s' != exp '%s'", pTemp, cDN);
+		TEST_FCOM__prf(cFNCN, "error: dirname does not match: is '%s' != exp '%s'", pTemp, cDN);
 		return ST_B_FALSE;
 	}
 
-	TEST__prf(cFNCN, "OK");
+	TEST_FCOM__prf(cFNCN, "OK");
 
 	ST_DELPOINT(pFull)
 	ST_DELPOINT(pTemp)
@@ -161,7 +141,7 @@ TEST__0_base(void)
  *       st_sysDirname()
  */
 Tst_bool
-TEST__1_base(void)
+TEST_SYSFILE__1_base(void)
 {
 	const char *cFNCN = __func__;
 	const Tst_str *cFN = (const Tst_str*)"santa.fe";
@@ -173,30 +153,30 @@ TEST__1_base(void)
 
 	resB = st_sysFileBasename(pFull, &pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysFileBasename() failed");
+		TEST_FCOM__prf(cFNCN, "error: st_sysFileBasename() failed");
 		return ST_B_FALSE;
 	}
 
 	resB = st_sysStrcmp(ST_B_TRUE, pTemp, cFN);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: base filename does not match: is '%s' != exp '%s'", pTemp, cFN);
+		TEST_FCOM__prf(cFNCN, "error: base filename does not match: is '%s' != exp '%s'", pTemp, cFN);
 		return ST_B_FALSE;
 	}
 
 	//
 	resB = st_sysDirname(pFull, &pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysDirname() failed");
+		TEST_FCOM__prf(cFNCN, "error: st_sysDirname() failed");
 		return ST_B_FALSE;
 	}
 
 	resB = st_sysStrcmp(ST_B_TRUE, pTemp, (const Tst_str*)".");
 	if (! resB) {
-		TEST__prf(cFNCN, "error: dirname does not match: is '%s' != exp '%s'", pTemp, (const Tst_str*)".");
+		TEST_FCOM__prf(cFNCN, "error: dirname does not match: is '%s' != exp '%s'", pTemp, (const Tst_str*)".");
 		return ST_B_FALSE;
 	}
 
-	TEST__prf(cFNCN, "OK");
+	TEST_FCOM__prf(cFNCN, "OK");
 
 	ST_DELPOINT(pFull)
 	ST_DELPOINT(pTemp)
@@ -210,7 +190,7 @@ TEST__1_base(void)
  * Tests st_sysConcatDirAndFilen()
  */
 Tst_bool
-TEST__2_concat(void)
+TEST_SYSFILE__2_concat(void)
 {
 	const char *cFNCN = __func__;
 	#if defined(_WIN32) || defined (__CYGWIN__)
@@ -230,17 +210,17 @@ TEST__2_concat(void)
 
 	resB = st_sysConcatDirAndFilen(cDN, cFN, &pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysConcatDirAndFilen() failed");
+		TEST_FCOM__prf(cFNCN, "error: st_sysConcatDirAndFilen() failed");
 		return ST_B_FALSE;
 	}
 
 	resB = st_sysStrcmp(ST_B_TRUE, pTemp, pFull);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: path does not match: is '%s' != exp '%s'", pTemp, pFull);
+		TEST_FCOM__prf(cFNCN, "error: path does not match: is '%s' != exp '%s'", pTemp, pFull);
 		return ST_B_FALSE;
 	}
 
-	TEST__prf(cFNCN, "OK");
+	TEST_FCOM__prf(cFNCN, "OK");
 
 	ST_DELPOINT(pFull)
 	ST_DELPOINT(pTemp)
@@ -254,7 +234,7 @@ TEST__2_concat(void)
  * Tests st_sysConcatDirAndFilen()
  */
 Tst_bool
-TEST__3_concat(void)
+TEST_SYSFILE__3_concat(void)
 {
 	const char *cFNCN = __func__;
 	#if defined(_WIN32) || defined (__CYGWIN__)
@@ -289,17 +269,17 @@ TEST__3_concat(void)
 
 	resB = st_sysConcatDirAndFilen(pInpDn, pInpFn, &pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysConcatDirAndFilen() failed");
+		TEST_FCOM__prf(cFNCN, "error: st_sysConcatDirAndFilen() failed");
 		return ST_B_FALSE;
 	}
 
 	resB = st_sysStrcmp(ST_B_TRUE, pTemp, pFull);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: path does not match: is '%s' != exp '%s'", pTemp, pFull);
+		TEST_FCOM__prf(cFNCN, "error: path does not match: is '%s' != exp '%s'", pTemp, pFull);
 		return ST_B_FALSE;
 	}
 
-	TEST__prf(cFNCN, "OK");
+	TEST_FCOM__prf(cFNCN, "OK");
 
 	ST_DELPOINT(pFull)
 	ST_DELPOINT(pTemp)

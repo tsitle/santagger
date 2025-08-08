@@ -28,13 +28,13 @@
 #include "src/includes/tag/tag_id3v2.h"
 #include "src/includes/tag/tag_vorbc.h"
 #include "src/includes/tag/tag_fldmap.h"
+#include "fncs_test_common.h"
 
 /*
 // System-Includes
 */
 #include <stdlib.h>       /* exit(), calloc(), getenv() */
 #include <string.h>       /* memset() */
-#include <stdarg.h>       /* va_list, ... */
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -54,18 +54,18 @@
 #define RUN_TEST_12  0
 #define RUN_TEST_13  0
 
-Tst_bool TEST__00_mapIV2_id(void);
-Tst_bool TEST__01_mapIV2_idstr(void);
-Tst_bool TEST__02_mapIV2_cust(void);
-Tst_bool TEST__03_mapIV2_fromVor(void);
-Tst_bool TEST__04_mapIV2_fromAv2(void);
-Tst_bool TEST__05_mapIV2_fromIv1(void);
-Tst_bool TEST__06_mapAV2_id(void);
-Tst_bool TEST__07_mapAV2_cust(void);
-Tst_bool TEST__08_mapAV2_fromIv2(void);
-Tst_bool TEST__11_mapVOR_id(void);
-Tst_bool TEST__12_mapVOR_cust(void);
-Tst_bool TEST__13_mapVOR_fromIv2(void);
+Tst_bool TEST_TFLDMAP__00_mapIV2_id(void);
+Tst_bool TEST_TFLDMAP__01_mapIV2_idstr(void);
+Tst_bool TEST_TFLDMAP__02_mapIV2_cust(void);
+Tst_bool TEST_TFLDMAP__03_mapIV2_fromVor(void);
+Tst_bool TEST_TFLDMAP__04_mapIV2_fromAv2(void);
+Tst_bool TEST_TFLDMAP__05_mapIV2_fromIv1(void);
+Tst_bool TEST_TFLDMAP__06_mapAV2_id(void);
+Tst_bool TEST_TFLDMAP__07_mapAV2_cust(void);
+Tst_bool TEST_TFLDMAP__08_mapAV2_fromIv2(void);
+Tst_bool TEST_TFLDMAP__11_mapVOR_id(void);
+Tst_bool TEST_TFLDMAP__12_mapVOR_cust(void);
+Tst_bool TEST_TFLDMAP__13_mapVOR_fromIv2(void);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -73,120 +73,104 @@ Tst_bool TEST__13_mapVOR_fromIv2(void);
 int
 main(const int argc, const char *argv[])
 {
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_00 == 1)
-	if (! TEST__00_mapIV2_id()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_00 == 1)
+		if (! TEST_TFLDMAP__00_mapIV2_id()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_01 == 1)
-	if (! TEST__01_mapIV2_idstr()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_01 == 1)
+		if (! TEST_TFLDMAP__01_mapIV2_idstr()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_02 == 1)
-	if (! TEST__02_mapIV2_cust()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_02 == 1)
+		if (! TEST_TFLDMAP__02_mapIV2_cust()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_03 == 1)
-	if (! TEST__03_mapIV2_fromVor()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_03 == 1)
+		if (! TEST_TFLDMAP__03_mapIV2_fromVor()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_04 == 1)
-	if (! TEST__04_mapIV2_fromAv2()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_04 == 1)
+		if (! TEST_TFLDMAP__04_mapIV2_fromAv2()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_05 == 1)
-	if (! TEST__05_mapIV2_fromIv1()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_05 == 1)
+		if (! TEST_TFLDMAP__05_mapIV2_fromIv1()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_06 == 1)
-	if (! TEST__06_mapAV2_id()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_06 == 1)
+		if (! TEST_TFLDMAP__06_mapAV2_id()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_07 == 1)
-	if (! TEST__07_mapAV2_cust()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_07 == 1)
+		if (! TEST_TFLDMAP__07_mapAV2_cust()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_08 == 1)
-	if (! TEST__08_mapAV2_fromIv2()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_08 == 1)
+		if (! TEST_TFLDMAP__08_mapAV2_fromIv2()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_11 == 1)
-	if (! TEST__11_mapVOR_id()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_11 == 1)
+		if (! TEST_TFLDMAP__11_mapVOR_id()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_12 == 1)
-	if (! TEST__12_mapVOR_cust()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_12 == 1)
+		if (! TEST_TFLDMAP__12_mapVOR_cust()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_ALL == 1 || RUN_TEST_13 == 1)
-	if (! TEST__13_mapVOR_fromIv2()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_ALL == 1 || RUN_TEST_13 == 1)
+		if (! TEST_TFLDMAP__13_mapVOR_fromIv2()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-	printf("All tests passed :-)\n");
+	printf("TEST_TFLDMAP -- All tests passed :-)\n");
 	return 0;
-}
-
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-
-void
-TEST__prf(const char *pFnc, const char *pMsg, ...)
-{
-	char    msgBuf[1024];
-	va_list args;
-
-	va_start(args, pMsg);
-
-	vsnprintf(msgBuf, sizeof(msgBuf), pMsg, args);
-	printf("%s(): %s\n", pFnc, msgBuf);
-	va_end(args);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -196,7 +180,7 @@ TEST__prf(const char *pFnc, const char *pMsg, ...)
  * Set basics: Mode, FldNr, ID/ID-String
  */
 static Tst_bool
-TEST__map_setBasics(Tst_tfldMap_genTagFld *pGTF,
+TEST_TFLDMAP__map_setBasics(Tst_tfldMap_genTagFld *pGTF,
 		const char *pTagN, const Tst_bool modeAoS, const Tst_int32 fnr,
 		const Tst_bool useIDorIDStr, const Tst_int32 fid, const Tst_str *pFIDstr)
 {
@@ -229,7 +213,7 @@ TEST__map_setBasics(Tst_tfldMap_genTagFld *pGTF,
 /*----------------------------------------------------------------------------*/
 
 static Tst_bool
-TEST__mapIV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
+TEST_TFLDMAP__mapIV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 		const Tst_bool expModeAoS, const Tst_int32 expFNr,
 		const Tst_id3v2_frID expFID, const Tst_str *pExpFIDstr,
 		const Tst_bool expIsOK,
@@ -242,22 +226,22 @@ TEST__mapIV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 
 	res = st_tagFldMap_mapToIV2(pGTF, pFData, &mode, &fnr, &isOK);
 	if (res == ST_ERR_SUCC && ! isOK && expIsOK) {
-		TEST__prf(pFnc, "error: couldn't map field [isOK mismatch: exp T]");
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [isOK mismatch: exp T]");
 		res = ST_ERR_FAIL;
 	} else if (res == ST_ERR_SUCC && isOK && mode != expModeAoS) {
-		TEST__prf(pFnc, "error: couldn't map field [mode mismatch: exp %c]",
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [mode mismatch: exp %c]",
 				(expModeAoS ? 'A' : 'S'));
 		res = ST_ERR_FAIL;
 	} else if (res == ST_ERR_SUCC && isOK && expModeAoS && fnr != -1) {
-		TEST__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
 				-1, fnr);
 		res = ST_ERR_FAIL;
 	} else if (res == ST_ERR_SUCC && isOK && ! expModeAoS && fnr != expFNr) {
-		TEST__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
 				expFNr, fnr);
 		res = ST_ERR_FAIL;
 	} else if (res != ST_ERR_SUCC) {
-		TEST__prf(pFnc, "error: st_tagFldMap_mapToIV2() failed");
+		TEST_FCOM__prf(pFnc, "error: st_tagFldMap_mapToIV2() failed");
 		res = ST_ERR_FAIL;
 	}
 
@@ -268,7 +252,7 @@ TEST__mapIV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 
 			fid = st_id3v2_gs_getFieldProp_id(pFProps);
 			if (expFID != -1 && fid != expFID) {
-				TEST__prf(pFnc, "error: couldn't map field "
+				TEST_FCOM__prf(pFnc, "error: couldn't map field "
 						"[ID mismatch: exp %d, got %d]",
 						(int)expFID, (int)fid);
 				res = ST_ERR_FAIL;
@@ -277,24 +261,24 @@ TEST__mapIV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 
 				pIDstr = st_id3v2_gs_getFieldProp_idStr(pFProps);
 				if (pIDstr == NULL) {
-					TEST__prf(pFnc, "error: couldn't map field [ID-String empty]");
+					TEST_FCOM__prf(pFnc, "error: couldn't map field [ID-String empty]");
 					res = ST_ERR_FAIL;
 				}
 				if (res == ST_ERR_SUCC && pExpFIDstr != NULL &&
 						strcasecmp((const char*)pIDstr, (const char*)pExpFIDstr) != 0) {
-					TEST__prf(pFnc, "error: couldn't map field "
+					TEST_FCOM__prf(pFnc, "error: couldn't map field "
 							"[ID-String mismatch: '%s' != '%s']",
 							pIDstr, pExpFIDstr);
 					res = ST_ERR_FAIL;
 				}
 				if (res == ST_ERR_SUCC) {
-					TEST__prf(pFnc, " [ID=%3d,  IDstr='%s',  mode=%c,  fnr=%2d]",
+					TEST_FCOM__prf(pFnc, " [ID=%3d,  IDstr='%s',  mode=%c,  fnr=%2d]",
 							fid, (pIDstr == NULL ? "" : (char const*)pIDstr),
 							(mode ? 'A' : 'S'), fnr);
 				}
 			}
 		} else {
-			TEST__prf(pFnc, "error: st_id3v2_gs_getField_props() failed");
+			TEST_FCOM__prf(pFnc, "error: st_id3v2_gs_getField_props() failed");
 		}
 	}
 	return (res == ST_ERR_SUCC);
@@ -307,9 +291,9 @@ TEST__mapIV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
  * Tests ...
  */
 Tst_bool
-TEST__00_mapIV2_id(void)
+TEST_TFLDMAP__00_mapIV2_id(void)
 {
-	const char *cFNCN = "TEST__00_mapIV2_id";
+	const char *cFNCN = __func__;
 	Tst_bool  bres;
 	Tst_err   res;
 	Tst_int32 fid;
@@ -318,7 +302,7 @@ TEST__00_mapIV2_id(void)
 	Tst_id3v2_fldProp     fprops;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping ID3v2 Tag Fields to ID3v2 Tag Fields by ID...");
+	TEST_FCOM__prf(cFNCN, "Mapping ID3v2 Tag Fields to ID3v2 Tag Fields by ID...");
 
 	st_id3v2_stc_rsetFPr(&fprops);
 	res  = st_id3v2_stc_initFDat(&fdata);
@@ -328,7 +312,7 @@ TEST__00_mapIV2_id(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -336,26 +320,26 @@ TEST__00_mapIV2_id(void)
 		const Tst_int32 fnr = -1;
 
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_ID3V2_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_ID3V2_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
 				fnr, /*useIDorIDStr:*/ST_B_TRUE, (Tst_id3v2_frID)fid, NULL);
 		if (! bres) {
 			break;
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdata, &fprops);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapIV2_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapIV2_mapAndCheckBasics() failed");
 			break;
 		}
 
 		res  = st_tagFldMap_gs_setDataStr_int(&gtf, 100);
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_int() failed");
+			TEST_FCOM__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_int() failed");
 			break;
 		}
 
@@ -363,7 +347,7 @@ TEST__00_mapIV2_id(void)
 				fid != (Tst_int32)ST_ID3V2_FID_234_CTXT &&
 				fid != (Tst_int32)ST_ID3V2_FID_234_CURL) {
 			/* shouldn't fail */
-			bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+			bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 					/*expModeAoS:*/(fid % 2 == 0), fnr, (Tst_id3v2_frID)fid, NULL,
 					/*expIsOK:*/ST_B_TRUE,
 					&fdata, &fprops);
@@ -372,7 +356,7 @@ TEST__00_mapIV2_id(void)
 					// ReSharper disable once CppDFAConstantConditions
 					fid == (Tst_int32)ST_ID3V2_FID_NONE) {
 			/* shouldn't fail, but get mapped to COMM */
-			bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+			bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 					/*expModeAoS:*/(fid % 2 == 0), fnr, ST_ID3V2_FID_234_COMM, NULL,
 					/*expIsOK:*/ST_B_FALSE,
 					&fdata, &fprops);
@@ -382,7 +366,7 @@ TEST__00_mapIV2_id(void)
 		}
 	}
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -396,9 +380,9 @@ TEST__00_mapIV2_id(void)
  * Tests ...
  */
 Tst_bool
-TEST__01_mapIV2_idstr(void)
+TEST_TFLDMAP__01_mapIV2_idstr(void)
 {
-	const char *cFNCN = "TEST__01_mapIV2_idstr";
+	const char *cFNCN = __func__;
 	Tst_bool      bres;
 	Tst_err       res;
 	Tst_str const *pFIDstr;
@@ -410,7 +394,7 @@ TEST__01_mapIV2_idstr(void)
 	Tst_id3v2_frID        fid;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping ID3v2 Tag Fields to ID3v2 Tag Fields by ID-String...");
+	TEST_FCOM__prf(cFNCN, "Mapping ID3v2 Tag Fields to ID3v2 Tag Fields by ID-String...");
 
 	st_id3v2_stc_rsetFPr(&iteCur);
 	st_id3v2_stc_rsetFPr(&fprops);
@@ -421,7 +405,7 @@ TEST__01_mapIV2_idstr(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -432,43 +416,43 @@ TEST__01_mapIV2_idstr(void)
 		fid      = st_id3v2_gs_getFieldProp_id(&iteCur);
 		pFIDstr  = st_id3v2_gs_getFieldProp_idStr(&iteCur);
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_ID3V2_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_ID3V2_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
 				fnr, /*useIDorIDStr:*/ST_B_FALSE, ST_ID3V2_FID_NONE,
 				pFIDstr);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__map_setBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__map_setBasics() failed");
 			break;
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdata, &fprops);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapIV2_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapIV2_mapAndCheckBasics() failed");
 			break;
 		}
 
 		res  = st_tagFldMap_gs_setDataStr_pos(&gtf, 100, 200);
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_pos() failed");
+			TEST_FCOM__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_pos() failed");
 			break;
 		}
 
 		/* shouldn't fail */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, pFIDstr,
 				/*expIsOK:*/ST_B_TRUE,
 				&fdata, &fprops);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapIV2_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapIV2_mapAndCheckBasics() failed");
 			break;
 		}
 	}
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -482,9 +466,9 @@ TEST__01_mapIV2_idstr(void)
  * Tests ...
  */
 Tst_bool
-TEST__02_mapIV2_cust(void)
+TEST_TFLDMAP__02_mapIV2_cust(void)
 {
-	const char *cFNCN = "TEST__02_mapIV2_cust";
+	const char *cFNCN = __func__;
 	Tst_bool   bres;
 	Tst_err    res;
 	Tst_int32  fnr = 1;
@@ -497,7 +481,7 @@ TEST__02_mapIV2_cust(void)
 	Tst_id3v2_frID        fid;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping ID3v2 Tag Fields to (custom) ID3v2 Tag Fields...");
+	TEST_FCOM__prf(cFNCN, "Mapping ID3v2 Tag Fields to (custom) ID3v2 Tag Fields...");
 
 	st_id3v2_stc_rsetFPr(&fprops);
 	res  = st_id3v2_stc_initFDat(&fdata);
@@ -507,7 +491,7 @@ TEST__02_mapIV2_cust(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -539,7 +523,7 @@ TEST__02_mapIV2_cust(void)
 				pFIDstrIn = "WZZ0";  pFIDstrOut = "WZZ0";  fid = ST_ID3V2_FID_234_CURL;
 		}
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_ID3V2_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_ID3V2_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
 				fnr, /*useIDorIDStr:*/ST_B_FALSE, ST_ID3V2_FID_NONE,
 				(Tst_str const*)pFIDstrIn);
 		if (! bres) {
@@ -547,24 +531,24 @@ TEST__02_mapIV2_cust(void)
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdata, &fprops);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapIV2_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapIV2_mapAndCheckBasics() failed");
 			break;
 		}
 
 		res  = st_tagFldMap_gs_setDataStr_pos(&gtf, 100, -1);
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_pos() failed");
+			TEST_FCOM__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_pos() failed");
 			break;
 		}
 
 		/* shouldn't fail */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, (Tst_str const*)pFIDstrOut,
 				/*expIsOK:*/ST_B_TRUE,
 				&fdata, &fprops);
@@ -573,7 +557,7 @@ TEST__02_mapIV2_cust(void)
 		}
 	}
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -587,9 +571,9 @@ TEST__02_mapIV2_cust(void)
  * Tests ...
  */
 Tst_bool
-TEST__03_mapIV2_fromVor(void)
+TEST_TFLDMAP__03_mapIV2_fromVor(void)
 {
-	const char *cFNCN = "TEST__03_mapIV2_fromVor";
+	const char *cFNCN = __func__;
 	Tst_bool   bres;
 	Tst_err    res;
 	Tst_uint32 x;
@@ -601,7 +585,7 @@ TEST__03_mapIV2_fromVor(void)
 	Tst_id3v2_frID        fidIV2;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping Vorbis Tag Fields to ID3v2 Tag Fields...");
+	TEST_FCOM__prf(cFNCN, "Mapping Vorbis Tag Fields to ID3v2 Tag Fields...");
 
 	st_id3v2_stc_rsetFPr(&fpropsIV2);
 	res  = st_id3v2_stc_initFDat(&fdataIV2);
@@ -611,7 +595,7 @@ TEST__03_mapIV2_fromVor(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -633,7 +617,7 @@ TEST__03_mapIV2_fromVor(void)
 				pFIDstrInVOR = "My own ID";    pFIDstrOutIV2 = "COMM";  fidIV2 = ST_ID3V2_FID_234_COMM;
 		}
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_VORBC_TAG_NAME_SH, /*modeAoS:*/ST_B_TRUE,
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_VORBC_TAG_NAME_SH, /*modeAoS:*/ST_B_TRUE,
 				-1, /*useIDorIDStr:*/ST_B_FALSE, -1,
 				(Tst_str const*)pFIDstrInVOR);
 		if (! bres) {
@@ -641,24 +625,24 @@ TEST__03_mapIV2_fromVor(void)
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/ST_B_TRUE, -1, -1, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdataIV2, &fpropsIV2);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapIV2_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapIV2_mapAndCheckBasics() failed");
 			break;
 		}
 
 		res  = st_tagFldMap_gs_setDataStr_pos(&gtf, 0, 200);
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_pos() failed");
+			TEST_FCOM__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_pos() failed");
 			break;
 		}
 
 		/* shouldn't fail */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/ST_B_TRUE, -1, fidIV2, (const Tst_str*)pFIDstrOutIV2,
 				/*expIsOK:*/ST_B_TRUE,
 				&fdataIV2, &fpropsIV2);
@@ -668,7 +652,7 @@ TEST__03_mapIV2_fromVor(void)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -682,9 +666,9 @@ TEST__03_mapIV2_fromVor(void)
  * Tests ...
  */
 Tst_bool
-TEST__04_mapIV2_fromAv2(void)
+TEST_TFLDMAP__04_mapIV2_fromAv2(void)
 {
-	const char *cFNCN = "TEST__04_mapIV2_fromAv2";
+	const char *cFNCN = __func__;
 	Tst_bool   bres;
 	Tst_err    res;
 	Tst_uint32 x;
@@ -696,7 +680,7 @@ TEST__04_mapIV2_fromAv2(void)
 	Tst_id3v2_frID        fidIV2;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping APEv2 Tag Fields to ID3v2 Tag Fields...");
+	TEST_FCOM__prf(cFNCN, "Mapping APEv2 Tag Fields to ID3v2 Tag Fields...");
 
 	st_id3v2_stc_rsetFPr(&fpropsIV2);
 	res  = st_id3v2_stc_initFDat(&fdataIV2);
@@ -706,7 +690,7 @@ TEST__04_mapIV2_fromAv2(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -726,7 +710,7 @@ TEST__04_mapIV2_fromAv2(void)
 				pFIDstrInAV2 = "My own ID";   pFIDstrOutIV2 = "COMM";  fidIV2 = ST_ID3V2_FID_234_COMM;
 		}
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_APEV2_TAG_NAME_SH, /*modeAoS:*/ST_B_TRUE,
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_APEV2_TAG_NAME_SH, /*modeAoS:*/ST_B_TRUE,
 				-1, /*useIDorIDStr:*/ST_B_FALSE, -1,
 				(Tst_str const*)pFIDstrInAV2);
 		if (! bres) {
@@ -734,24 +718,24 @@ TEST__04_mapIV2_fromAv2(void)
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/ST_B_TRUE, -1, -1, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdataIV2, &fpropsIV2);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapIV2_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapIV2_mapAndCheckBasics() failed");
 			break;
 		}
 
 		res  = st_tagFldMap_gs_setDataStr_pos(&gtf, 0, 200);
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_pos() failed");
+			TEST_FCOM__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_pos() failed");
 			break;
 		}
 
 		/* shouldn't fail */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/ST_B_TRUE, -1, fidIV2, (const Tst_str*)pFIDstrOutIV2,
 				/*expIsOK:*/ST_B_TRUE,
 				&fdataIV2, &fpropsIV2);
@@ -761,7 +745,7 @@ TEST__04_mapIV2_fromAv2(void)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -775,9 +759,9 @@ TEST__04_mapIV2_fromAv2(void)
  * Tests ...
  */
 Tst_bool
-TEST__05_mapIV2_fromIv1(void)
+TEST_TFLDMAP__05_mapIV2_fromIv1(void)
 {
-	const char *cFNCN = "TEST__05_mapIV2_fromIv1";
+	const char *cFNCN = __func__;
 	Tst_bool   bres;
 	Tst_err    res;
 	Tst_uint32 x;
@@ -789,7 +773,7 @@ TEST__05_mapIV2_fromIv1(void)
 	Tst_id3v2_frID        fidIV2;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping ID3v1 Tag Fields to ID3v2 Tag Fields...");
+	TEST_FCOM__prf(cFNCN, "Mapping ID3v1 Tag Fields to ID3v2 Tag Fields...");
 
 	st_id3v2_stc_rsetFPr(&fpropsIV2);
 	res  = st_id3v2_stc_initFDat(&fdataIV2);
@@ -799,7 +783,7 @@ TEST__05_mapIV2_fromIv1(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -821,31 +805,31 @@ TEST__05_mapIV2_fromIv1(void)
 				fidInIV1 = ST_ID3V1_FID_GENR;  pFIDstrOutIV2 = "TCON";  fidIV2 = ST_ID3V2_FID_234_TCON;
 		}
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_ID3V1_TAG_NAME_SH, /*modeAoS:*/ST_B_TRUE,
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_ID3V1_TAG_NAME_SH, /*modeAoS:*/ST_B_TRUE,
 				-1, /*useIDorIDStr:*/ST_B_TRUE, fidInIV1, NULL);
 		if (! bres) {
 			break;
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/ST_B_TRUE, -1, -1, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdataIV2, &fpropsIV2);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapIV2_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapIV2_mapAndCheckBasics() failed");
 			break;
 		}
 
 		res  = st_tagFldMap_gs_setDataStr_pos(&gtf, 0, 200);
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_pos() failed");
+			TEST_FCOM__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_pos() failed");
 			break;
 		}
 
 		/* shouldn't fail */
-		bres = TEST__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapIV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/ST_B_TRUE, -1, fidIV2, (const Tst_str*)pFIDstrOutIV2,
 				/*expIsOK:*/ST_B_TRUE,
 				&fdataIV2, &fpropsIV2);
@@ -855,7 +839,7 @@ TEST__05_mapIV2_fromIv1(void)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -867,7 +851,7 @@ TEST__05_mapIV2_fromIv1(void)
 /*----------------------------------------------------------------------------*/
 
 static Tst_bool
-TEST__mapAV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
+TEST_TFLDMAP__mapAV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 		const Tst_bool expModeAoS, const Tst_int32 expFNr,
 		const Tst_apev2_frID expFID, const Tst_str *pExpFIDstr,
 		const Tst_bool expIsOK,
@@ -880,22 +864,22 @@ TEST__mapAV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 
 	res = st_tagFldMap_mapToAV2(pGTF, pFData, &mode, &fnr, &isOK);
 	if (res == ST_ERR_SUCC && ! isOK && expIsOK) {
-		TEST__prf(pFnc, "error: couldn't map field [isOK mismatch: exp T]");
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [isOK mismatch: exp T]");
 		res = ST_ERR_FAIL;
 	} else if (res == ST_ERR_SUCC && isOK && mode != expModeAoS) {
-		TEST__prf(pFnc, "error: couldn't map field [mode mismatch: exp %c]",
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [mode mismatch: exp %c]",
 				(expModeAoS ? 'A' : 'S'));
 		res = ST_ERR_FAIL;
 	} else if (res == ST_ERR_SUCC && isOK && expModeAoS && fnr != -1) {
-		TEST__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
 				-1, fnr);
 		res = ST_ERR_FAIL;
 	} else if (res == ST_ERR_SUCC && isOK && ! expModeAoS && fnr != expFNr) {
-		TEST__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
 				expFNr, fnr);
 		res = ST_ERR_FAIL;
 	} else if (res != ST_ERR_SUCC) {
-		TEST__prf(pFnc, "error: st_tagFldMap_mapToAV2() failed");
+		TEST_FCOM__prf(pFnc, "error: st_tagFldMap_mapToAV2() failed");
 		res = ST_ERR_FAIL;
 	}
 
@@ -906,7 +890,7 @@ TEST__mapAV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 
 			fid = st_apev2_gs_getFieldProp_id(pFProps);
 			if (expFID != -1 && fid != expFID) {
-				TEST__prf(pFnc, "error: couldn't map field "
+				TEST_FCOM__prf(pFnc, "error: couldn't map field "
 						"[ID mismatch: exp %d, got %d]",
 						(int)expFID, (int)fid);
 				res = ST_ERR_FAIL;
@@ -915,24 +899,24 @@ TEST__mapAV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 
 				pIDstr = st_apev2_gs_getFieldProp_idStr(pFProps);
 				if (pIDstr == NULL) {
-					TEST__prf(pFnc, "error: couldn't map field [ID-String empty]");
+					TEST_FCOM__prf(pFnc, "error: couldn't map field [ID-String empty]");
 					res = ST_ERR_FAIL;
 				}
 				if (res == ST_ERR_SUCC && pExpFIDstr != NULL &&
 						strcasecmp((const char*)pIDstr, (const char*)pExpFIDstr) != 0) {
-					TEST__prf(pFnc, "error: couldn't map field "
+					TEST_FCOM__prf(pFnc, "error: couldn't map field "
 							"[ID-String mismatch: '%s' != '%s']",
 							pIDstr, pExpFIDstr);
 					res = ST_ERR_FAIL;
 				}
 				if (res == ST_ERR_SUCC) {
-					TEST__prf(pFnc, " [ID=%3d,  IDstr='%s',  mode=%c,  fnr=%2d]",
+					TEST_FCOM__prf(pFnc, " [ID=%3d,  IDstr='%s',  mode=%c,  fnr=%2d]",
 							fid, (pIDstr == NULL ? "" : (char const*)pIDstr),
 							(mode ? 'A' : 'S'), fnr);
 				}
 			}
 		} else {
-			TEST__prf(pFnc, "error: st_apev2_gs_getField_props() failed");
+			TEST_FCOM__prf(pFnc, "error: st_apev2_gs_getField_props() failed");
 		}
 	}
 	return (res == ST_ERR_SUCC);
@@ -945,9 +929,9 @@ TEST__mapAV2_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
  * Tests ...
  */
 Tst_bool
-TEST__06_mapAV2_id(void)
+TEST_TFLDMAP__06_mapAV2_id(void)
 {
-	const char *cFNCN = "TEST__06_mapAV2_id";
+	const char *cFNCN = __func__;
 	Tst_bool  bres;
 	Tst_err   res;
 	Tst_int32 fid;
@@ -958,7 +942,7 @@ TEST__06_mapAV2_id(void)
 	Tst_binobj            bindat;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping APEv2 Tag Fields to APEv2 Tag Fields by ID...");
+	TEST_FCOM__prf(cFNCN, "Mapping APEv2 Tag Fields to APEv2 Tag Fields by ID...");
 
 	st_binobj_stc_initBO(&bindat);
 	st_apev2_stc_rsetFPr(&fprops);
@@ -969,7 +953,7 @@ TEST__06_mapAV2_id(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -979,20 +963,20 @@ TEST__06_mapAV2_id(void)
 		const Tst_int32 fnr = -1;
 
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_APEV2_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_APEV2_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
 				fnr, /*useIDorIDStr:*/ST_B_TRUE, (Tst_apev2_frID)fid, NULL);
 		if (! bres) {
 			break;
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdata, &fprops);
 		if (! bres) {
-			TEST__prf(cFNCN, "notice: TEST__mapAV2_mapAndCheckBasics() failed on purpose");
-			/*TEST__prf(cFNCN, "error: TEST__mapAV2_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "notice: TEST_TFLDMAP__mapAV2_mapAndCheckBasics() failed on purpose");
+			/*TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapAV2_mapAndCheckBasics() failed");
 			break;*/
 		}
 
@@ -1003,19 +987,19 @@ TEST__06_mapAV2_id(void)
 		}
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_int() failed");
+			TEST_FCOM__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_int() failed");
 			break;
 		}
 
 		if (fid != (Tst_int32)ST_APEV2_FID_NONE && fid != (Tst_int32)ST_APEV2_FID_CTXT) {
 			/* shouldn't fail */
-			bres = TEST__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
+			bres = TEST_TFLDMAP__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
 					/*expModeAoS:*/(fid % 2 == 0), fnr, (Tst_apev2_frID)fid, NULL,
 					/*expIsOK:*/ST_B_TRUE,
 					&fdata, &fprops);
 		} else {
 			/* shouldn't fail, but get mapped to COMM */
-			bres = TEST__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
+			bres = TEST_TFLDMAP__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
 					/*expModeAoS:*/(fid % 2 == 0), fnr, ST_APEV2_FID_COMM, NULL,
 					/*expIsOK:*/ST_B_FALSE,
 					&fdata, &fprops);
@@ -1025,7 +1009,7 @@ TEST__06_mapAV2_id(void)
 		}
 	}
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -1040,9 +1024,9 @@ TEST__06_mapAV2_id(void)
  * Tests ...
  */
 Tst_bool
-TEST__07_mapAV2_cust(void)
+TEST_TFLDMAP__07_mapAV2_cust(void)
 {
-	const char *cFNCN = "TEST__07_mapAV2_cust";
+	const char *cFNCN = __func__;
 	Tst_bool   bres;
 	Tst_err    res;
 	Tst_int32  fnr = 1;
@@ -1057,7 +1041,7 @@ TEST__07_mapAV2_cust(void)
 	Tst_binobj            bindat;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping APEv2 Tag Fields to (custom) APEv2 Tag Fields...");
+	TEST_FCOM__prf(cFNCN, "Mapping APEv2 Tag Fields to (custom) APEv2 Tag Fields...");
 
 	st_binobj_stc_initBO(&bindat);
 	st_apev2_stc_rsetFPr(&fprops);
@@ -1068,7 +1052,7 @@ TEST__07_mapAV2_cust(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -1086,7 +1070,7 @@ TEST__07_mapAV2_cust(void)
 				pFIDstrIn = "DISCTOTAL";   pFIDstrOut = "DISCTOTAL";   fid = ST_APEV2_FID_DSCT;
 		}
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_APEV2_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_APEV2_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
 				fnr, /*useIDorIDStr:*/ST_B_FALSE, ST_APEV2_FID_NONE,
 				(Tst_str const*)pFIDstrIn);
 		if (! bres) {
@@ -1094,13 +1078,13 @@ TEST__07_mapAV2_cust(void)
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdata, &fprops);
 		if (! bres) {
-			TEST__prf(cFNCN, "notice: TEST__mapAV2_mapAndCheckBasics() failed on purpose");
-			/*TEST__prf(cFNCN, "error: TEST__mapAV2_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "notice: TEST_TFLDMAP__mapAV2_mapAndCheckBasics() failed on purpose");
+			/*TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapAV2_mapAndCheckBasics() failed");
 			break;*/
 		}
 
@@ -1111,12 +1095,12 @@ TEST__07_mapAV2_cust(void)
 		}
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: setting field data failed");
+			TEST_FCOM__prf(cFNCN, "error: setting field data failed");
 			break;
 		}
 
 		/* shouldn't fail */
-		bres = TEST__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, (Tst_str const*)pFIDstrOut,
 				/*expIsOK:*/ST_B_TRUE,
 				&fdata, &fprops);
@@ -1125,7 +1109,7 @@ TEST__07_mapAV2_cust(void)
 		}
 	}
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -1140,9 +1124,9 @@ TEST__07_mapAV2_cust(void)
  * Tests ...
  */
 Tst_bool
-TEST__08_mapAV2_fromIv2(void)
+TEST_TFLDMAP__08_mapAV2_fromIv2(void)
 {
-	const char *cFNCN = "TEST__08_mapAV2_fromIv2";
+	const char *cFNCN = __func__;
 	Tst_bool   bres;
 	Tst_err    res;
 	Tst_uint32 x;
@@ -1156,7 +1140,7 @@ TEST__08_mapAV2_fromIv2(void)
 	Tst_binobj            bindat;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping ID3v2 Tag Fields to APEv2 Tag Fields...");
+	TEST_FCOM__prf(cFNCN, "Mapping ID3v2 Tag Fields to APEv2 Tag Fields...");
 
 	st_binobj_stc_initBO(&bindat);
 	st_apev2_stc_rsetFPr(&fpropsAV2);
@@ -1167,7 +1151,7 @@ TEST__08_mapAV2_fromIv2(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -1189,7 +1173,7 @@ TEST__08_mapAV2_fromIv2(void)
 				pFIDstrInIV2 = "COMM";  pFIDstrOutAV2 = "COMMENT";  fidAV2 = ST_APEV2_FID_COMM;
 		}
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_ID3V2_TAG_NAME_SH, /*modeAoS:*/ST_B_TRUE,
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_ID3V2_TAG_NAME_SH, /*modeAoS:*/ST_B_TRUE,
 				-1, /*useIDorIDStr:*/ST_B_FALSE, -1,
 				(Tst_str const*)pFIDstrInIV2);
 		if (! bres) {
@@ -1197,12 +1181,12 @@ TEST__08_mapAV2_fromIv2(void)
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/ST_B_TRUE, -1, -1, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdataAV2, &fpropsAV2);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapAV2_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapAV2_mapAndCheckBasics() failed");
 			break;
 		}
 
@@ -1213,12 +1197,12 @@ TEST__08_mapAV2_fromIv2(void)
 		}
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: setting field data failed");
+			TEST_FCOM__prf(cFNCN, "error: setting field data failed");
 			break;
 		}
 
 		/* shouldn't fail */
-		bres = TEST__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapAV2_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/ST_B_TRUE, -1, fidAV2, (const Tst_str*)pFIDstrOutAV2,
 				/*expIsOK:*/ST_B_TRUE,
 				&fdataAV2, &fpropsAV2);
@@ -1228,7 +1212,7 @@ TEST__08_mapAV2_fromIv2(void)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -1241,7 +1225,7 @@ TEST__08_mapAV2_fromIv2(void)
 /*----------------------------------------------------------------------------*/
 
 static Tst_bool
-TEST__mapVOR_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
+TEST_TFLDMAP__mapVOR_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 		const Tst_bool expModeAoS, const Tst_int32 expFNr,
 		const Tst_vorbc_frID expFID, const Tst_str *pExpFIDstr,
 		const Tst_bool expIsOK,
@@ -1255,22 +1239,22 @@ TEST__mapVOR_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 
 	res = st_tagFldMap_mapToVOR(pGTF, pFData, &mode, &fnr, &isOK);
 	if (res == ST_ERR_SUCC && ! isOK && expIsOK) {
-		TEST__prf(pFnc, "error: couldn't map field [isOK mismatch: exp T]");
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [isOK mismatch: exp T]");
 		res = ST_ERR_FAIL;
 	} else if (res == ST_ERR_SUCC && isOK && mode != expModeAoS) {
-		TEST__prf(pFnc, "error: couldn't map field [mode mismatch: exp %c]",
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [mode mismatch: exp %c]",
 				(expModeAoS ? 'A' : 'S'));
 		res = ST_ERR_FAIL;
 	} else if (res == ST_ERR_SUCC && isOK && expModeAoS && fnr != -1) {
-		TEST__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
 				-1, fnr);
 		res = ST_ERR_FAIL;
 	} else if (res == ST_ERR_SUCC && isOK && ! expModeAoS && fnr != expFNr) {
-		TEST__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
+		TEST_FCOM__prf(pFnc, "error: couldn't map field [fnr mismatch: exp %d, got %d]",
 				expFNr, fnr);
 		res = ST_ERR_FAIL;
 	} else if (res != ST_ERR_SUCC) {
-		TEST__prf(pFnc, "error: st_tagFldMap_mapToVOR() failed");
+		TEST_FCOM__prf(pFnc, "error: st_tagFldMap_mapToVOR() failed");
 		res = ST_ERR_FAIL;
 	}
 
@@ -1281,31 +1265,31 @@ TEST__mapVOR_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
 
 			fid = st_vorbc_gs_getFieldProp_id(pFProps);
 			if (expFID != -1 && fid != expFID) {
-				TEST__prf(pFnc, "error: couldn't map field "
+				TEST_FCOM__prf(pFnc, "error: couldn't map field "
 						"[ID mismatch: exp %d, got %d]",
 						(int)expFID, (int)fid);
 				res = ST_ERR_FAIL;
 			} else {
 				pIDstr = st_vorbc_gs_getFieldProp_idStr(pFProps);
 				if (pIDstr == NULL) {
-					TEST__prf(pFnc, "error: couldn't map field [ID-String empty]");
+					TEST_FCOM__prf(pFnc, "error: couldn't map field [ID-String empty]");
 					res = ST_ERR_FAIL;
 				}
 				if (res == ST_ERR_SUCC && pExpFIDstr != NULL &&
 						strcasecmp((const char*)pIDstr, (const char*)pExpFIDstr) != 0) {
-					TEST__prf(pFnc, "error: couldn't map field "
+					TEST_FCOM__prf(pFnc, "error: couldn't map field "
 							"[ID-String mismatch: '%s' != '%s']",
 							pIDstr, pExpFIDstr);
 					res = ST_ERR_FAIL;
 				}
 				if (res == ST_ERR_SUCC) {
-					TEST__prf(pFnc, " [ID=%3d,  IDstr='%s',  mode=%c,  fnr=%2d]",
+					TEST_FCOM__prf(pFnc, " [ID=%3d,  IDstr='%s',  mode=%c,  fnr=%2d]",
 							fid, (pIDstr == NULL ? "" : (char const*)pIDstr),
 							(mode ? 'A' : 'S'), fnr);
 				}
 			}
 		} else {
-			TEST__prf(pFnc, "error: st_vorbc_gs_getField_props() failed");
+			TEST_FCOM__prf(pFnc, "error: st_vorbc_gs_getField_props() failed");
 		}
 	}
 	return (res == ST_ERR_SUCC);
@@ -1318,9 +1302,9 @@ TEST__mapVOR_mapAndCheckBasics(const char *pFnc, Tst_tfldMap_genTagFld *pGTF,
  * Tests ...
  */
 Tst_bool
-TEST__11_mapVOR_id(void)
+TEST_TFLDMAP__11_mapVOR_id(void)
 {
-	const char *cFNCN = "TEST__11_mapVOR_id";
+	const char *cFNCN = __func__;
 	Tst_bool  bres;
 	Tst_err   res;
 	Tst_int32 fnr = -1,
@@ -1330,7 +1314,7 @@ TEST__11_mapVOR_id(void)
 	Tst_vorbc_fldProp     fprops;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping Vorbis Tag Fields to Vorbis Tag Fields by ID...");
+	TEST_FCOM__prf(cFNCN, "Mapping Vorbis Tag Fields to Vorbis Tag Fields by ID...");
 
 	st_vorbc_stc_rsetFPr(&fprops);
 	res  = st_vorbc_stc_initFDat(&fdata);
@@ -1340,39 +1324,39 @@ TEST__11_mapVOR_id(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
 	for (fid = 0; fid <= (Tst_int32)ST_VORBC_FID_NONE; fid++) {
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_VORBC_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_VORBC_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
 				fnr, /*useIDorIDStr:*/ST_B_TRUE, (Tst_vorbc_frID)fid, NULL);
 		if (! bres) {
 			break;
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdata, &fprops);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapVOR_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapVOR_mapAndCheckBasics() failed");
 			break;
 		}
 
 		res  = st_tagFldMap_gs_setDataStr_int(&gtf, 100);
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_int() failed");
+			TEST_FCOM__prf(cFNCN, "error: st_tagFldMap_gs_setDataStr_int() failed");
 			break;
 		}
 
 		if (fid != (Tst_int32)ST_VORBC_FID_NONE &&
 				fid != (Tst_int32)ST_VORBC_FID_CTXT) {
 			/* shouldn't fail */
-			bres = TEST__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
+			bres = TEST_TFLDMAP__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
 					/*expModeAoS:*/(fid % 2 == 0), fnr, (Tst_vorbc_frID)fid, NULL,
 					/*expIsOK:*/ST_B_TRUE,
 					&fdata, &fprops);
@@ -1380,7 +1364,7 @@ TEST__11_mapVOR_id(void)
 					// ReSharper disable once CppDFAConstantConditions
 					fid == (Tst_int32)ST_VORBC_FID_NONE) {
 			/* shouldn't fail, but get mapped to COMM */
-			bres = TEST__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
+			bres = TEST_TFLDMAP__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
 					/*expModeAoS:*/(fid % 2 == 0), fnr, ST_VORBC_FID_DESC, NULL,
 					/*expIsOK:*/ST_B_FALSE,
 					&fdata, &fprops);
@@ -1390,7 +1374,7 @@ TEST__11_mapVOR_id(void)
 		}
 	}
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -1404,9 +1388,9 @@ TEST__11_mapVOR_id(void)
  * Tests ...
  */
 Tst_bool
-TEST__12_mapVOR_cust(void)
+TEST_TFLDMAP__12_mapVOR_cust(void)
 {
-	const char *cFNCN = "TEST__12_mapVOR_cust";
+	const char *cFNCN = __func__;
 	Tst_bool   bres;
 	Tst_err    res;
 	Tst_uint32 x;
@@ -1418,7 +1402,7 @@ TEST__12_mapVOR_cust(void)
 	Tst_vorbc_frID        fid;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping Vorbis Tag Fields to (custom) Vorbis Tag Fields...");
+	TEST_FCOM__prf(cFNCN, "Mapping Vorbis Tag Fields to (custom) Vorbis Tag Fields...");
 
 	st_vorbc_stc_rsetFPr(&fprops);
 	res  = st_vorbc_stc_initFDat(&fdata);
@@ -1428,7 +1412,7 @@ TEST__12_mapVOR_cust(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -1444,7 +1428,7 @@ TEST__12_mapVOR_cust(void)
 				pFIDstrIn = "DISCTOTAL";   pFIDstrOut = "DISCTOTAL";   fid = ST_VORBC_FID_DSCT;
 		}
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_VORBC_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_VORBC_TAG_NAME_SH, /*modeAoS:*/(fid % 2 == 0),
 				fnr, /*useIDorIDStr:*/ST_B_FALSE, ST_VORBC_FID_NONE,
 				(Tst_str const*)pFIDstrIn);
 		if (! bres) {
@@ -1452,24 +1436,24 @@ TEST__12_mapVOR_cust(void)
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdata, &fprops);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapVOR_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapVOR_mapAndCheckBasics() failed");
 			break;
 		}
 
 		res  = st_tagFldMap_gs_setDataStr_pos(&gtf, 100, -1);
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: setting field data failed");
+			TEST_FCOM__prf(cFNCN, "error: setting field data failed");
 			break;
 		}
 
 		/* shouldn't fail */
-		bres = TEST__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/(fid % 2 == 0), fnr, fid, (Tst_str const*)pFIDstrOut,
 				/*expIsOK:*/ST_B_TRUE,
 				&fdata, &fprops);
@@ -1478,7 +1462,7 @@ TEST__12_mapVOR_cust(void)
 		}
 	}
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);
@@ -1492,9 +1476,9 @@ TEST__12_mapVOR_cust(void)
  * Tests ...
  */
 Tst_bool
-TEST__13_mapVOR_fromIv2(void)
+TEST_TFLDMAP__13_mapVOR_fromIv2(void)
 {
-	const char *cFNCN = "TEST__13_mapVOR_fromIv2";
+	const char *cFNCN = __func__;
 	Tst_bool   bres;
 	Tst_err    res;
 	Tst_uint32 x;
@@ -1506,7 +1490,7 @@ TEST__13_mapVOR_fromIv2(void)
 	Tst_vorbc_frID        fidVOR;
 
 	/* */
-	TEST__prf(cFNCN, "Mapping ID3v2 Tag Fields to Vorbis Tag Fields...");
+	TEST_FCOM__prf(cFNCN, "Mapping ID3v2 Tag Fields to Vorbis Tag Fields...");
 
 	st_vorbc_stc_rsetFPr(&fpropsVOR);
 	res  = st_vorbc_stc_initFDat(&fdataVOR);
@@ -1516,7 +1500,7 @@ TEST__13_mapVOR_fromIv2(void)
 		bres = (res == ST_ERR_SUCC);
 	}
 	if (! bres) {
-		TEST__prf(cFNCN, "error: init structs failed");
+		TEST_FCOM__prf(cFNCN, "error: init structs failed");
 		return ST_B_FALSE;
 	}
 
@@ -1534,7 +1518,7 @@ TEST__13_mapVOR_fromIv2(void)
 				pFIDstrInIV2 = "CoMM";  pFIDstrOutVOR = "description";  fidVOR = ST_VORBC_FID_DESC;
 		}
 		/* set basics: Mode, FldNr, ID */
-		bres = TEST__map_setBasics(&gtf, ST_ID3V2_TAG_NAME_SH, /*modeAoS:*/ST_B_TRUE,
+		bres = TEST_TFLDMAP__map_setBasics(&gtf, ST_ID3V2_TAG_NAME_SH, /*modeAoS:*/ST_B_TRUE,
 				-1, /*useIDorIDStr:*/ST_B_FALSE, -1,
 				(Tst_str const*)pFIDstrInIV2);
 		if (! bres) {
@@ -1542,24 +1526,24 @@ TEST__13_mapVOR_fromIv2(void)
 		}
 
 		/* should fail: no data/attributes set */
-		bres = TEST__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/ST_B_TRUE, -1, -1, NULL,
 				/*expIsOK:*/ST_B_FALSE,
 				&fdataVOR, &fpropsVOR);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: TEST__mapVOR_mapAndCheckBasics() failed");
+			TEST_FCOM__prf(cFNCN, "error: TEST_TFLDMAP__mapVOR_mapAndCheckBasics() failed");
 			break;
 		}
 
 		res  = st_tagFldMap_gs_setDataStr_pos(&gtf, 100, -1);
 		bres = (res == ST_ERR_SUCC);
 		if (! bres) {
-			TEST__prf(cFNCN, "error: setting field data failed");
+			TEST_FCOM__prf(cFNCN, "error: setting field data failed");
 			break;
 		}
 
 		/* shouldn't fail */
-		bres = TEST__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
+		bres = TEST_TFLDMAP__mapVOR_mapAndCheckBasics(cFNCN, &gtf,
 				/*expModeAoS:*/ST_B_TRUE, -1, fidVOR, (const Tst_str*)pFIDstrOutVOR,
 				/*expIsOK:*/ST_B_TRUE,
 				&fdataVOR, &fpropsVOR);
@@ -1569,7 +1553,7 @@ TEST__13_mapVOR_fromIv2(void)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	st_tagFldMap_stc_freeGTF(&gtf);

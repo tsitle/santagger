@@ -23,27 +23,23 @@
 #endif
 /** */
 #include "src/includes/common/sys_fnc.h"
+#include "fncs_test_common.h"
 
 /*
 // System-Includes
 */
-#include <stdarg.h> /* va_list, ... */
 #include <stdlib.h> /* exit(), calloc(), getenv() */
 #include <string.h>
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-void TEST__prf(const char *pFnc, const char *pMsg, ...);
-void TEST__prf32(const char *pFnc, const char *pMsg, Tst_uint32 v32);
-void TEST__prf32dec(const char *pFnc, const char *pMsg, Tst_uint32 v32);
-/* */
-Tst_bool TEST__0_rndInt(void);
-Tst_bool TEST__1_rndDbl(void);
-Tst_bool TEST__2_time(void);
-Tst_bool TEST__3_byteOrder(void);
-Tst_bool TEST__4_bufSearch(void);
-Tst_bool TEST__5_strings(void);
+Tst_bool TEST_SYSFNC__0_rndInt(void);
+Tst_bool TEST_SYSFNC__1_rndDbl(void);
+Tst_bool TEST_SYSFNC__2_time(void);
+Tst_bool TEST_SYSFNC__3_byteOrder(void);
+Tst_bool TEST_SYSFNC__4_bufSearch(void);
+Tst_bool TEST_SYSFNC__5_strings(void);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -51,60 +47,44 @@ Tst_bool TEST__5_strings(void);
 int
 main(const int argc, const char *argv[])
 {
-	if (! TEST__0_rndInt()) {
+	if (! TEST_SYSFNC__0_rndInt()) {
 		printf("! Test failed !\n");
 		return 1;
 	}
 	printf("\n");
 
-	if (! TEST__1_rndDbl()) {
+	if (! TEST_SYSFNC__1_rndDbl()) {
 		printf("! Test failed !\n");
 		return 1;
 	}
 	printf("\n");
 
-	if (! TEST__2_time()) {
+	if (! TEST_SYSFNC__2_time()) {
 		printf("! Test failed !\n");
 		return 1;
 	}
 	printf("\n");
 
-	if (! TEST__3_byteOrder()) {
+	if (! TEST_SYSFNC__3_byteOrder()) {
 		printf("! Test failed !\n");
 		return 1;
 	}
 	printf("\n");
 
-	if (! TEST__4_bufSearch()) {
+	if (! TEST_SYSFNC__4_bufSearch()) {
 		printf("! Test failed !\n");
 		return 1;
 	}
 	printf("\n");
 
-	if (! TEST__5_strings()) {
+	if (! TEST_SYSFNC__5_strings()) {
 		printf("! Test failed !\n");
 		return 1;
 	}
 	printf("\n");
 
-	printf("All tests passed :-)\n");
+	printf("TEST_SYSFNC -- All tests passed :-)\n");
 	return 0;
-}
-
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-
-void
-TEST__prf(const char *pFnc, const char *pMsg, ...)
-{
-	char    msgBuf[1024];
-	va_list args;
-
-	va_start(args, pMsg);
-
-	vsnprintf(msgBuf, sizeof(msgBuf), pMsg, args);
-	printf("%s(): %s\n", pFnc, msgBuf);
-	va_end(args);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -114,7 +94,7 @@ TEST__prf(const char *pFnc, const char *pMsg, ...)
  * Tests st_sysGetRand()
  */
 Tst_bool
-TEST__0_rndInt(void)
+TEST_SYSFNC__0_rndInt(void)
 {
 	const char *cFNCN = __func__;
 	const Tst_uint32 cLOWER = 100;
@@ -125,13 +105,13 @@ TEST__0_rndInt(void)
 	for (x = 0; x < (cUPPER - cLOWER) * 5; x++) {
 		val = st_sysGetRand(cLOWER, cUPPER);
 		if (val < cLOWER || val > cUPPER) {
-			TEST__prf(cFNCN, "error: val %u not in range %u .. %u", val, cLOWER, cUPPER);
+			TEST_FCOM__prf(cFNCN, "error: val %u not in range %u .. %u", val, cLOWER, cUPPER);
 			return ST_B_FALSE;
 		}
-		TEST__prf(cFNCN, "- val %u", val);
+		TEST_FCOM__prf(cFNCN, "- val %u", val);
 	}
 
-	TEST__prf(cFNCN, "OK");
+	TEST_FCOM__prf(cFNCN, "OK");
 
 	return ST_B_TRUE;
 }
@@ -142,7 +122,7 @@ TEST__0_rndInt(void)
  * Tests st_sysGetRand()
  */
 Tst_bool
-TEST__1_rndDbl(void)
+TEST_SYSFNC__1_rndDbl(void)
 {
 	const char *cFNCN = __func__;
 	const double cLOWER = 100.0f;
@@ -153,13 +133,13 @@ TEST__1_rndDbl(void)
 	for (x = 0; x < (Tst_uint32)(cUPPER - cLOWER) * 5; x++) {
 		val = st_sysGetRandDbl(cLOWER, cUPPER);
 		if (val < cLOWER || val > cUPPER) {
-			TEST__prf(cFNCN, "error: val %f not in range %f .. %f", val, cLOWER, cUPPER);
+			TEST_FCOM__prf(cFNCN, "error: val %f not in range %f .. %f", val, cLOWER, cUPPER);
 			return ST_B_FALSE;
 		}
-		TEST__prf(cFNCN, "- val %f", val);
+		TEST_FCOM__prf(cFNCN, "- val %f", val);
 	}
 
-	TEST__prf(cFNCN, "OK");
+	TEST_FCOM__prf(cFNCN, "OK");
 
 	return ST_B_TRUE;
 }
@@ -171,7 +151,7 @@ TEST__1_rndDbl(void)
  *       st_sysSleepMS()
  */
 Tst_bool
-TEST__2_time(void)
+TEST_SYSFNC__2_time(void)
 {
 	const char *cFNCN = __func__;
 	double time1;
@@ -183,10 +163,10 @@ TEST__2_time(void)
 	time2 = st_sysGetTime();
 
 	if (time2 - time1 < 0.49 || time2 - time1 > 0.6) {
-		TEST__prf(cFNCN, "error: time delta mismatch (is=%.f, exp=0.5)", time2 - time1);
+		TEST_FCOM__prf(cFNCN, "error: time delta mismatch (is=%.f, exp=0.5)", time2 - time1);
 		return ST_B_FALSE;
 	}
-	TEST__prf(cFNCN, "time delta = %.2f", time2 - time1);
+	TEST_FCOM__prf(cFNCN, "time delta = %.2f", time2 - time1);
 
 	//
 	time1 = st_sysGetTime();
@@ -194,13 +174,13 @@ TEST__2_time(void)
 	time2 = st_sysGetTime();
 
 	if (time2 - time1 < 0.749 || time2 - time1 > 0.8) {
-		TEST__prf(cFNCN, "error: time delta mismatch (is=%.f, exp=0.75)", time2 - time1);
+		TEST_FCOM__prf(cFNCN, "error: time delta mismatch (is=%.f, exp=0.75)", time2 - time1);
 		return ST_B_FALSE;
 	}
-	TEST__prf(cFNCN, "time delta = %.2f", time2 - time1);
+	TEST_FCOM__prf(cFNCN, "time delta = %.2f", time2 - time1);
 
 	//
-	TEST__prf(cFNCN, "OK");
+	TEST_FCOM__prf(cFNCN, "OK");
 
 	return ST_B_TRUE;
 }
@@ -213,7 +193,7 @@ TEST__2_time(void)
  *       st_sysReverseByteOrder_LL()
  */
 Tst_bool
-TEST__3_byteOrder(void)
+TEST_SYSFNC__3_byteOrder(void)
 {
 	const char *cFNCN = __func__;
 	const Tst_uint16 cINP_UI16_S = 0x1234;
@@ -230,14 +210,14 @@ TEST__3_byteOrder(void)
 	//
 	testUI16 = st_sysReverseByteOrder_UI16(cINP_UI16_S);
 	if (testUI16 != cINP_UI16_T) {
-		TEST__prf(cFNCN, "error: st_sysReverseByteOrder_UI16() failed (is=0x%04X, exp=0x%04X)", testUI16, cINP_UI16_T);
+		TEST_FCOM__prf(cFNCN, "error: st_sysReverseByteOrder_UI16() failed (is=0x%04X, exp=0x%04X)", testUI16, cINP_UI16_T);
 		return ST_B_FALSE;
 	}
 
 	//
 	testUI32 = st_sysReverseByteOrder_UI32(cINP_UI32_S);
 	if (testUI32 != cINP_UI32_T) {
-		TEST__prf(cFNCN, "error: st_sysReverseByteOrder_UI32() failed (is=0x%08X, exp=0x%08X)", testUI32, cINP_UI32_T);
+		TEST_FCOM__prf(cFNCN, "error: st_sysReverseByteOrder_UI32() failed (is=0x%08X, exp=0x%08X)", testUI32, cINP_UI32_T);
 		return ST_B_FALSE;
 	}
 
@@ -246,12 +226,12 @@ TEST__3_byteOrder(void)
 	memcpy(cmpUI64Buf, cINP_UI64_T, sizeof(cmpUI64Buf));
 	st_sysReverseByteOrder_LL(testUI64Buf, sizeof(testUI64Buf));
 	if (memcmp(testUI64Buf, cmpUI64Buf, sizeof(testUI64Buf)) != 0) {
-		TEST__prf(cFNCN, "error: st_sysReverseByteOrder_LL() failed");
+		TEST_FCOM__prf(cFNCN, "error: st_sysReverseByteOrder_LL() failed");
 		return ST_B_FALSE;
 	}
 
 	//
-	TEST__prf(cFNCN, "OK");
+	TEST_FCOM__prf(cFNCN, "OK");
 
 	return ST_B_TRUE;
 }
@@ -262,7 +242,7 @@ TEST__3_byteOrder(void)
  * Tests st_sysBufSearch()
  */
 Tst_bool
-TEST__4_bufSearch(void)
+TEST_SYSFNC__4_bufSearch(void)
 {
 	const char *cFNCN = __func__;
 	const Tst_buf cINP_BIG[8] = {0x12, 0x34, 0x56, 0x78, 0xA1, 0xB2, 0xC3, 0xD4};
@@ -276,33 +256,33 @@ TEST__4_bufSearch(void)
 	//
 	fnd = st_sysBufSearch(cINP_BIG, sizeof(cINP_BIG), cINP_SUB1, sizeof(cINP_SUB1), &offs);
 	if (! fnd || offs != 3) {
-		TEST__prf(cFNCN, "error: st_sysBufSearch() failed (sub1)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysBufSearch() failed (sub1)");
 		return ST_B_FALSE;
 	}
 
 	//
 	fnd = st_sysBufSearch(cINP_BIG, sizeof(cINP_BIG), cINP_SUB2, sizeof(cINP_SUB2), &offs);
 	if (! fnd || offs != 1) {
-		TEST__prf(cFNCN, "error: st_sysBufSearch() failed (sub2)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysBufSearch() failed (sub2)");
 		return ST_B_FALSE;
 	}
 
 	// expect fail
 	fnd = st_sysBufSearch(cINP_BIG, sizeof(cINP_BIG), cINP_SUB3, sizeof(cINP_SUB3), &offs);
 	if (fnd) {
-		TEST__prf(cFNCN, "error: st_sysBufSearch() failed (sub3)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysBufSearch() failed (sub3)");
 		return ST_B_FALSE;
 	}
 
 	//
 	fnd = st_sysBufSearch(cINP_BIG, sizeof(cINP_BIG), cINP_SUB4, sizeof(cINP_SUB4), &offs);
 	if (! fnd || offs != 0) {
-		TEST__prf(cFNCN, "error: st_sysBufSearch() failed (sub4)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysBufSearch() failed (sub4)");
 		return ST_B_FALSE;
 	}
 
 	//
-	TEST__prf(cFNCN, "OK");
+	TEST_FCOM__prf(cFNCN, "OK");
 
 	return ST_B_TRUE;
 }
@@ -319,7 +299,7 @@ TEST__4_bufSearch(void)
  *       st_sysStrcmpN()
  */
 Tst_bool
-TEST__5_strings(void)
+TEST_SYSFNC__5_strings(void)
 {
 	const char *cFNCN = __func__;
 	Tst_uint32 resI;
@@ -330,119 +310,119 @@ TEST__5_strings(void)
 	//
 	resI = st_sysStrlen((const Tst_str*)"abcd");
 	if (resI != 4) {
-		TEST__prf(cFNCN, "error: st_sysStrlen() failed (t1)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrlen() failed (t1)");
 		return ST_B_FALSE;
 	}
 
 	//
 	resI = st_sysStrlen(NULL);
 	if (resI != 0) {
-		TEST__prf(cFNCN, "error: st_sysStrlen() failed (t2)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrlen() failed (t2)");
 		return ST_B_FALSE;
 	}
 
 	//
 	resE = st_sysStrcpy((const Tst_str*)"abcd", &pTemp);
 	if (resE != ST_ERR_SUCC) {
-		TEST__prf(cFNCN, "error: st_sysStrcpy() failed (t3-a)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcpy() failed (t3-a)");
 		return ST_B_FALSE;
 	}
 	resB = st_sysStrcmp(ST_B_TRUE, (const Tst_str*)"abcd", pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysStrcmp() failed (t3-b)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcmp() failed (t3-b)");
 		return ST_B_FALSE;
 	}
 	resB = st_sysStrcmp(ST_B_FALSE, (const Tst_str*)"aBcD", pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysStrcmp() failed (t3-c)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcmp() failed (t3-c)");
 		return ST_B_FALSE;
 	}
 	resB = st_sysStrcmp(ST_B_FALSE, (const Tst_str*)"aBcDe", pTemp);
 	if (resB) {
-		TEST__prf(cFNCN, "error: st_sysStrcmp() failed (t3-d)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcmp() failed (t3-d)");
 		return ST_B_FALSE;
 	}
 	resB = st_sysStrcmpN(ST_B_FALSE, 2, (const Tst_str*)"aB", pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysStrcmpN() failed (t3-e)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcmpN() failed (t3-e)");
 		return ST_B_FALSE;
 	}
 	resB = st_sysStrcmpN(ST_B_FALSE, 2, pTemp, (const Tst_str*)"aB");
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysStrcmpN() failed (t3-f)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcmpN() failed (t3-f)");
 		return ST_B_FALSE;
 	}
 	resB = st_sysStrcmpN(ST_B_FALSE, st_sysStrlen(pTemp), pTemp, (const Tst_str*)"aBcDeF");
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysStrcmpN() failed (t3-g)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcmpN() failed (t3-g)");
 		return ST_B_FALSE;
 	}
 
 	//
 	resE = st_sysStrcpy(NULL, &pTemp);
 	if (resE != ST_ERR_SUCC) {
-		TEST__prf(cFNCN, "error: st_sysStrcpy() failed (t4-a)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcpy() failed (t4-a)");
 		return ST_B_FALSE;
 	}
 	resB = st_sysStrcmp(ST_B_TRUE, (const Tst_str*)"", pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysStrcmp() failed (t4-b)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcmp() failed (t4-b)");
 		return ST_B_FALSE;
 	}
 	resI = st_sysStrlen(pTemp);
 	if (resI != 0) {
-		TEST__prf(cFNCN, "error: st_sysStrlen() failed (t4-c)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrlen() failed (t4-c)");
 		return ST_B_FALSE;
 	}
 
 	//
 	resE = st_sysStrcpy((const Tst_str*)"12345678", &pTemp);
 	if (resE != ST_ERR_SUCC) {
-		TEST__prf(cFNCN, "error: st_sysStrcpy() failed (t5-a)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcpy() failed (t5-a)");
 		return ST_B_FALSE;
 	}
 	resE = st_sysStrapp((const Tst_str*)"12345678", &pTemp);
 	if (resE != ST_ERR_SUCC) {
-		TEST__prf(cFNCN, "error: st_sysStrapp() failed (t5-b)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrapp() failed (t5-b)");
 		return ST_B_FALSE;
 	}
 	resE = st_sysStrapp(NULL, &pTemp);
 	if (resE != ST_ERR_SUCC) {
-		TEST__prf(cFNCN, "error: st_sysStrapp() failed (t5-c)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrapp() failed (t5-c)");
 		return ST_B_FALSE;
 	}
 	resB = st_sysStrcmp(ST_B_TRUE, (const Tst_str*)"1234567812345678", pTemp);
 	if (! resB) {
-		TEST__prf(cFNCN, "error: st_sysStrcmp() failed (t5-d)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcmp() failed (t5-d)");
 		return ST_B_FALSE;
 	}
 
 	// expect fail
 	resB = st_sysStrcmp(ST_B_TRUE, NULL, NULL);
 	if (resB) {
-		TEST__prf(cFNCN, "error: st_sysStrcmp() failed (t6)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcmp() failed (t6)");
 		return ST_B_FALSE;
 	}
 
 	//
 	resE = st_sysStrcpy((const Tst_str*)"abcdEFGH", &pTemp);
 	if (resE != ST_ERR_SUCC) {
-		TEST__prf(cFNCN, "error: st_sysStrcpy() failed (t7-a)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrcpy() failed (t7-a)");
 		return ST_B_FALSE;
 	}
 	st_sysStrToUpper(pTemp);
 	if (! st_sysStrcmp(ST_B_TRUE, (const Tst_str*)"ABCDEFGH", pTemp)) {
-		TEST__prf(cFNCN, "error: st_sysStrToUpper() failed (t7-b)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrToUpper() failed (t7-b)");
 		return ST_B_FALSE;
 	}
 	st_sysStrToLower(pTemp);
 	if (! st_sysStrcmp(ST_B_TRUE, (const Tst_str*)"abcdefgh", pTemp)) {
-		TEST__prf(cFNCN, "error: st_sysStrToUpper() failed (t7-c)");
+		TEST_FCOM__prf(cFNCN, "error: st_sysStrToUpper() failed (t7-c)");
 		return ST_B_FALSE;
 	}
 
 	//
-	TEST__prf(cFNCN, "OK");
+	TEST_FCOM__prf(cFNCN, "OK");
 
 	return ST_B_TRUE;
 }

@@ -19,12 +19,13 @@
 // Own-Includes
 */
 #ifdef HAVE_CONFIG_H
-#	include <config.h>
+	#include <config.h>
 #endif
 /** */
 #include "src/includes/common/sys_file.h"
 #include "src/includes/common/sys_fnc.h"
 #include "src/includes/common/dynlist.h"
+#include "fncs_test_common.h"
 
 /*
 // System-Includes
@@ -38,58 +39,59 @@
 
 #define RUN_TEST_ANY  1
 #if (RUN_TEST_ANY == 1)
-#	define RUN_TEST_0   1
-#	define RUN_TEST_1   1
-#	define RUN_TEST_2   1
-#	define RUN_TEST_3   1
-#	define RUN_TEST_4   1
-#	define RUN_TEST_5   1
-#	define RUN_TEST_6   1
-#	define RUN_TEST_7   1
-#	define RUN_BENCH_1  1
+	#define RUN_TEST_0   1
+	#define RUN_TEST_1   1
+	#define RUN_TEST_2   1
+	#define RUN_TEST_3   1
+	#define RUN_TEST_4   1
+	#define RUN_TEST_5   1
+	#define RUN_TEST_6   1
+	#define RUN_TEST_7   1
+	#define RUN_BENCH_1  1
 #endif
 
 typedef struct {
 	Tst_bool   asc;    /* ascending or descending ? */
 	Tst_uint32 comps;  /* comparisons count */
-} Ttest__sort;
+} TtestDl__sort;
 
 typedef enum {
 	TEST_DIR_ASC  = 0,  /* ascending */
 	TEST_DIR_DSC  = 1,  /* descending */
 	TEST_DIR_NONE = 2
-} Ttest__dir;
+} TtestDl__dir;
 
 #if (RUN_TEST_0 == 1)
-Tst_bool TEST__0(void);
+	Tst_bool TEST_DL__0(void);
 #endif
 #if (RUN_TEST_1 == 1)
-Tst_bool TEST__1(void);
+	Tst_bool TEST_DL__1(void);
 #endif
 #if (RUN_TEST_2 == 1)
-Tst_bool TEST__2(void);
+	Tst_bool TEST_DL__2(void);
 #endif
 #if (RUN_TEST_3 == 1)
-Tst_bool TEST__3(void);
+	Tst_bool TEST_DL__3(void);
 #endif
 #if (RUN_TEST_4 == 1)
-Tst_bool TEST__4(void);
+	Tst_bool TEST_DL__4(void);
 #endif
 #if (RUN_TEST_5 == 1)
-Tst_bool TEST__5(void);
+	Tst_bool TEST_DL__5(void);
 #endif
 #if (RUN_TEST_6 == 1)
-Tst_bool TEST__6(void);
+	Tst_bool TEST_DL__6(void);
 #endif
 #if (RUN_TEST_7 == 1)
-Tst_bool TEST__7(void);
+	Tst_bool TEST_DL__7(void);
 #endif
-Tst_bool TEST__createSortFile(const Tst_str *pPath, Tst_int32 tp, Tst_uint32 sz);
-Tst_bool TEST__printSortFile(const Tst_str *pFn, Tst_dynlist *pDL);
+
+Tst_bool TEST_DL__createSortFile(const Tst_str *pPath, Tst_int32 tp, Tst_uint32 sz);
+Tst_bool TEST_DL__printSortFile(const Tst_str *pFn, Tst_dynlist *pDL);
 #if (RUN_BENCH_1 == 1)
-Tst_bool TEST__bench1(void);
+	Tst_bool TEST_DL__bench1(void);
 #endif
-Tst_bool TEST__bench2(const Tst_str *pFn, Tst_dynlist_sortAlgo algo, Ttest__dir dir);
+Tst_bool TEST_DL__bench2(const Tst_str *pFn, Tst_dynlist_sortAlgo algo, TtestDl__dir dir);
 
 #define TEST__RSET_SORT(macS)  { (macS).asc = ST_B_TRUE; (macS).comps = 0; }
 
@@ -97,7 +99,7 @@ Tst_bool TEST__bench2(const Tst_str *pFn, Tst_dynlist_sortAlgo algo, Ttest__dir 
 /*----------------------------------------------------------------------------*/
 
 void
-TEST__prUsage(const char *pExe)
+TEST_DL__prUsage(const char *pExe)
 {
 	Tst_str *pBN = NULL;
 
@@ -121,13 +123,15 @@ TEST__prUsage(const char *pExe)
 int
 main(const int argc, const char *argv[])
 {
+	// ReSharper disable once CppTooWideScope
 	const Tst_uint32 cELEMMAX = 0xffffff;
-	int          tp;
-	unsigned int sz;
-	Ttest__dir   sdir = TEST_DIR_NONE;
+	TtestDl__dir           sdir  = TEST_DIR_NONE;
 	Tst_dynlist_sortAlgo salgo = ST_DYNLIST_SA_NONE;
 
 	if (argc == 5 && strcmp(argv[1], "-c") == 0) {
+		int          tp;
+		unsigned int sz;
+
 		tp = (strcmp(argv[3], "asc") == 0 ? 0 :
 				strcmp(argv[3], "dsc") == 0 ? 1 : 2);
 		if (argv[4][0] != 0 && argv[4][0] == 'h') {
@@ -155,14 +159,14 @@ main(const int argc, const char *argv[])
 			printf("Max ELEMCNT is h%X (%u)\n", cELEMMAX, cELEMMAX);
 			return 1;
 		}
-		if (! TEST__createSortFile((Tst_str*)argv[2], tp, (Tst_uint32)sz)) {
+		if (! TEST_DL__createSortFile((Tst_str*)argv[2], tp, (Tst_uint32)sz)) {
 			return 1;
 		}
 		printf("\n");
 		return 0;
 	}
 	if (argc == 3 && strcmp(argv[1], "-p") == 0) {
-		if (! TEST__printSortFile((Tst_str*)argv[2], NULL)) {
+		if (! TEST_DL__printSortFile((Tst_str*)argv[2], NULL)) {
 			return 1;
 		}
 		printf("\n");
@@ -189,7 +193,7 @@ main(const int argc, const char *argv[])
 				}
 			}
 		}
-		if (! TEST__bench2((Tst_str*)argv[2], salgo, sdir)) {
+		if (! TEST_DL__bench2((Tst_str*)argv[2], salgo, sdir)) {
 			return 1;
 		}
 		printf("\n");
@@ -199,86 +203,86 @@ main(const int argc, const char *argv[])
 		/* run standard tests */
 	} else if (argc == 2 &&
 			(strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0)) {
-		TEST__prUsage(argv[0]);
+		TEST_DL__prUsage(argv[0]);
 		return 0;
 	} else {
-		TEST__prUsage(argv[0]);
+		TEST_DL__prUsage(argv[0]);
 		return 1;
 	}
 
-#	if (RUN_TEST_0 == 1)
-	if (! TEST__0()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_0 == 1)
+		if (! TEST_DL__0()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_1 == 1)
-	if (! TEST__1()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_1 == 1)
+		if (! TEST_DL__1()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_2 == 1)
-	if (! TEST__2()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_2 == 1)
+		if (! TEST_DL__2()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_3 == 1)
-	if (! TEST__3()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_3 == 1)
+		if (! TEST_DL__3()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_4 == 1)
-	if (! TEST__4()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_4 == 1)
+		if (! TEST_DL__4()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_5 == 1)
-	if (! TEST__5()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_5 == 1)
+		if (! TEST_DL__5()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_6 == 1)
-	if (! TEST__6()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_6 == 1)
+		if (! TEST_DL__6()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_7 == 1)
-	if (! TEST__7()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_7 == 1)
+		if (! TEST_DL__7()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_BENCH_1 == 1)
-	if (! TEST__bench1()) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_BENCH_1 == 1)
+		if (! TEST_DL__bench1()) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-	printf("All tests passed :-)\n");
+	printf("TEST_DL -- All tests passed :-)\n");
 	return 0;
 }
 
@@ -286,27 +290,19 @@ main(const int argc, const char *argv[])
 /*----------------------------------------------------------------------------*/
 
 void
-TEST__prf(const char *pFnc, const char *pMsg)
-{
-	printf("%s(): %s\n", pFnc, pMsg);
-}
-
-/*----------------------------------------------------------------------------*/
-
-void
-TEST__cbRsetElemUI32(void *pData)
+TEST_DL__cbRsetElemUI32(void *pData)
 {
 	*(Tst_uint32*)pData = 0;
 }
 
 void
-TEST__cbFreeElemUI32(void *pData)
+TEST_DL__cbFreeElemUI32(void *pData)
 {
 	*(Tst_uint32*)pData = 0;
 }
 
 Tst_int32
-TEST__cbCmpElemsUI32(const void *pData1, const void *pData2,
+TEST_DL__cbCmpElemsUI32(const void *pData1, const void *pData2,
 		void *pCustomOptions)
 {
 	if (pCustomOptions == NULL) {
@@ -314,9 +310,9 @@ TEST__cbCmpElemsUI32(const void *pData1, const void *pData2,
 	}
 	/* for huge amounts of data to be sorted
 	 * this would produce an overflow...  */
-	++((Ttest__sort*)pCustomOptions)->comps;
+	++((TtestDl__sort*)pCustomOptions)->comps;
 
-	if (((Ttest__sort*)pCustomOptions)->asc) {
+	if (((TtestDl__sort*)pCustomOptions)->asc) {
 		return (*(Tst_uint32*)pData1 >= *(Tst_uint32*)pData2 ?
 				(*(Tst_uint32*)pData1 > *(Tst_uint32*)pData2 ? 1 : 0) : -1);
 	}
@@ -325,7 +321,7 @@ TEST__cbCmpElemsUI32(const void *pData1, const void *pData2,
 }
 
 void
-TEST__cbSortStatus(const Tst_uint32 valCur, const Tst_uint32 valMax)
+TEST_DL__cbSortStatus(const Tst_uint32 valCur, const Tst_uint32 valMax)
 {
 	fprintf(stderr, "\r  sort prog %.2f%%  (%u / %u)",
 			valMax > 0 ? ((double)valCur / (double)valMax) * 100.0 : 100.0,
@@ -336,14 +332,14 @@ TEST__cbSortStatus(const Tst_uint32 valCur, const Tst_uint32 valMax)
 }
 
 Tst_err
-TEST__cbCloneInitElem(void *pElem)
+TEST_DL__cbCloneInitElem(void *pElem)
 {
 	*(Tst_uint32*)pElem = 0;
 	return ST_ERR_SUCC;
 }
 
 Tst_err
-TEST__cbCloneCopyElem(const void *pElemSrc, void *pElemDst)
+TEST_DL__cbCloneCopyElem(const void *pElemSrc, void *pElemDst)
 {
 	*(Tst_uint32*)pElemDst = *(const Tst_uint32*)pElemSrc;
 	return ST_ERR_SUCC;
@@ -352,17 +348,17 @@ TEST__cbCloneCopyElem(const void *pElemSrc, void *pElemDst)
 /*----------------------------------------------------------------------------*/
 
 Tst_bool
-TEST__getIxAndDataUI32(const char *pFnc,
+TEST_DL__getIxAndDataUI32(const char *pFnc,
 		const Tst_dynlist *pDL, Tst_uint32 **ppUI32, Tst_uint32 *pEIx)
 {
 	*ppUI32 = (Tst_uint32*)st_dynlist_ite_getCurrent(pDL);
 	if (*ppUI32 == NULL) {
-		TEST__prf(pFnc, "st_dynlist_ite_getCurrent() failed");
+		TEST_FCOM__prf(pFnc, "st_dynlist_ite_getCurrent() failed");
 		return ST_B_FALSE;
 	}
 	*pEIx = st_dynlist_ite_getCurrentIndex(pDL);
 	if (*pEIx == 0) {
-		TEST__prf(pFnc, "st_dynlist_ite_getCurrentIndex() failed");
+		TEST_FCOM__prf(pFnc, "st_dynlist_ite_getCurrentIndex() failed");
 		return ST_B_FALSE;
 	}
 	return ST_B_TRUE;
@@ -375,14 +371,14 @@ TEST__getIxAndDataUI32(const char *pFnc,
 		RUN_TEST_6 == 1 || RUN_TEST_7 == 1 || \
 		RUN_BENCH_1 == 1)
 Tst_bool
-TEST__addDataUI32(const char *pFnc,
+TEST_DL__addDataUI32(const char *pFnc,
 		Tst_dynlist *pDL, const Tst_uint32 val, Tst_uint32 **ppUI32)
 {
 	Tst_err res;
 
 	ST_CALLOC(*ppUI32, Tst_uint32*, 1, sizeof(Tst_uint32))
 	if (*ppUI32 == NULL) {
-		TEST__prf(pFnc, "out of mem #1");
+		TEST_FCOM__prf(pFnc, "out of mem #1");
 		return ST_B_FALSE;
 	}
 	**ppUI32 = val;
@@ -390,9 +386,9 @@ TEST__addDataUI32(const char *pFnc,
 	res = st_dynlist_addElement(pDL, *ppUI32);
 	if (res != ST_ERR_SUCC) {
 		if (res == ST_ERR_OMEM) {
-			TEST__prf(pFnc, "out of mem #2");
+			TEST_FCOM__prf(pFnc, "out of mem #2");
 		} else {
-			TEST__prf(pFnc, "st_dynlist_addElement() failed");
+			TEST_FCOM__prf(pFnc, "st_dynlist_addElement() failed");
 		}
 		ST_DELPOINT(*ppUI32)
 		return ST_B_FALSE;
@@ -407,7 +403,7 @@ TEST__addDataUI32(const char *pFnc,
 		RUN_TEST_3 == 1 || RUN_TEST_4 == 1 || RUN_TEST_5 == 1 || \
 		RUN_TEST_6 == 1 || RUN_BENCH_1 == 1)
 ST_INLINE_S Tst_bool
-TEST__insDataUI32(const char *pFnc,
+TEST_DL__insDataUI32(const char *pFnc,
 		Tst_dynlist *pDL, const Tst_uint32 pos, const Tst_uint32 val,
 		Tst_uint32 **ppUI32)
 {
@@ -416,7 +412,7 @@ TEST__insDataUI32(const char *pFnc,
 
 	ST_CALLOC(*ppUI32, Tst_uint32*, 1, sizeof(Tst_uint32))
 	if (*ppUI32 == NULL) {
-		TEST__prf(pFnc, "out of mem #1");
+		TEST_FCOM__prf(pFnc, "out of mem #1");
 		return ST_B_FALSE;
 	}
 	**ppUI32 = val;
@@ -424,11 +420,11 @@ TEST__insDataUI32(const char *pFnc,
 	res = st_dynlist_insElement(pDL, *ppUI32, pos);
 	if (res != ST_ERR_SUCC) {
 		if (res == ST_ERR_OMEM) {
-			TEST__prf(pFnc, "out of mem #2");
+			TEST_FCOM__prf(pFnc, "out of mem #2");
 		} else {
 			sprintf(msg, "st_dynlist_insElement() failed, pars:pos=%u,val=%u",
 					pos, val);
-			TEST__prf(pFnc, msg);
+			TEST_FCOM__prf(pFnc, msg);
 		}
 		ST_DELPOINT(*ppUI32)
 		return ST_B_FALSE;
@@ -444,7 +440,7 @@ TEST__insDataUI32(const char *pFnc,
 		RUN_TEST_6 == 1 || RUN_TEST_7 == 1 || \
 		RUN_BENCH_1 == 1)
 Tst_bool
-TEST__checkIxDataUI32(const char *pFnc,
+TEST_DL__checkIxDataUI32(const char *pFnc,
 		const Tst_uint32 ixIs, const Tst_uint32 ixSh,
 		const Tst_uint32 valIs, const Tst_uint32 valSh)
 {
@@ -452,12 +448,12 @@ TEST__checkIxDataUI32(const char *pFnc,
 
 	if (ixIs != ixSh) {
 		sprintf(msg, " elemIx mismatch: %u != %u\n", ixIs, ixSh);
-		TEST__prf(pFnc, msg);
+		TEST_FCOM__prf(pFnc, msg);
 		return ST_B_FALSE;
 	}
 	if (valIs != valSh) {
 		sprintf(msg, " value mismatch: %u != %u\n", valIs, valSh);
-		TEST__prf(pFnc, msg);
+		TEST_FCOM__prf(pFnc, msg);
 		return ST_B_FALSE;
 	}
 	return ST_B_TRUE;
@@ -479,9 +475,9 @@ TEST__checkIxDataUI32(const char *pFnc,
  */
 #if (RUN_TEST_0 == 1)
 Tst_bool
-TEST__0(void)
+TEST_DL__0(void)
 {
-	const char       *cFNC  = "TEST__0";
+	const char       *cFNC  = __func__;
 	const Tst_uint32 cELEMS = 20;
 	Tst_bool    resB   = ST_B_TRUE;
 	Tst_err     res;
@@ -492,26 +488,26 @@ TEST__0(void)
 	Tst_dynlist dl;
 
 	res = st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNC, "Adding elements...");
+	TEST_FCOM__prf(cFNC, "Adding elements...");
 	for (x = 0; x < cELEMS; x++) {
-		resB = TEST__addDataUI32(cFNC, &dl, x + 1, &pUI32);
+		resB = TEST_DL__addDataUI32(cFNC, &dl, x + 1, &pUI32);
 		if (! resB) {
 			break;
 		}
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Getting elements...");
+		TEST_FCOM__prf(cFNC, "Getting elements...");
 		cnt = st_dynlist_getElementCount(&dl);
 		if (cnt != cELEMS) {
-			TEST__prf(cFNC, "amount of elems wrong");
+			TEST_FCOM__prf(cFNC, "amount of elems wrong");
 			resB = ST_B_FALSE;
 		}
 	}
@@ -519,12 +515,12 @@ TEST__0(void)
 		st_dynlist_ite_gotoFirst(&dl);
 		x = 1;
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
 			printf("  ix %010u data: %010u\n", eix, *pUI32);
-			resB = TEST__checkIxDataUI32(cFNC, eix, x, *pUI32, x);
+			resB = TEST_DL__checkIxDataUI32(cFNC, eix, x, *pUI32, x);
 			if (! resB) {
 				break;
 			}
@@ -533,7 +529,7 @@ TEST__0(void)
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "OK");
+		TEST_FCOM__prf(cFNC, "OK");
 	}
 	st_dynlist_stc_freeDL(&dl);
 	return resB;
@@ -554,9 +550,9 @@ TEST__0(void)
  */
 #if (RUN_TEST_1 == 1)
 Tst_bool
-TEST__1(void)
+TEST_DL__1(void)
 {
-	const char       *cFNC  = "TEST__1";
+	const char       *cFNC  = __func__;
 	const Tst_uint32 cELEMS = 20;
 	Tst_bool    resB   = ST_B_TRUE;
 	Tst_err     res;
@@ -567,26 +563,26 @@ TEST__1(void)
 	Tst_dynlist dl;
 
 	res = st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNC, "Adding elements...");
+	TEST_FCOM__prf(cFNC, "Adding elements...");
 	for (x = 0; x < cELEMS; x++) {
-		resB = TEST__addDataUI32(cFNC, &dl, x + 1, &pUI32);
+		resB = TEST_DL__addDataUI32(cFNC, &dl, x + 1, &pUI32);
 		if (! resB) {
 			break;
 		}
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Getting elements in reverse order...");
+		TEST_FCOM__prf(cFNC, "Getting elements in reverse order...");
 		cnt = st_dynlist_getElementCount(&dl);
 		if (cnt != cELEMS) {
-			TEST__prf(cFNC, "amount of elems wrong");
+			TEST_FCOM__prf(cFNC, "amount of elems wrong");
 			resB = ST_B_FALSE;
 		}
 	}
@@ -594,12 +590,12 @@ TEST__1(void)
 		x = cELEMS;
 		st_dynlist_ite_gotoLast(&dl);
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
 			printf("  ix %010u data: %010u\n", eix, *pUI32);
-			resB = TEST__checkIxDataUI32(cFNC, eix, x, *pUI32, x);
+			resB = TEST_DL__checkIxDataUI32(cFNC, eix, x, *pUI32, x);
 			if (! resB) {
 				break;
 			}
@@ -610,7 +606,7 @@ TEST__1(void)
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "OK");
+		TEST_FCOM__prf(cFNC, "OK");
 	}
 	st_dynlist_stc_freeDL(&dl);
 	return resB;
@@ -634,9 +630,9 @@ TEST__1(void)
  */
 #if (RUN_TEST_2 == 1)
 Tst_bool
-TEST__2(void)
+TEST_DL__2(void)
 {
-	const char       *cFNC  = "TEST__2";
+	const char       *cFNC  = __func__;
 	const Tst_uint32 cELEMS = 20;
 	Tst_bool    resB   = ST_B_TRUE;
 	Tst_err     res;
@@ -648,29 +644,29 @@ TEST__2(void)
 	Tst_dynlist dl;
 
 	res = st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNC, "Adding elements...");
+	TEST_FCOM__prf(cFNC, "Adding elements...");
 	for (x = 0; x < cELEMS; x++) {
-		resB = TEST__addDataUI32(cFNC, &dl, x + 1, &pUI32);
+		resB = TEST_DL__addDataUI32(cFNC, &dl, x + 1, &pUI32);
 		if (! resB) {
 			break;
 		}
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Removing elements...");
+		TEST_FCOM__prf(cFNC, "Removing elements...");
 		/* */
 		/** */
 		eix = 5;
 		/** */
 		if (! st_dynlist_remElement(&dl, eix)) {
-			TEST__prf(cFNC, "st_dynlist_remElement() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_remElement() failed");
 			resB = ST_B_FALSE;
 		}
 		/* */
@@ -679,7 +675,7 @@ TEST__2(void)
 			eix = 10;
 			/** */
 			if (! st_dynlist_remElement(&dl, eix)) {
-				TEST__prf(cFNC, "st_dynlist_remElement() failed");
+				TEST_FCOM__prf(cFNC, "st_dynlist_remElement() failed");
 				resB = ST_B_FALSE;
 			}
 		}
@@ -690,7 +686,7 @@ TEST__2(void)
 			/** */
 			if (! st_dynlist_remElement(&dl,
 					st_dynlist_ite_getCurrentIndex(&dl))) {
-				TEST__prf(cFNC, "st_dynlist_remElement() failed");
+				TEST_FCOM__prf(cFNC, "st_dynlist_remElement() failed");
 				resB = ST_B_FALSE;
 			}
 		}
@@ -701,17 +697,17 @@ TEST__2(void)
 			/** */
 			if (! st_dynlist_remElement(&dl,
 					st_dynlist_ite_getCurrentIndex(&dl))) {
-				TEST__prf(cFNC, "st_dynlist_remElement() failed");
+				TEST_FCOM__prf(cFNC, "st_dynlist_remElement() failed");
 				resB = ST_B_FALSE;
 			}
 		}
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Getting elements in reverse order...");
+		TEST_FCOM__prf(cFNC, "Getting elements in reverse order...");
 		cnt = st_dynlist_getElementCount(&dl);
 		if (cnt + 4 != cELEMS) {
-			TEST__prf(cFNC, "amount of elems wrong");
+			TEST_FCOM__prf(cFNC, "amount of elems wrong");
 			resB = ST_B_FALSE;
 		}
 	}
@@ -720,7 +716,7 @@ TEST__2(void)
 		expV = cELEMS;
 		st_dynlist_ite_gotoLast(&dl);
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
@@ -728,7 +724,7 @@ TEST__2(void)
 			if (expV == 20 || expV == 11 || expV == 5) {
 				--expV;
 			}
-			resB = TEST__checkIxDataUI32(cFNC, eix, x, *pUI32, expV);
+			resB = TEST_DL__checkIxDataUI32(cFNC, eix, x, *pUI32, expV);
 			if (! resB) {
 				break;
 			}
@@ -741,12 +737,12 @@ TEST__2(void)
 		} while (st_dynlist_ite_gotoPrev(&dl));
 	}
 	if (resB) {
-		TEST__prf(cFNC, "Getting elements...");
+		TEST_FCOM__prf(cFNC, "Getting elements...");
 		x    = 1;
 		expV = 1;
 		st_dynlist_ite_gotoFirst(&dl);
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
@@ -754,7 +750,7 @@ TEST__2(void)
 			if (expV == 1 || expV == 5 || expV == 11) {
 				++expV;
 			}
-			resB = TEST__checkIxDataUI32(cFNC, eix, x, *pUI32, expV);
+			resB = TEST_DL__checkIxDataUI32(cFNC, eix, x, *pUI32, expV);
 			if (! resB) {
 				break;
 			}
@@ -764,7 +760,7 @@ TEST__2(void)
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "OK");
+		TEST_FCOM__prf(cFNC, "OK");
 	}
 	st_dynlist_stc_freeDL(&dl);
 	return resB;
@@ -787,9 +783,9 @@ TEST__2(void)
  */
 #if (RUN_TEST_3 == 1)
 Tst_bool
-TEST__3(void)
+TEST_DL__3(void)
 {
-	const char       *cFNC  = "TEST__3";
+	const char       *cFNC  = __func__;
 	const Tst_uint32 cELEMS = 3;
 	Tst_bool    resB   = ST_B_TRUE;
 	Tst_err     res;
@@ -800,33 +796,33 @@ TEST__3(void)
 	Tst_dynlist dl;
 
 	res = st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNC, "Adding elements...");
+	TEST_FCOM__prf(cFNC, "Adding elements...");
 	for (x = 0; x < cELEMS; x++) {
-		resB = TEST__addDataUI32(cFNC, &dl, x + 1, &pUI32);
+		resB = TEST_DL__addDataUI32(cFNC, &dl, x + 1, &pUI32);
 		if (! resB) {
 			break;
 		}
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Getting elements...");
+		TEST_FCOM__prf(cFNC, "Getting elements...");
 		cnt = st_dynlist_getElementCount(&dl);
 		if (cnt != cELEMS) {
-			TEST__prf(cFNC, "amount of elems wrong");
+			TEST_FCOM__prf(cFNC, "amount of elems wrong");
 			resB = ST_B_FALSE;
 		}
 	}
 	if (resB) {
 		st_dynlist_ite_gotoFirst(&dl);
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
@@ -837,17 +833,17 @@ TEST__3(void)
 	/* */
 	if (resB) {
 		st_dynlist_ite_gotoLast(&dl);
-		TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+		TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 		printf("  last:  ix %010u data: %010u\n", eix, *pUI32);
-		resB = TEST__checkIxDataUI32(cFNC, eix, cELEMS, *pUI32, cELEMS);
+		resB = TEST_DL__checkIxDataUI32(cFNC, eix, cELEMS, *pUI32, cELEMS);
 
 		if (resB) {
 			st_dynlist_remElement(&dl,
 					st_dynlist_ite_getCurrentIndex(&dl));
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (resB) {
 				printf("  last:  ix %010u data: %010u\n", eix, *pUI32);
-				resB = TEST__checkIxDataUI32(cFNC, eix, cELEMS - 1,
+				resB = TEST_DL__checkIxDataUI32(cFNC, eix, cELEMS - 1,
 						*pUI32, cELEMS - 1);
 			}
 		}
@@ -855,10 +851,10 @@ TEST__3(void)
 		if (resB) {
 			st_dynlist_remElement(&dl,
 					st_dynlist_ite_getCurrentIndex(&dl));
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (resB) {
 				printf("  last:  ix %010u data: %010u\n", eix, *pUI32);
-				resB = TEST__checkIxDataUI32(cFNC, eix, cELEMS - 2,
+				resB = TEST_DL__checkIxDataUI32(cFNC, eix, cELEMS - 2,
 						*pUI32, cELEMS - 2);
 			}
 		}
@@ -869,7 +865,7 @@ TEST__3(void)
 					st_dynlist_ite_getCurrentIndex(&dl));
 			printf("  expecting error:\n");
 			resB = st_dynlist_isEmpty(&dl) &&
-					! TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+					! TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (resB) {
 				printf("  last:  empty now, that's fine...\n");
 			}
@@ -880,25 +876,25 @@ TEST__3(void)
 			resB = ! st_dynlist_remElement(&dl,
 					st_dynlist_ite_getCurrentIndex(&dl));
 			if (! resB) {
-				TEST__prf(cFNC, "st_dynlist_remElement() failed");
+				TEST_FCOM__prf(cFNC, "st_dynlist_remElement() failed");
 			}
 		}
 	}
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Adding elements...");
+		TEST_FCOM__prf(cFNC, "Adding elements...");
 		for (x = 0; x < cELEMS * 4; x++) {
-			resB = TEST__addDataUI32(cFNC, &dl, cELEMS + x + 1, &pUI32);
+			resB = TEST_DL__addDataUI32(cFNC, &dl, cELEMS + x + 1, &pUI32);
 			if (! resB) {
 				break;
 			}
 		}
 	}
 	if (resB) {
-		TEST__prf(cFNC, "Accessing elements...");
+		TEST_FCOM__prf(cFNC, "Accessing elements...");
 		printf("  expecting error:\n");
-		resB = ! TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+		resB = ! TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 		if (resB) {
 			printf("  no current element set, that's fine...\n");
 		}
@@ -906,32 +902,32 @@ TEST__3(void)
 
 	if (resB) {
 		st_dynlist_ite_gotoLast(&dl);
-		resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+		resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 		if (resB) {
 			printf("  last :  ix %010u data: %010u\n", eix, *pUI32);
-			resB = TEST__checkIxDataUI32(cFNC, eix, cELEMS * 4,
+			resB = TEST_DL__checkIxDataUI32(cFNC, eix, cELEMS * 4,
 					*pUI32, cELEMS + cELEMS * 4);
 		}
 	}
 
 	if (resB) {
 		st_dynlist_ite_gotoFirst(&dl);
-		resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+		resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 		if (resB) {
 			printf("  first:  ix %010u data: %010u\n", eix, *pUI32);
-			resB = TEST__checkIxDataUI32(cFNC, eix, 1,
+			resB = TEST_DL__checkIxDataUI32(cFNC, eix, 1,
 					*pUI32, cELEMS + 1);
 		}
 	}
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Resetting st_dynlist...");
+		TEST_FCOM__prf(cFNC, "Resetting st_dynlist...");
 		st_dynlist_stc_rsetDL(&dl);
 
-		TEST__prf(cFNC, "Adding elements...");
+		TEST_FCOM__prf(cFNC, "Adding elements...");
 		for (x = 0; x < cELEMS * 4; x++) {
-			resB = TEST__addDataUI32(cFNC, &dl, x + 1, &pUI32);
+			resB = TEST_DL__addDataUI32(cFNC, &dl, x + 1, &pUI32);
 			if (! resB) {
 				break;
 			}
@@ -939,10 +935,10 @@ TEST__3(void)
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Getting elements...");
+		TEST_FCOM__prf(cFNC, "Getting elements...");
 		cnt = st_dynlist_getElementCount(&dl);
 		if (cnt != cELEMS * 4) {
-			TEST__prf(cFNC, "amount of elems wrong");
+			TEST_FCOM__prf(cFNC, "amount of elems wrong");
 			resB = ST_B_FALSE;
 		}
 	}
@@ -950,12 +946,12 @@ TEST__3(void)
 		x = 1;
 		st_dynlist_ite_gotoFirst(&dl);
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
 			printf("  ix %010u data: %010u\n", eix, *pUI32);
-			resB = TEST__checkIxDataUI32(cFNC, eix, x,
+			resB = TEST_DL__checkIxDataUI32(cFNC, eix, x,
 					*pUI32, x);
 			if (! resB) {
 				break;
@@ -966,7 +962,7 @@ TEST__3(void)
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "OK");
+		TEST_FCOM__prf(cFNC, "OK");
 	}
 	st_dynlist_stc_freeDL(&dl);
 	return resB;
@@ -989,9 +985,9 @@ TEST__3(void)
  */
 #if (RUN_TEST_4 == 1)
 Tst_bool
-TEST__4(void)
+TEST_DL__4(void)
 {
-	const char       *cFNC  = "TEST__4";
+	const char       *cFNC  = __func__;
 	const Tst_uint32 cELEMS = 0x3fffff;
 	Tst_bool    resB   = ST_B_TRUE;
 	Tst_err     res;
@@ -1005,9 +1001,9 @@ TEST__4(void)
 	Tst_dynlist dl;
 
 	res = st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		return ST_B_FALSE;
 	}
 
@@ -1018,9 +1014,9 @@ TEST__4(void)
 			(double)((cELEMS + 1024) *
 					(sizeof(Tst_uint32) + (3 * sizeof(void*)))) /
 				(1024.0 * 1024.0));
-	TEST__prf(cFNC, msg);
+	TEST_FCOM__prf(cFNC, msg);
 	for (x = 0; x < cELEMS; x++) {
-		resB = TEST__addDataUI32(cFNC, &dl, x + 1, &pUI32);
+		resB = TEST_DL__addDataUI32(cFNC, &dl, x + 1, &pUI32);
 		if (! resB) {
 			break;
 		}
@@ -1033,20 +1029,20 @@ TEST__4(void)
 	/* */
 	if (resB) {
 		timeB = st_sysGetTime();
-		TEST__prf(cFNC, "Getting elements...");
+		TEST_FCOM__prf(cFNC, "Getting elements...");
 		cnt = st_dynlist_getElementCount(&dl);
 		if (cnt != cELEMS) {
-			TEST__prf(cFNC, "amount of elems wrong");
+			TEST_FCOM__prf(cFNC, "amount of elems wrong");
 			resB = ST_B_FALSE;
 		} else if (st_dynlist_isEmpty(&dl)) {
-			TEST__prf(cFNC, "st_dynlist_isEmpty() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_isEmpty() failed");
 			resB = ST_B_FALSE;
 		}
 	}
 	if (resB) {
 		st_dynlist_ite_gotoFirst(&dl);
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
@@ -1059,17 +1055,17 @@ TEST__4(void)
 	/* */
 	if (resB) {
 		timeB = st_sysGetTime();
-		TEST__prf(cFNC, "Randomly accessing elements #1...");
+		TEST_FCOM__prf(cFNC, "Randomly accessing elements #1...");
 		st_dynlist_ite_gotoFirst(&dl);
 
 		eix = cELEMS / 2;
 		if (! st_dynlist_ite_goto(&dl, eix)) {
-			TEST__prf(cFNC, "st_dynlist_ite_goto() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_ite_goto() failed");
 			resB = ST_B_FALSE;
 		} else {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (resB) {
-				resB = TEST__checkIxDataUI32(cFNC, eix, cELEMS / 2,
+				resB = TEST_DL__checkIxDataUI32(cFNC, eix, cELEMS / 2,
 						*pUI32, cELEMS / 2);
 			}
 		}
@@ -1078,12 +1074,12 @@ TEST__4(void)
 			/* use cached element */
 			eix += 11;
 			if (! st_dynlist_ite_goto(&dl, eix)) {
-				TEST__prf(cFNC, "st_dynlist_ite_goto() failed");
+				TEST_FCOM__prf(cFNC, "st_dynlist_ite_goto() failed");
 				resB = ST_B_FALSE;
 			} else {
-				resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+				resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 				if (resB) {
-					resB = TEST__checkIxDataUI32(cFNC, eix, cELEMS / 2 + 11,
+					resB = TEST_DL__checkIxDataUI32(cFNC, eix, cELEMS / 2 + 11,
 							*pUI32, cELEMS / 2 + 11);
 				}
 			}
@@ -1093,12 +1089,12 @@ TEST__4(void)
 			/* use cached element */
 			eix -= 12;
 			if (! st_dynlist_ite_goto(&dl, eix)) {
-				TEST__prf(cFNC, "st_dynlist_ite_goto() failed");
+				TEST_FCOM__prf(cFNC, "st_dynlist_ite_goto() failed");
 				resB = ST_B_FALSE;
 			} else {
-				resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+				resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 				if (resB) {
-					resB = TEST__checkIxDataUI32(cFNC, eix, cELEMS / 2 - 1,
+					resB = TEST_DL__checkIxDataUI32(cFNC, eix, cELEMS / 2 - 1,
 							*pUI32, cELEMS / 2 - 1);
 				}
 			}
@@ -1106,18 +1102,18 @@ TEST__4(void)
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Randomly accessing elements #2...");
+		TEST_FCOM__prf(cFNC, "Randomly accessing elements #2...");
 		st_dynlist_ite_gotoFirst(&dl);
 
 		/* use last added element */
 		eix = cELEMS - 20;
 		if (! st_dynlist_ite_goto(&dl, eix)) {
-			TEST__prf(cFNC, "st_dynlist_ite_goto() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_ite_goto() failed");
 			resB = ST_B_FALSE;
 		} else {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (resB) {
-				resB = TEST__checkIxDataUI32(cFNC, eix, cELEMS - 20,
+				resB = TEST_DL__checkIxDataUI32(cFNC, eix, cELEMS - 20,
 						*pUI32, cELEMS - 20);
 			}
 		}
@@ -1126,12 +1122,12 @@ TEST__4(void)
 			/* use last added element */
 			eix += 11;
 			if (! st_dynlist_ite_goto(&dl, eix)) {
-				TEST__prf(cFNC, "st_dynlist_ite_goto() failed");
+				TEST_FCOM__prf(cFNC, "st_dynlist_ite_goto() failed");
 				resB = ST_B_FALSE;
 			} else {
-				resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+				resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 				if (resB) {
-					resB = TEST__checkIxDataUI32(cFNC, eix, cELEMS - 20 + 11,
+					resB = TEST_DL__checkIxDataUI32(cFNC, eix, cELEMS - 20 + 11,
 							*pUI32, cELEMS - 20 + 11);
 				}
 			}
@@ -1139,17 +1135,17 @@ TEST__4(void)
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Randomly accessing elements #3...");
+		TEST_FCOM__prf(cFNC, "Randomly accessing elements #3...");
 
 		/* use first element */
 		eix = 20;
 		if (! st_dynlist_ite_goto(&dl, eix)) {
-			TEST__prf(cFNC, "st_dynlist_ite_goto() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_ite_goto() failed");
 			resB = ST_B_FALSE;
 		} else {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (resB) {
-				resB = TEST__checkIxDataUI32(cFNC, eix, 20,
+				resB = TEST_DL__checkIxDataUI32(cFNC, eix, 20,
 						*pUI32, 20);
 			}
 		}
@@ -1158,12 +1154,12 @@ TEST__4(void)
 			/* use cached element */
 			eix += 12;
 			if (! st_dynlist_ite_goto(&dl, eix)) {
-				TEST__prf(cFNC, "st_dynlist_ite_goto() failed");
+				TEST_FCOM__prf(cFNC, "st_dynlist_ite_goto() failed");
 				resB = ST_B_FALSE;
 			} else {
-				resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+				resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 				if (resB) {
-					resB = TEST__checkIxDataUI32(cFNC, eix, 20 + 12,
+					resB = TEST_DL__checkIxDataUI32(cFNC, eix, 20 + 12,
 							*pUI32, 20 + 12);
 				}
 			}
@@ -1173,12 +1169,12 @@ TEST__4(void)
 			/* use cached element */
 			eix -= 15;
 			if (! st_dynlist_ite_goto(&dl, eix)) {
-				TEST__prf(cFNC, "st_dynlist_ite_goto() failed");
+				TEST_FCOM__prf(cFNC, "st_dynlist_ite_goto() failed");
 				resB = ST_B_FALSE;
 			} else {
-				resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+				resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 				if (resB) {
-					resB = TEST__checkIxDataUI32(cFNC, eix, 20 + 12 - 15,
+					resB = TEST_DL__checkIxDataUI32(cFNC, eix, 20 + 12 - 15,
 							*pUI32, 20 + 12 - 15);
 				}
 			}
@@ -1188,12 +1184,12 @@ TEST__4(void)
 			/* use first element */
 			eix -= 11;
 			if (! st_dynlist_ite_goto(&dl, eix)) {
-				TEST__prf(cFNC, "st_dynlist_ite_goto() failed");
+				TEST_FCOM__prf(cFNC, "st_dynlist_ite_goto() failed");
 				resB = ST_B_FALSE;
 			} else {
-				resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+				resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 				if (resB) {
-					resB = TEST__checkIxDataUI32(cFNC, eix, 20 + 12 - 15 - 11,
+					resB = TEST_DL__checkIxDataUI32(cFNC, eix, 20 + 12 - 15 - 11,
 							*pUI32, 20 + 12 - 15 - 11);
 				}
 			}
@@ -1208,13 +1204,13 @@ TEST__4(void)
 	if (resB) {
 		timeB = st_sysGetTime();
 	}
-	TEST__prf(cFNC, "Freeing elements...");
+	TEST_FCOM__prf(cFNC, "Freeing elements...");
 	st_dynlist_stc_freeDL(&dl);
 	if (resB) {
 		timeE = st_sysGetTime();
 		printf("\t\t\ttime --> %.2fs\n\n", timeE - timeB);
 
-		TEST__prf(cFNC, "OK");
+		TEST_FCOM__prf(cFNC, "OK");
 	}
 	return resB;
 }
@@ -1234,9 +1230,9 @@ TEST__4(void)
  */
 #if (RUN_TEST_5 == 1)
 Tst_bool
-TEST__5(void)
+TEST_DL__5(void)
 {
-	const char       *cFNC  = "TEST__5";
+	const char       *cFNC  = __func__;
 	const Tst_uint32 cELEMS = 6;
 	Tst_bool    resB   = ST_B_TRUE;
 	Tst_err     res;
@@ -1248,38 +1244,38 @@ TEST__5(void)
 	char        msg[512];
 
 	res = st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNC, "Inserting elements...");
-	resB = TEST__insDataUI32(cFNC, &dl, 33, 5, &pUI32);
+	TEST_FCOM__prf(cFNC, "Inserting elements...");
+	resB = TEST_DL__insDataUI32(cFNC, &dl, 33, 5, &pUI32);
 	if (resB) {
-		resB = TEST__insDataUI32(cFNC, &dl, 1, 3, &pUI32);
+		resB = TEST_DL__insDataUI32(cFNC, &dl, 1, 3, &pUI32);
 	}
 	if (resB) {
-		resB = TEST__insDataUI32(cFNC, &dl, 1, 2, &pUI32);
+		resB = TEST_DL__insDataUI32(cFNC, &dl, 1, 2, &pUI32);
 	}
 	if (resB) {
-		resB = TEST__insDataUI32(cFNC, &dl, 3, 4, &pUI32);
+		resB = TEST_DL__insDataUI32(cFNC, &dl, 3, 4, &pUI32);
 	}
 	if (resB) {
-		resB = TEST__insDataUI32(cFNC, &dl, 5, 6, &pUI32);
+		resB = TEST_DL__insDataUI32(cFNC, &dl, 5, 6, &pUI32);
 	}
 	if (resB) {
-		resB = TEST__insDataUI32(cFNC, &dl, 1, 1, &pUI32);
+		resB = TEST_DL__insDataUI32(cFNC, &dl, 1, 1, &pUI32);
 	}
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Getting elements...");
+		TEST_FCOM__prf(cFNC, "Getting elements...");
 		cnt = st_dynlist_getElementCount(&dl);
 		if (cnt != cELEMS) {
 			sprintf(msg, "amount of elems wrong: %u != %u", cnt, cELEMS);
-			TEST__prf(cFNC, msg);
+			TEST_FCOM__prf(cFNC, msg);
 			resB = ST_B_FALSE;
 		}
 	}
@@ -1287,12 +1283,12 @@ TEST__5(void)
 		st_dynlist_ite_gotoFirst(&dl);
 		x = 1;
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, &dl, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
 			printf("  ix %010u data: %010u\n", eix, *pUI32);
-			resB = TEST__checkIxDataUI32(cFNC, eix, x, *pUI32, x);
+			resB = TEST_DL__checkIxDataUI32(cFNC, eix, x, *pUI32, x);
 			if (! resB) {
 				break;
 			}
@@ -1301,7 +1297,7 @@ TEST__5(void)
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "OK");
+		TEST_FCOM__prf(cFNC, "OK");
 	}
 	st_dynlist_stc_freeDL(&dl);
 	return resB;
@@ -1325,11 +1321,11 @@ TEST__5(void)
  */
 #if (RUN_TEST_6 == 1)
 Tst_bool
-TEST__6_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
+TEST_DL__6_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 		const Tst_dynlist_sortAlgo sortAlgo, const Tst_bool ascOrDesc,
 		const Tst_bool alwDup, const Tst_uint32 dup, const Tst_bool showUS)
 {
-	const char *cFNC = "TEST__6_sub2";
+	const char *cFNC = __func__;
 	Tst_bool    resB   = ST_B_TRUE,
 	            dupF   = ST_B_FALSE;
 	Tst_uint32  x,
@@ -1337,22 +1333,22 @@ TEST__6_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 	            *pUI32 = NULL,
 	            eix    = 0;
 	char        msg[512];
-	Ttest__sort custSO;
+	TtestDl__sort custSO;
 
 	printf("\n");
 	/* */
 	if (showUS) {
-		TEST__prf(cFNC, "Getting elements...");
+		TEST_FCOM__prf(cFNC, "Getting elements...");
 		cnt = st_dynlist_getElementCount(pDL);
 		if (cnt != elemCnt) {
 			sprintf(msg, "amount of elems wrong: %u != %u", cnt, elemCnt);
-			TEST__prf(cFNC, msg);
+			TEST_FCOM__prf(cFNC, msg);
 			resB = ST_B_FALSE;
 		}
 		if (resB) {
 			st_dynlist_ite_gotoFirst(pDL);
 			do {
-				resB = TEST__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
+				resB = TEST_DL__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
 				if (! resB) {
 					break;
 				}
@@ -1367,38 +1363,38 @@ TEST__6_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 		custSO.asc = ascOrDesc;
 		switch (sortAlgo) {
 			case ST_DYNLIST_SA_DEF:
-				TEST__prf(cFNC, "sortAlgo: Default");
+				TEST_FCOM__prf(cFNC, "sortAlgo: Default");
 				break;
 			case ST_DYNLIST_SA_INSSORT:
-				TEST__prf(cFNC, "sortAlgo: Insertionsort");
+				TEST_FCOM__prf(cFNC, "sortAlgo: Insertionsort");
 				break;
 			case ST_DYNLIST_SA_QUICKSORT:
-				TEST__prf(cFNC, "sortAlgo: Quicksort");
+				TEST_FCOM__prf(cFNC, "sortAlgo: Quicksort");
 				break;
 			case ST_DYNLIST_SA_MERGESORT:
-				TEST__prf(cFNC, "sortAlgo: Mergesort");
+				TEST_FCOM__prf(cFNC, "sortAlgo: Mergesort");
 				break;
 			default:
-				TEST__prf(cFNC, "sortAlgo: unknown");
+				TEST_FCOM__prf(cFNC, "sortAlgo: unknown");
 				break;
 		}
 		sprintf(msg, "order   : %s", ascOrDesc ? "asc" : "desc");
-		TEST__prf(cFNC, msg);
-		TEST__prf(cFNC, "Sorting elements...");
+		TEST_FCOM__prf(cFNC, msg);
+		TEST_FCOM__prf(cFNC, "Sorting elements...");
 		resB = st_dynlist_sortElements(pDL, sortAlgo,
-				TEST__cbCmpElemsUI32, NULL, &custSO);
+				TEST_DL__cbCmpElemsUI32, NULL, &custSO);
 		if (! resB) {
-			TEST__prf(cFNC, "st_dynlist_sortElements() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_sortElements() failed");
 		}
 	}
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Checking sorted elements...");
+		TEST_FCOM__prf(cFNC, "Checking sorted elements...");
 		cnt = st_dynlist_getElementCount(pDL);
 		if (cnt != elemCnt) {
 			sprintf(msg, "amount of elems wrong: %u != %u", cnt, elemCnt);
-			TEST__prf(cFNC, msg);
+			TEST_FCOM__prf(cFNC, msg);
 			resB = ST_B_FALSE;
 		}
 	}
@@ -1410,7 +1406,7 @@ TEST__6_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 		}
 		st_dynlist_ite_gotoFirst(pDL);
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
@@ -1419,7 +1415,7 @@ TEST__6_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 				dupF = ST_B_TRUE;
 				continue;
 			}
-			resB = TEST__checkIxDataUI32(cFNC, eix, eix, *pUI32, x);
+			resB = TEST_DL__checkIxDataUI32(cFNC, eix, eix, *pUI32, x);
 			if (! resB) {
 				break;
 			}
@@ -1435,35 +1431,35 @@ TEST__6_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 }
 
 Tst_bool
-TEST__6_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
+TEST_DL__6_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 		const Tst_bool ascOrDesc, const Tst_bool alwDup, const Tst_uint32 dup)
 {
-	const char *cFNC = "TEST__6_sub";
+	const char *cFNC = __func__;
 	Tst_bool    resB = ST_B_TRUE;
 	Tst_err     res;
 	int         sa;
 	Tst_dynlist dupLst;
 
 	res = st_dynlist_stc_initDL(&dupLst, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
 		if (res == ST_ERR_OMEM) {
-			TEST__prf(cFNC, "out of mem");
+			TEST_FCOM__prf(cFNC, "out of mem");
 		} else {
-			TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		}
 		return ST_B_FALSE;
 	}
 	for (sa = 0; sa < (int)ST_DYNLIST_SA_NONE; sa++) {
-		TEST__prf(cFNC, "cloning list from org to dup...");
+		TEST_FCOM__prf(cFNC, "cloning list from org to dup...");
 		res = st_dynlist_clone(pDL, &dupLst,
-				TEST__cbCloneInitElem, TEST__cbCloneCopyElem);
+				TEST_DL__cbCloneInitElem, TEST_DL__cbCloneCopyElem);
 		if (res != ST_ERR_SUCC) {
-			TEST__prf(cFNC, "st_dynlist_clone() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_clone() failed");
 			resB = ST_B_FALSE;
 			break;
 		}
-		if (! TEST__6_sub2(&dupLst, elemCnt,
+		if (! TEST_DL__6_sub2(&dupLst, elemCnt,
 				(Tst_dynlist_sortAlgo)sa, ascOrDesc, alwDup, dup, sa == 0)) {
 			resB = ST_B_FALSE;
 			break;
@@ -1474,34 +1470,34 @@ TEST__6_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 }
 
 Tst_bool
-TEST__6(void)
+TEST_DL__6(void)
 {
-	const char *cFNC = "TEST__6";
+	const char *cFNC = __func__;
 	Tst_bool    resB;
 	Tst_err     res;
 	Tst_uint32  *pUI32 = NULL;
 	Tst_dynlist dl;
 
 	res = st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNC, "#1 Adding elements...");
-	resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+	TEST_FCOM__prf(cFNC, "#1 Adding elements...");
+	resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 	if (resB) {
-		TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 5, &pUI32);
-		resB = TEST__addDataUI32(cFNC, &dl, 6, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 5, &pUI32);
+		resB = TEST_DL__addDataUI32(cFNC, &dl, 6, &pUI32);
 	}
 	/* */
 	if (resB) {
-		resB = TEST__6_sub(&dl, 6, ST_B_TRUE, ST_B_FALSE, 0);
+		resB = TEST_DL__6_sub(&dl, 6, ST_B_TRUE, ST_B_FALSE, 0);
 	}
 	if (resB) {
 		st_dynlist_stc_rsetDL(&dl);
@@ -1510,18 +1506,18 @@ TEST__6(void)
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "#2 Adding elements...");
-		resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+		TEST_FCOM__prf(cFNC, "#2 Adding elements...");
+		resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 		if (resB) {
-			TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 5, &pUI32);
-			resB = TEST__addDataUI32(cFNC, &dl, 6, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 5, &pUI32);
+			resB = TEST_DL__addDataUI32(cFNC, &dl, 6, &pUI32);
 		}
 		/* */
 		if (resB) {
-			resB = TEST__6_sub(&dl, 6, ST_B_FALSE, ST_B_FALSE, 0);
+			resB = TEST_DL__6_sub(&dl, 6, ST_B_FALSE, ST_B_FALSE, 0);
 		}
 		if (resB) {
 			st_dynlist_stc_rsetDL(&dl);
@@ -1531,18 +1527,18 @@ TEST__6(void)
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "#3 Adding elements...");
-		resB = TEST__addDataUI32(cFNC, &dl, 5, &pUI32);
+		TEST_FCOM__prf(cFNC, "#3 Adding elements...");
+		resB = TEST_DL__addDataUI32(cFNC, &dl, 5, &pUI32);
 		if (resB) {
-			TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 6, &pUI32);
-			resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 6, &pUI32);
+			resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 		}
 		/* */
 		if (resB) {
-			resB = TEST__6_sub(&dl, 6, ST_B_TRUE, ST_B_FALSE, 0);
+			resB = TEST_DL__6_sub(&dl, 6, ST_B_TRUE, ST_B_FALSE, 0);
 		}
 		if (resB) {
 			st_dynlist_stc_rsetDL(&dl);
@@ -1552,18 +1548,18 @@ TEST__6(void)
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "#4 Adding elements...");
-		resB = TEST__addDataUI32(cFNC, &dl, 6, &pUI32);
+		TEST_FCOM__prf(cFNC, "#4 Adding elements...");
+		resB = TEST_DL__addDataUI32(cFNC, &dl, 6, &pUI32);
 		if (resB) {
-			TEST__addDataUI32(cFNC, &dl, 5, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-			resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 5, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+			resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 		}
 		/* */
 		if (resB) {
-			resB = TEST__6_sub(&dl, 6, ST_B_TRUE, ST_B_FALSE, 0);
+			resB = TEST_DL__6_sub(&dl, 6, ST_B_TRUE, ST_B_FALSE, 0);
 		}
 		if (resB) {
 			st_dynlist_stc_rsetDL(&dl);
@@ -1573,11 +1569,11 @@ TEST__6(void)
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "#5 Adding elements...");
-		resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+		TEST_FCOM__prf(cFNC, "#5 Adding elements...");
+		resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 		/* */
 		if (resB) {
-			resB = TEST__6_sub(&dl, 1, ST_B_TRUE, ST_B_FALSE, 0);
+			resB = TEST_DL__6_sub(&dl, 1, ST_B_TRUE, ST_B_FALSE, 0);
 		}
 		if (resB) {
 			st_dynlist_stc_rsetDL(&dl);
@@ -1587,20 +1583,20 @@ TEST__6(void)
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "#6 Adding elements...");
-		resB = TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
+		TEST_FCOM__prf(cFNC, "#6 Adding elements...");
+		resB = TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
 		if (resB) {
-			TEST__addDataUI32(cFNC, &dl, 5, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 6, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
-			TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-			resB = TEST__addDataUI32(cFNC, &dl, 7, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 5, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 6, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
+			TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+			resB = TEST_DL__addDataUI32(cFNC, &dl, 7, &pUI32);
 		}
 		/* */
 		if (resB) {
-			resB = TEST__6_sub(&dl, 8, ST_B_TRUE, ST_B_TRUE, 4);
+			resB = TEST_DL__6_sub(&dl, 8, ST_B_TRUE, ST_B_TRUE, 4);
 		}
 		if (resB) {
 			st_dynlist_stc_rsetDL(&dl);
@@ -1610,7 +1606,7 @@ TEST__6(void)
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "OK");
+		TEST_FCOM__prf(cFNC, "OK");
 	}
 	st_dynlist_stc_freeDL(&dl);
 	return resB;
@@ -1624,10 +1620,10 @@ TEST__6(void)
  * Tests st_dynlist_moveElement()
  */
 Tst_bool
-TEST__7_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
+TEST_DL__7_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 		const Tst_uint32 data[])
 {
-	const char *cFNC = "TEST__7_sub";
+	const char *cFNC = __func__;
 	Tst_bool   resB;
 	Tst_uint32 *pUI32 = NULL,
 	           eix    = 0,
@@ -1635,32 +1631,32 @@ TEST__7_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 
 	resB = st_dynlist_ite_gotoFirst(pDL);
 	if (! resB) {
-		TEST__prf(cFNC, "st_dynlist_ite_gotoFirst() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_ite_gotoFirst() failed");
 		return resB;
 	}
 	x = 1;
 	do {
-		resB = TEST__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
+		resB = TEST_DL__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
 		if (! resB) {
 			break;
 		}
 		printf("  ix %010u data: %010u\n", eix, *pUI32);
-		resB = TEST__checkIxDataUI32(cFNC, eix, x, *pUI32, data[x - 1]);
+		resB = TEST_DL__checkIxDataUI32(cFNC, eix, x, *pUI32, data[x - 1]);
 		if (! resB) {
 			break;
 		}
 		++x;
 	} while (st_dynlist_ite_gotoNext(pDL));
 	if (resB && x != elemCnt + 1) {
-		TEST__prf(cFNC, "Element count doesn't match");
+		TEST_FCOM__prf(cFNC, "Element count doesn't match");
 		resB = ST_B_FALSE;
 	}
 
 	if (resB) {
-		TEST__prf(cFNC, "Checking integrity...");
+		TEST_FCOM__prf(cFNC, "Checking integrity...");
 		resB = st_dynlist_check(pDL);
 		if (! resB) {
-			TEST__prf(cFNC, "st_dynlist_check() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_check() failed");
 		}
 	}
 
@@ -1668,9 +1664,9 @@ TEST__7_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 }
 
 Tst_bool
-TEST__7(void)
+TEST_DL__7(void)
 {
-	const char *cFNC = "TEST__7";
+	const char *cFNC = __func__;
 	Tst_bool    resB;
 	Tst_err     res;
 	Tst_uint32  *pUI32 = NULL,
@@ -1678,24 +1674,24 @@ TEST__7(void)
 	Tst_dynlist dl;
 
 	res = st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNC, "#1 Adding elements...");
-	resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+	TEST_FCOM__prf(cFNC, "#1 Adding elements...");
+	resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 	if (resB) {
-		TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
 	}
 	/* */
-	TEST__prf(cFNC, "#1 Moving elements...");
+	TEST_FCOM__prf(cFNC, "#1 Moving elements...");
 	resB = st_dynlist_moveElement(&dl, 1, 3);  /* 2 3 1 */
 	if (! resB) {
-		TEST__prf(cFNC, "st_dynlist_moveElement() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_moveElement() failed");
 	}
 	if (resB) {
 		data[0] = 2;
@@ -1705,7 +1701,7 @@ TEST__7(void)
 		data[4] = 0;
 		data[5] = 0;
 		/* */
-		resB = TEST__7_sub(&dl, 3, data);
+		resB = TEST_DL__7_sub(&dl, 3, data);
 	}
 	if (! resB) {
 		st_dynlist_stc_freeDL(&dl);
@@ -1714,21 +1710,21 @@ TEST__7(void)
 
 	/* */
 	st_dynlist_stc_rsetDL(&dl);
-	TEST__prf(cFNC, "#2 Adding elements...");
-	resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+	TEST_FCOM__prf(cFNC, "#2 Adding elements...");
+	resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 	if (resB) {
-		TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 5, &pUI32);
-		resB = TEST__addDataUI32(cFNC, &dl, 6, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 5, &pUI32);
+		resB = TEST_DL__addDataUI32(cFNC, &dl, 6, &pUI32);
 	}
 	if (! resB) {
 		st_dynlist_stc_freeDL(&dl);
 		return resB;
 	}
 	/* */
-	TEST__prf(cFNC, "#2 Moving elements...");
+	TEST_FCOM__prf(cFNC, "#2 Moving elements...");
 	resB = st_dynlist_moveElement(&dl, 1, 2);  /* 2 1 3 4 5 6 */
 	if (resB) {
 		resB = st_dynlist_moveElement(&dl, 3, 4);  /* 2 1 4 3 5 6 */
@@ -1737,7 +1733,7 @@ TEST__7(void)
 		resB = st_dynlist_moveElement(&dl, 5, 6);  /* 2 1 4 3 6 5 */
 	}
 	if (! resB) {
-		TEST__prf(cFNC, "st_dynlist_moveElement() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_moveElement() failed");
 	}
 	if (resB) {
 		data[0] = 2;
@@ -1747,7 +1743,7 @@ TEST__7(void)
 		data[4] = 6;
 		data[5] = 5;
 		/* */
-		resB = TEST__7_sub(&dl, 6, data);
+		resB = TEST_DL__7_sub(&dl, 6, data);
 	}
 	if (! resB) {
 		st_dynlist_stc_freeDL(&dl);
@@ -1756,17 +1752,17 @@ TEST__7(void)
 
 	/* */
 	st_dynlist_stc_rsetDL(&dl);
-	TEST__prf(cFNC, "#3 Adding elements...");
-	resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+	TEST_FCOM__prf(cFNC, "#3 Adding elements...");
+	resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 	if (resB) {
-		TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 5, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 6, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 5, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 6, &pUI32);
 	}
 	/* */
-	TEST__prf(cFNC, "#3 Moving elements...");
+	TEST_FCOM__prf(cFNC, "#3 Moving elements...");
 	resB = st_dynlist_moveElement(&dl, 1, 7);  /* 2 3 4 5 6 1 */
 	if (resB) {
 		resB = st_dynlist_moveElement(&dl, 1, 7);  /* 3 4 5 6 1 2 */
@@ -1775,7 +1771,7 @@ TEST__7(void)
 		resB = st_dynlist_moveElement(&dl, 2, 5);  /* 3 5 6 1 4 2 */
 	}
 	if (! resB) {
-		TEST__prf(cFNC, "st_dynlist_moveElement() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_moveElement() failed");
 	}
 	if (resB) {
 		data[0] = 3;
@@ -1785,7 +1781,7 @@ TEST__7(void)
 		data[4] = 4;
 		data[5] = 2;
 		/* */
-		resB = TEST__7_sub(&dl, 6, data);
+		resB = TEST_DL__7_sub(&dl, 6, data);
 	}
 	if (! resB) {
 		st_dynlist_stc_freeDL(&dl);
@@ -1794,23 +1790,23 @@ TEST__7(void)
 
 	/* */
 	st_dynlist_stc_rsetDL(&dl);
-	TEST__prf(cFNC, "#4 Adding elements...");
-	resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+	TEST_FCOM__prf(cFNC, "#4 Adding elements...");
+	resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 	if (resB) {
-		TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 5, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 6, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 5, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 6, &pUI32);
 	}
 	/* */
-	TEST__prf(cFNC, "#4 Moving elements...");
+	TEST_FCOM__prf(cFNC, "#4 Moving elements...");
 	resB = st_dynlist_moveElement(&dl, 6, 1);  /* 6 1 2 3 4 5 */
 	if (resB) {
 		resB = st_dynlist_moveElement(&dl, 3, 5);  /* 6 1 3 4 2 5 */
 	}
 	if (! resB) {
-		TEST__prf(cFNC, "st_dynlist_moveElement() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_moveElement() failed");
 	}
 	if (resB) {
 		data[0] = 6;
@@ -1820,7 +1816,7 @@ TEST__7(void)
 		data[4] = 2;
 		data[5] = 5;
 		/* */
-		resB = TEST__7_sub(&dl, 6, data);
+		resB = TEST_DL__7_sub(&dl, 6, data);
 	}
 	if (! resB) {
 		st_dynlist_stc_freeDL(&dl);
@@ -1829,17 +1825,17 @@ TEST__7(void)
 
 	/* */
 	st_dynlist_stc_rsetDL(&dl);
-	TEST__prf(cFNC, "#5 Adding elements...");
-	resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+	TEST_FCOM__prf(cFNC, "#5 Adding elements...");
+	resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 	if (resB) {
-		TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 5, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 6, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 5, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 6, &pUI32);
 	}
 	/* */
-	TEST__prf(cFNC, "#5 Moving elements...");
+	TEST_FCOM__prf(cFNC, "#5 Moving elements...");
 	resB = st_dynlist_moveElement(&dl, 2, 7);  /* 1 3 4 5 6 2 */
 	if (resB) {
 		resB = st_dynlist_moveElement(&dl, 6, 1);  /* 2 1 3 4 5 6 */
@@ -1857,7 +1853,7 @@ TEST__7(void)
 		resB = st_dynlist_moveElement(&dl, 5, 6);  /* 2 1 4 6 3 5 */
 	}
 	if (! resB) {
-		TEST__prf(cFNC, "st_dynlist_moveElement() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_moveElement() failed");
 	}
 	if (resB) {
 		data[0] = 2;
@@ -1867,7 +1863,7 @@ TEST__7(void)
 		data[4] = 3;
 		data[5] = 5;
 		/* */
-		resB = TEST__7_sub(&dl, 6, data);
+		resB = TEST_DL__7_sub(&dl, 6, data);
 	}
 	if (! resB) {
 		st_dynlist_stc_freeDL(&dl);
@@ -1876,13 +1872,13 @@ TEST__7(void)
 
 	/* */
 	st_dynlist_stc_rsetDL(&dl);
-	TEST__prf(cFNC, "#6 Adding elements...");
-	resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+	TEST_FCOM__prf(cFNC, "#6 Adding elements...");
+	resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 	if (resB) {
-		TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
 	}
 	/* */
-	TEST__prf(cFNC, "#6 Moving elements...");
+	TEST_FCOM__prf(cFNC, "#6 Moving elements...");
 	resB = st_dynlist_moveElement(&dl, 1, 1);  /* 1 2 */
 	if (resB) {
 		resB = st_dynlist_moveElement(&dl, 2, 2);  /* 1 2 */
@@ -1891,7 +1887,7 @@ TEST__7(void)
 		resB = st_dynlist_moveElement(&dl, 1, 2);  /* 2 1 */
 	}
 	if (! resB) {
-		TEST__prf(cFNC, "st_dynlist_moveElement() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_moveElement() failed");
 	}
 	if (resB) {
 		data[0] = 2;
@@ -1901,7 +1897,7 @@ TEST__7(void)
 		data[4] = 0;
 		data[5] = 0;
 		/* */
-		resB = TEST__7_sub(&dl, 2, data);
+		resB = TEST_DL__7_sub(&dl, 2, data);
 	}
 	if (! resB) {
 		st_dynlist_stc_freeDL(&dl);
@@ -1910,17 +1906,17 @@ TEST__7(void)
 
 	/* */
 	st_dynlist_stc_rsetDL(&dl);
-	TEST__prf(cFNC, "#7 Adding elements...");
-	resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+	TEST_FCOM__prf(cFNC, "#7 Adding elements...");
+	resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 	if (resB) {
-		TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
 	}
 	/* */
-	TEST__prf(cFNC, "#7 Moving elements...");
+	TEST_FCOM__prf(cFNC, "#7 Moving elements...");
 	resB = st_dynlist_moveElement(&dl, 3, 1);  /* 3 1 2 */
 	if (! resB) {
-		TEST__prf(cFNC, "st_dynlist_moveElement() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_moveElement() failed");
 	}
 	if (resB) {
 		data[0] = 3;
@@ -1930,7 +1926,7 @@ TEST__7(void)
 		data[4] = 0;
 		data[5] = 0;
 		/* */
-		resB = TEST__7_sub(&dl, 3, data);
+		resB = TEST_DL__7_sub(&dl, 3, data);
 	}
 	if (! resB) {
 		st_dynlist_stc_freeDL(&dl);
@@ -1939,23 +1935,23 @@ TEST__7(void)
 
 	/* */
 	st_dynlist_stc_rsetDL(&dl);
-	TEST__prf(cFNC, "#8 Adding elements...");
-	resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+	TEST_FCOM__prf(cFNC, "#8 Adding elements...");
+	resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 	if (resB) {
-		TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 5, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 6, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 5, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 6, &pUI32);
 	}
 	/* */
-	TEST__prf(cFNC, "#8 Moving elements...");
+	TEST_FCOM__prf(cFNC, "#8 Moving elements...");
 	resB = st_dynlist_moveElement(&dl, 2, 4);  /* 1 3 4 2 5 6 */
 	if (resB) {
 		resB = st_dynlist_moveElement(&dl, 5, 2);  /* 1 5 3 4 2 6 */
 	}
 	if (! resB) {
-		TEST__prf(cFNC, "st_dynlist_moveElement() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_moveElement() failed");
 	}
 	if (resB) {
 		data[0] = 1;
@@ -1965,7 +1961,7 @@ TEST__7(void)
 		data[4] = 2;
 		data[5] = 6;
 		/* */
-		resB = TEST__7_sub(&dl, 6, data);
+		resB = TEST_DL__7_sub(&dl, 6, data);
 	}
 	if (! resB) {
 		st_dynlist_stc_freeDL(&dl);
@@ -1974,21 +1970,21 @@ TEST__7(void)
 
 	/* */
 	st_dynlist_stc_rsetDL(&dl);
-	TEST__prf(cFNC, "#9 Adding elements...");
-	resB = TEST__addDataUI32(cFNC, &dl, 1, &pUI32);
+	TEST_FCOM__prf(cFNC, "#9 Adding elements...");
+	resB = TEST_DL__addDataUI32(cFNC, &dl, 1, &pUI32);
 	if (resB) {
-		TEST__addDataUI32(cFNC, &dl, 2, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 3, &pUI32);
-		TEST__addDataUI32(cFNC, &dl, 4, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 2, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 3, &pUI32);
+		TEST_DL__addDataUI32(cFNC, &dl, 4, &pUI32);
 	}
 	/* */
-	TEST__prf(cFNC, "#9 Moving elements...");
+	TEST_FCOM__prf(cFNC, "#9 Moving elements...");
 	resB = st_dynlist_moveElement(&dl, 3, 1);  /* 3 1 2 4 */
 	if (resB) {
 		resB = st_dynlist_moveElement(&dl, 4, 1);  /* 4 3 1 2 */
 	}
 	if (! resB) {
-		TEST__prf(cFNC, "st_dynlist_moveElement() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_moveElement() failed");
 	}
 	if (resB) {
 		data[0] = 4;
@@ -1998,7 +1994,7 @@ TEST__7(void)
 		data[4] = 0;
 		data[5] = 0;
 		/* */
-		resB = TEST__7_sub(&dl, 4, data);
+		resB = TEST_DL__7_sub(&dl, 4, data);
 	}
 	if (resB) {
 		resB = st_dynlist_moveElement(&dl, 1, 3);  /* 3 1 4 2 */
@@ -2014,12 +2010,12 @@ TEST__7(void)
 		data[4] = 0;
 		data[5] = 0;
 		/* */
-		resB = TEST__7_sub(&dl, 4, data);
+		resB = TEST_DL__7_sub(&dl, 4, data);
 	}
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "OK");
+		TEST_FCOM__prf(cFNC, "OK");
 	}
 	st_dynlist_stc_freeDL(&dl);
 	return resB;
@@ -2032,7 +2028,7 @@ TEST__7(void)
  * Create file to sort
  */
 Tst_bool
-TEST__createSortFile(const Tst_str *pPath,
+TEST_DL__createSortFile(const Tst_str *pPath,
 		const Tst_int32 tp, const Tst_uint32 sz)
 {
 	Tst_bool     resB = ST_B_TRUE;
@@ -2042,11 +2038,11 @@ TEST__createSortFile(const Tst_str *pPath,
 	             div,
 	             *pUI32 = NULL;
 	Tst_dynlist  dl;
-	Ttest__sort  custSO;
+	TtestDl__sort  custSO;
 
 	st_sys_stc_initFStc(&fstc);
 	st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 
 	snprintf((char*)fn, sizeof(fn), "./%s/sort-%s-%08x.bin",
 			(char*)pPath,
@@ -2099,7 +2095,7 @@ TEST__createSortFile(const Tst_str *pPath,
 		TEST__RSET_SORT(custSO)
 		custSO.asc = (tp == 0);
 		resB = st_dynlist_sortElements(&dl, ST_DYNLIST_SA_QUICKSORT,
-				TEST__cbCmpElemsUI32, TEST__cbSortStatus, &custSO);
+				TEST_DL__cbCmpElemsUI32, TEST_DL__cbSortStatus, &custSO);
 		if (! resB) {
 			printf(" st_dynlist_sortElements() failed\n");
 		}
@@ -2147,7 +2143,7 @@ TEST__createSortFile(const Tst_str *pPath,
  * Print file to sort
  */
 Tst_bool
-TEST__printSortFile(const Tst_str *pFn, Tst_dynlist *pDL)
+TEST_DL__printSortFile(const Tst_str *pFn, Tst_dynlist *pDL)
 {
 	Tst_bool     resB = ST_B_TRUE;
 	Tst_sys_fstc fstc;
@@ -2227,12 +2223,12 @@ TEST__printSortFile(const Tst_str *pFn, Tst_dynlist *pDL)
 /*----------------------------------------------------------------------------*/
 
 Tst_bool
-TEST__bench_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
+TEST_DL__bench_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 		const Tst_dynlist_sortAlgo sortAlgo, const Tst_bool ascOrDesc,
 		const Tst_bool showUS, const Tst_bool showSO,
 		const Tst_uint32 runC, const Tst_uint32 runT)
 {
-	const char *cFNC = "TEST__bench_sub2";
+	const char *cFNC = __func__;
 	Tst_bool    resB;
 	Tst_uint32  cnt    = 0,
 	            *pUI32 = NULL,
@@ -2240,42 +2236,42 @@ TEST__bench_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 	char        msg[512];
 	double      timeB,
 	            timeE;
-	Ttest__sort custSO;
+	TtestDl__sort custSO;
 
 	/* */
 	printf("\n");
 	sprintf(msg, "run     : %u/%u", runC, runT);
-	TEST__prf(cFNC, msg);
+	TEST_FCOM__prf(cFNC, msg);
 	switch (sortAlgo) {
 		case ST_DYNLIST_SA_DEF:
-			TEST__prf(cFNC, "sortAlgo: Default");
+			TEST_FCOM__prf(cFNC, "sortAlgo: Default");
 			break;
 		case ST_DYNLIST_SA_INSSORT:
-			TEST__prf(cFNC, "sortAlgo: Insertionsort");
+			TEST_FCOM__prf(cFNC, "sortAlgo: Insertionsort");
 			break;
 		case ST_DYNLIST_SA_QUICKSORT:
-			TEST__prf(cFNC, "sortAlgo: Quicksort");
+			TEST_FCOM__prf(cFNC, "sortAlgo: Quicksort");
 			break;
 		case ST_DYNLIST_SA_MERGESORT:
-			TEST__prf(cFNC, "sortAlgo: Mergesort");
+			TEST_FCOM__prf(cFNC, "sortAlgo: Mergesort");
 			break;
 		default:
-			TEST__prf(cFNC, "sortAlgo: unknown");
+			TEST_FCOM__prf(cFNC, "sortAlgo: unknown");
 			break;
 	}
 	sprintf(msg, "order   : %s", ascOrDesc ? "asc" : "desc");
-	TEST__prf(cFNC, msg);
+	TEST_FCOM__prf(cFNC, msg);
 	/* */
-	TEST__prf(cFNC, "Getting unsorted elements...");
+	TEST_FCOM__prf(cFNC, "Getting unsorted elements...");
 	cnt = st_dynlist_getElementCount(pDL);
 	if (cnt != elemCnt) {
 		sprintf(msg, "amount of elems wrong: %u != %u", cnt, elemCnt);
-		TEST__prf(cFNC, msg);
+		TEST_FCOM__prf(cFNC, msg);
 		resB = ST_B_FALSE;
 	} else {
 		st_dynlist_ite_gotoFirst(pDL);
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
@@ -2291,11 +2287,11 @@ TEST__bench_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 		TEST__RSET_SORT(custSO)
 		custSO.asc = ascOrDesc;
 		timeB = st_sysGetTime();
-		TEST__prf(cFNC, "Sorting elements...");
+		TEST_FCOM__prf(cFNC, "Sorting elements...");
 		resB = st_dynlist_sortElements(pDL, sortAlgo,
-				TEST__cbCmpElemsUI32, TEST__cbSortStatus, &custSO);
+				TEST_DL__cbCmpElemsUI32, TEST_DL__cbSortStatus, &custSO);
 		if (! resB) {
-			TEST__prf(cFNC, "st_dynlist_sortElements() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_sortElements() failed");
 		} else {
 			timeE = st_sysGetTime();
 			printf("\t\t\ttime --> %.2fs  (comps: %010u)\n\n",
@@ -2305,11 +2301,11 @@ TEST__bench_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Checking sorted elements...");
+		TEST_FCOM__prf(cFNC, "Checking sorted elements...");
 		cnt = st_dynlist_getElementCount(pDL);
 		if (cnt != elemCnt) {
 			sprintf(msg, "amount of elems wrong: %u != %u", cnt, elemCnt);
-			TEST__prf(cFNC, msg);
+			TEST_FCOM__prf(cFNC, msg);
 			resB = ST_B_FALSE;
 		}
 	}
@@ -2323,7 +2319,7 @@ TEST__bench_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 		}
 		st_dynlist_ite_gotoFirst(pDL);
 		do {
-			resB = TEST__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
+			resB = TEST_DL__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
 			if (! resB) {
 				break;
 			}
@@ -2334,11 +2330,11 @@ TEST__bench_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 			if (! resB) {
 				sprintf(msg, "  sorting error: %u !%s %u",
 						*pUI32, (ascOrDesc ? ">=" : "<="), x);
-				TEST__prf(cFNC, msg);
+				TEST_FCOM__prf(cFNC, msg);
 				/* */
 				st_dynlist_ite_gotoFirst(pDL);
 				do {
-					TEST__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
+					TEST_DL__getIxAndDataUI32(cFNC, pDL, &pUI32, &eix);
 					printf("  ix %010u data: %010u\n", eix, *pUI32);
 				} while (st_dynlist_ite_gotoNext(pDL));
 				break;
@@ -2348,10 +2344,10 @@ TEST__bench_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 	}
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "Checking internal state of list...");
+		TEST_FCOM__prf(cFNC, "Checking internal state of list...");
 		resB = st_dynlist_check(pDL);
 		if (! resB) {
-			TEST__prf(cFNC, "st_dynlist_check() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_check() failed");
 		}
 	}
 
@@ -2359,11 +2355,11 @@ TEST__bench_sub2(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 }
 
 Tst_bool
-TEST__bench_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
-		const Tst_dynlist_sortAlgo sortAlgo, const Ttest__dir dir,
+TEST_DL__bench_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
+		const Tst_dynlist_sortAlgo sortAlgo, const TtestDl__dir dir,
 		const Tst_bool showUS, const Tst_bool showSO)
 {
-	const char       *cFNC = "TEST__bench_sub";
+	const char      *cFNC  = __func__;
 	const Tst_uint32 cRUNS = 1;
 	Tst_bool    resB = ST_B_TRUE;
 	Tst_err     res  = ST_ERR_SUCC;
@@ -2374,12 +2370,12 @@ TEST__bench_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 	            *pUse;
 
 	res = st_dynlist_stc_initDL(&dupLst, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
 		if (res == ST_ERR_OMEM) {
-			TEST__prf(cFNC, "out of mem");
+			TEST_FCOM__prf(cFNC, "out of mem");
 		} else {
-			TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+			TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		}
 		return ST_B_FALSE;
 	}
@@ -2400,16 +2396,16 @@ TEST__bench_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
 			}
 			for (x = 0; x < cRUNS; x++) {
 				if (pUse == &dupLst) {
-					TEST__prf(cFNC, "cloning list from org to dup...");
+					TEST_FCOM__prf(cFNC, "cloning list from org to dup...");
 					res = st_dynlist_clone(pDL, &dupLst,
-							TEST__cbCloneInitElem, TEST__cbCloneCopyElem);
+							TEST_DL__cbCloneInitElem, TEST_DL__cbCloneCopyElem);
 				}
 				if (res != ST_ERR_SUCC) {
-					TEST__prf(cFNC, "st_dynlist_clone() failed");
+					TEST_FCOM__prf(cFNC, "st_dynlist_clone() failed");
 					resB = ST_B_FALSE;
 					break;
 				}
-				if (! TEST__bench_sub2(pUse, elemCnt,
+				if (! TEST_DL__bench_sub2(pUse, elemCnt,
 						(Tst_dynlist_sortAlgo)sa, ad == (int)TEST_DIR_ASC,
 						showUS, showSO,
 						x + 1, cRUNS)) {
@@ -2436,17 +2432,17 @@ TEST__bench_sub(Tst_dynlist *pDL, const Tst_uint32 elemCnt,
  */
 #if (RUN_BENCH_1 == 1)
 Tst_bool
-TEST__bench1(void)
+TEST_DL__bench1(void)
 {
-#	define LOC_RUN_1  1
-#	define LOC_RUN_2  1
-	const char    *cFNC  = "TEST__bench1";
-#	if (LOC_RUN_1 == 1)
-	const Tst_uint32 cELEMS1 = 0x00000fff;
-#	endif
-#	if (LOC_RUN_2 == 1)
-	const Tst_uint32 cELEMS2 = 0x000fffff;
-#	endif
+	#define LOC_RUN_1  1
+	#define LOC_RUN_2  1
+	const char *cFNC = __func__;
+	#if (LOC_RUN_1 == 1)
+		const Tst_uint32 cELEMS1 = 0x00000fff;
+	#endif
+	#if (LOC_RUN_2 == 1)
+		const Tst_uint32 cELEMS2 = 0x000fffff;
+	#endif
 	Tst_bool    resB = ST_B_TRUE;
 	Tst_err     res;
 	Tst_uint32  x,
@@ -2456,95 +2452,95 @@ TEST__bench1(void)
 	char        msg[512];
 
 	res = st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32);
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+		TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		return ST_B_FALSE;
 	}
 
 	/* all algos */
-#	if (LOC_RUN_1 == 1)
-	sprintf(msg, "#1 Adding/Inserting %u elements (ca. %.2f MB RAM)...",
-			cELEMS1,
-			(double)((cELEMS1 + 1024) *
-					(sizeof(Tst_uint32) + (3 * sizeof(void*)))) /
-				(1024.0 * 1024.0));
-	TEST__prf(cFNC, msg);
-	for (x = 0; x < cELEMS1; x++) {
-		if (x % 10000 == 0 || x + 1 == cELEMS1) {
-			fprintf(stderr, "\r  add  prog %.2f%%",
-					((double)x / (double)cELEMS1) * 100);
-			if (x + 1 == cELEMS1) {
-				fprintf(stderr, "\n");
-			}
-		}
-		if (st_sysGetRand(1, 1000) % 2 == 0) {
-			div = st_sysGetRand(1, st_sysGetRand(1, 100000));
-		} else {
-			div = 1;
-		}
-		if (st_dynlist_isEmpty(&dl) || st_sysGetRand(1, 1000) % 2 == 0) {
-			/* add */
-			resB = TEST__addDataUI32(cFNC, &dl,
-					st_sysGetRand(1, 0xffffffff / div), &pUI32);
-		} else {
-			/* insert */
-			resB = TEST__insDataUI32(cFNC, &dl,
-					st_sysGetRand(1, st_dynlist_getElementCount(&dl)),
-					st_sysGetRand(1, 0xffffffff / div), &pUI32);
-		}
-		if (! resB) {
-			break;
-		}
-	}
-	if (resB) {
-		TEST__prf(cFNC, "using all algos");
-		resB = TEST__bench_sub(&dl, cELEMS1,
-				ST_DYNLIST_SA_NONE, TEST_DIR_NONE, ST_B_FALSE, ST_B_FALSE);
-	}
-#	endif
-
-	/* only quick-/mergesort */
-#	if (LOC_RUN_2 == 1)
-	if (resB) {
-		printf("\n");
-		st_dynlist_stc_rsetDL(&dl);
-		sprintf(msg, "#2 Inserting %u elements (ca. %.2f MB RAM)...",
-				cELEMS2,
-				(double)((cELEMS2 + 1024) *
+	#if (LOC_RUN_1 == 1)
+		sprintf(msg, "#1 Adding/Inserting %u elements (ca. %.2f MB RAM)...",
+				cELEMS1,
+				(double)((cELEMS1 + 1024) *
 						(sizeof(Tst_uint32) + (3 * sizeof(void*)))) /
 					(1024.0 * 1024.0));
-		TEST__prf(cFNC, msg);
-		for (x = 0; x < cELEMS2; x++) {
-			if (x % 10000 == 0 || x + 1 == cELEMS2) {
+		TEST_FCOM__prf(cFNC, msg);
+		for (x = 0; x < cELEMS1; x++) {
+			if (x % 10000 == 0 || x + 1 == cELEMS1) {
 				fprintf(stderr, "\r  add  prog %.2f%%",
-						((double)x / (double)cELEMS2) * 100);
-				if (x + 1 == cELEMS2) {
+						((double)x / (double)cELEMS1) * 100);
+				if (x + 1 == cELEMS1) {
 					fprintf(stderr, "\n");
 				}
 			}
-			div = st_sysGetRand(1, st_sysGetRand(1, 100000));
-			/* insert */
-			resB = TEST__insDataUI32(cFNC, &dl,
-					1, st_sysGetRand(1, 0xffffffff / div), &pUI32);
+			if (st_sysGetRand(1, 1000) % 2 == 0) {
+				div = st_sysGetRand(1, st_sysGetRand(1, 100000));
+			} else {
+				div = 1;
+			}
+			if (st_dynlist_isEmpty(&dl) || st_sysGetRand(1, 1000) % 2 == 0) {
+				/* add */
+				resB = TEST_DL__addDataUI32(cFNC, &dl,
+						st_sysGetRand(1, 0xffffffff / div), &pUI32);
+			} else {
+				/* insert */
+				resB = TEST_DL__insDataUI32(cFNC, &dl,
+						st_sysGetRand(1, st_dynlist_getElementCount(&dl)),
+						st_sysGetRand(1, 0xffffffff / div), &pUI32);
+			}
 			if (! resB) {
 				break;
 			}
 		}
 		if (resB) {
-			TEST__prf(cFNC, "using only quicksort");
-			resB = TEST__bench_sub(&dl, cELEMS2,
-					ST_DYNLIST_SA_QUICKSORT, TEST_DIR_NONE, ST_B_FALSE, ST_B_FALSE);
-			TEST__prf(cFNC, "using only mergesort");
-			resB = TEST__bench_sub(&dl, cELEMS2,
-					ST_DYNLIST_SA_MERGESORT, TEST_DIR_NONE, ST_B_FALSE, ST_B_FALSE);
+			TEST_FCOM__prf(cFNC, "using all algos");
+			resB = TEST_DL__bench_sub(&dl, cELEMS1,
+					ST_DYNLIST_SA_NONE, TEST_DIR_NONE, ST_B_FALSE, ST_B_FALSE);
 		}
-	}
-#	endif
+	#endif
+
+	/* only quick-/mergesort */
+	#if (LOC_RUN_2 == 1)
+		if (resB) {
+			printf("\n");
+			st_dynlist_stc_rsetDL(&dl);
+			sprintf(msg, "#2 Inserting %u elements (ca. %.2f MB RAM)...",
+					cELEMS2,
+					(double)((cELEMS2 + 1024) *
+							(sizeof(Tst_uint32) + (3 * sizeof(void*)))) /
+						(1024.0 * 1024.0));
+			TEST_FCOM__prf(cFNC, msg);
+			for (x = 0; x < cELEMS2; x++) {
+				if (x % 10000 == 0 || x + 1 == cELEMS2) {
+					fprintf(stderr, "\r  add  prog %.2f%%",
+							((double)x / (double)cELEMS2) * 100);
+					if (x + 1 == cELEMS2) {
+						fprintf(stderr, "\n");
+					}
+				}
+				div = st_sysGetRand(1, st_sysGetRand(1, 100000));
+				/* insert */
+				resB = TEST_DL__insDataUI32(cFNC, &dl,
+						1, st_sysGetRand(1, 0xffffffff / div), &pUI32);
+				if (! resB) {
+					break;
+				}
+			}
+			if (resB) {
+				TEST_FCOM__prf(cFNC, "using only quicksort");
+				resB = TEST_DL__bench_sub(&dl, cELEMS2,
+						ST_DYNLIST_SA_QUICKSORT, TEST_DIR_NONE, ST_B_FALSE, ST_B_FALSE);
+				TEST_FCOM__prf(cFNC, "using only mergesort");
+				resB = TEST_DL__bench_sub(&dl, cELEMS2,
+						ST_DYNLIST_SA_MERGESORT, TEST_DIR_NONE, ST_B_FALSE, ST_B_FALSE);
+			}
+		}
+	#endif
 
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "OK");
+		TEST_FCOM__prf(cFNC, "OK");
 	}
 	st_dynlist_stc_freeDL(&dl);
 	return resB;
@@ -2557,28 +2553,28 @@ TEST__bench1(void)
  * Benchmark sorting algos
  */
 Tst_bool
-TEST__bench2(const Tst_str *pFn, const Tst_dynlist_sortAlgo algo,
-		const Ttest__dir dir)
+TEST_DL__bench2(const Tst_str *pFn, const Tst_dynlist_sortAlgo algo,
+		const TtestDl__dir dir)
 {
-	const char *cFNC = "TEST__bench2";
+	const char *cFNC = __func__;
 	Tst_bool    resB;
 	Tst_dynlist dl;
 
-	TEST__prf(cFNC, "Starting...");
+	TEST_FCOM__prf(cFNC, "Starting...");
 	if (st_dynlist_stc_initDL(&dl, sizeof(Tst_uint32),
-			TEST__cbRsetElemUI32, TEST__cbFreeElemUI32) != ST_ERR_SUCC) {
-		TEST__prf(cFNC, "st_dynlist_stc_initDL() failed");
+			TEST_DL__cbRsetElemUI32, TEST_DL__cbFreeElemUI32) != ST_ERR_SUCC) {
+		TEST_FCOM__prf(cFNC, "st_dynlist_stc_initDL() failed");
 		return ST_B_FALSE;
 	}
-	if (! TEST__printSortFile(pFn, &dl)) {
+	if (! TEST_DL__printSortFile(pFn, &dl)) {
 		return ST_B_FALSE;
 	}
 
-	resB = TEST__bench_sub(&dl, st_dynlist_getElementCount(&dl),
+	resB = TEST_DL__bench_sub(&dl, st_dynlist_getElementCount(&dl),
 			algo, dir, ST_B_FALSE, ST_B_FALSE);
 	/* */
 	if (resB) {
-		TEST__prf(cFNC, "OK");
+		TEST_FCOM__prf(cFNC, "OK");
 	}
 	st_dynlist_stc_freeDL(&dl);
 	return resB;

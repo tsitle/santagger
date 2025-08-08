@@ -25,13 +25,13 @@
 #include "src/includes/common/streamrd.h"
 #include "src/includes/common/sys_file.h"
 #include "src/includes/common/sys_fnc.h"
+#include "fncs_test_common.h"
 
 /*
 // System-Includes
 */
 #include <stdlib.h>       /* exit(), calloc(), getenv() */
 #include <string.h>       /* memset() */
-#include <stdarg.h>       /* va_list, ... */
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -43,16 +43,16 @@
 #define RUN_TEST_3   1
 
 #if (RUN_TEST_0 == 1)
-Tst_bool TEST__0_cpFile(const char *pInFn);
+	Tst_bool TEST_STRRD__0_cpFile(const char *pInFn);
 #endif
 #if (RUN_TEST_1 == 1)
-Tst_bool TEST__1_cpFile(const char *pInFn);
+	Tst_bool TEST_STRRD__1_cpFile(const char *pInFn);
 #endif
 #if (RUN_TEST_2 == 1)
-Tst_bool TEST__2_cpFile(const char *pInFn);
+	Tst_bool TEST_STRRD__2_cpFile(const char *pInFn);
 #endif
 #if (RUN_TEST_3 == 1)
-Tst_bool TEST__3_cpFile(const char *pInFn);
+	Tst_bool TEST_STRRD__3_cpFile(const char *pInFn);
 #endif
 
 /*----------------------------------------------------------------------------*/
@@ -66,77 +66,47 @@ main(const int argc, const char *argv[])
 		return 1;
 	}
 
-#	if (RUN_TEST_0 == 1)
-	if (! TEST__0_cpFile(argv[1])) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_0 == 1)
+		if (! TEST_STRRD__0_cpFile(argv[1])) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_1 == 1)
-	if (! TEST__1_cpFile(argv[1])) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_1 == 1)
+		if (! TEST_STRRD__1_cpFile(argv[1])) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_2 == 1)
-	if (! TEST__2_cpFile(argv[1])) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_2 == 1)
+		if (! TEST_STRRD__2_cpFile(argv[1])) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_3 == 1)
-	if (! TEST__3_cpFile(argv[1])) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_3 == 1)
+		if (! TEST_STRRD__3_cpFile(argv[1])) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-	printf("All tests passed :-)\n");
+	printf("TEST_STRRD -- All tests passed :-)\n");
 	return 0;
 }
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-void
-TEST__prf(const char *pFnc, const char *pMsg, ...)
-{
-	va_list args;
-
-	printf("%s(): ", pFnc);
-	va_start(args, pMsg);
-	vprintf(pMsg, args);
-	va_end(args);
-	printf("\n");
-}
-/*
-void
-TEST__prf32(const char *pFnc, const char *pMsg, const Tst_uint32 v32)
-{
-	printf("%s(): %s ", pFnc, pMsg);
-	printf("0x%08x\n", v32);
-}
-
-void
-TEST__prf32dec(const char *pFnc, const char *pMsg, const Tst_uint32 v32)
-{
-	printf("%s(): %s ", pFnc, pMsg);
-	printf("%u\n", v32);
-}
-*/
-
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-
 Tst_bool
-SF__setupFiles(const char *pFnc, const int fncNr, const char *pInFn,
+TEST_STRRD__SF__setupFiles(const char *pFnc, const int fncNr, const char *pInFn,
 		Tst_sys_fstc *pFStcIn, Tst_sys_fstc *pFStcOut, Tst_streamrd *pSObj)
 {
 	Tst_bool bres    = ST_B_TRUE;
@@ -149,7 +119,7 @@ SF__setupFiles(const char *pFnc, const int fncNr, const char *pInFn,
 	st_sysFStc_setFilen(pFStcIn, (Tst_str*)pInFn);
 	res = st_sysFStc_openExisting(pFStcIn, ST_B_TRUE, ST_B_FALSE);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(pFnc, "Can't open file '%s'",
+		TEST_FCOM__prf(pFnc, "Can't open file '%s'",
 				st_sysFStc_getFilen(pFStcIn));
 		st_sys_stc_freeFStc(pFStcIn);
 		st_sys_stc_freeFStc(pFStcOut);
@@ -164,7 +134,7 @@ SF__setupFiles(const char *pFnc, const int fncNr, const char *pInFn,
 	ST_DELPOINT(pOutFn)
 	res = st_sysFStc_openNew(pFStcOut);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(pFnc, "Can't create file '%s'",
+		TEST_FCOM__prf(pFnc, "Can't create file '%s'",
 				st_sysFStc_getFilen(pFStcOut));
 		st_sysFStc_close(pFStcIn);
 		st_sys_stc_freeFStc(pFStcIn);
@@ -177,24 +147,24 @@ SF__setupFiles(const char *pFnc, const int fncNr, const char *pInFn,
 	res = st_streamrd_setInput_file(pSObj, pFStcIn);
 	if (res != ST_ERR_SUCC) {
 		bres = ST_B_FALSE;
-		TEST__prf(pFnc, "Can't associate inp-file with SObj");
+		TEST_FCOM__prf(pFnc, "Can't associate inp-file with SObj");
 	}
 
 	return bres;
 }
 
 void
-SF__freeStcs(Tst_sys_fstc *pFStcIn, Tst_sys_fstc *pFStcOut,
+TEST_STRRD__SF__freeStcs(Tst_sys_fstc *pFStcIn, Tst_sys_fstc *pFStcOut,
 		Tst_streamrd *pSObj, const Tst_bool delFile)
 {
 	st_streamrd_stc_freeSObj(pSObj);
 	st_sysFStc_close(pFStcIn);
 	st_sysFStc_close(pFStcOut);
-#	if (DEL_OUTP_FILES == 1)
-	if (delFile) {
-		st_sysUnlinkFile(st_sysFStc_getFilen(pFStcOut));
-	}
-#	endif
+	#if (DEL_OUTP_FILES == 1)
+		if (delFile) {
+			st_sysUnlinkFile(st_sysFStc_getFilen(pFStcOut));
+		}
+	#endif
 	st_sys_stc_freeFStc(pFStcIn);
 	st_sys_stc_freeFStc(pFStcOut);
 }
@@ -206,9 +176,9 @@ SF__freeStcs(Tst_sys_fstc *pFStcIn, Tst_sys_fstc *pFStcOut,
  * Tests the Stream Reader
  */
 Tst_bool
-TEST__0_cpFile(const char *pInFn)
+TEST_STRRD__0_cpFile(const char *pInFn)
 {
-	const char *cFNCN = "TEST__0_cpFile";
+	const char *cFNCN = __func__;
 	Tst_bool     bres = ST_B_TRUE;
 	Tst_err      res  = ST_ERR_SUCC;
 	Tst_sys_fstc fstcIn,
@@ -218,13 +188,13 @@ TEST__0_cpFile(const char *pInFn)
 	             *pIB,
 	             *pIBEnd;
 
-	if (! SF__setupFiles(cFNCN, 0, pInFn,
+	if (! TEST_STRRD__SF__setupFiles(cFNCN, 0, pInFn,
 			&fstcIn, &fstcOut, &sobj)) {
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNCN, "Copying file...");
+	TEST_FCOM__prf(cFNCN, "Copying file...");
 	st_streamrd_startCRC8(&sobj);
 	st_streamrd_startCRC16(&sobj);
 	st_streamrd_startCRC32(&sobj);
@@ -237,10 +207,10 @@ TEST__0_cpFile(const char *pInFn)
 			res = st_streamrd_rdByte(&sobj, 8, pIB);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "st_streamrd_rdByte() failed");
+					TEST_FCOM__prf(cFNCN, "st_streamrd_rdByte() failed");
 				}
 				break;
 			}
@@ -254,17 +224,17 @@ TEST__0_cpFile(const char *pInFn)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, " CRC8 : 0x%02x        %u",
+		TEST_FCOM__prf(cFNCN, " CRC8 : 0x%02x        %u",
 				st_streamrd_getCRC8(&sobj), st_streamrd_getCRC8(&sobj));
-		TEST__prf(cFNCN, " CRC16: 0x%04x      %u",
+		TEST_FCOM__prf(cFNCN, " CRC16: 0x%04x      %u",
 				st_streamrd_getCRC16(&sobj), st_streamrd_getCRC16(&sobj));
-		TEST__prf(cFNCN, " CRC32: 0x%08x  %u",
+		TEST_FCOM__prf(cFNCN, " CRC32: 0x%08x  %u",
 				st_streamrd_getCRC32(&sobj), st_streamrd_getCRC32(&sobj));
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	/* */
-	SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
+	TEST_STRRD__SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
 	return bres;
 }
 
@@ -274,9 +244,9 @@ TEST__0_cpFile(const char *pInFn)
  * Tests the Stream Reader
  */
 Tst_bool
-TEST__1_cpFile(const char *pInFn)
+TEST_STRRD__1_cpFile(const char *pInFn)
 {
-	const char *cFNCN = "TEST__1_cpFile";
+	const char *cFNCN = __func__;
 	Tst_bool     bres = ST_B_TRUE;
 	Tst_err      res  = ST_ERR_SUCC;
 	Tst_sys_fstc fstcIn,
@@ -286,13 +256,13 @@ TEST__1_cpFile(const char *pInFn)
 	Tst_uint32   cp        = sizeof(buf),
 	             rdFromStr = 0;
 
-	if (! SF__setupFiles(cFNCN, 1, pInFn,
+	if (! TEST_STRRD__SF__setupFiles(cFNCN, 1, pInFn,
 			&fstcIn, &fstcOut, &sobj)) {
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNCN, "Copying file...");
+	TEST_FCOM__prf(cFNCN, "Copying file...");
 	while (res == ST_ERR_SUCC) {
 		if (cp > st_streamrd_getAmountRemainingBytes(&sobj)) {
 			cp = st_streamrd_getAmountRemainingBytes(&sobj);
@@ -300,10 +270,10 @@ TEST__1_cpFile(const char *pInFn)
 		res = st_streamrd_rdAheadBuffer(&sobj, cp, buf, &rdFromStr);
 		if (res != ST_ERR_SUCC || cp != rdFromStr) {
 			if (res == ST_ERR_FEOF) {
-				TEST__prf(cFNCN, "eof");
+				TEST_FCOM__prf(cFNCN, "eof");
 			} else {
 				bres = ST_B_FALSE;
-				TEST__prf(cFNCN, "ERROR #2");
+				TEST_FCOM__prf(cFNCN, "ERROR #2");
 			}
 		} else {
 			st_streamrd_rdSkipBytes(&sobj, cp, ST_B_TRUE);
@@ -315,11 +285,11 @@ TEST__1_cpFile(const char *pInFn)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	/* */
-	SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
+	TEST_STRRD__SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
 	return bres;
 }
 
@@ -329,9 +299,9 @@ TEST__1_cpFile(const char *pInFn)
  * Tests the Stream Reader
  */
 Tst_bool
-TEST__2_cpFile(const char *pInFn)
+TEST_STRRD__2_cpFile(const char *pInFn)
 {
-	const char *cFNCN = "TEST__2_cpFile";
+	const char *cFNCN = __func__;
 	Tst_bool     bres = ST_B_TRUE;
 	Tst_err      res  = ST_ERR_SUCC;
 	Tst_sys_fstc fstcIn,
@@ -346,13 +316,13 @@ TEST__2_cpFile(const char *pInFn)
 	Tst_byte     ui8       = 0;
 	Tst_uint16   ui16      = 0;
 
-	if (! SF__setupFiles(cFNCN, 2, pInFn,
+	if (! TEST_STRRD__SF__setupFiles(cFNCN, 2, pInFn,
 			&fstcIn, &fstcOut, &sobj)) {
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNCN, "Copying file...");
+	TEST_FCOM__prf(cFNCN, "Copying file...");
 	while (res == ST_ERR_SUCC) {
 		rb = st_streamrd_getAmountRemainingBytes(&sobj);
 		if (cp > rb) {
@@ -367,13 +337,13 @@ TEST__2_cpFile(const char *pInFn)
 					ST_STREAMRD_IEND_IGN, 32, &ui32);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "UI32  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "UI32  from %u to %u",
 						copied, copied + 4 - 1);
 				ui32 = st_sysReverseByteOrder_UI32(ui32);
 				st_sysFStc_writeBuf(&fstcOut, &ui32, 4);
@@ -384,13 +354,13 @@ TEST__2_cpFile(const char *pInFn)
 					ST_STREAMRD_IEND_IGN, 16, &ui16);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "UI16  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "UI16  from %u to %u",
 						copied, copied + 2 - 1);
 				ui16 = st_sysReverseByteOrder_UI16(ui16);
 				st_sysFStc_writeBuf(&fstcOut, &ui16, 2);
@@ -400,10 +370,10 @@ TEST__2_cpFile(const char *pInFn)
 			res = st_streamrd_rdByte(&sobj, 8, &ui8);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
 				st_sysFStc_writeBuf(&fstcOut, &ui8, 1);
@@ -411,13 +381,13 @@ TEST__2_cpFile(const char *pInFn)
 			res = st_streamrd_rdByte(&sobj, 8, &ui8);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "UI8x2  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "UI8x2  from %u to %u",
 						copied, copied + 2 - 1);
 				st_sysFStc_writeBuf(&fstcOut, &ui8, 1);
 				copied += 2;
@@ -426,13 +396,13 @@ TEST__2_cpFile(const char *pInFn)
 			res = st_streamrd_rdByte(&sobj, 8, &ui8);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "UI8  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "UI8  from %u to %u",
 						copied, copied + 1 - 1);
 				st_sysFStc_writeBuf(&fstcOut, &ui8, 1);
 				copied += 1;
@@ -441,13 +411,13 @@ TEST__2_cpFile(const char *pInFn)
 			res = st_streamrd_rdAheadBuffer(&sobj, cp, buf, &rdFromStr);
 			if (res != ST_ERR_SUCC || cp != rdFromStr) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "MCP  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "MCP  from %u to %u",
 						copied, copied + cp - 1);
 				st_streamrd_rdSkipBytes(&sobj, cp, ST_B_TRUE);
 				st_sysFStc_writeBuf(&fstcOut, buf, cp);
@@ -457,11 +427,11 @@ TEST__2_cpFile(const char *pInFn)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	/* */
-	SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
+	TEST_STRRD__SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
 	return bres;
 }
 
@@ -471,9 +441,9 @@ TEST__2_cpFile(const char *pInFn)
  * Tests the Stream Reader
  */
 Tst_bool
-TEST__3_cpFile(const char *pInFn)
+TEST_STRRD__3_cpFile(const char *pInFn)
 {
-	const char *cFNCN = "TEST__3_cpFile";
+	const char *cFNCN = __func__;
 	Tst_bool     bres = ST_B_TRUE;
 	Tst_err      res  = ST_ERR_SUCC;
 	Tst_sys_fstc fstcIn,
@@ -489,13 +459,13 @@ TEST__3_cpFile(const char *pInFn)
 	Tst_uint16   ui16      = 0;
 	Tst_uint32   rnd;
 
-	if (! SF__setupFiles(cFNCN, 3, pInFn,
+	if (! TEST_STRRD__SF__setupFiles(cFNCN, 3, pInFn,
 			&fstcIn, &fstcOut, &sobj)) {
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNCN, "Copying file...");
+	TEST_FCOM__prf(cFNCN, "Copying file...");
 	while (res == ST_ERR_SUCC) {
 		rnd = st_sysGetRand(1, 100);
 		rb  = st_streamrd_getAmountRemainingBytes(&sobj);
@@ -511,13 +481,13 @@ TEST__3_cpFile(const char *pInFn)
 					ST_STREAMRD_IEND_IGN, 32, &ui32);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "UI32  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "UI32  from %u to %u",
 						copied, copied + 4 - 1);
 				ui32 = st_sysReverseByteOrder_UI32(ui32);
 				st_sysFStc_writeBuf(&fstcOut, &ui32, 4);
@@ -528,13 +498,13 @@ TEST__3_cpFile(const char *pInFn)
 					ST_STREAMRD_IEND_IGN, 16, &ui16);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "UI16  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "UI16  from %u to %u",
 						copied, copied + 2 - 1);
 				ui16 = st_sysReverseByteOrder_UI16(ui16);
 				st_sysFStc_writeBuf(&fstcOut, &ui16, 2);
@@ -544,13 +514,13 @@ TEST__3_cpFile(const char *pInFn)
 			res = st_streamrd_rdAheadByte(&sobj, 8, &ui8);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "Ahead UI8  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "Ahead UI8  from %u to %u",
 						copied, copied + 1 - 1);
 			}
 		} else if (rb >= 2 && rnd % 11 == 0) {
@@ -558,26 +528,26 @@ TEST__3_cpFile(const char *pInFn)
 					ST_STREAMRD_IEND_IGN, 16, &ui16);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "Ahead UI16  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "Ahead UI16  from %u to %u",
 						copied, copied + 2 - 1);
 			}
 		} else if (rb > 0 && rnd % 9 == 0) {
 			res = st_streamrd_rdByte(&sobj, 8, &ui8);
 			if (res != ST_ERR_SUCC) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "UI8  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "UI8  from %u to %u",
 						copied, copied + 1 - 1);
 				st_sysFStc_writeBuf(&fstcOut, &ui8, 1);
 				copied += 1;
@@ -586,13 +556,13 @@ TEST__3_cpFile(const char *pInFn)
 			res = st_streamrd_rdAheadBuffer(&sobj, cp, buf, &rdFromStr);
 			if (res != ST_ERR_SUCC || cp != rdFromStr) {
 				if (res == ST_ERR_FEOF) {
-					TEST__prf(cFNCN, "eof");
+					TEST_FCOM__prf(cFNCN, "eof");
 				} else {
 					bres = ST_B_FALSE;
-					TEST__prf(cFNCN, "ERROR #2");
+					TEST_FCOM__prf(cFNCN, "ERROR #2");
 				}
 			} else {
-				TEST__prf(cFNCN, "MCP  from %u to %u",
+				TEST_FCOM__prf(cFNCN, "MCP  from %u to %u",
 						copied, copied + cp - 1);
 				st_streamrd_rdSkipBytes(&sobj, cp, ST_B_TRUE);
 				st_sysFStc_writeBuf(&fstcOut, buf, cp);
@@ -602,11 +572,11 @@ TEST__3_cpFile(const char *pInFn)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	/* */
-	SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
+	TEST_STRRD__SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
 	return bres;
 }
 

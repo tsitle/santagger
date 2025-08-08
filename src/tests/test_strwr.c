@@ -25,13 +25,13 @@
 #include "src/includes/common/streamwr.h"
 #include "src/includes/common/sys_file.h"
 #include "src/includes/common/sys_fnc.h"
+#include "fncs_test_common.h"
 
 /*
 // System-Includes
 */
 #include <stdlib.h>       /* exit(), calloc(), getenv() */
 #include <string.h>       /* memset() */
-#include <stdarg.h>       /* va_list, ... */
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -41,9 +41,9 @@
 #define RUN_TEST_1  1
 #define RUN_TEST_2  1
 
-Tst_bool TEST__0_cpFile(const char *pInFn);
-Tst_bool TEST__1_cpFile(const char *pInFn);
-Tst_bool TEST__2_cpFile(const char *pInFn);
+Tst_bool TEST_STRWR__0_cpFile(const char *pInFn);
+Tst_bool TEST_STRWR__1_cpFile(const char *pInFn);
+Tst_bool TEST_STRWR__2_cpFile(const char *pInFn);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -56,69 +56,39 @@ main(const int argc, const char *argv[])
 		return 1;
 	}
 
-#	if (RUN_TEST_0 == 1)
-	if (! TEST__0_cpFile(argv[1])) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_0 == 1)
+		if (! TEST_STRWR__0_cpFile(argv[1])) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_1 == 1)
-	if (! TEST__1_cpFile(argv[1])) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_1 == 1)
+		if (! TEST_STRWR__1_cpFile(argv[1])) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-#	if (RUN_TEST_2 == 1)
-	if (! TEST__2_cpFile(argv[1])) {
-		printf("! Test failed !\n");
-		return 1;
-	}
-	printf("\n");
-#	endif
+	#if (RUN_TEST_2 == 1)
+		if (! TEST_STRWR__2_cpFile(argv[1])) {
+			printf("! Test failed !\n");
+			return 1;
+		}
+		printf("\n");
+	#endif
 
-	printf("All tests passed :-)\n");
+	printf("TEST_STRWR -- All tests passed :-)\n");
 	return 0;
 }
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-void
-TEST__prf(const char *pFnc, const char *pMsg, ...)
-{
-	va_list args;
-
-	printf("%s(): ", pFnc);
-	va_start(args, pMsg);
-	vprintf(pMsg, args);
-	va_end(args);
-	printf("\n");
-}
-/*
-void
-TEST__prf32(const char *pFnc, const char *pMsg, const Tst_uint32 v32)
-{
-	printf("%s(): %s ", pFnc, pMsg);
-	printf("0x%08x\n", v32);
-}
-
-void
-TEST__prf32dec(const char *pFnc, const char *pMsg, const Tst_uint32 v32)
-{
-	printf("%s(): %s ", pFnc, pMsg);
-	printf("%u\n", v32);
-}
-*/
-
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-
 Tst_bool
-SF__setupFiles(const char *pFnc, const int fncNr, const char *pInFn,
+TEST_STRWR__SF__setupFiles(const char *pFnc, const int fncNr, const char *pInFn,
 		Tst_sys_fstc *pFStcIn, Tst_sys_fstc *pFStcOut, Tst_streamwr *pSObj)
 {
 	Tst_bool bres    = ST_B_TRUE;
@@ -131,7 +101,7 @@ SF__setupFiles(const char *pFnc, const int fncNr, const char *pInFn,
 	st_sysFStc_setFilen(pFStcIn, (Tst_str*)pInFn);
 	res = st_sysFStc_openExisting(pFStcIn, ST_B_TRUE, ST_B_FALSE);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(pFnc, "Can't open file '%s'",
+		TEST_FCOM__prf(pFnc, "Can't open file '%s'",
 				st_sysFStc_getFilen(pFStcIn));
 		st_sys_stc_freeFStc(pFStcIn);
 		st_sys_stc_freeFStc(pFStcOut);
@@ -146,7 +116,7 @@ SF__setupFiles(const char *pFnc, const int fncNr, const char *pInFn,
 	ST_DELPOINT(pOutFn)
 	res = st_sysFStc_openNew(pFStcOut);
 	if (res != ST_ERR_SUCC) {
-		TEST__prf(pFnc, "Can't create file '%s'",
+		TEST_FCOM__prf(pFnc, "Can't create file '%s'",
 				st_sysFStc_getFilen(pFStcOut));
 		st_sysFStc_close(pFStcIn);
 		st_sys_stc_freeFStc(pFStcIn);
@@ -159,24 +129,24 @@ SF__setupFiles(const char *pFnc, const int fncNr, const char *pInFn,
 	res = st_streamwr_setOutput_file(pSObj, pFStcOut);
 	if (res != ST_ERR_SUCC) {
 		bres = ST_B_FALSE;
-		TEST__prf(pFnc, "Can't associate outp-file with SObj");
+		TEST_FCOM__prf(pFnc, "Can't associate outp-file with SObj");
 	}
 
 	return bres;
 }
 
 void
-SF__freeStcs(Tst_sys_fstc *pFStcIn, Tst_sys_fstc *pFStcOut,
+TEST_STRWR__SF__freeStcs(Tst_sys_fstc *pFStcIn, Tst_sys_fstc *pFStcOut,
 		Tst_streamwr *pSObj, const Tst_bool delFile)
 {
 	st_streamwr_stc_freeSObj(pSObj);
 	st_sysFStc_close(pFStcIn);
 	st_sysFStc_close(pFStcOut);
-#	if (DEL_OUTP_FILES == 1)
-	if (delFile) {
-		st_sysUnlinkFile(st_sysFStc_getFilen(pFStcOut));
-	}
-#	endif
+	#if (DEL_OUTP_FILES == 1)
+		if (delFile) {
+			st_sysUnlinkFile(st_sysFStc_getFilen(pFStcOut));
+		}
+	#endif
 	st_sys_stc_freeFStc(pFStcIn);
 	st_sys_stc_freeFStc(pFStcOut);
 }
@@ -188,9 +158,9 @@ SF__freeStcs(Tst_sys_fstc *pFStcIn, Tst_sys_fstc *pFStcOut,
  * Tests the Stream Writer
  */
 Tst_bool
-TEST__0_cpFile(const char *pInFn)
+TEST_STRWR__0_cpFile(const char *pInFn)
 {
-	const char *cFNCN = "TEST__0_cpFile";
+	const char *cFNCN = __func__;
 	Tst_bool     bres   = ST_B_TRUE;
 	Tst_err      res    = ST_ERR_SUCC;
 	Tst_sys_fstc fstcIn,
@@ -201,13 +171,13 @@ TEST__0_cpFile(const char *pInFn)
 	             *pIB,
 	             *pIBEnd;
 
-	if (! SF__setupFiles(cFNCN, 0, pInFn,
+	if (! TEST_STRWR__SF__setupFiles(cFNCN, 0, pInFn,
 			&fstcIn, &fstcOut, &sobj)) {
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNCN, "Copying file...");
+	TEST_FCOM__prf(cFNCN, "Copying file...");
 	st_streamwr_startCRC8(&sobj);
 	st_streamwr_startCRC16(&sobj);
 	st_streamwr_startCRC32(&sobj);
@@ -217,7 +187,7 @@ TEST__0_cpFile(const char *pInFn)
 				ibuf, &cpd);
 		if (res != ST_ERR_SUCC) {
 			bres = ST_B_FALSE;
-			TEST__prf(cFNCN, "st_sysFStc_readBuf() failed");
+			TEST_FCOM__prf(cFNCN, "st_sysFStc_readBuf() failed");
 			break;
 		}
 		if (cpd == 0) {
@@ -230,7 +200,7 @@ TEST__0_cpFile(const char *pInFn)
 			res = st_streamwr_wrByte(&sobj, 8, *pIB);
 			if (res != ST_ERR_SUCC) {
 				bres = ST_B_FALSE;
-				TEST__prf(cFNCN, "st_streamwr_wrByte() failed");
+				TEST_FCOM__prf(cFNCN, "st_streamwr_wrByte() failed");
 				break;
 			}
 			++pIB;
@@ -238,17 +208,17 @@ TEST__0_cpFile(const char *pInFn)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, " CRC8 : 0x%02x        %u",
+		TEST_FCOM__prf(cFNCN, " CRC8 : 0x%02x        %u",
 				st_streamwr_getCRC8(&sobj), st_streamwr_getCRC8(&sobj));
-		TEST__prf(cFNCN, " CRC16: 0x%04x      %u",
+		TEST_FCOM__prf(cFNCN, " CRC16: 0x%04x      %u",
 				st_streamwr_getCRC16(&sobj), st_streamwr_getCRC16(&sobj));
-		TEST__prf(cFNCN, " CRC32: 0x%08x  %u",
+		TEST_FCOM__prf(cFNCN, " CRC32: 0x%08x  %u",
 				st_streamwr_getCRC32(&sobj), st_streamwr_getCRC32(&sobj));
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	/* */
-	SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
+	TEST_STRWR__SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
 	return bres;
 }
 
@@ -258,9 +228,9 @@ TEST__0_cpFile(const char *pInFn)
  * Tests the Stream Writer
  */
 Tst_bool
-TEST__1_cpFile(const char *pInFn)
+TEST_STRWR__1_cpFile(const char *pInFn)
 {
-	const char *cFNCN = "TEST__1_cpFile";
+	const char *cFNCN = __func__;
 	Tst_bool     bres   = ST_B_TRUE;
 	Tst_err      res    = ST_ERR_SUCC;
 	Tst_sys_fstc fstcIn,
@@ -273,13 +243,13 @@ TEST__1_cpFile(const char *pInFn)
 	             *pIBEnd;
 	/**Tst_byte  byt;**/
 
-	if (! SF__setupFiles(cFNCN, 1, pInFn,
+	if (! TEST_STRWR__SF__setupFiles(cFNCN, 1, pInFn,
 			&fstcIn, &fstcOut, &sobj)) {
 		return ST_B_FALSE;
 	}
 
 	/* */
-	TEST__prf(cFNCN, "Copying file...");
+	TEST_FCOM__prf(cFNCN, "Copying file...");
 	st_streamwr_startCRC8(&sobj);
 	st_streamwr_startCRC16(&sobj);
 	st_streamwr_startCRC32(&sobj);
@@ -289,7 +259,7 @@ TEST__1_cpFile(const char *pInFn)
 				ibuf, &cpd);
 		if (res != ST_ERR_SUCC) {
 			bres = ST_B_FALSE;
-			TEST__prf(cFNCN, "st_sysFStc_readBuf() failed");
+			TEST_FCOM__prf(cFNCN, "st_sysFStc_readBuf() failed");
 			break;
 		}
 		if (cpd == 0) {
@@ -310,13 +280,13 @@ TEST__1_cpFile(const char *pInFn)
 			res = st_streamwr_wrByte(&sobj, rnd, *pIB >> (8 - rnd));
 			if (res != ST_ERR_SUCC) {
 				bres = ST_B_FALSE;
-				TEST__prf(cFNCN, "st_streamwr_wrByte() failed");
+				TEST_FCOM__prf(cFNCN, "st_streamwr_wrByte() failed");
 				break;
 			}
 			res = st_streamwr_wrByte(&sobj, 8 - rnd, *pIB);
 			if (res != ST_ERR_SUCC) {
 				bres = ST_B_FALSE;
-				TEST__prf(cFNCN, "st_streamwr_wrByte() failed");
+				TEST_FCOM__prf(cFNCN, "st_streamwr_wrByte() failed");
 				break;
 			}
 			++pIB;
@@ -324,17 +294,17 @@ TEST__1_cpFile(const char *pInFn)
 	}
 
 	if (bres) {
-		TEST__prf(cFNCN, " CRC8 : 0x%02x        %u",
+		TEST_FCOM__prf(cFNCN, " CRC8 : 0x%02x        %u",
 				st_streamwr_getCRC8(&sobj), st_streamwr_getCRC8(&sobj));
-		TEST__prf(cFNCN, " CRC16: 0x%04x      %u",
+		TEST_FCOM__prf(cFNCN, " CRC16: 0x%04x      %u",
 				st_streamwr_getCRC16(&sobj), st_streamwr_getCRC16(&sobj));
-		TEST__prf(cFNCN, " CRC32: 0x%08x  %u",
+		TEST_FCOM__prf(cFNCN, " CRC32: 0x%08x  %u",
 				st_streamwr_getCRC32(&sobj), st_streamwr_getCRC32(&sobj));
-		TEST__prf(cFNCN, "Done.");
+		TEST_FCOM__prf(cFNCN, "Done.");
 	}
 
 	/* */
-	SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
+	TEST_STRWR__SF__freeStcs(&fstcIn, &fstcOut, &sobj, bres);
 	return bres;
 }
 
@@ -344,9 +314,9 @@ TEST__1_cpFile(const char *pInFn)
  * Tests the Stream Writer
  */
 Tst_bool
-TEST__2_cpFile(const char *pInFn)
+TEST_STRWR__2_cpFile(const char *pInFn)
 {
-	const char *cFNCN = "TEST__2_cpFile";
+	const char *cFNCN = __func__;
 	Tst_bool     bres     = ST_B_TRUE;
 	Tst_err      res      = ST_ERR_SUCC;
 	Tst_sys_fstc fstcIn,
@@ -359,7 +329,7 @@ TEST__2_cpFile(const char *pInFn)
 	/* sobj[0] uses an output file
 	 * sobj[1] uses an output buffer
 	 * sobj[2] is only used for CRC computation  */
-	if (! SF__setupFiles(cFNCN, 2, pInFn,
+	if (! TEST_STRWR__SF__setupFiles(cFNCN, 2, pInFn,
 			&fstcIn, &fstcOut, &sobj[0])) {
 		return ST_B_FALSE;
 	}
@@ -368,12 +338,12 @@ TEST__2_cpFile(const char *pInFn)
 	res = st_streamwr_setOutput_buffer(&sobj[1]);
 	if (res != ST_ERR_SUCC) {
 		bres = ST_B_FALSE;
-		TEST__prf(cFNCN, "st_streamwr_setOutput_buffer() failed");
+		TEST_FCOM__prf(cFNCN, "st_streamwr_setOutput_buffer() failed");
 	}
 
 	/* */
 	if (bres) {
-		TEST__prf(cFNCN, "Copying file...");
+		TEST_FCOM__prf(cFNCN, "Copying file...");
 		st_streamwr_startCRC32(&sobj[0]);
 		st_streamwr_startCRC32(&sobj[1]);
 		st_streamwr_startCRC32(&sobj[2]);
@@ -384,7 +354,7 @@ TEST__2_cpFile(const char *pInFn)
 				ibuf, &cpd);
 		if (res != ST_ERR_SUCC) {
 			bres = ST_B_FALSE;
-			TEST__prf(cFNCN, "st_sysFStc_readBuf() failed");
+			TEST_FCOM__prf(cFNCN, "st_sysFStc_readBuf() failed");
 			break;
 		}
 		if (cpd == 0) {
@@ -396,14 +366,14 @@ TEST__2_cpFile(const char *pInFn)
 		res = st_streamwr_wrBuffer(&sobj[0], cpd, ibuf);
 		if (res != ST_ERR_SUCC) {
 			bres = ST_B_FALSE;
-			TEST__prf(cFNCN, "st_streamwr_wrBuffer() failed");
+			TEST_FCOM__prf(cFNCN, "st_streamwr_wrBuffer() failed");
 			break;
 		}
 
 		res = st_streamwr_wrBuffer(&sobj[1], cpd, ibuf);
 		if (res != ST_ERR_SUCC) {
 			bres = ST_B_FALSE;
-			TEST__prf(cFNCN, "st_streamwr_wrBuffer() failed");
+			TEST_FCOM__prf(cFNCN, "st_streamwr_wrBuffer() failed");
 			break;
 		}
 	}
@@ -412,21 +382,21 @@ TEST__2_cpFile(const char *pInFn)
 		crc32[0] = st_streamwr_getCRC32(&sobj[0]);
 		crc32[1] = st_streamwr_getCRC32(&sobj[1]);
 		crc32[2] = st_streamwr_getCRC32(&sobj[2]);
-		TEST__prf(cFNCN, " CRC32: "
+		TEST_FCOM__prf(cFNCN, " CRC32: "
 				"read 0x%08x  writeF 0x%08x  writeB 0x%08x",
 				crc32[2], crc32[0], crc32[1]);
 		if (crc32[2] != crc32[0] || crc32[2] != crc32[1]) {
-			TEST__prf(cFNCN, "CRC32 doesn't match !");
+			TEST_FCOM__prf(cFNCN, "CRC32 doesn't match !");
 			bres = ST_B_FALSE;
 		} else {
-			TEST__prf(cFNCN, "Done.");
+			TEST_FCOM__prf(cFNCN, "Done.");
 		}
 	}
 
 	/* */
 	st_streamwr_stc_freeSObj(&sobj[1]);
 	st_streamwr_stc_freeSObj(&sobj[2]);
-	SF__freeStcs(&fstcIn, &fstcOut, &sobj[0], bres);
+	TEST_STRWR__SF__freeStcs(&fstcIn, &fstcOut, &sobj[0], bres);
 	return bres;
 }
 
