@@ -28,11 +28,14 @@
 /*
 // System-Includes
 */
+#ifdef _MSC_VER
+	#error MSVC is not supported
+#endif
 #include <stdlib.h>      /* calloc() */
 #include <sys/stat.h>    /* stat(), mkdir(), ... */
 //#include <sys/types.h>   /* mode_t, ... */
 #include <fcntl.h>       /* open(), O_WRONLY, ... */
-#include <unistd.h>      /* unlink(),readlink(),rename() */
+#include <unistd.h>      /* unlink(), readlink(), rename(), close() */
 #include <string.h>      /* memcpy() */
 #include <errno.h>       /* errno */
 #include <stdio.h>       /* fseek(), fseeko(), ftell(), ftello(), ... */

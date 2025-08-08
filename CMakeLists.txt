@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.23)  # due to 'target_sources(<target> xxx FILE
                                       # see https://cmake.org/cmake/help/latest/command/target_sources.html#file-sets
 project(santagger_app_and_lib C)
 
+if (MSVC)
+	message(FATAL_ERROR "__ST__: MSVC Compiler is not supported")
+endif ()
+
 # ----------------------------------------------------------------------------
 
 option(BUILD_FOR_VALGRIND "Build for Valgrind" OFF)

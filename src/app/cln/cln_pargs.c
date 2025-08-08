@@ -36,6 +36,9 @@
 /*
 // System-Includes
 */
+#ifdef _MSC_VER
+	#error MSVC is not supported
+#endif
 #include <stdlib.h>      /* calloc() */
 #include <string.h>      /* strcat() */
 #include <ctype.h>       /* isprint() */

@@ -68,6 +68,9 @@
 /*
 // System-Includes
 */
+#ifdef _MSC_VER
+	#error MSVC is not supported
+#endif
 #include <stdlib.h>      /* exit(), calloc(), getenv() */
 //#include <string.h>      /* memset() */
 #include <locale.h>      /* setlocale() */

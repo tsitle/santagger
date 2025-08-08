@@ -401,17 +401,24 @@ st_sysGetTime(void)
 void
 st_sysSleepMS(const Tst_uint32 millisecs)
 {
+	if (millisecs == 0) {
+		return;
+	}
 	#if (HAVE_STRUCT_TIMESPEC_TV_SEC == 1 && \
 			HAVE_STRUCT_TIMESPEC_TV_NSEC == 1)
 		struct timespec ts;
 
-		if (millisecs > 0) {
-			ts.tv_sec  = (time_t)((millisecs - millisecs % 1000) / 1000);
-			ts.tv_nsec = (long)((millisecs - ts.tv_sec * 1000) * 1000 * 1000);
-			nanosleep(&ts, NULL);
-		}
+		ts.tv_sec  = (time_t)((millisecs - millisecs % 1000) / 1000);
+		ts.tv_nsec = (long)((millisecs - ts.tv_sec * 1000) * 1000 * 1000);
+		nanosleep(&ts, NULL);
 	#else
-		#warning No sleep function
+		/*
+		 * We have no actual sleep function. So we emulate one (in a terrible way).
+		 */
+		const double timeStart = st_sysGetTime();
+		while ((st_sysGetTime() - timeStart) * 1000.0f < (double)millisecs) {
+			// do nothing
+		}
 	#endif
 }
 

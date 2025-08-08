@@ -30,6 +30,9 @@
 /*
 // System-Includes
 */
+#ifdef _MSC_VER
+	#error MSVC is not supported
+#endif
 #include <stdlib.h>      /* calloc(), qsort() */
 #include <string.h>      /* memcpy(), ... */
 #include <unistd.h>      /* getopt(), char(optarg),           */
