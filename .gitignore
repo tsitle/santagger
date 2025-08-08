@@ -14,6 +14,8 @@ src/tests/data/*
 
 output-bin-archive/
 
+x-*.sh
+
 
 # =========================
 # IDE Files
