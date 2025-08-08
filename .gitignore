@@ -1,9 +1,6 @@
-.idea/
+cmake-build-*/
 
-cmake-build-*-debug/
-cmake-build-*-release/
-
-docs-old/
+docs-internal/
 
 src/app/app_version.h
 src/includes/lib_version.h
