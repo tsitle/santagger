@@ -614,7 +614,7 @@ AST_CLN__pa_sc_version(const Tast_cln_cbMsg cbMsg)
 	Tst_str         *pTmp = NULL;
 	Tst_err         tmpRes;
 
-	cbMsg("%s %s", APP_ST_NAME, APP_ST_VERS_STRING);
+	cbMsg("%s %s (commit ID '%s')", APP_ST_NAME, APP_ST_VERS_STRING, APP_ST_VERS_COMMITID);
 	//
 	st_mtes_stc_initStr(&tagger);
 	tmpRes = st_tagCFnc_getTaggerStr(&tagger, ST_B_TRUE);

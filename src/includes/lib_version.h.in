@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* lib_version.h                  [Sandy Tagger]                         tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Library version info                                                       */
 /******************************************************************************/
@@ -27,6 +27,7 @@
 #define ST_LIBSANTAG_VERS_PATCH      (###VERS_PATCH###)
 #define ST_LIBSANTAG_VERS_ALPHABETA  ("###VERS_ALPHABETA###")
 #define ST_LIBSANTAG_VERS_STRING     ("###VERS_STRING###")
+#define ST_LIBSANTAG_VERS_COMMITID   ("###VERS_COMMITID###")
 
 
 #endif  /* HEAD_LIB_VERSION_H */

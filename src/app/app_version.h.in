@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* app_version.h                  [Sandy Tagger]                         tw=4 */
 /*                                                                            */
-/* (C) 2005-2024 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
 /*                                                                            */
 /* Application version info                                                   */
 /******************************************************************************/
@@ -27,6 +27,7 @@
 #define APP_ST_VERS_PATCH      (###VERS_PATCH###)
 #define APP_ST_VERS_ALPHABETA  ("###VERS_ALPHABETA###")
 #define APP_ST_VERS_STRING     ("###VERS_STRING###")
+#define APP_ST_VERS_COMMITID   ("###VERS_COMMITID###")
 
 
 #endif  /* HEAD_APP_VERSION_H */

@@ -374,12 +374,14 @@ endif ()
 
 if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	# get the current Git tag description (e.g. '1.0-2-ga12d3ef') for semantic versioning
+	##
 	execute_process(
 			COMMAND git describe --tags --dirty
 			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 			OUTPUT_VARIABLE GIT_VERSION_SEM
 			OUTPUT_STRIP_TRAILING_WHITESPACE
 		)
+	## for testing the version parsing only:
 	#set(GIT_VERSION_SEM "12.34-gdeadbeef")
 	#set(GIT_VERSION_SEM "12.34-56-gdeadbeef")
 	#set(GIT_VERSION_SEM "12.34-alpha5-gdeadbeef")
@@ -392,6 +394,7 @@ if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	#set(GIT_VERSION_SEM "1.0-g4fdbbae")
 	#set(GIT_VERSION_SEM "1.0-beta")
 	#set(GIT_VERSION_SEM "1.0")
+	##
 	if (GIT_VERSION_SEM MATCHES "^$")
 		message(FATAL_ERROR "__ST__: could not determine Git Semantic version")
 	endif ()
@@ -399,7 +402,7 @@ if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	# get only the major and minor version
 	#   --> extract everything before the first dash (-)
 	string(REGEX REPLACE "-.*" "" GIT_VERSION_MAJMIN "${GIT_VERSION_SEM}")
-	message(STATUS "Git version: mm '${GIT_VERSION_MAJMIN}'")
+	#message(STATUS "Git version: mm '${GIT_VERSION_MAJMIN}'")
 	if (GIT_VERSION_MAJMIN MATCHES "^$")
 		message(FATAL_ERROR "__ST__: could not determine Git Major.Minor version")
 	endif ()
@@ -451,6 +454,18 @@ if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
 	string(REGEX REPLACE "^${GIT_VERSION_PATCH}$" "" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
 	#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
+
+	# --------------------------
+	# get only the commit ID
+	execute_process(
+			COMMAND git rev-parse --short HEAD
+			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+			OUTPUT_VARIABLE GIT_VERSION_CID
+			OUTPUT_STRIP_TRAILING_WHITESPACE
+		)
+	if (GIT_VERSION_CID MATCHES "^$")
+		message(FATAL_ERROR "__ST__: could not determine Git Commit ID")
+	endif ()
 elseif (EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
 	message(STATUS "__ST__: Using existing lib_version.h")
 	if (WIN32)
@@ -463,6 +478,7 @@ elseif (EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
 	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_MINOR " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_MINOR WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
 	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_PATCH " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_PATCH WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
 	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_ALPHABETA " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_ALPHABETA WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_COMMITID " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_CID WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 	# --> extract everything in between the parenthesis - but without the quotation marks
 	string(REGEX REPLACE "(.*)\\(\"(.*)\"\\)(.*)" "\\2" GIT_VERSION_SEM "${GIT_VERSION_SEM}")
@@ -492,6 +508,7 @@ if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 			COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
 			COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
 			COMMAND sed -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
+			COMMAND sed -e "s;###VERS_COMMITID###;${GIT_VERSION_CID};g"
 			COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
 			OUTPUT_FILE "${X_FN_APP_VERSION_H}"
 			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -505,6 +522,7 @@ if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 			COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
 			COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
 			COMMAND sed -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
+			COMMAND sed -e "s;###VERS_COMMITID###;${GIT_VERSION_CID};g"
 			COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
 			OUTPUT_FILE "${X_FN_LIB_VERSION_H}"
 			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -518,7 +536,7 @@ if (NOT EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
 	message(FATAL_ERROR "__ST__: Missing lib_version.h")
 endif ()
 
-message(STATUS "__ST__: Git version: Semantic=${GIT_VERSION_SEM}; Major=${GIT_VERSION_MAJOR}; Minor=${GIT_VERSION_MINOR}; A/B=${GIT_VERSION_ALPHABETA}; Patch=${GIT_VERSION_PATCH}")
+message(STATUS "__ST__: Git version: Semantic=${GIT_VERSION_SEM}; Major=${GIT_VERSION_MAJOR}; Minor=${GIT_VERSION_MINOR}; A/B=${GIT_VERSION_ALPHABETA}; Patch=${GIT_VERSION_PATCH}; CID=${GIT_VERSION_CID}")
 
 target_sources(santagger_app
 	PRIVATE

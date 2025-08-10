@@ -491,8 +491,15 @@ st_tagCFnc_getTaggerStr(Tst_mtes_string *pTagger, Tst_bool withColon)
 
 	ST_ASSERTN_IARG(pTagger == NULL)
 
-	snprintf(myVend, sizeof(myVend),
-			"%s%s %s", ST_LIBSANTAG_NAME, withColon ? ":" : "", ST_LIBSANTAG_VERS_STRING);
+	snprintf(
+			myVend,
+			sizeof(myVend),
+			"%s%s %s (commit ID '%s')",
+			ST_LIBSANTAG_NAME,
+			withColon ? ":" : "",
+			ST_LIBSANTAG_VERS_STRING,
+			ST_LIBSANTAG_VERS_COMMITID
+		);
 	return st_mtes_copyFromCharp_iso((const Tst_str*)myVend, pTagger);
 }
 
