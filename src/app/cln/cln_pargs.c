@@ -566,8 +566,8 @@ AST_CLN__pa_sc_info(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 {
 	Tst_str  *pSup = NULL;
 
-	cbMsg("\nApp     : %s %s", APP_ST_NAME, APP_ST_VERS_STRING);
-	cbMsg("Compiled: %s %s (%s-Endian)", __DATE__, __TIME__,
+	cbMsg("\nApp      : %s %s", APP_ST_NAME, APP_ST_VERS_STRING);
+	cbMsg("Compiled : %s %s (%s-Endian)", __DATE__, __TIME__,
 			#if (WORDS_BIGENDIAN != 1)
 				"Little"
 			#else
@@ -590,11 +590,12 @@ AST_CLN__pa_sc_info(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 	#if (HAVE_LIBZ == 1)
 		st_sysStrapp((Tst_str*)"zlib ", &pSup);
 	#endif
-	cbMsg("Supports: %s", pSup);
+	cbMsg("Supports : %s", pSup);
 	ST_DELPOINT(pSup);
-	cbMsg("Author  : %s", APP_ST_AUTHOR);
-	cbMsg("License : General Public License v3");
-	cbMsg("          (for details try '%s --license')\n\n", pAppFn);
+	cbMsg("Author   : %s", APP_ST_AUTHOR);
+	cbMsg("Copyright: %s", APP_ST_COPYR);
+	cbMsg("License  : General Public License v3");
+	cbMsg("           (for details try '%s --license')\n\n", pAppFn);
 
 	return ST_ERR_QUIT;
 }
