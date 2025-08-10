@@ -308,28 +308,46 @@ main(const int argc, const char *argv[])
 		}
 		/* */
 		if (! cmdln.opts.quiet) {
-			char cmdType;
+			char cmdType[3];
 
 			if (cmdln.cmds.roTgExtCmds > 0) {
-				cmdType = 'X';
+				cmdType[0] = 'E';
+				cmdType[1] = 'X';
+				cmdType[2] = 'T';
 			} else if (cmdln.cmds.rwTgRwrCmds > 0) {
-				cmdType = 'W';
+				cmdType[0] = 'R';
+				cmdType[1] = 'W';
+				cmdType[2] = 'R';
 			} else if (cmdln.cmds.rwTgEdtCmds > 0) {
-				cmdType = 'E';
+				cmdType[0] = 'E';
+				cmdType[1] = 'D';
+				cmdType[2] = 'T';
 			} else if (cmdln.cmds.rwTgRemCmds > 0) {
-				cmdType = 'R';
+				cmdType[0] = 'R';
+				cmdType[1] = 'E';
+				cmdType[2] = 'M';
 			} else if (cmdln.cmds.rwTgCnvCmds > 0) {
-				cmdType = 'C';
+				cmdType[0] = 'C';
+				cmdType[1] = 'N';
+				cmdType[2] = 'V';
 			} else if (cmdln.cmds.anlz) {
-				cmdType = 'A';
+				cmdType[0] = 'A';
+				cmdType[1] = 'N';
+				cmdType[2] = 'Z';
 			} else if (cmdln.cmds.decAud) {
-				cmdType = 'D';
+				cmdType[0] = 'D';
+				cmdType[1] = 'E';
+				cmdType[2] = 'C';
 			} else if (cmdln.opts.quickScan) {
-				cmdType = 'Q';
-			} else {
-				cmdType = '-';  // read
+				cmdType[0] = 'Q';
+				cmdType[1] = 'S';
+				cmdType[2] = 'C';
+			} else {  // read
+				cmdType[0] = 'R';
+				cmdType[1] = 'E';
+				cmdType[2] = 'A';
 			}
-			ast_mf_op_prMsg("File [%c]: %s", cmdType, mf.pFilen);
+			ast_mf_op_prMsg("File [%c%c%c]: %s", cmdType[0], cmdType[1], cmdType[2], mf.pFilen);
 		}
 		/* mime / fileformat */
 		if (! AST_MAIN__getFFmt(&mf, pAppFn, &cmdln)) {
