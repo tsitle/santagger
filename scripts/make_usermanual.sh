@@ -9,26 +9,38 @@ X_OUTFN="README-usermanual-.md"
 X_TITLE="Sandy Tagger User Manual"
 
 ####
+
+# param $1: Index of help page
+# param $2: Arguments for santagger
 prOneHelp()
 {
-	echo "* * *" >> ${X_OUTFN}
-	echo >> ${X_OUTFN}
-	echo "## <a name=\"hp$1\"></a>\[$2\]" >> ${X_OUTFN}
-	echo >> ${X_OUTFN}
-	echo "[Back To Top](#top)" >> ${X_OUTFN}
-	echo >> ${X_OUTFN}
-	echo "\`\`\`" >> ${X_OUTFN}
-	santagger $2 >> ${X_OUTFN}
-	local l_ret=$?
-	echo "\`\`\`" >> ${X_OUTFN}
-	echo >> ${X_OUTFN}
+	{
+		echo "* * *"
+		echo
+		echo "## <a name=\"hp$1\"></a>\[$2\]"
+		echo
+		echo "[Back To Top](#top)"
+		echo
+		echo "\`\`\`"
+		santagger $2
+		local l_ret=$?
+		echo "\`\`\`"
+		echo
 
-	[ $l_ret -ne 0 ] && echo "invalid ret code" >>/dev/stderr
+		[ ${l_ret} -ne 0 ] && {
+			echo "invalid ret code" >>/dev/stderr
+			exit 1
+		}
+	} >> "${X_OUTFN}"
 }
+
+test ! -d "src" && cd ..
+cd src || exit 1
+cd .. || exit 1
 
 echo "Writing to '${X_OUTFN}'..."
 
-[ -f ${X_OUTFN} ] && rm ${X_OUTFN}
+[ -f "${X_OUTFN}" ] && rm "${X_OUTFN}"
 
 ####
 declare -a hlppgsA
@@ -66,22 +78,26 @@ hlppgsA[${#hlppgsA[@]}]="--pic-fm help"
 x_ecnt=${#hlppgsA[@]}
 
 ####
-echo "# <a name=\"top\"></a>${X_TITLE}" >> ${X_OUTFN}
-echo >> ${X_OUTFN}
-echo "* * *" >> ${X_OUTFN}
-echo >> ${X_OUTFN}
-echo "Index of Help Pages:" >> ${X_OUTFN}
-echo >> ${X_OUTFN}
-for (( i = 0 ; i < x_ecnt ; i++ )) {
-	echo "- [${hlppgsA[$i]}](#hp${i})" >> ${X_OUTFN}
-}
-echo >> ${X_OUTFN}
+{
+	echo "# <a name=\"top\"></a>${X_TITLE}"
+	echo
+	echo "* * *"
+	echo
+	echo "Index of Help Pages:"
+	echo
+	for (( i = 0 ; i < x_ecnt ; i++ )) {
+		echo "- [${hlppgsA[$i]}](#hp${i})"
+	}
+	echo
+} >> "${X_OUTFN}"
 ####
 for (( i = 0 ; i < x_ecnt ; i++ )) {
 	prOneHelp ${i} "${hlppgsA[$i]}"
 }
 ####
 X_DATE="$(date "+%F %R")"
-echo "* * *" >> ${X_OUTFN}
-echo >> ${X_OUTFN}
-echo "*Generated on ${X_DATE}*" >> ${X_OUTFN}
+{
+	echo "* * *"
+	echo
+	echo "*Generated on ${X_DATE}*"
+} >> "${X_OUTFN}"
