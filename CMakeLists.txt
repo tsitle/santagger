@@ -43,6 +43,11 @@ else ()
 	message(STATUS "__ST__: Building without coverage")
 endif ()
 
+if (BUILD_FOR_VALGRIND)
+	message(STATUS "__ST__: Building for Valgrind")
+	set(Z_VAR_FORCE_BUILD_STATIC ON)
+endif ()
+
 if (Z_VAR_FORCE_BUILD_STATIC)
 	message(STATUS "__ST__: Forcing build of static library")
 	set(BUILD_SHARED_LIBS OFF)
@@ -74,7 +79,7 @@ add_library(santagger_includes INTERFACE)
 add_subdirectory("src/includes")
 
 # add shared library
-SET(LIBRARY_ST_PUBLIC_NAME "santagger")
+set(LIBRARY_ST_PUBLIC_NAME "santagger")
 
 add_library(santagger_lib)
 set_target_properties(santagger_lib PROPERTIES OUTPUT_NAME "${LIBRARY_ST_PUBLIC_NAME}${OUTPUT_NAME_SUFFIX}")
@@ -235,7 +240,7 @@ if (NOT BUILD_SHARED_LIBS)
 		# for the executable:
 		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc")
-		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++")
+		#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++")
 	else ()
 		message(STATUS "__ST__: Compiler flags for exe: w/o Static")
 	endif ()
@@ -493,6 +498,8 @@ elseif (EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
 	string(REGEX REPLACE "(.*)\\((.*)\\)(.*)" "\\2" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")
 	# --> extract everything in between the parenthesis - but without the quotation marks
 	string(REGEX REPLACE "(.*)\\(\"(.*)\"\\)(.*)" "\\2" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
+	# --> extract everything in between the parenthesis - but without the quotation marks
+	string(REGEX REPLACE "(.*)\\(\"(.*)\"\\)(.*)" "\\2" GIT_VERSION_CID "${GIT_VERSION_CID}")
 endif ()
 
 # ----------------------------------------------------------------------------
@@ -624,6 +631,7 @@ else ()
 	message(STATUS "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libz not found, proceeding without it")
 endif ()
 
+# libbcrypt
 if (WIN32)
 	# link to shared library 'libbcrypt' - required only for MS Windows
 	find_library(LIBBCRYPT NAMES bcrypt)
@@ -635,6 +643,7 @@ if (WIN32)
 	target_link_libraries(santagger_lib PRIVATE ${LIBBCRYPT})
 endif ()
 
+# libm
 if (NOT WIN32 AND NOT APPLE)
 	# link to shared library 'libm' - required only for Debian when using libvorbis
 	find_library(LIBM NAMES m)
