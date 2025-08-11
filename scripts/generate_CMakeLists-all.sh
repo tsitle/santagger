@@ -17,6 +17,6 @@ for TMP_DN in ${LCFG_SUBDIRS}; do
 	[ -z "${TMP_DN}" ] && continue
 	cd "${TMP_DN}" || exit 1
 	echo -e "\n-- ${TMP_DN}"
-	"../scripts/generate_CMakeLists-s-${TMP_DN}.sh" || exit 1
+	"../../scripts/generate_CMakeLists-s-${TMP_DN}.sh" || exit 1
 	cd ..
 done

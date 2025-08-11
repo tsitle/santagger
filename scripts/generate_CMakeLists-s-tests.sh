@@ -23,6 +23,7 @@ LCFG_CMAKELISTS_FN="CMakeLists.txt"
 
 appendCmakeListsForTest() {
 	{
+		echo "#"
 		echo "target_sources(santagger_test_${1}"
 		echo -e "\tPRIVATE"
 		echo -e "\t\tfncs_test_common.c"
@@ -30,7 +31,6 @@ appendCmakeListsForTest() {
 		echo -e "\t\ttest_${1}.c"
 		echo -e ")"
 		echo -e "target_link_libraries(santagger_test_${1} PRIVATE ${LCFG_TARGET_LIB} ${LCFG_TARGET_INCS})"
-		echo
 	} >> "${LCFG_CMAKELISTS_FN}"
 }
 
@@ -38,8 +38,15 @@ echo "$(basename "${0}"): create '$(pwd)/${LCFG_CMAKELISTS_FN}'"
 
 test -f "${LCFG_CMAKELISTS_FN}" && rm "${LCFG_CMAKELISTS_FN}"
 
+TMP_IS_FIRST=true
 for TMP_TN in ${LCFG_TEST_NAMES}; do
 	[ -z "${TMP_TN}" ] && continue
 	#
+	if [ "${TMP_IS_FIRST}" != "true" ]; then
+		echo >> "${LCFG_CMAKELISTS_FN}"
+	fi
+	#
 	appendCmakeListsForTest "${TMP_TN}"
+	#
+	TMP_IS_FIRST=false
 done
