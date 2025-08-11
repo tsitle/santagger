@@ -725,7 +725,7 @@ AST_CLN__pa_sc_examples(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 			"%*s--add-geo lyr.pdf --geo-de Lyrics *.mp3",
 			spadd, "");
 	LOC_PREX_("", msg);
-	LOC_PREX_("", "--dec wav --ow --ou wavfiles/ *.flac");
+	LOC_PREX_("", "--dec wav --ow --od wavfiles/ *.flac");
 	LOC_PREX_("", "--dec aiff --bps 24 *.ogg");
 	LOC_PREX_("", "--conv id3v1,apev2-id3v2 --tiv2 v3 *.mp3");
 	LOC_PREX_("", "--fset TBPM=150 song_with_150bpm.ogg");
