@@ -398,7 +398,7 @@ TEST_DL__addDataUI32(const char *pFnc,
 #if (RUN_TEST_0 == 1 || RUN_TEST_1 == 1 || RUN_TEST_2 == 1 || \
 		RUN_TEST_3 == 1 || RUN_TEST_4 == 1 || RUN_TEST_5 == 1 || \
 		RUN_TEST_6 == 1 || RUN_BENCH_1 == 1)
-ST_INLINE_S Tst_bool
+Tst_bool
 TEST_DL__insDataUI32(const char *pFnc,
 		Tst_dynlist *pDL, const Tst_uint32 pos, const Tst_uint32 val,
 		Tst_uint32 **ppUI32)
