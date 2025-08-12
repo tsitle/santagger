@@ -78,4 +78,15 @@ fi
 
 export LD_LIBRARY_PATH=${TMP_ARG_BUILD_DIR}:${LD_LIBRARY_PATH}
 
-"${TMP_ARG_BUILD_DIR}/${LCFG_PROJECT_NAME}_test_${LOPT_TESTNAME}" "${@}"
+TMP_EXE_VG=""
+if [ "${LOPT_BUILDTYPE}" = "vg_debug" ] || [ "${LOPT_BUILDTYPE}" = "vg_release" ]; then
+	TMP_EXE_VG="valgrind"
+	TMP_EXE_VG+=" --leak-check=full"
+	TMP_EXE_VG+=" --show-leak-kinds=all"
+	#TMP_EXE_VG+=" --track-origins=yes"
+	TMP_EXE_VG+=" --undef-value-errors=no"
+	#TMP_EXE_VG+=" --verbose"
+	TMP_EXE_VG+=" --error-exitcode=1"
+fi
+
+${TMP_EXE_VG} "${TMP_ARG_BUILD_DIR}/${LCFG_PROJECT_NAME}_test_${LOPT_TESTNAME}" "${@}"
