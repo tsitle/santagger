@@ -128,14 +128,14 @@ Building with Valgrind compiler flags can be done like this:
 
 ```
 $ ./za-cmake.sh vg_release
-$ ./zb-build.sh
+$ ./zb-build.sh vg_release
 ```
 
 Building all executables (the application plus all Unit Tests) with the Debug build type can be done like this:
 
 ```
 $ ./za-cmake.sh debug
-$ ./zb-build.sh all
+$ ./zb-build.sh debug all
 ```
 
 Building just one of the Unit Tests can be done like this:
@@ -166,22 +166,43 @@ For convenience, there is a simple script for building all executables as stripp
 
 For convenience, there are two Bash scripts for running the Unit Tests on macOS / Linux.
 
-To run a specific Unit Test, use the `test_<name>` target, e.g.:
+To run a specific Unit Test, use the `zc-run-test.sh` script, e.g.:
 
 ```
+Build type = release, Build target = test_sysfnc:
 $ ./zc-run-test.sh sysfnc
+
+Build type = debug, Build target = test_sysfnc:
+$ ./zc-run-test.sh debug sysfnc
+
+Build type = release, Build target = test_sysfnc, run test with Valgrind:
+$ ./zc-run-test.sh vg_release sysfnc
+
+Build type = debug, Build target = test_sysfnc, run test with Valgrind:
+$ ./zc-run-test.sh vg_debug sysfnc
 ```
 
 Some Unit Tests require additional parameters, e.g.:
 
 ```
+Build type = release, Build target = test_dl:
 $ ./zc-run-test.sh dl -- -s
 ```
 
-To run all Unit Tests:
+To run all Unit Tests, e.g.:
 
 ```
+Build type = release:
 $ ./zc-run-test-all.sh
+
+Build type = debug:
+$ ./zc-run-test-all.sh debug
+
+Build type = release, run test with Valgrind:
+$ ./zc-run-test-all.sh vg_release
+
+Build type = debug, run test with Valgrind:
+$ ./zc-run-test-all.sh vg_debug
 ```
 
 ### Batch File for MS Windows
