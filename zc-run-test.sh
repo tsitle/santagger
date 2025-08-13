@@ -13,7 +13,9 @@
 # param $1: Exit code
 function printUsage() {
 	{
-		echo "Usage: $(basename "${0}") [debug|vg_debug|<release>|vg_release] TESTNAME -- [ARGS FOR TEST...]"
+		echo "Usage: $(basename "${0}") [BUILD_DIR_SUFFIX] TESTNAME -- [ARGS FOR TEST]"
+		echo
+		echo "If the BUILD_DIR_SUFFIX is empty the default value 'release' will be used."
 		echo
 		echo "Tests:"
 		echo "  binobj"
@@ -30,19 +32,12 @@ function printUsage() {
 	exit ${1}
 }
 
-LOPT_BUILDTYPE="release"
-TMP_HAVE_ARG_BUILDTYPE=false
+LOPT_BUILDDIRSUFFIX="release"
+TMP_HAVE_ARG_BUILDDIRSUFFIX=false
 LOPT_TESTNAME=""
 TMP_HAVE_ARG_TESTNAME=false
 while [ $# -ne 0 ]; do
-	if [ "${1}" = "debug" ] || [ "${1}" = "release" ] || [ "${1}" = "vg_debug" ] || [ "${1}" = "vg_release" ]; then
-		if [ "${TMP_HAVE_ARG_BUILDTYPE}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg 'debug|...'" >>/dev/stderr
-			printUsage 1
-		fi
-		LOPT_BUILDTYPE="${1}"
-		TMP_HAVE_ARG_BUILDTYPE=true
-	elif [ "${1}" = "binobj" ] || [ "${1}" = "dl" ] || [ "${1}" = "m64" ] || [ "${1}" = "mtes" ] || \
+	if [ "${1}" = "binobj" ] || [ "${1}" = "dl" ] || [ "${1}" = "m64" ] || [ "${1}" = "mtes" ] || \
 			[ "${1}" = "stream" ] || [ "${1}" = "strrd" ] || [ "${1}" = "strwr" ] || \
 			[ "${1}" = "sysfile" ] || [ "${1}" = "sysfnc" ] || \
 			[ "${1}" = "tfldmap" ]; then
@@ -58,8 +53,17 @@ while [ $# -ne 0 ]; do
 		shift
 		break
 	else
-		echo -e "$(basename "${0}"): Invalid arg '${1}'" >>/dev/stderr
-		printUsage 1
+		if [ "${TMP_HAVE_ARG_TESTNAME}" = "false" ]; then
+			if [ "${TMP_HAVE_ARG_BUILDDIRSUFFIX}" = "true" ]; then
+				echo -e "$(basename "${0}"): Duplicate arg BUILD_DIR_SUFFIX" >>/dev/stderr
+				printUsage 1
+			fi
+			LOPT_BUILDDIRSUFFIX="${1}"
+			TMP_HAVE_ARG_BUILDDIRSUFFIX=true
+		else
+			echo -e "$(basename "${0}"): Invalid arg '${1}'" >>/dev/stderr
+			printUsage 1
+		fi
 	fi
 	shift
 done
@@ -70,16 +74,21 @@ fi
 
 # ----------------------------------------------------------
 
-TMP_ARG_BUILD_DIR="$(getCmakeBuildDir "${LOPT_BUILDTYPE}")"
+TMP_ARG_BUILD_DIR="$(getCmakeBuildDirFromSuffix "${LOPT_BUILDDIRSUFFIX}")"
 
-if [ ! -f "${TMP_ARG_BUILD_DIR}/${LCFG_PROJECT_NAME}_test_${LOPT_TESTNAME}" ]; then
-	./zb-build.sh "${LOPT_BUILDTYPE}" "test_${LOPT_TESTNAME}" || exit 1
+LTMP_EXE_FN="${LCFG_PROJECT_NAME}_test_${LOPT_TESTNAME}"
+
+if [ ! -x "${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}" ]; then
+	echo -e "$(basename "${0}"): Executable '${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}' not found" >>/dev/stderr
+	exit 1
 fi
 
 export LD_LIBRARY_PATH=${TMP_ARG_BUILD_DIR}:${LD_LIBRARY_PATH}
 
+# run with Valgrind?
+TMP_IS_FOR_VG="$(getIsForValgrindFromSuffix "${LOPT_BUILDDIRSUFFIX}")"
 TMP_EXE_VG=""
-if [ "${LOPT_BUILDTYPE}" = "vg_debug" ] || [ "${LOPT_BUILDTYPE}" = "vg_release" ]; then
+if [ "${TMP_IS_FOR_VG}" = "true" ]; then
 	TMP_EXE_VG="valgrind"
 	TMP_EXE_VG+=" --leak-check=full"
 	TMP_EXE_VG+=" --show-leak-kinds=all"

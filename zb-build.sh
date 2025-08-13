@@ -13,7 +13,9 @@
 # param $1: Exit code
 function printUsage() {
 	{
-		echo "Usage: $(basename "${0}") [-v|--verbose] [clean] [debug|vg_debug|<release>|vg_release] [strip] [static] TARGET"
+		echo "Usage: $(basename "${0}") [-v|--verbose] [clean] [BUILD_DIR_SUFFIX] [TARGET]"
+		echo
+		echo "If the BUILD_DIR_SUFFIX is empty the default value 'release' will be used."
 		echo
 		echo "Targets:"
 		echo "  all"
@@ -37,12 +39,8 @@ LOPT_CLEAN=false
 TMP_HAVE_ARG_CLEAN=false
 LOPT_VERBOSE=false
 TMP_HAVE_ARG_VERBOSE=false
-LOPT_BUILDTYPE="release"
-TMP_HAVE_ARG_BUILDTYPE=false
-LOPT_STRIP=""
-TMP_HAVE_ARG_STRIP=false
-LOPT_STATIC=""
-TMP_HAVE_ARG_STATIC=false
+LOPT_BUILDDIRSUFFIX="release"
+TMP_HAVE_ARG_BUILDDIRSUFFIX=false
 LOPT_BUILDTARGET="app"
 TMP_HAVE_ARG_BUILDTARGET=false
 while [ $# -ne 0 ]; do
@@ -60,27 +58,6 @@ while [ $# -ne 0 ]; do
 		fi
 		LOPT_VERBOSE=true
 		TMP_HAVE_ARG_VERBOSE=true
-	elif [ "${1}" = "debug" ] || [ "${1}" = "release" ] || [ "${1}" = "vg_debug" ] || [ "${1}" = "vg_release" ]; then
-		if [ "${TMP_HAVE_ARG_BUILDTYPE}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg 'debug|...'" >>/dev/stderr
-			printUsage 1
-		fi
-		LOPT_BUILDTYPE="${1}"
-		TMP_HAVE_ARG_BUILDTYPE=true
-	elif [ "${1}" = "strip" ]; then
-		if [ "${TMP_HAVE_ARG_STRIP}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg 'strip'" >>/dev/stderr
-			printUsage 1
-		fi
-		LOPT_STRIP="strip"
-		TMP_HAVE_ARG_STRIP=true
-	elif [ "${1}" = "static" ]; then
-		if [ "${TMP_HAVE_ARG_STATIC}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg 'static'" >>/dev/stderr
-			printUsage 1
-		fi
-		LOPT_STATIC="static"
-		TMP_HAVE_ARG_STATIC=true
 	elif [ "${1}" = "all" ] || [ "${1}" = "lib" ] || [ "${1}" = "app" ] || \
 			[ "${1}" = "test_binobj" ] || [ "${1}" = "test_dl" ] || [ "${1}" = "test_m64" ] || [ "${1}" = "test_mtes" ] || \
 			[ "${1}" = "test_stream" ] || [ "${1}" = "test_strrd" ] || [ "${1}" = "test_strwr" ] || \
@@ -95,8 +72,17 @@ while [ $# -ne 0 ]; do
 	elif [ "${1}" = "--help" ]; then
 		printUsage 0
 	else
-		echo -e "$(basename "${0}"): Invalid arg '${1}'" >>/dev/stderr
-		printUsage 1
+		if [ "${TMP_HAVE_ARG_BUILDTARGET}" = "false" ]; then
+			if [ "${TMP_HAVE_ARG_BUILDDIRSUFFIX}" = "true" ]; then
+				echo -e "$(basename "${0}"): Duplicate arg BUILD_DIR_SUFFIX" >>/dev/stderr
+				printUsage 1
+			fi
+			LOPT_BUILDDIRSUFFIX="${1}"
+			TMP_HAVE_ARG_BUILDDIRSUFFIX=true
+		else
+			echo -e "$(basename "${0}"): Invalid arg '${1}'" >>/dev/stderr
+			printUsage 1
+		fi
 	fi
 	shift
 done
@@ -107,16 +93,25 @@ fi
 
 # ----------------------------------------------------------
 
-TMP_ARG_BUILD_DIR="$(getCmakeBuildDir "${LOPT_BUILDTYPE}")"
+TMP_ARG_BUILD_DIR="$(getCmakeBuildDirFromSuffix "${LOPT_BUILDDIRSUFFIX}")"
 
+#
 TMP_TEST_HAVE_BUILD_FILE=false
 if [ -f "${TMP_ARG_BUILD_DIR}/build.ninja" ] || [ -f "${TMP_ARG_BUILD_DIR}/Makefile" ]; then
 	TMP_TEST_HAVE_BUILD_FILE=true
 fi
 if [ ! -d "${TMP_ARG_BUILD_DIR}" ] || [ "${TMP_TEST_HAVE_BUILD_FILE}" != "true" ]; then
-	./za-cmake.sh "${LOPT_BUILDTYPE}" ${LOPT_STRIP} ${LOPT_STATIC} || exit 1
+	echo -e "$(basename "${0}"): Build dir '${TMP_ARG_BUILD_DIR}' not found or invalid" >>/dev/stderr
+	exit 1
 fi
 
+# chown build directory
+if [ -n "${TMP_ARG_BUILD_DIR}" ] && [ -d "${TMP_ARG_BUILD_DIR}" ]; then
+	echo "$(basename "$0"): Chown'ing the build directory '${TMP_ARG_BUILD_DIR}'"
+	sudo chown -R "$(id -u):$(id -g)" "${TMP_ARG_BUILD_DIR}" || exit 1
+fi
+
+#
 TMP_TARGET_ARG=""
 if [ "${LOPT_BUILDTARGET}" = "lib" ]; then
 	TMP_TARGET_ARG="--target ${LCFG_CMAKE_TARGET_LIB}"
