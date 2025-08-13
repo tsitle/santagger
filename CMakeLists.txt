@@ -31,26 +31,33 @@ endif ()
 message(STATUS "__ST__: Build Type: ${CMAKE_BUILD_TYPE}")
 
 # ----------------------------------------------------------------------------
+# Handle options
+# ----------------------------------------------------------------------------
 
 set(OUTPUT_NAME_SUFFIX "")
+set(Z_VAR_REQU_BUILD_STATIC OFF)
 
 # Check if coverage flags are set
-set(Z_VAR_FORCE_BUILD_STATIC OFF)
 if (CMAKE_CXX_FLAGS MATCHES "(-fprofile-arcs|-ftest-coverage|--coverage|-fprofile-instr-generate|-fcoverage-mapping)")
-	message(STATUS "__ST__: Building with coverage enabled '${CMAKE_CXX_FLAGS}'")
-	set(Z_VAR_FORCE_BUILD_STATIC ON)
+	message(STATUS "__ST__: Building with coverage enabled '${CMAKE_CXX_FLAGS}' - requires static build")
+	set(Z_VAR_REQU_BUILD_STATIC ON)
 else ()
 	message(STATUS "__ST__: Building without coverage")
 endif ()
 
 if (BUILD_FOR_VALGRIND)
-	message(STATUS "__ST__: Building for Valgrind")
-	set(Z_VAR_FORCE_BUILD_STATIC ON)
+	message(STATUS "__ST__: Building for Valgrind - requires static build")
+	set(Z_VAR_REQU_BUILD_STATIC ON)
 endif ()
 
-if (Z_VAR_FORCE_BUILD_STATIC)
-	message(STATUS "__ST__: Forcing build of static library")
-	set(BUILD_SHARED_LIBS OFF)
+if (Z_VAR_REQU_BUILD_STATIC AND BUILD_SHARED_LIBS)
+	message(FATAL_ERROR "__ST__: Need to build static executables/library (BUILD_SHARED_LIBS=OFF)")
+endif ()
+if (BUILD_FOR_VALGRIND AND STRIP_AFTER_BUILD)
+	message(FATAL_ERROR "__ST__: Cannot strip executables/library when building for Valgrind")
+endif ()
+if (CMAKE_BUILD_TYPE STREQUAL "Debug" AND STRIP_AFTER_BUILD)
+	message(FATAL_ERROR "__ST__: Stripping executables/library with Build Type 'Debug' is nonsensical")
 endif ()
 
 #
