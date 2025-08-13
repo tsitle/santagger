@@ -120,36 +120,39 @@ Each script can print out a list of available options by using the `--help` opti
 For example, building the project can be done like this:
 
 ```
-$ ./za-cmake.sh
-$ ./zb-build.sh
+Build type = release:
+$ ./za-cmake.sh && ./zb-build.sh
 ```
 
 Building with Valgrind compiler flags can be done like this:
 
 ```
-$ ./za-cmake.sh vg_release
-$ ./zb-build.sh vg_release
+Build type = release:
+$ ./za-cmake.sh release vg static && ./zb-build.sh vg_release_stat
+
+Build type = debug:
+$ ./za-cmake.sh debug vg static && ./zb-build.sh vg_debug_stat
 ```
 
 Building all executables (the application plus all Unit Tests) with the Debug build type can be done like this:
 
 ```
-$ ./za-cmake.sh debug
-$ ./zb-build.sh debug all
+Build type = debug:
+$ ./za-cmake.sh debug && ./zb-build.sh debug all
 ```
 
 Building just one of the Unit Tests can be done like this:
 
 ```
-$ ./za-cmake.sh
-$ ./zb-build.sh test_sysfnc
+Build type = release, Build target = test_sysfnc:
+$ ./za-cmake.sh && ./zb-build.sh test_sysfnc
 ```
 
 Building the application as a stripped, statically linked executable can be done like this (`app` in this example is actually the default target):
 
 ```
-$ ./za-cmake.sh static strip
-$ ./zb-build.sh app
+Build type = release, Build target = app:
+$ ./za-cmake.sh static strip && ./zb-build.sh release_stat_strip app
 ```
 
 ### Batch File for MS Windows
@@ -176,10 +179,10 @@ Build type = debug, Build target = test_sysfnc:
 $ ./zc-run-test.sh debug sysfnc
 
 Build type = release, Build target = test_sysfnc, run test with Valgrind:
-$ ./zc-run-test.sh vg_release sysfnc
+$ ./zc-run-test.sh vg_release_stat sysfnc
 
 Build type = debug, Build target = test_sysfnc, run test with Valgrind:
-$ ./zc-run-test.sh vg_debug sysfnc
+$ ./zc-run-test.sh vg_debug_stat sysfnc
 ```
 
 Some Unit Tests require additional parameters, e.g.:
@@ -199,10 +202,10 @@ Build type = debug:
 $ ./zc-run-test-all.sh debug
 
 Build type = release, run test with Valgrind:
-$ ./zc-run-test-all.sh vg_release
+$ ./zc-run-test-all.sh vg_release_stat
 
 Build type = debug, run test with Valgrind:
-$ ./zc-run-test-all.sh vg_debug
+$ ./zc-run-test-all.sh vg_debug_stat
 ```
 
 ### Batch File for MS Windows
