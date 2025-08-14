@@ -54,18 +54,26 @@ ast_mf_op_isLocaleUTF8(const char *pLocale)
 
 	ST_ASSERTN_BOOL(ST_B_FALSE, pLocale == NULL)
 
+	if ((st_sysStrlen2(pLocale) == 5 && st_sysStrcmpN2(ST_B_TRUE, 5, pLocale, "UTF-8")) ||
+			(st_sysStrlen2(pLocale) == 4 && st_sysStrcmpN2(ST_B_TRUE, 4, pLocale, "utf8"))) {
+		return ST_B_TRUE;
+	}
+
 	for (; *cp != '\0' && *cp != '@' && *cp != '+' && *cp != ','; cp++) {
-		if (*cp == '.') {
-			encoding = ++cp;
-			for (; *cp != '\0' && *cp != '@' && *cp != '+' && *cp != ','; cp++)
-				;
-			if ((cp - encoding == 5 &&
-						st_sysStrcmpN2(ST_B_TRUE, 5, encoding, "UTF-8")) ||
-					(cp - encoding == 4 &&
-						st_sysStrcmpN2(ST_B_TRUE, 4, encoding, "utf8")))
-				return ST_B_TRUE;
-			break;
+		if (*cp != '.') {
+			continue;
 		}
+		encoding = ++cp;
+		for (; *cp != '\0' && *cp != '@' && *cp != '+' && *cp != ','; cp++) {
+			// do nothing
+		}
+		if ((cp - encoding == 5 &&
+					st_sysStrcmpN2(ST_B_TRUE, 5, encoding, "UTF-8")) ||
+				(cp - encoding == 4 &&
+					st_sysStrcmpN2(ST_B_TRUE, 4, encoding, "utf8"))) {
+			return ST_B_TRUE;
+		}
+		break;
 	}
 	return ST_B_FALSE;
 }
