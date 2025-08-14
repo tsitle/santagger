@@ -198,8 +198,13 @@ main(const int argc, const char *argv[])
 	}
 
 	/* set/get locale */
-	if ((pLocaleStr = setlocale(LC_CTYPE, "")) == NULL) {
+	if (setlocale(LC_CTYPE, "") == NULL && setlocale(LC_CTYPE, "C.UTF-8") == NULL) {
 		ast_mf_op_d_mainErrApp(pAppFn, "setting locale failed");
+		ST_DELPOINT(pAppFn)
+		exit(1);  /* error */
+	}
+	if ((pLocaleStr = setlocale(LC_CTYPE, NULL)) == NULL) {
+		ast_mf_op_d_mainErrApp(pAppFn, "getting locale failed");
 		ST_DELPOINT(pAppFn)
 		exit(1);  /* error */
 	}
