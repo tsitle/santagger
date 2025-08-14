@@ -68,9 +68,6 @@ fi
 
 # ----------------------------------------------------------
 
-TMP_ARG_BUILD_DIR="$(getCmakeBuildDir "${LOPT_BUILDTYPE}" "${LOPT_VG}" "${LOPT_STATIC}" "${LOPT_STRIP}")"
-TMP_ARG_INSTALL_PREFIX="$(getCmakeInstallPrefix "${LOPT_BUILDTYPE}" "${LOPT_VG}")"
-
 # convert first letter of LOPT_BUILDTYPE to uppercase
 TMP_ARG_BUILD_TYPE="$(echo -n "${LOPT_BUILDTYPE}" | cut -c1 | tr "[:lower:]" "[:upper:]")$(echo -n "${LOPT_BUILDTYPE}" | cut -c2-)"
 
@@ -92,13 +89,17 @@ test -n "${LOPT_VG}" && TMP_ARG_DO_VALGRIND="-D BUILD_FOR_VALGRIND=ON" || TMP_AR
 test -n "${LOPT_STRIP}" && TMP_ARG_DO_STRIP="-D STRIP_AFTER_BUILD=ON" || TMP_ARG_DO_STRIP=""
 test -n "${LOPT_STATIC}" && TMP_ARG_DO_STATIC="-D BUILD_SHARED_LIBS=OFF" || TMP_ARG_DO_STATIC="-D BUILD_SHARED_LIBS=ON"
 
+#
+TMP_ARG_BUILD_DIR="$(getCmakeBuildDir "${LOPT_BUILDTYPE}" "${LOPT_VG}" "${LOPT_STATIC}" "${LOPT_STRIP}")"
+TMP_ARG_INSTALL_PREFIX="$(getCmakeInstallPrefix "${LOPT_BUILDTYPE}" "${LOPT_VG}")"
+
 # chown build directory
 if [ -n "${TMP_ARG_BUILD_DIR}" ] && [ -d "${TMP_ARG_BUILD_DIR}" ]; then
 	echo "$(basename "$0"): Chown'ing the build directory '${TMP_ARG_BUILD_DIR}'"
 	sudo chown -R "$(id -u):$(id -g)" "${TMP_ARG_BUILD_DIR}" || exit 1
 fi
 
-"${LCFG_BIN_CMAKE}" \
+"${GCFG_BIN_CMAKE}" \
 	--fresh \
 	-D CMAKE_BUILD_TYPE="${TMP_ARG_BUILD_TYPE}" \
 	${TMP_ARG_DO_VALGRIND} \

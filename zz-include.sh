@@ -4,17 +4,19 @@
 # by TS, Sep 2024
 #
 
-LCFG_PROJECT_NAME="santagger"
+GCFG_PROJECT_NAME="santagger"
 
-LCFG_CMAKE_INSTALL_PREFIX="/opt/${LCFG_PROJECT_NAME}"
+GCFG_OUTPUT_BIN_ARCH_DN="output-bin-archive"
 
-LCFG_CMAKE_TARGET_LIB="${LCFG_PROJECT_NAME}_lib"
-LCFG_CMAKE_TARGET_APP="${LCFG_PROJECT_NAME}_app"
+GCFG_CMAKE_INSTALL_PREFIX="/opt/${GCFG_PROJECT_NAME}"
 
-LCFG_BIN_LIB_STATIC_BASE_FN="lib${LCFG_PROJECT_NAME}-static"
-LCFG_BIN_LIB_DYN_BASE_FN="lib${LCFG_PROJECT_NAME}"
+GCFG_CMAKE_TARGET_LIB="${GCFG_PROJECT_NAME}_lib"
+GCFG_CMAKE_TARGET_APP="${GCFG_PROJECT_NAME}_app"
 
-LCFG_EXECUTABLE_ST_FN="${LCFG_PROJECT_NAME}"
+GCFG_BIN_LIB_STATIC_BASE_FN="lib${GCFG_PROJECT_NAME}-static"
+GCFG_BIN_LIB_DYN_BASE_FN="lib${GCFG_PROJECT_NAME}"
+
+GCFG_EXECUTABLE_ST_FN="${GCFG_PROJECT_NAME}"
 
 # ----------------------------------------------------------
 
@@ -39,7 +41,7 @@ function getOsName() {
 
 getOsName >/dev/null || exit 1
 
-LVAR_OS="$(getOsName)"
+GVAR_OS="$(getOsName)"
 
 # ----------------------------------------------------------
 
@@ -70,37 +72,37 @@ function _getCpuArch() {
 
 _getCpuArch >/dev/null || exit 1
 
-LVAR_ARCH="$(_getCpuArch)"
+GVAR_ARCH="$(_getCpuArch)"
 
 # ----------------------------------------------------------
 
-LCFG_BIN_CMAKE=""
+GCFG_BIN_CMAKE=""
 if command -v cmake >/dev/null; then
-	LCFG_BIN_CMAKE="cmake"
+	GCFG_BIN_CMAKE="cmake"
 else
-	if [ "${LVAR_OS}" = "macos" ] && [ -x "${HOME}/Applications/CLion.app/Contents/bin/cmake/mac/${LVAR_ARCH}/bin/cmake" ]; then
-		LCFG_BIN_CMAKE="${HOME}/Applications/CLion.app/Contents/bin/cmake/mac/${LVAR_ARCH}/bin/cmake"
-	elif [ "${LVAR_OS}" = "linux" ]; then
+	if [ "${GVAR_OS}" = "macos" ] && [ -x "${HOME}/Applications/CLion.app/Contents/bin/cmake/mac/${GVAR_ARCH}/bin/cmake" ]; then
+		GCFG_BIN_CMAKE="${HOME}/Applications/CLion.app/Contents/bin/cmake/mac/${GVAR_ARCH}/bin/cmake"
+	elif [ "${GVAR_OS}" = "linux" ]; then
 		TMP_FIND_FN="tmp.find-$$.tmp"
 		test -f "${TMP_FIND_FN}" && rm "${TMP_FIND_FN}"
 		find /opt -maxdepth 1 -type d -name "clion-*" | sort -r > "${TMP_FIND_FN}"
 		while IFS= read -r TMP_DN; do
-			LCFG_BIN_CMAKE="$(find "${TMP_DN}" -type f -name "cmake" -perm -u=x 2>/dev/null)"
+			GCFG_BIN_CMAKE="$(find "${TMP_DN}" -type f -name "cmake" -perm -u=x 2>/dev/null)"
 			break
 		done < "${TMP_FIND_FN}"
 		rm "${TMP_FIND_FN}"
 	fi
 fi
 
-if [ -z "${LCFG_BIN_CMAKE}" ]; then
+if [ -z "${GCFG_BIN_CMAKE}" ]; then
 	echo "Couldn't find cmake. Aborting." >>/dev/stderr
 	exit 1
 fi
 
-if [ "${LVAR_OS}" = "macos" ]; then
-	LCFG_BUILD_DIR_PREFIX="cmake-build-manual-macos"
+if [ "${GVAR_OS}" = "macos" ]; then
+	GCFG_BUILD_DIR_PREFIX="cmake-build-manual-macos"
 else
-	LCFG_BUILD_DIR_PREFIX="cmake-build-manual-lx"
+	GCFG_BUILD_DIR_PREFIX="cmake-build-manual-lx"
 fi
 
 # param $1: Build type (e.g. "Release" or "Debug")
@@ -118,14 +120,14 @@ function getCmakeBuildDir() {
 	test -n "${3}" && TMP_C_I_P+="_stat"
 	test -n "${4}" && TMP_C_I_P+="_strip"
 
-	echo -n "${LCFG_BUILD_DIR_PREFIX}-${TMP_C_I_P}"
+	echo -n "${GCFG_BUILD_DIR_PREFIX}-${TMP_C_I_P}"
 }
 
 # param $1: Build directory suffix (e.g. "release" or "debug" or "vg_debug" or "vg_debug_stat" or "vg_debug_strip" or "vg_debug_stat_strip")
 function getCmakeBuildDirFromSuffix() {
 	local TMP_BUILD_D_S_LC
 	TMP_BUILD_D_S_LC="$(echo -n "${1}" | tr "[:upper:]" "[:lower:]")"
-	echo -n "${LCFG_BUILD_DIR_PREFIX}-${TMP_BUILD_D_S_LC}"
+	echo -n "${GCFG_BUILD_DIR_PREFIX}-${TMP_BUILD_D_S_LC}"
 }
 
 # param $1: Build directory suffix (e.g. "release" or "debug" or "vg_debug" or "vg_debug_stat" or "vg_debug_strip" or "vg_debug_stat_strip")
@@ -163,7 +165,7 @@ function getCmakeInstallPrefix() {
 		TMP_C_I_P+="${TMP_BUILD_TYPE_LC}"
 	fi
 
-	echo -n "${LCFG_CMAKE_INSTALL_PREFIX}"
+	echo -n "${GCFG_CMAKE_INSTALL_PREFIX}"
 	if [ -n "${TMP_C_I_P}" ]; then
 		echo -n "-${TMP_C_I_P}"
 	fi
@@ -215,33 +217,46 @@ function getIsStripFromSuffix() {
 }
 
 # param $1: Build type (e.g. "Release" or "Debug")
-# param $2: File ID (e.g. 'BIN_LIB_STATIC' or 'BIN_LIB_DYN')
+# param $2: Is for Valgrind? ("true" or "false")
+# param $3: File ID (e.g. 'BIN_LIB_STATIC' or 'BIN_LIB_DYN')
 function getBinaryFn() {
 	local TMP_BASE
-	if [ "${2}" = "BIN_LIB_STATIC" ]; then
-		TMP_BASE="${LCFG_BIN_LIB_STATIC_BASE_FN}"
-	elif [ "${2}" = "BIN_LIB_DYN" ]; then
-		TMP_BASE="${LCFG_BIN_LIB_DYN_BASE_FN}"
+	local TMP_BT
+	local TMP_VG
+	local TMP_FILEID
+	TMP_BT="${1}"
+	TMP_VG="${2}"
+	TMP_FILEID="${3}"
+	if [ "${TMP_FILEID}" = "BIN_LIB_STATIC" ]; then
+		TMP_BASE="${GCFG_BIN_LIB_STATIC_BASE_FN}"
+	elif [ "${TMP_FILEID}" = "BIN_LIB_DYN" ]; then
+		TMP_BASE="${GCFG_BIN_LIB_DYN_BASE_FN}"
 	else
-		echo "Error: getBinaryFn(): Unknown FILE_ID '${2}'" >>/dev/stderr
+		echo "Error: getBinaryFn(): Unknown FILE_ID '${TMP_FILEID}'" >>/dev/stderr
 		exit 1
 	fi
 	if [ -z "${TMP_BASE}" ]; then
-		echo "Error: getBinaryFn(): Empty base fn for FILE_ID '${2}'" >>/dev/stderr
+		echo "Error: getBinaryFn(): Empty base fn for FILE_ID '${TMP_FILEID}'" >>/dev/stderr
 		exit 1
 	fi
-	if [ "${1}" != "release" ]; then
-		TMP_BASE+="-${1}"
+	local TMP_SUFF
+	TMP_SUFF=""
+	test "${TMP_VG}" = "true" && TMP_SUFF+="vg_"
+	if [ -n "${TMP_SUFF}" ] || [ "${TMP_BT}" != "release" ]; then
+		TMP_SUFF+="${TMP_BT}"
 	fi
-	if [ "${2}" = "BIN_LIB_STATIC" ]; then
+
+	test -n "${TMP_SUFF}" && TMP_BASE+="-${TMP_SUFF}"
+
+	if [ "${TMP_FILEID}" = "BIN_LIB_STATIC" ]; then
 		TMP_BASE+=".a"
 	else
-		if [ "${LVAR_OS}" = "linux" ]; then
+		if [ "${GVAR_OS}" = "linux" ]; then
 			TMP_BASE+=".so"
-		elif [ "${LVAR_OS}" = "macos" ]; then
+		elif [ "${GVAR_OS}" = "macos" ]; then
 			TMP_BASE+=".dylib"
 		else
-			echo "Error: getBinaryFn(): Unknown OS '${LVAR_OS}'" >>/dev/stderr
+			echo "Error: getBinaryFn(): Unknown OS '${GVAR_OS}'" >>/dev/stderr
 			exit 1
 		fi
 	fi

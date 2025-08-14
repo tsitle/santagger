@@ -76,7 +76,7 @@ fi
 
 TMP_ARG_BUILD_DIR="$(getCmakeBuildDirFromSuffix "${LOPT_BUILDDIRSUFFIX}")"
 
-LTMP_EXE_FN="${LCFG_PROJECT_NAME}_test_${LOPT_TESTNAME}"
+LTMP_EXE_FN="${GCFG_PROJECT_NAME}_test_${LOPT_TESTNAME}"
 
 if [ ! -x "${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}" ]; then
 	echo -e "$(basename "${0}"): Executable '${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}' not found" >>/dev/stderr
@@ -98,4 +98,4 @@ if [ "${TMP_IS_FOR_VG}" = "true" ]; then
 	TMP_EXE_VG+=" --error-exitcode=1"
 fi
 
-${TMP_EXE_VG} "${TMP_ARG_BUILD_DIR}/${LCFG_PROJECT_NAME}_test_${LOPT_TESTNAME}" "${@}"
+${TMP_EXE_VG} "${TMP_ARG_BUILD_DIR}/${GCFG_PROJECT_NAME}_test_${LOPT_TESTNAME}" "${@}"

@@ -47,7 +47,7 @@ done
 
 TMP_ARG_BUILD_DIR="$(getCmakeBuildDirFromSuffix "${LOPT_BUILDDIRSUFFIX}")"
 
-LTMP_EXE_FN="${LCFG_EXECUTABLE_ST_FN}"
+LTMP_EXE_FN="${GCFG_EXECUTABLE_ST_FN}"
 
 if [ ! -x "${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}" ]; then
 	echo -e "$(basename "${0}"): Executable '${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}' not found" >>/dev/stderr

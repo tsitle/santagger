@@ -114,19 +114,56 @@ fi
 #
 TMP_TARGET_ARG=""
 if [ "${LOPT_BUILDTARGET}" = "lib" ]; then
-	TMP_TARGET_ARG="--target ${LCFG_CMAKE_TARGET_LIB}"
+	TMP_TARGET_ARG="--target ${GCFG_CMAKE_TARGET_LIB}"
 elif [ "${LOPT_BUILDTARGET}" = "app" ]; then
-	TMP_TARGET_ARG="--target ${LCFG_CMAKE_TARGET_APP}"
+	TMP_TARGET_ARG="--target ${GCFG_CMAKE_TARGET_APP}"
 elif [ "${LOPT_BUILDTARGET}" != "all" ]; then
-	TMP_TARGET_ARG="--target ${LCFG_PROJECT_NAME}_${LOPT_BUILDTARGET}"
+	TMP_TARGET_ARG="--target ${GCFG_PROJECT_NAME}_${LOPT_BUILDTARGET}"
 fi
 
 TMP_ARG=""
 [ "${LOPT_CLEAN}" = "true" ] && TMP_ARG="--clean-first"
 [ "${LOPT_VERBOSE}" = "true" ] && TMP_ARG+=" --verbose"
-"${LCFG_BIN_CMAKE}" \
+"${GCFG_BIN_CMAKE}" \
 	--build "${TMP_ARG_BUILD_DIR}" \
 	--parallel 4 \
 	${TMP_TARGET_ARG} \
 	${TMP_ARG} \
 	|| exit 1
+
+# ----------------------
+
+cd "${TMP_ARG_BUILD_DIR}" || exit 1
+
+LTMP_EXE_FN="${GCFG_EXECUTABLE_ST_FN}"
+
+LTMP_ST_VERS="$("./${LTMP_EXE_FN}" --version)"
+LTMP_ST_VERS="$(echo -n "${LTMP_ST_VERS}" | grep 'libsantag: ' | cut -f2 -d: | cut -f1 -d\])"
+LTMP_ST_VERS_STR="$(echo -n "${LTMP_ST_VERS}" | cut -f2 -d\ )"
+if [ -z "${LTMP_ST_VERS_STR}" ]; then
+	echo "$(basename "${0}"): Could not determine santagger version string:"
+	"./${LTMP_EXE_FN}" --version
+	exit 1
+fi
+LTMP_ST_VERS_CID="$(echo -n "${LTMP_ST_VERS}" | cut -f2 -d\( | cut -f1 -d\) | cut -f2 -d\')"
+if [ -z "${LTMP_ST_VERS_CID}" ]; then
+	echo "$(basename "${0}"): Could not determine santagger Commit ID:"
+	"./${LTMP_EXE_FN}" --version
+	exit 1
+fi
+
+LTMP_HOSTNAME="$(hostname)"
+echo -n "${LTMP_HOSTNAME}" | grep -q "\." && LTMP_HOSTNAME="$(echo -n "${LTMP_HOSTNAME}" | cut -f1 -d.)"
+
+LTMP_FN_BASE="${LTMP_EXE_FN}-${LTMP_HOSTNAME}-${GVAR_OS}-${GVAR_ARCH}-${LOPT_BUILDDIRSUFFIX}-${LTMP_ST_VERS_STR}"
+echo -n "${LTMP_ST_VERS_STR}" | grep -q -e "-g${LTMP_ST_VERS_CID}$" || LTMP_FN_BASE+="-g${LTMP_ST_VERS_CID}"
+
+LTMP_TAR_FN="${LTMP_FN_BASE}.tgz"
+
+# ----------------------
+
+test -d "../${GCFG_OUTPUT_BIN_ARCH_DN}" || mkdir "../${GCFG_OUTPUT_BIN_ARCH_DN}"
+
+echo "$(basename "${0}"): Creating TAR ball '${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}'"
+test -f "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}" && rm "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}"
+tar czf "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}" "${LTMP_EXE_FN}"
