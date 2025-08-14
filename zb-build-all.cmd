@@ -16,13 +16,15 @@ title %0
 
 set INT_ERROR_CODE=0
 
-if exist cmake-build-manual-win-release goto startBuild
+set LCFG_BUILD_DIR=cmake-build-manual-win-release_stat_strip
 
-mkdir cmake-build-manual-win-release
+if exist %LCFG_BUILD_DIR% goto startBuild
+
+mkdir %LCFG_BUILD_DIR%
 
 :startBuild
 
-cd cmake-build-manual-win-release
+cd %LCFG_BUILD_DIR%
 
 cmake --fresh -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -D STRIP_AFTER_BUILD=ON -D BUILD_SHARED_LIBS=OFF -S .. -B .
 set INT_ERROR_CODE=%errorlevel%

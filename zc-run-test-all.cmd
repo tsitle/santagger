@@ -12,7 +12,9 @@ title %0
 
 set INT_ERROR_CODE=0
 
-if exist cmake-build-manual-win-release goto checkInpFiles
+set LCFG_BUILD_DIR=cmake-build-manual-win-release_stat_strip
+
+if exist %LCFG_BUILD_DIR% goto checkInpFiles
 
 echo Missing build directory >&2
 echo. >&2
@@ -21,7 +23,7 @@ goto HaveError
 
 :checkInpFiles
 
-cd cmake-build-manual-win-release
+cd %LCFG_BUILD_DIR%
 
 set LTMP_TESTFILE_TXT=src\tests\data\data.txt
 set LTMP_TESTFILE_BIN=src\tests\data\data.rnd
