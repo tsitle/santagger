@@ -107,8 +107,10 @@ fi
 
 # chown build directory
 if [ -n "${TMP_ARG_BUILD_DIR}" ] && [ -d "${TMP_ARG_BUILD_DIR}" ]; then
-	echo "$(basename "$0"): Chown'ing the build directory '${TMP_ARG_BUILD_DIR}'"
-	sudo chown -R "$(id -u):$(id -g)" "${TMP_ARG_BUILD_DIR}" || exit 1
+	command -v sudo >/dev/null 2>&1 && test "$(id -u)" != "0" && {
+		echo "$(basename "$0"): Chown'ing the build directory '${TMP_ARG_BUILD_DIR}'"
+		sudo chown -R "$(id -u):$(id -g)" "${TMP_ARG_BUILD_DIR}" || exit 1
+	}
 fi
 
 #
@@ -133,37 +135,62 @@ TMP_ARG=""
 
 # ----------------------
 
+if ! { [ "${LOPT_BUILDTARGET}" = "all" ] || [ "${LOPT_BUILDTARGET}" = "app" ]; }; then
+	exit 0
+fi
+
 cd "${TMP_ARG_BUILD_DIR}" || exit 1
 
-LTMP_EXE_FN="${GCFG_EXECUTABLE_ST_FN}"
+LTMP_EXE_NIX_FN="${GCFG_EXECUTABLE_ST_FN}"
+LTMP_EXE_WIN_FN="${GCFG_EXECUTABLE_ST_FN}.exe"
 
-LTMP_ST_VERS="$("./${LTMP_EXE_FN}" --version)"
-LTMP_ST_VERS="$(echo -n "${LTMP_ST_VERS}" | grep 'libsantag: ' | cut -f2 -d: | cut -f1 -d\])"
-LTMP_ST_VERS_STR="$(echo -n "${LTMP_ST_VERS}" | cut -f2 -d\ )"
-if [ -z "${LTMP_ST_VERS_STR}" ]; then
-	echo "$(basename "${0}"): Could not determine santagger version string:"
-	"./${LTMP_EXE_FN}" --version
+if [ ! -f "${LTMP_EXE_NIX_FN}" ] && [ ! -f "${LTMP_EXE_WIN_FN}" ]; then
+	echo "$(basename "${0}"): Executable '${LTMP_EXE_NIX_FN}'/'${LTMP_EXE_WIN_FN}' not found - not creating TAR ball"
+	exit 0
+fi
+
+test -f "${LTMP_EXE_WIN_FN}" && LTMP_EXE_FN="${LTMP_EXE_WIN_FN}" || LTMP_EXE_FN="${LTMP_EXE_NIX_FN}"
+
+TMP_APP_VERSION_H_FN="../src/includes/lib_version.h"
+
+TMP_GIT_VERSION_SEM="$(grep " ST_LIBSANTAG_VERS_STRING " "${TMP_APP_VERSION_H_FN}" | cut -f2 -d\( | cut -f1 -d\) | tr -d \")"
+TMP_GIT_VERSION_CID="$(grep " ST_LIBSANTAG_VERS_COMMITID " "${TMP_APP_VERSION_H_FN}" | cut -f2 -d\( | cut -f1 -d\) | tr -d \")"
+
+if [ -z "${TMP_GIT_VERSION_SEM}" ]; then
+	echo "$(basename "${0}"): Could not determine santagger version string" >>/dev/stderr
 	exit 1
 fi
-LTMP_ST_VERS_CID="$(echo -n "${LTMP_ST_VERS}" | cut -f2 -d\( | cut -f1 -d\) | cut -f2 -d\')"
-if [ -z "${LTMP_ST_VERS_CID}" ]; then
-	echo "$(basename "${0}"): Could not determine santagger Commit ID:"
-	"./${LTMP_EXE_FN}" --version
+if [ -z "${TMP_GIT_VERSION_CID}" ]; then
+	echo "$(basename "${0}"): Could not determine santagger Commit ID" >>/dev/stderr
 	exit 1
 fi
 
 LTMP_HOSTNAME="$(hostname)"
+test -z "${LTMP_HOSTNAME}" && LTMP_HOSTNAME="unknown"
 echo -n "${LTMP_HOSTNAME}" | grep -q "\." && LTMP_HOSTNAME="$(echo -n "${LTMP_HOSTNAME}" | cut -f1 -d.)"
 
-LTMP_FN_BASE="${LTMP_EXE_FN}-${LTMP_HOSTNAME}-${GVAR_OS}-${GVAR_ARCH}-${LOPT_BUILDDIRSUFFIX}-${LTMP_ST_VERS_STR}"
-echo -n "${LTMP_ST_VERS_STR}" | grep -q -e "-g${LTMP_ST_VERS_CID}$" || LTMP_FN_BASE+="-g${LTMP_ST_VERS_CID}"
-
-LTMP_TAR_FN="${LTMP_FN_BASE}.tgz"
+LTMP_FN_BASE="${GCFG_EXECUTABLE_ST_FN}-${LTMP_HOSTNAME}-"
+LTMP_FN_BASE+="${GVAR_OS}-${GVAR_ARCH}"
+LTMP_FN_BASE+="-${LOPT_BUILDDIRSUFFIX}-${TMP_GIT_VERSION_SEM}"
+echo -n "${TMP_GIT_VERSION_SEM}" | grep -q -e "-g${TMP_GIT_VERSION_CID}$" || LTMP_FN_BASE+="-g${TMP_GIT_VERSION_CID}"
 
 # ----------------------
 
 test -d "../${GCFG_OUTPUT_BIN_ARCH_DN}" || mkdir "../${GCFG_OUTPUT_BIN_ARCH_DN}"
 
-echo "$(basename "${0}"): Creating TAR ball '${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}'"
-test -f "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}" && rm "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}"
-tar czf "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}" "${LTMP_EXE_FN}"
+if [ "${LTMP_EXE_FN}" = "${LTMP_EXE_WIN_FN}" ]; then
+	LTMP_ZIP_FN="${LTMP_FN_BASE}.zip"
+	echo "$(basename "${0}"): Creating ZIP file '${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_ZIP_FN}'"
+	test -f "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_ZIP_FN}" && rm "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_ZIP_FN}"
+	command -v zip >/dev/null 2>&1 && TMP_ZIP_EXE="zip" || TMP_ZIP_EXE="tar.exe"
+	if [ "${TMP_ZIP_EXE}" = "zip" ]; then
+		"${TMP_ZIP_EXE}" "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_ZIP_FN}" "${LTMP_EXE_FN}" || exit 1
+	else
+		"${TMP_ZIP_EXE}" acvf "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_ZIP_FN}" "${LTMP_EXE_FN}" || exit 1
+	fi
+else
+	LTMP_TAR_FN="${LTMP_FN_BASE}.tgz"
+	echo "$(basename "${0}"): Creating TAR ball '${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}'"
+	test -f "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}" && rm "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}"
+	tar czf "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}" "${LTMP_EXE_FN}" || exit 1
+fi

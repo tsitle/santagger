@@ -26,10 +26,23 @@ GCFG_EXECUTABLE_ST_FN="${GCFG_PROJECT_NAME}"
 function getOsName() {
 	case "${OSTYPE}" in
 		linux*)
-			echo -n "linux"
+			# check if we are in a 'dockcross' environment
+			if [ -n "${CROSS_TRIPLE}" ]; then
+				# CROSS_TRIPLE: 'aarch64-w64-mingw32', 'aarch64-unknown-linux-gnu', 'x86_64-w64-mingw32.static'
+				if echo -n "${CROSS_TRIPLE}" | grep -q "\-w64\-"; then
+					echo -n "win"
+				else
+					echo -n "linux"
+				fi
+			else
+				echo -n "linux"
+			fi
 			;;
 		darwin*)
 			echo -n "macos"
+			;;
+		msys*)
+			echo -n "win"
 			;;
 		*)
 			echo "Error: getOsName(): Unknown OSTYPE '${OSTYPE}'" >>/dev/stderr
@@ -49,7 +62,16 @@ GVAR_OS="$(getOsName)"
 #
 # @return int EXITCODE
 function _getCpuArch() {
-	case "$(uname -m)" in
+	local TMP_CPUARCH_INP
+	# check if we are in a 'dockcross' environment
+	if [ -n "${CROSS_TRIPLE}" ]; then
+		# CROSS_TRIPLE: 'aarch64-w64-mingw32', 'aarch64-unknown-linux-gnu', 'x86_64-w64-mingw32.static'
+		TMP_CPUARCH_INP="$(echo -n "${CROSS_TRIPLE}" | cut -f1 -d-)"
+	else
+		TMP_CPUARCH_INP="$(uname -m)"
+	fi
+	#
+	case "${TMP_CPUARCH_INP}" in
 		x86_64*)
 				echo -n "x64"
 				;;
@@ -101,9 +123,12 @@ fi
 
 if [ "${GVAR_OS}" = "macos" ]; then
 	GCFG_BUILD_DIR_PREFIX="cmake-build-manual-macos"
+elif [ "${GVAR_OS}" = "win" ]; then
+	GCFG_BUILD_DIR_PREFIX="cmake-build-manual-win"
 else
 	GCFG_BUILD_DIR_PREFIX="cmake-build-manual-lx"
 fi
+GCFG_BUILD_DIR_PREFIX+="-${GVAR_ARCH}"
 
 # param $1: Build type (e.g. "Release" or "Debug")
 # param $2: Build for Valgrind? (true if non-empty)

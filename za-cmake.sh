@@ -95,8 +95,10 @@ TMP_ARG_INSTALL_PREFIX="$(getCmakeInstallPrefix "${LOPT_BUILDTYPE}" "${LOPT_VG}"
 
 # chown build directory
 if [ -n "${TMP_ARG_BUILD_DIR}" ] && [ -d "${TMP_ARG_BUILD_DIR}" ]; then
-	echo "$(basename "$0"): Chown'ing the build directory '${TMP_ARG_BUILD_DIR}'"
-	sudo chown -R "$(id -u):$(id -g)" "${TMP_ARG_BUILD_DIR}" || exit 1
+	command -v sudo >/dev/null 2>&1 && test "$(id -u)" != "0" && {
+		echo "$(basename "$0"): Chown'ing the build directory '${TMP_ARG_BUILD_DIR}'"
+		sudo chown -R "$(id -u):$(id -g)" "${TMP_ARG_BUILD_DIR}" || exit 1
+	}
 fi
 
 "${GCFG_BIN_CMAKE}" \
