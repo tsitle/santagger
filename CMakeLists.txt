@@ -385,19 +385,19 @@ endif ()
 # Semantic version variables
 # ----------------------------------------------------------------------------
 
-if (WIN32)
-	set(X_FN_APP_VERSION_H "src\\app\\app_version.h")
-	set(X_FN_LIB_VERSION_H "src\\includes\\lib_version.h")
-else ()
-	set(X_FN_APP_VERSION_H "src/app/app_version.h")
-	set(X_FN_LIB_VERSION_H "src/includes/lib_version.h")
-endif ()
+set(X_FN_APP_VERSION_H "src/app/app_version.h")
+set(X_FN_LIB_VERSION_H "src/includes/lib_version.h")
 
-if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
+# Find Git
+find_program(APP_GIT "git")
+# Find Grep
+find_program(APP_GREP "grep")
+
+if (APP_GIT AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	# get the current Git tag description (e.g. '1.0-2-ga12d3ef') for semantic versioning
 	##
 	execute_process(
-			COMMAND git describe --tags --dirty
+			COMMAND ${APP_GIT} describe --tags --dirty
 			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 			OUTPUT_VARIABLE GIT_VERSION_SEM
 			OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -479,7 +479,7 @@ if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	# --------------------------
 	# get only the commit ID
 	execute_process(
-			COMMAND git rev-parse --short HEAD
+			COMMAND ${APP_GIT} rev-parse --short HEAD
 			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 			OUTPUT_VARIABLE GIT_VERSION_CID
 			OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -489,10 +489,14 @@ if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	endif ()
 elseif (EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
 	message(STATUS "__ST__: Using existing lib_version.h")
-	if (WIN32)
+	if (APP_GREP)
+		set(Z_VAR_CMD_GREP "${APP_GREP}")
+	elseif (WIN32)
+		# we are in a MS Windows Terminal (and not in an UCRT64 environment)
 		set(Z_VAR_CMD_GREP "findstr")
+		set(X_FN_LIB_VERSION_H "src\\includes\\lib_version.h")
 	else ()
-		set(Z_VAR_CMD_GREP "grep")
+		message(FATAL_ERROR "__ST__: No application found for 'grep'")
 	endif ()
 	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_STRING " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_SEM WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
 	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_MAJOR " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_MAJOR WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -522,17 +526,20 @@ endif ()
 # Replace version strings and numbers in app_version.h and lib_version.h
 # ----------------------------------------------------------------------------
 
-if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
+# Find Sed
+find_program(APP_SED "sed")
+
+if (APP_SED AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	message(STATUS "__ST__: Rewrite file '${X_FN_APP_VERSION_H}'")
 	execute_process(
 			INPUT_FILE "${X_FN_APP_VERSION_H}.in"
-			COMMAND sed -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
-			COMMAND sed -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
-			COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
-			COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
-			COMMAND sed -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
-			COMMAND sed -e "s;###VERS_COMMITID###;${GIT_VERSION_CID};g"
-			COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
+			COMMAND ${APP_SED} -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
+			COMMAND ${APP_SED} -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
+			COMMAND ${APP_SED} -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
+			COMMAND ${APP_SED} -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
+			COMMAND ${APP_SED} -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
+			COMMAND ${APP_SED} -e "s;###VERS_COMMITID###;${GIT_VERSION_CID};g"
+			COMMAND ${APP_SED} -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
 			OUTPUT_FILE "${X_FN_APP_VERSION_H}"
 			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
@@ -540,16 +547,18 @@ if (NOT WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	message(STATUS "__ST__: Rewrite file '${X_FN_LIB_VERSION_H}'")
 	execute_process(
 			INPUT_FILE "${X_FN_LIB_VERSION_H}.in"
-			COMMAND sed -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
-			COMMAND sed -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
-			COMMAND sed -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
-			COMMAND sed -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
-			COMMAND sed -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
-			COMMAND sed -e "s;###VERS_COMMITID###;${GIT_VERSION_CID};g"
-			COMMAND sed -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
+			COMMAND ${APP_SED} -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
+			COMMAND ${APP_SED} -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
+			COMMAND ${APP_SED} -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
+			COMMAND ${APP_SED} -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
+			COMMAND ${APP_SED} -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
+			COMMAND ${APP_SED} -e "s;###VERS_COMMITID###;${GIT_VERSION_CID};g"
+			COMMAND ${APP_SED} -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
 			OUTPUT_FILE "${X_FN_LIB_VERSION_H}"
 			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
+else ()
+	message(STATUS "__ST__: Not rewriting files '${X_FN_APP_VERSION_H}' and '${X_FN_LIB_VERSION_H}'")
 endif ()
 
 if (NOT EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_APP_VERSION_H}")
@@ -598,6 +607,21 @@ if (LIBMPG123 AND LIBMPG123_INCLUDE_DIR)
 	endif ()
 	target_link_libraries(santagger_app PRIVATE ${LIBMPG123})
 	include_directories(${LIBMPG123_INCLUDE_DIR})
+
+	# libshlwapi is only required for MS Windows when mpg123 is being statically linked
+	if (MINGW AND NOT BUILD_SHARED_LIBS)
+		find_library(LIBSHLWAPI NAMES shlwapi)
+		find_path(LIBSHLWAPI_INCLUDE_DIR NAMES shlwapi.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
+
+		if (LIBSHLWAPI AND LIBSHLWAPI_INCLUDE_DIR)
+			message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libshlwapi: ${LIBSHLWAPI}")
+
+			target_link_libraries(santagger_app PRIVATE ${LIBSHLWAPI})
+			include_directories(${LIBSHLWAPI_INCLUDE_DIR})
+		else ()
+			message(FATAL_ERROR "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libshlwapi not found")
+		endif ()
+	endif ()
 else ()
 	message(STATUS "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libmpg123 not found, trying libmad")
 
@@ -622,6 +646,7 @@ find_path(LIBVORBIS_INCLUDE_DIR NAMES vorbis/codec.h PATHS /usr/include /usr/loc
 find_library(LIBOGG NAMES ogg)
 find_path(LIBOGG_INCLUDE_DIR NAMES ogg/ogg.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
 
+set(Z_VAR_NEED_LIBM OFF)
 if (LIBVORBIS AND LIBVORBIS_INCLUDE_DIR AND LIBOGG AND LIBOGG_INCLUDE_DIR)
 	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libvorbis: ${LIBVORBIS}")
 	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libogg: ${LIBOGG}")
@@ -629,12 +654,22 @@ if (LIBVORBIS AND LIBVORBIS_INCLUDE_DIR AND LIBOGG AND LIBOGG_INCLUDE_DIR)
 
 	target_link_libraries(santagger_app PRIVATE ${LIBVORBIS} ${LIBOGG})
 	include_directories(${LIBVORBIS_INCLUDE_DIR} ${LIBOGG_INCLUDE_DIR})
+
+	if (NOT APPLE AND NOT WIN32)
+		set(Z_VAR_NEED_LIBM ON)
+	endif ()
 else ()
 	message(STATUS "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libvorbis+libogg not found, proceeding without it")
 endif ()
 
 # check for optional shared library 'zlib'
-find_library(LIBZ NAMES z PATHS /usr/local/opt/zlib/lib)
+set(Z_VAR_ZLIB_STATIC_EXTRA_NAME "")
+if (MINGW AND NOT BUILD_SHARED_LIBS)
+	set(Z_VAR_ZLIB_STATIC_EXTRA_NAME "zlibstatic")
+elseif (MINGW)
+	set(Z_VAR_ZLIB_STATIC_EXTRA_NAME "zlib")
+endif ()
+find_library(LIBZ NAMES z ${Z_VAR_ZLIB_STATIC_EXTRA_NAME} PATHS /usr/local/opt/zlib/lib)
 find_path(LIBZ_INCLUDE_DIR NAMES zlib.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
 
 if (LIBZ AND LIBZ_INCLUDE_DIR)
@@ -660,13 +695,13 @@ if (WIN32)
 endif ()
 
 # libm
-if (NOT WIN32 AND NOT APPLE)
+if (Z_VAR_NEED_LIBM)
 	# link to shared library 'libm' - required only for Debian when using libvorbis
 	find_library(LIBM NAMES m)
 	if (LIBM)
 		message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libm: ${LIBM}")
+		target_link_libraries(santagger_app PRIVATE ${LIBM})
 	else ()
-		message(FATAL_ERROR "__ST__: libm not found")
+		message(STATUS "__ST__: libm not found")
 	endif ()
-	target_link_libraries(santagger_app PRIVATE ${LIBM})
 endif ()
