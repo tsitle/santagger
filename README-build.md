@@ -93,6 +93,12 @@ MinGW with GCC and CMake:
     ```
 - install CMake:  
   `$ pacman -S mingw-w64-ucrt-x86_64-cmake`
+- install Git:  
+  - `$ pacman -S git` (this version of Git will only work inside a MSYS2 environment like UCRT64)  
+  - alternatively, you can download and install Git from [here](https://git-scm.com/download/win).  
+    That version of Git will then work everywhere.
+- optional: install Zip:  
+  `$ pacman -S zip` (this version of Zip will only work inside a MSYS2 environment like UCRT64)  
 
 Optional external libraries:
 
@@ -111,7 +117,7 @@ $ pacman -S mingw-w64-ucrt-x86_64-zlib
 - `STRIP_AFTER_BUILD`: strip debug symbols etc. from executable/library after build (default: `OFF`)
 - `BUILD_SHARED_LIBS`: build dynamically linked executable/library (default: `ON`)
 
-### Bash Scripts for macOS / Linux
+### Bash Scripts for macOS / Linux / MinGW
 
 For convenience, there are some Bash scripts for building the project on macOS / Linux.
 
@@ -120,24 +126,24 @@ Each script can print out a list of available options by using the `--help` opti
 For example, building the project can be done like this:
 
 ```
-Build type = release:
+Build type = release, Build target = app:
 $ ./za-cmake.sh && ./zb-build.sh
 ```
 
 Building with Valgrind compiler flags can be done like this:
 
 ```
-Build type = release:
+Build type = release, Build target = app:
 $ ./za-cmake.sh release vg static && ./zb-build.sh vg_release_stat
 
-Build type = debug:
+Build type = debug, Build target = app:
 $ ./za-cmake.sh debug vg static && ./zb-build.sh vg_debug_stat
 ```
 
 Building all executables (the application plus all Unit Tests) with the Debug build type can be done like this:
 
 ```
-Build type = debug:
+Build type = debug, Build target = all:
 $ ./za-cmake.sh debug && ./zb-build.sh debug all
 ```
 
@@ -155,7 +161,7 @@ Build type = release, Build target = app:
 $ ./za-cmake.sh static strip && ./zb-build.sh release_stat_strip app
 ```
 
-### Batch File for MS Windows
+### Batch File for MS Windows Terminal
 
 For convenience, there is a simple script for building all executables as stripped, statically linked executables on MS Windows:
 
@@ -165,30 +171,30 @@ For convenience, there is a simple script for building all executables as stripp
 
 ## Unit Tests
 
-### Bash Scripts for macOS / Linux
+### Bash Scripts for macOS / Linux / MinGW
 
 For convenience, there are two Bash scripts for running the Unit Tests on macOS / Linux.
 
 To run a specific Unit Test, use the `zc-run-test.sh` script, e.g.:
 
 ```
-Build type = release, Build target = test_sysfnc:
+Build type = release, Test = test_sysfnc:
 $ ./zc-run-test.sh sysfnc
 
-Build type = debug, Build target = test_sysfnc:
+Build type = debug, Test = test_sysfnc:
 $ ./zc-run-test.sh debug sysfnc
 
-Build type = release, Build target = test_sysfnc, run test with Valgrind:
+Build type = release, Test = test_sysfnc, run test with Valgrind:
 $ ./zc-run-test.sh vg_release_stat sysfnc
 
-Build type = debug, Build target = test_sysfnc, run test with Valgrind:
+Build type = debug, Test = test_sysfnc, run test with Valgrind:
 $ ./zc-run-test.sh vg_debug_stat sysfnc
 ```
 
 Some Unit Tests require additional parameters, e.g.:
 
 ```
-Build type = release, Build target = test_dl:
+Build type = release, Test = test_dl:
 $ ./zc-run-test.sh dl -- -s
 ```
 
@@ -208,7 +214,7 @@ Build type = debug, run test with Valgrind:
 $ ./zc-run-test-all.sh vg_debug_stat
 ```
 
-### Batch File for MS Windows
+### Batch File for MS Windows Terminal
 
 For convenience, there is a simple script for running all Unit Tests on MS Windows:
 
