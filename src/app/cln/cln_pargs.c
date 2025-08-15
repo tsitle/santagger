@@ -606,8 +606,7 @@ AST_CLN__pa_sc_info(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 static Tst_err
 AST_CLN__pa_sc_version(const Tast_cln_cbMsg cbMsg)
 {
-	#if (HAVE_LIBVORBIS == 1) || (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1) || (HAVE_LIBZ == 1)
-		const char *cNA = "n/a";
+	#if (HAVE_LIBVORBIS == 1) || (HAVE_LIBMAD == 1) || (HAVE_LIBZ == 1)
 		char const *pVer;
 	#endif
 	Tst_mtes_string tagger;
@@ -632,7 +631,7 @@ AST_CLN__pa_sc_version(const Tast_cln_cbMsg cbMsg)
 	#if (HAVE_LIBVORBIS == 1)
 		pVer = vorbis_version_string();
 		if (pVer == NULL) {
-			pVer = cNA;
+			pVer = "n/a";
 		}
 		cbMsg("[libvorbis: %s]", pVer);
 	#endif
