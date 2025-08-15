@@ -335,6 +335,15 @@ else ()
 	message(STATUS "__ST__: Compiler defs: no HAVE_GETTIMEOFDAY")
 endif ()
 
+# check if nanosleep() exists
+check_function_exists(nanosleep HAVE_NANOSLEEP)
+if (HAVE_NANOSLEEP)
+	message(STATUS "__ST__: Compiler defs: HAVE_NANOSLEEP=1")
+	add_compile_definitions(HAVE_NANOSLEEP=1)
+else ()
+	message(STATUS "__ST__: Compiler defs: no HAVE_NANOSLEEP")
+endif ()
+
 # include the CheckStructHasMember module
 include(CheckStructHasMember)
 

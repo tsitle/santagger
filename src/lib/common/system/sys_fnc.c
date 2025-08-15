@@ -404,8 +404,7 @@ st_sysSleepMS(const Tst_uint32 millisecs)
 	if (millisecs == 0) {
 		return;
 	}
-	#if (HAVE_STRUCT_TIMESPEC_TV_SEC == 1 && \
-			HAVE_STRUCT_TIMESPEC_TV_NSEC == 1)
+	#if (HAVE_STRUCT_TIMESPEC_TV_SEC == 1 && HAVE_STRUCT_TIMESPEC_TV_NSEC == 1 && HAVE_NANOSLEEP == 1)
 		struct timespec ts;
 
 		ts.tv_sec  = (time_t)((millisecs - millisecs % 1000) / 1000);
