@@ -119,7 +119,7 @@ $ pacman -S mingw-w64-ucrt-x86_64-zlib
 
 ### Bash Scripts for macOS / Linux / MinGW
 
-For convenience, there are some Bash scripts for building the project on macOS / Linux.
+For convenience, there are some Bash scripts for building the project on macOS / Linux / MinGW.
 
 Each script can print out a list of available options by using the `--help` option.
 
@@ -173,7 +173,7 @@ For convenience, there is a simple script for building all executables as stripp
 
 ### Bash Scripts for macOS / Linux / MinGW
 
-For convenience, there are two Bash scripts for running the Unit Tests on macOS / Linux.
+For convenience, there are two Bash scripts for running the Unit Tests on macOS / Linux / MinGW.
 
 To run a specific Unit Test, use the `zc-run-test.sh` script, e.g.:
 
@@ -220,4 +220,37 @@ For convenience, there is a simple script for running all Unit Tests on MS Windo
 
 ```
 > .\zc-run-test-all.cmd
+```
+
+## Cross-Compiling
+
+The directory `scripts/docker-cross/` contains the script `build_image.sh` which will create Docker Images
+for cross-compiling the application for Linux AARCH64, MS Windows x86_64 and MS Windows AARCH64.
+
+Once the Docker Images have been created, the script `scripts/build_cross.sh` can be used to build the application
+for the different targets.
+
+## Installation
+
+### Bash Scripts for macOS / Linux / MinGW
+
+For convenience, there is a Bash script for installing the application on macOS / Linux / MinGW.
+
+Be aware that the default installation path is `/opt/santagger/`.  
+If you want to install the application somewhere else, you can use the `--prefix` option.
+
+Example for installing the application and shared library to `/usr/local/`:
+
+```
+$ ./za-cmake.sh --prefix=/usr/local
+$ ./zb-build.sh
+$ ./zd-install.sh
+```
+
+Example for installing the static application and static library to `/usr/local/`:
+
+```
+$ ./za-cmake.sh release static strip --prefix=/usr/local
+$ ./zb-build.sh release_stat_strip
+$ ./zd-install.sh release_stat_strip
 ```
