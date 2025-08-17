@@ -28,7 +28,7 @@ prOneHelp()
 		echo
 
 		[ ${l_ret} -ne 0 ] && {
-			echo "invalid ret code" >>/dev/stderr
+			echo "invalid ret code" >&2
 			exit 1
 		}
 	} >> "${X_OUTFN}"

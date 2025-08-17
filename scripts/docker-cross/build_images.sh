@@ -24,7 +24,7 @@ function _getCpuArch() {
 			elif [ "$1" = "debian_dist" ]; then
 				echo -n "arm64"
 			else
-				echo "${VAR_MYNAME}: Error: invalid arg '$1'" >>/dev/stderr
+				echo "${VAR_MYNAME}: Error: invalid arg '$1'" >&2
 				return 1
 			fi
 			;;
@@ -34,12 +34,12 @@ function _getCpuArch() {
 			elif [ "$1" = "debian_dist" ]; then
 				echo -n "armhf"
 			else
-				echo "${VAR_MYNAME}: Error: invalid arg '$1'" >>/dev/stderr
+				echo "${VAR_MYNAME}: Error: invalid arg '$1'" >&2
 				return 1
 			fi
 			;;
 		*)
-			echo "${VAR_MYNAME}: Error: Unknown CPU architecture '$(uname -m)'" >>/dev/stderr
+			echo "${VAR_MYNAME}: Error: Unknown CPU architecture '$(uname -m)'" >&2
 			return 1
 			;;
 	esac
@@ -63,7 +63,7 @@ fi
 LVAR_DEB_DIST="$(_getCpuArch debian_dist)"
 
 if [ "${LVAR_DEB_DIST}" != "amd64" ]; then
-	echo "${VAR_MYNAME}: Error: Only amd64/x86_64 hosts supported by dockcross Docker Images" >>/dev/stderr
+	echo "${VAR_MYNAME}: Error: Only amd64/x86_64 hosts supported by dockcross Docker Images" >&2
 	exit 1
 fi
 
@@ -85,7 +85,7 @@ printUsage() {
 		echo "  ${LCNST_TOS_LX_ARM64}"
 		echo "  ${LCNST_TOS_WIN_X64}"
 		echo "  ${LCNST_TOS_WIN_ARM64}"
-	} >>/dev/stderr
+	} >&2
 	exit 1
 }
 
@@ -96,8 +96,8 @@ fi
 LVAR_CROSS_TARGETS=""
 if [ $# -eq 1 ]; then
 	if ! { [ "${1}" = "${LCNST_TOS_LX_ARM64}" ] || [ "${1}" = "${LCNST_TOS_WIN_X64}" ] || [ "${1}" = "${LCNST_TOS_WIN_ARM64}" ]; }; then
-		echo "${VAR_MYNAME}: Invalid TARGET_OS" >>/dev/stderr
-		echo >>/dev/stderr
+		echo "${VAR_MYNAME}: Invalid TARGET_OS" >&2
+		echo >&2
 		printUsage
 	fi
 	LVAR_CROSS_TARGETS="$1"

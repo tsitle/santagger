@@ -31,7 +31,7 @@ function printUsage() {
 		echo "  test_sysfile"
 		echo "  test_sysfnc"
 		echo "  test_tfldmap"
-	} >>/dev/stderr;
+	} >&2;
 	exit ${1}
 }
 
@@ -46,14 +46,14 @@ TMP_HAVE_ARG_BUILDTARGET=false
 while [ $# -ne 0 ]; do
 	if [ "${1}" = "clean" ]; then
 		if [ "${TMP_HAVE_ARG_CLEAN}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg 'clean'" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg 'clean'\n" >&2
 			printUsage 1
 		fi
 		LOPT_CLEAN=true
 		TMP_HAVE_ARG_CLEAN=true
 	elif [ "${1}" = "--verbose" ] || [ "${1}" = "-v" ]; then
 		if [ "${TMP_HAVE_ARG_VERBOSE}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg '-v|--verbose'" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg '-v|--verbose'\n" >&2
 			printUsage 1
 		fi
 		LOPT_VERBOSE=true
@@ -64,7 +64,7 @@ while [ $# -ne 0 ]; do
 			[ "${1}" = "test_sysfile" ] || [ "${1}" = "test_sysfnc" ] || \
 			[ "${1}" = "test_tfldmap" ]; then
 		if [ "${TMP_HAVE_ARG_BUILDTARGET}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg TARGET" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg TARGET\n" >&2
 			printUsage 1
 		fi
 		LOPT_BUILDTARGET="${1}"
@@ -74,13 +74,13 @@ while [ $# -ne 0 ]; do
 	else
 		if [ "${TMP_HAVE_ARG_BUILDTARGET}" = "false" ]; then
 			if [ "${TMP_HAVE_ARG_BUILDDIRSUFFIX}" = "true" ]; then
-				echo -e "$(basename "${0}"): Duplicate arg BUILD_DIR_SUFFIX" >>/dev/stderr
+				echo -e "$(basename "${0}"): Duplicate arg BUILD_DIR_SUFFIX\n" >&2
 				printUsage 1
 			fi
 			LOPT_BUILDDIRSUFFIX="${1}"
 			TMP_HAVE_ARG_BUILDDIRSUFFIX=true
 		else
-			echo -e "$(basename "${0}"): Invalid arg '${1}'" >>/dev/stderr
+			echo -e "$(basename "${0}"): Invalid arg '${1}'\n" >&2
 			printUsage 1
 		fi
 	fi
@@ -101,7 +101,7 @@ if [ -f "${TMP_ARG_BUILD_DIR}/build.ninja" ] || [ -f "${TMP_ARG_BUILD_DIR}/Makef
 	TMP_TEST_HAVE_BUILD_FILE=true
 fi
 if [ ! -d "${TMP_ARG_BUILD_DIR}" ] || [ "${TMP_TEST_HAVE_BUILD_FILE}" != "true" ]; then
-	echo -e "$(basename "${0}"): Build dir '${TMP_ARG_BUILD_DIR}' not found or invalid" >>/dev/stderr
+	echo "$(basename "${0}"): Build dir '${TMP_ARG_BUILD_DIR}' not found or invalid" >&2
 	exit 1
 fi
 
@@ -157,11 +157,11 @@ TMP_GIT_VERSION_SEM="$(grep " ST_LIBSANTAG_VERS_STRING " "${TMP_APP_VERSION_H_FN
 TMP_GIT_VERSION_CID="$(grep " ST_LIBSANTAG_VERS_COMMITID " "${TMP_APP_VERSION_H_FN}" | cut -f2 -d\( | cut -f1 -d\) | tr -d \")"
 
 if [ -z "${TMP_GIT_VERSION_SEM}" ]; then
-	echo "$(basename "${0}"): Could not determine santagger version string" >>/dev/stderr
+	echo "$(basename "${0}"): Could not determine santagger version string" >&2
 	exit 1
 fi
 if [ -z "${TMP_GIT_VERSION_CID}" ]; then
-	echo "$(basename "${0}"): Could not determine santagger Commit ID" >>/dev/stderr
+	echo "$(basename "${0}"): Could not determine santagger Commit ID" >&2
 	exit 1
 fi
 

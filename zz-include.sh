@@ -45,7 +45,7 @@ function getOsName() {
 			echo -n "win"
 			;;
 		*)
-			echo "Error: getOsName(): Unknown OSTYPE '${OSTYPE}'" >>/dev/stderr
+			echo "Error: getOsName(): Unknown OSTYPE '${OSTYPE}'" >&2
 			return 1
 			;;
 	esac
@@ -85,7 +85,7 @@ function _getCpuArch() {
 				echo -n "armhf"
 				;;
 		*)
-				echo "Error: Unknown CPU architecture '$(uname -m)'" >>/dev/stderr
+				echo "Error: Unknown CPU architecture '$(uname -m)'" >&2
 				return 1
 				;;
 	esac
@@ -117,7 +117,7 @@ else
 fi
 
 if [ -z "${GCFG_BIN_CMAKE}" ]; then
-	echo "Couldn't find cmake. Aborting." >>/dev/stderr
+	echo "Couldn't find cmake. Aborting." >&2
 	exit 1
 fi
 
@@ -257,11 +257,11 @@ function getBinaryFn() {
 	elif [ "${TMP_FILEID}" = "BIN_LIB_DYN" ]; then
 		TMP_BASE="${GCFG_BIN_LIB_DYN_BASE_FN}"
 	else
-		echo "Error: getBinaryFn(): Unknown FILE_ID '${TMP_FILEID}'" >>/dev/stderr
+		echo "Error: getBinaryFn(): Unknown FILE_ID '${TMP_FILEID}'" >&2
 		exit 1
 	fi
 	if [ -z "${TMP_BASE}" ]; then
-		echo "Error: getBinaryFn(): Empty base fn for FILE_ID '${TMP_FILEID}'" >>/dev/stderr
+		echo "Error: getBinaryFn(): Empty base fn for FILE_ID '${TMP_FILEID}'" >&2
 		exit 1
 	fi
 	local TMP_SUFF
@@ -281,7 +281,7 @@ function getBinaryFn() {
 		elif [ "${GVAR_OS}" = "macos" ]; then
 			TMP_BASE+=".dylib"
 		else
-			echo "Error: getBinaryFn(): Unknown OS '${GVAR_OS}'" >>/dev/stderr
+			echo "Error: getBinaryFn(): Unknown OS '${GVAR_OS}'" >&2
 			exit 1
 		fi
 	fi

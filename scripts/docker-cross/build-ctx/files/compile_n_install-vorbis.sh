@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 if [ -z "${CROSS_ROOT}" ] || [ -z "${CROSS_TRIPLE}" ]; then
-	echo "Env var CROSS_ROOT and/or CROSS_TRIPLE not set" >>/dev/stderr
+	echo "Env var CROSS_ROOT and/or CROSS_TRIPLE not set" >&2
 	exit 1
 fi
 if [ ! -d "${CROSS_ROOT}/${CROSS_TRIPLE}" ]; then
-	echo "Directory '${CROSS_ROOT}/${CROSS_TRIPLE}' not found" >>/dev/stderr
+	echo "Directory '${CROSS_ROOT}/${CROSS_TRIPLE}' not found" >&2
 	exit 1
 fi
 

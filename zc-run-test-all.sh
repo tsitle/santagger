@@ -16,7 +16,7 @@ function printUsage() {
 		echo "Usage: $(basename "${0}") [BUILD_DIR_SUFFIX]"
 		echo
 		echo "If the BUILD_DIR_SUFFIX is empty the default value 'release' will be used."
-	} >>/dev/stderr;
+	} >&2;
 	exit ${1}
 }
 
@@ -27,7 +27,7 @@ while [ $# -ne 0 ]; do
 		printUsage 0
 	else
 		if [ "${TMP_HAVE_ARG_BUILDDIRSUFFIX}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg BUILD_DIR_SUFFIX" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg BUILD_DIR_SUFFIX\n" >&2
 			printUsage 1
 		fi
 		LOPT_BUILDDIRSUFFIX="${1}"
@@ -42,11 +42,11 @@ LTMP_TESTFILE_TXT="src/tests/data/data.txt"
 LTMP_TESTFILE_BIN="src/tests/data/data.rnd"
 
 if [ ! -f "${LTMP_TESTFILE_TXT}" ]; then
-	echo -e "$(basename "${0}"): could not find file '${LTMP_TESTFILE_TXT}'" >>/dev/stderr
+	echo "$(basename "${0}"): could not find file '${LTMP_TESTFILE_TXT}'" >&2
 	exit 1
 fi
 if [ ! -f "${LTMP_TESTFILE_BIN}" ]; then
-	echo -e "$(basename "${0}"): could not find file '${LTMP_TESTFILE_BIN}'" >>/dev/stderr
+	echo "$(basename "${0}"): could not find file '${LTMP_TESTFILE_BIN}'" >&2
 	exit 1
 fi
 

@@ -20,7 +20,7 @@ function printUsage() {
 		echo "          $(basename "${0}") -- -b 'Some Band' some_audio.mp3"
 		echo
 		echo "If the BUILD_DIR_SUFFIX is empty the default value 'release' will be used."
-	} >>/dev/stderr
+	} >&2
 	exit ${1}
 }
 
@@ -34,7 +34,7 @@ while [ $# -ne 0 ]; do
 		break
 	else
 		if [ "${TMP_HAVE_ARG_BUILDDIRSUFFIX}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg BUILD_DIR_SUFFIX" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg BUILD_DIR_SUFFIX\n" >&2
 			printUsage 1
 		fi
 		LOPT_BUILDDIRSUFFIX="${1}"
@@ -50,7 +50,7 @@ TMP_ARG_BUILD_DIR="$(getCmakeBuildDirFromSuffix "${LOPT_BUILDDIRSUFFIX}")"
 LTMP_EXE_FN="${GCFG_EXECUTABLE_ST_FN}"
 
 if [ ! -x "${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}" ]; then
-	echo -e "$(basename "${0}"): Executable '${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}' not found" >>/dev/stderr
+	echo "$(basename "${0}"): Executable '${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}' not found" >&2
 	exit 1
 fi
 

@@ -28,7 +28,7 @@ function printUsage() {
 		echo "  Default install prefix is '${GCFG_CMAKE_INSTALL_PREFIX}'."
 		echo "  Depending on the BUILD TYPE and OPTIONS the prefix will be adjusted."
 		echo "  When using a custom prefix like '/usr/local' the prefix will not be adjusted."
-	} >>/dev/stderr
+	} >&2
 	exit ${1}
 }
 
@@ -45,35 +45,35 @@ TMP_HAVE_ARG_INSTALLPREFIX=false
 while [ $# -ne 0 ]; do
 	if [ "${1}" = "debug" ] || [ "${1}" = "release" ]; then
 		if [ "${TMP_HAVE_ARG_BUILDTYPE}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg BUILDTYPE" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg BUILDTYPE\n" >&2
 			printUsage 1
 		fi
 		LOPT_BUILDTYPE="$1"
 		TMP_HAVE_ARG_BUILDTYPE=true
 	elif [ "${1}" = "vg" ]; then
 		if [ "${TMP_HAVE_ARG_VG}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg 'vg'" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg 'vg'\n" >&2
 			printUsage 1
 		fi
 		LOPT_VG="vg"
 		TMP_HAVE_ARG_VG=true
 	elif [ "${1}" = "static" ]; then
 		if [ "${TMP_HAVE_ARG_STATIC}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg 'static'" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg 'static'\n" >&2
 			printUsage 1
 		fi
 		LOPT_STATIC="static"
 		TMP_HAVE_ARG_STATIC=true
 	elif [ "${1}" = "strip" ]; then
 		if [ "${TMP_HAVE_ARG_STRIP}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg 'strip'" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg 'strip'\n" >&2
 			printUsage 1
 		fi
 		LOPT_STRIP="strip"
 		TMP_HAVE_ARG_STRIP=true
-	elif [ "${1}" = "--prefix" ]; then
+	elif [ "${1:0:9}" = "--prefix=" ]; then
 		if [ "${TMP_HAVE_ARG_INSTALLPREFIX}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg '--prefix'" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg '--prefix'\n" >&2
 			printUsage 1
 		fi
 		LOPT_INSTALLPREFIX="$(echo -n "${1}" | cut -f2 -d=)"
@@ -81,7 +81,7 @@ while [ $# -ne 0 ]; do
 	elif [ "${1}" = "--help" ]; then
 		printUsage 0
 	else
-		echo -e "$(basename "$0"): Invalid arg '${1}'" >>/dev/stderr
+		echo -e "$(basename "$0"): Invalid arg '${1}'\n" >&2
 		printUsage 1
 	fi
 	shift

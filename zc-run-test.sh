@@ -28,7 +28,7 @@ function printUsage() {
 		echo "  sysfile"
 		echo "  sysfnc"
 		echo "  tfldmap"
-	} >>/dev/stderr;
+	} >&2;
 	exit ${1}
 }
 
@@ -42,7 +42,7 @@ while [ $# -ne 0 ]; do
 			[ "${1}" = "sysfile" ] || [ "${1}" = "sysfnc" ] || \
 			[ "${1}" = "tfldmap" ]; then
 		if [ "${TMP_HAVE_ARG_TESTNAME}" = "true" ]; then
-			echo -e "$(basename "${0}"): Duplicate arg TESTNAME" >>/dev/stderr
+			echo -e "$(basename "${0}"): Duplicate arg TESTNAME\n" >&2
 			printUsage 1
 		fi
 		LOPT_TESTNAME="${1}"
@@ -55,13 +55,13 @@ while [ $# -ne 0 ]; do
 	else
 		if [ "${TMP_HAVE_ARG_TESTNAME}" = "false" ]; then
 			if [ "${TMP_HAVE_ARG_BUILDDIRSUFFIX}" = "true" ]; then
-				echo -e "$(basename "${0}"): Duplicate arg BUILD_DIR_SUFFIX" >>/dev/stderr
+				echo -e "$(basename "${0}"): Duplicate arg BUILD_DIR_SUFFIX\n" >&2
 				printUsage 1
 			fi
 			LOPT_BUILDDIRSUFFIX="${1}"
 			TMP_HAVE_ARG_BUILDDIRSUFFIX=true
 		else
-			echo -e "$(basename "${0}"): Invalid arg '${1}'" >>/dev/stderr
+			echo -e "$(basename "${0}"): Invalid arg '${1}'\n" >&2
 			printUsage 1
 		fi
 	fi
@@ -79,7 +79,7 @@ TMP_ARG_BUILD_DIR="$(getCmakeBuildDirFromSuffix "${LOPT_BUILDDIRSUFFIX}")"
 LTMP_EXE_FN="${GCFG_PROJECT_NAME}_test_${LOPT_TESTNAME}"
 
 if [ ! -x "${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}" ]; then
-	echo -e "$(basename "${0}"): Executable '${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}' not found" >>/dev/stderr
+	echo "$(basename "${0}"): Executable '${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}' not found" >&2
 	exit 1
 fi
 

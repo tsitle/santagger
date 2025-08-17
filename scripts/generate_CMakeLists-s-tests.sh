@@ -29,8 +29,8 @@ appendCmakeListsForTest() {
 		echo -e "\t\tfncs_test_common.c"
 		echo -e "\t\tfncs_test_common.h"
 		echo -e "\t\ttest_${1}.c"
-		echo -e ")"
-		echo -e "target_link_libraries(santagger_test_${1} PRIVATE ${LCFG_TARGET_LIB} ${LCFG_TARGET_INCS})"
+		echo ")"
+		echo "target_link_libraries(santagger_test_${1} PRIVATE ${LCFG_TARGET_LIB} ${LCFG_TARGET_INCS})"
 	} >> "${LCFG_CMAKELISTS_FN}"
 }
 

@@ -28,7 +28,7 @@ printUsage() {
 		echo "  ${LCNST_TOS_LX_ARM64}"
 		echo "  ${LCNST_TOS_WIN_X64}"
 		echo "  ${LCNST_TOS_WIN_ARM64}"
-	} >>/dev/stderr
+	} >&2
 	exit 1
 }
 
@@ -39,8 +39,7 @@ fi
 LVAR_CROSS_TARGETS=""
 if [ $# -eq 1 ]; then
 	if ! { [ "${1}" = "${LCNST_TOS_LX_ARM64}" ] || [ "${1}" = "${LCNST_TOS_WIN_X64}" ] || [ "${1}" = "${LCNST_TOS_WIN_ARM64}" ]; }; then
-		echo "${VAR_MYNAME}: Invalid TARGET_OS" >>/dev/stderr
-		echo >>/dev/stderr
+		echo -e "${VAR_MYNAME}: Invalid TARGET_OS\n" >&2
 		printUsage
 	fi
 	LVAR_CROSS_TARGETS="$1"
@@ -64,7 +63,7 @@ for CROSS_TRG in $LVAR_CROSS_TARGETS; do
 			echo "${VAR_MYNAME}: Perhaps you need to run"
 			echo "${VAR_MYNAME}:   $ scripts/docker-cross/build_images.sh ${LTMP_ORG_CROSS_TRG}"
 			echo "${VAR_MYNAME}: first."
-		} >>/dev/stderr
+		} >&2
 		exit 1
 	fi
 
