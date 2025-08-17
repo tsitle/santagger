@@ -105,20 +105,22 @@ target_link_libraries(santagger_app PRIVATE santagger_lib santagger_includes)
 include(GNUInstallDirs)
 message(STATUS "__ST__: Install directories: PREFIX='${CMAKE_INSTALL_PREFIX}', BIN='${CMAKE_INSTALL_BINDIR}', LIB='${CMAKE_INSTALL_LIBDIR}', INC='${CMAKE_INSTALL_INCLUDEDIR}'")
 install(TARGETS santagger_app santagger_lib
-		RUNTIME
-			COMPONENT Runtime
-			DESTINATION ${CMAKE_INSTALL_BINDIR}  # Executables
-		LIBRARY
-			COMPONENT Runtime
-			DESTINATION ${CMAKE_INSTALL_LIBDIR}  # Shared libraries
-		ARCHIVE
-			COMPONENT Runtime
-			DESTINATION ${CMAKE_INSTALL_LIBDIR}  # Static libraries
-	)
+	RUNTIME
+		COMPONENT Runtime
+		DESTINATION ${CMAKE_INSTALL_BINDIR}  # Executables
+	LIBRARY
+		COMPONENT Runtime
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}  # Shared libraries
+	ARCHIVE
+		COMPONENT Runtime
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}  # Static libraries
+)
 install(DIRECTORY src/includes/
-		COMPONENT Development
-		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/santagger
-		FILES_MATCHING PATTERN "*.h")
+	COMPONENT Development
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/santagger
+	FILES_MATCHING PATTERN "*.h"
+)
+set_target_properties(santagger_app PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/lib64")
 
 # add executables for tests
 add_executable(santagger_test_binobj)
