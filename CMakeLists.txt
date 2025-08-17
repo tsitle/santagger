@@ -12,6 +12,8 @@ option(BUILD_FOR_VALGRIND "Build for Valgrind" OFF)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 option(STRIP_AFTER_BUILD "Strip executable after build" OFF)
 
+option(INSTALL_PKG_CONFIG_MODULE "Install santagger.pc file" ON)
+
 set(X_OPT 2)       # 0|1|2|3|s   (Optimization level (s=optimize for size))
 set(X_PED "nor")   # nor|err|no  (be pedantic (warning level) ?)
 set(X_WALL "yes")  # no|yes      (show warnings ?)
@@ -598,6 +600,8 @@ set_target_properties(santagger_lib PROPERTIES
 find_library(LIBMPG123 NAMES mpg123)
 find_path(LIBMPG123_INCLUDE_DIR NAMES mpg123.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
 
+set(Z_VAR_PC_REQU_MPG123 OFF)
+set(Z_VAR_PC_REQU_MAD OFF)
 if (LIBMPG123 AND LIBMPG123_INCLUDE_DIR)
 	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libmpg123: ${LIBMPG123}")
 	add_compile_definitions(HAVE_LIBMPG123=1)
@@ -607,6 +611,8 @@ if (LIBMPG123 AND LIBMPG123_INCLUDE_DIR)
 	endif ()
 	target_link_libraries(santagger_app PRIVATE ${LIBMPG123})
 	include_directories(${LIBMPG123_INCLUDE_DIR})
+
+	set(Z_VAR_PC_REQU_MPG123 ON)
 
 	# libshlwapi is only required for MS Windows when mpg123 is being statically linked
 	if (MINGW AND NOT BUILD_SHARED_LIBS)
@@ -634,6 +640,8 @@ else ()
 
 		target_link_libraries(santagger_app PRIVATE ${LIBMAD})
 		include_directories(${LIBMAD_INCLUDE_DIR})
+
+		set(Z_VAR_PC_REQU_MAD ON)
 	else ()
 		message(STATUS "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libmad not found, proceeding without it")
 	endif ()
@@ -647,6 +655,8 @@ find_library(LIBOGG NAMES ogg)
 find_path(LIBOGG_INCLUDE_DIR NAMES ogg/ogg.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
 
 set(Z_VAR_NEED_LIBM OFF)
+set(Z_VAR_PC_REQU_VORBIS OFF)
+set(Z_VAR_PC_REQU_OGG OFF)
 if (LIBVORBIS AND LIBVORBIS_INCLUDE_DIR AND LIBOGG AND LIBOGG_INCLUDE_DIR)
 	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libvorbis: ${LIBVORBIS}")
 	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libogg: ${LIBOGG}")
@@ -655,6 +665,8 @@ if (LIBVORBIS AND LIBVORBIS_INCLUDE_DIR AND LIBOGG AND LIBOGG_INCLUDE_DIR)
 	target_link_libraries(santagger_app PRIVATE ${LIBVORBIS} ${LIBOGG})
 	include_directories(${LIBVORBIS_INCLUDE_DIR} ${LIBOGG_INCLUDE_DIR})
 
+	set(Z_VAR_PC_REQU_VORBIS ON)
+	set(Z_VAR_PC_REQU_OGG ON)
 	if (NOT APPLE AND NOT WIN32)
 		set(Z_VAR_NEED_LIBM ON)
 	endif ()
@@ -672,17 +684,21 @@ endif ()
 find_library(LIBZ NAMES z ${Z_VAR_ZLIB_STATIC_EXTRA_NAME} PATHS /usr/local/opt/zlib/lib)
 find_path(LIBZ_INCLUDE_DIR NAMES zlib.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
 
+set(Z_VAR_PC_REQU_LIBZ OFF)
 if (LIBZ AND LIBZ_INCLUDE_DIR)
 	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libz: ${LIBZ}")
 	add_compile_definitions(HAVE_LIBZ=1)
 
 	target_link_libraries(santagger_app PRIVATE ${LIBZ})
 	include_directories(${LIBZ_INCLUDE_DIR})
+
+	set(Z_VAR_PC_REQU_LIBZ ON)
 else ()
 	message(STATUS "__ST__: ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libz not found, proceeding without it")
 endif ()
 
 # libbcrypt
+set(Z_VAR_PC_REQU_BCRYPT OFF)
 if (WIN32)
 	# link to shared library 'libbcrypt' - required only for MS Windows
 	find_library(LIBBCRYPT NAMES bcrypt)
@@ -692,16 +708,72 @@ if (WIN32)
 		message(FATAL_ERROR "__ST__: libbcrypt not found")
 	endif ()
 	target_link_libraries(santagger_lib PRIVATE ${LIBBCRYPT})
+
+	set(Z_VAR_PC_REQU_BCRYPT ON)
 endif ()
 
 # libm
+set(Z_VAR_PC_REQU_LIBM OFF)
 if (Z_VAR_NEED_LIBM)
 	# link to shared library 'libm' - required only for Debian when using libvorbis
 	find_library(LIBM NAMES m)
 	if (LIBM)
 		message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libm: ${LIBM}")
 		target_link_libraries(santagger_app PRIVATE ${LIBM})
+
+		set(Z_VAR_PC_REQU_LIBM ON)
 	else ()
 		message(STATUS "__ST__: libm not found")
 	endif ()
 endif ()
+
+# ----------------------------------------------------------------------------
+# Pkg-config
+# ----------------------------------------------------------------------------
+
+# Helper function to configure pkg-config files
+function(configure_pkg_config_file pkg_config_file_in)
+	set(prefix ${CMAKE_INSTALL_PREFIX})
+	set(exec_prefix ${CMAKE_INSTALL_FULL_BINDIR})
+	set(libdir ${CMAKE_INSTALL_FULL_LIBDIR})
+	set(includedir ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+	set(VERSION ${GIT_VERSION_SEM})
+	set(REQU_PRIV "")
+	if (BUILD_SHARED_LIBS)
+		if (Z_VAR_PC_REQU_MPG123)
+			set(REQU_PRIV "${REQU_PRIV} libmpg123")
+		endif ()
+		if (Z_VAR_PC_REQU_MAD)
+			set(REQU_PRIV "${REQU_PRIV} mad")
+		endif ()
+		if (Z_VAR_PC_REQU_VORBIS)
+			set(REQU_PRIV "${REQU_PRIV} vorbis")
+		endif ()
+		if (Z_VAR_PC_REQU_OGG)
+			set(REQU_PRIV "${REQU_PRIV} ogg")
+		endif ()
+		if (Z_VAR_PC_REQU_LIBZ)
+			set(REQU_PRIV "${REQU_PRIV} zlib")
+		endif ()
+	endif ()
+	set(LIBS_PRIV "")
+	if (BUILD_SHARED_LIBS)
+		if (Z_VAR_PC_REQU_BCRYPT)
+			set(LIBS_PRIV "${LIBS_PRIV} -lbcrypt")
+		endif ()
+		if (Z_VAR_PC_REQU_LIBM)
+			set(LIBS_PRIV "${LIBS_PRIV} -lm")
+		endif ()
+	endif ()
+	string(REPLACE ".in" "" pkg_config_file ${pkg_config_file_in})
+	configure_file(${pkg_config_file_in} ${pkg_config_file} @ONLY)
+endfunction()
+
+if(INSTALL_PKG_CONFIG_MODULE)
+	configure_pkg_config_file(santagger.pc.in)
+
+	install(
+		FILES ${CMAKE_CURRENT_BINARY_DIR}/santagger.pc
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+	)
+endif()
