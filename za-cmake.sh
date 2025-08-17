@@ -12,7 +12,23 @@
 
 # param $1: Exit code
 function printUsage() {
-	echo "Usage: $(basename "${0}") [debug|<release>] [vg] [static] [strip]" >>/dev/stderr
+	{
+		echo "Usage: $(basename "${0}") [debug|<release>] [vg] [static] [strip] [--prefix=DIRECTORY]"
+		echo
+		echo "BUILD TYPE:"
+		echo "  debug      Build with debug symbols"
+		echo "  <release>  Build without debug symbols and with optimization"
+		echo
+		echo "OPTIONS:"
+		echo "  vg         Build for Valgrind (will automatically add 'static' option)"
+		echo "  static     Build statically linked lib/executable"
+		echo "  strip      Strip lib/executable (only for release and non-Valgrind builds)"
+		echo
+		echo "INSTALLATION PREFIX:"
+		echo "  Default install prefix is '${GCFG_CMAKE_INSTALL_PREFIX}'."
+		echo "  Depending on the BUILD TYPE and OPTIONS the prefix will be adjusted."
+		echo "  When using a custom prefix like '/usr/local' the prefix will not be adjusted."
+	} >>/dev/stderr
 	exit ${1}
 }
 
@@ -24,6 +40,8 @@ LOPT_STRIP=""
 TMP_HAVE_ARG_STRIP=false
 LOPT_STATIC=""
 TMP_HAVE_ARG_STATIC=false
+LOPT_INSTALLPREFIX=""
+TMP_HAVE_ARG_INSTALLPREFIX=false
 while [ $# -ne 0 ]; do
 	if [ "${1}" = "debug" ] || [ "${1}" = "release" ]; then
 		if [ "${TMP_HAVE_ARG_BUILDTYPE}" = "true" ]; then
@@ -53,6 +71,13 @@ while [ $# -ne 0 ]; do
 		fi
 		LOPT_STRIP="strip"
 		TMP_HAVE_ARG_STRIP=true
+	elif [ "${1}" = "--prefix" ]; then
+		if [ "${TMP_HAVE_ARG_INSTALLPREFIX}" = "true" ]; then
+			echo -e "$(basename "${0}"): Duplicate arg '--prefix'" >>/dev/stderr
+			printUsage 1
+		fi
+		LOPT_INSTALLPREFIX="$(echo -n "${1}" | cut -f2 -d=)"
+		TMP_HAVE_ARG_INSTALLPREFIX=true
 	elif [ "${1}" = "--help" ]; then
 		printUsage 0
 	else
@@ -64,6 +89,15 @@ done
 
 if [ $# -ne 0 ]; then
 	printUsage 1
+fi
+
+if [ "${TMP_HAVE_ARG_INSTALLPREFIX}" = "true" ]; then
+	if [ -z "${LOPT_INSTALLPREFIX}" ] || [ "${LOPT_INSTALLPREFIX}" = "/" ]; then
+		LOPT_INSTALLPREFIX="/${GCFG_PROJECT_NAME}"
+	fi
+	LOPT_INSTALLPREFIX="$(echo -n "${LOPT_INSTALLPREFIX}" | sed -e 's;/$;;')"
+	# overwrite global variable
+	GCFG_CMAKE_INSTALL_PREFIX="${LOPT_INSTALLPREFIX}"
 fi
 
 # ----------------------------------------------------------
@@ -91,7 +125,11 @@ test -n "${LOPT_STATIC}" && TMP_ARG_DO_STATIC="-D BUILD_SHARED_LIBS=OFF" || TMP_
 
 #
 TMP_ARG_BUILD_DIR="$(getCmakeBuildDir "${LOPT_BUILDTYPE}" "${LOPT_VG}" "${LOPT_STATIC}" "${LOPT_STRIP}")"
-TMP_ARG_INSTALL_PREFIX="$(getCmakeInstallPrefix "${LOPT_BUILDTYPE}" "${LOPT_VG}")"
+if [ -z "${LOPT_INSTALLPREFIX}" ]; then
+	TMP_ARG_INSTALL_PREFIX="$(getCmakeInstallPrefix "${LOPT_BUILDTYPE}" "${LOPT_VG}")"
+else
+	TMP_ARG_INSTALL_PREFIX="${LOPT_INSTALLPREFIX}"
+fi
 
 # chown build directory
 if [ -n "${TMP_ARG_BUILD_DIR}" ] && [ -d "${TMP_ARG_BUILD_DIR}" ]; then
@@ -101,6 +139,7 @@ if [ -n "${TMP_ARG_BUILD_DIR}" ] && [ -d "${TMP_ARG_BUILD_DIR}" ]; then
 	}
 fi
 
+#
 "${GCFG_BIN_CMAKE}" \
 	--fresh \
 	-D CMAKE_BUILD_TYPE="${TMP_ARG_BUILD_TYPE}" \
