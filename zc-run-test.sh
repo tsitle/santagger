@@ -79,8 +79,9 @@ TMP_ARG_BUILD_DIR="$(getCmakeBuildDirFromSuffix "${LOPT_BUILDDIRSUFFIX}")"
 LTMP_EXE_FN="${GCFG_PROJECT_NAME}_test_${LOPT_TESTNAME}"
 
 if [ ! -x "${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}" ]; then
-	echo "$(basename "${0}"): Executable '${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}' not found" >&2
-	exit 1
+	echo -e "$(basename "${0}"): Executable '${TMP_ARG_BUILD_DIR}/${LTMP_EXE_FN}' not found\n" >&2
+	echo -e "$(basename "${0}"): Trying to build the executable\n" >&2
+	./zb-build.sh "${LOPT_BUILDDIRSUFFIX}" "test_${LOPT_TESTNAME}" || exit 1
 fi
 
 export LD_LIBRARY_PATH=${TMP_ARG_BUILD_DIR}:${LD_LIBRARY_PATH}
