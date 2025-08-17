@@ -68,6 +68,6 @@ for CROSS_TRG in $LVAR_CROSS_TARGETS; do
 		exit 1
 	fi
 
-	"scripts/docker-cross/${LTMP_SCR_FN}" ./za-cmake.sh static strip || exit 1
+	"scripts/docker-cross/${LTMP_SCR_FN}" ./za-cmake.sh static strip --prefix=/usr/local || exit 1
 	"scripts/docker-cross/${LTMP_SCR_FN}" ./zb-build.sh release_stat_strip || exit 1
 done
