@@ -1,4 +1,4 @@
-# Sandy Tagger - a command line tool for tagging audio and video files 
+# Sandy Tagger - a command line tool for tagging audio and video files
 
 Overview of *Sandy Tagger*'s features:
 
