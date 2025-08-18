@@ -97,8 +97,8 @@ MinGW with GCC and CMake:
   - `$ pacman -S git` (this version of Git will only work inside a MSYS2 environment like UCRT64)  
   - alternatively, you can download and install Git from [here](https://git-scm.com/download/win).  
     That version of Git will then work everywhere.
-- optional: install Zip:  
-  `$ pacman -S zip` (this version of Zip will only work inside a MSYS2 environment like UCRT64)  
+- optional: install Zip and Unzip:  
+  `$ pacman -S zip unzip` (this version of Zip will only work inside a MSYS2 environment like UCRT64)  
 
 Optional external libraries:
 
@@ -225,10 +225,33 @@ For convenience, there is a simple script for running all Unit Tests on MS Windo
 ## Cross-Compiling
 
 The directory `scripts/docker-cross/` contains the script `build_image.sh` which will create Docker Images
-for cross-compiling the application for Linux AARCH64, MS Windows x86_64 and MS Windows AARCH64.
+for cross-compiling the application for Linux x86_64, Linux AARCH64, MS Windows x86_64 and MS Windows AARCH64.
+
+Also see the [Cross-Compiling Docker Images README](scripts/docker-cross/README.md).
 
 Once the Docker Images have been created, the script `scripts/build_cross.sh` can be used to build the application
 for the different targets.
+
+To build the application for all targets, simply run:
+
+```
+$ scripts/build_cross.sh
+```
+
+To build the application only for one target, simply run:
+
+```
+$ scripts/build_cross.sh TARGET
+
+# e.g.
+$ scripts/build_cross.sh linux-arm64
+```
+
+If you only want to re-build the application for one target, you could do something like this:
+
+```
+$ scripts/docker-cross/run-st_dockcross-linux_arm64.sh ./zb-build.sh
+```
 
 ## Installation
 

@@ -12,6 +12,7 @@ VAR_MYNAME="$(basename "$0")"
 
 # ----------------------------------------------------------
 
+LCNST_TOS_LX_X64="linux-x64"
 LCNST_TOS_LX_ARM64="linux-arm64"
 LCNST_TOS_WIN_X64="windows-x64"
 LCNST_TOS_WIN_ARM64="windows-arm64"
@@ -25,6 +26,7 @@ printUsage() {
 		echo "If the TARGET_OS is empty the application will be built for all target OSes."
 		echo
 		echo "TARGET_OS:"
+		echo "  ${LCNST_TOS_LX_X64}"
 		echo "  ${LCNST_TOS_LX_ARM64}"
 		echo "  ${LCNST_TOS_WIN_X64}"
 		echo "  ${LCNST_TOS_WIN_ARM64}"
@@ -38,12 +40,14 @@ fi
 
 LVAR_CROSS_TARGETS=""
 if [ $# -eq 1 ]; then
-	if ! { [ "${1}" = "${LCNST_TOS_LX_ARM64}" ] || [ "${1}" = "${LCNST_TOS_WIN_X64}" ] || [ "${1}" = "${LCNST_TOS_WIN_ARM64}" ]; }; then
+	if ! { [ "${1}" = "${LCNST_TOS_LX_X64}" ] || [ "${1}" = "${LCNST_TOS_LX_ARM64}" ] || \
+			[ "${1}" = "${LCNST_TOS_WIN_X64}" ] || [ "${1}" = "${LCNST_TOS_WIN_ARM64}" ]; }; then
 		echo -e "${VAR_MYNAME}: Invalid TARGET_OS\n" >&2
 		printUsage
 	fi
 	LVAR_CROSS_TARGETS="$1"
 else
+	LVAR_CROSS_TARGETS+=" ${LCNST_TOS_LX_X64}"
 	LVAR_CROSS_TARGETS+=" ${LCNST_TOS_LX_ARM64}"
 	LVAR_CROSS_TARGETS+=" ${LCNST_TOS_WIN_X64}"
 	LVAR_CROSS_TARGETS+=" ${LCNST_TOS_WIN_ARM64}"

@@ -10,6 +10,7 @@ They additionally contain cross-compiled versions of:
 
 Only x86_64/amd64 hosts are supported.  
 Supported targets:  
+- Linux x86_64 (aka amd64)
 - Linux aarch64 (aka arm64)
 - MS Windows x86_64 (aka amd64)
 - MS Windows aarch64 (aka arm64)
@@ -18,6 +19,12 @@ Supported targets:
 
 ```
 $ ./build_images.sh
+```
+
+or if you want to build only one image, e.g.:
+
+```
+$ ./build_images.sh linux-arm64
 ```
 
 This will also create the `run-st_dockcross-*.sh` scripts.
