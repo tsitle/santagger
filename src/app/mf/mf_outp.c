@@ -49,33 +49,40 @@ Tst_uint32 ast_g_mf_op_termLnLen = 80;
 Tst_bool
 ast_mf_op_isLocaleUTF8(const char *pLocale)
 {
-	const char* cp       = pLocale;
-	const char* encoding = NULL;
+	#if ! (defined(_WIN32) || defined (__CYGWIN__))
+		const char* cp       = pLocale;
+		const char* encoding = NULL;
 
-	ST_ASSERTN_BOOL(ST_B_FALSE, pLocale == NULL)
+		ST_ASSERTN_BOOL(ST_B_FALSE, pLocale == NULL)
 
-	if ((st_sysStrlen2(pLocale) == 5 && st_sysStrcmpN2(ST_B_TRUE, 5, pLocale, "UTF-8")) ||
-			(st_sysStrlen2(pLocale) == 4 && st_sysStrcmpN2(ST_B_TRUE, 4, pLocale, "utf8"))) {
-		return ST_B_TRUE;
-	}
-
-	for (; *cp != '\0' && *cp != '@' && *cp != '+' && *cp != ','; cp++) {
-		if (*cp != '.') {
-			continue;
-		}
-		encoding = ++cp;
-		for (; *cp != '\0' && *cp != '@' && *cp != '+' && *cp != ','; cp++) {
-			// do nothing
-		}
-		if ((cp - encoding == 5 &&
-					st_sysStrcmpN2(ST_B_TRUE, 5, encoding, "UTF-8")) ||
-				(cp - encoding == 4 &&
-					st_sysStrcmpN2(ST_B_TRUE, 4, encoding, "utf8"))) {
+		if ((st_sysStrlen2(pLocale) == 5 && st_sysStrcmpN2(ST_B_TRUE, 5, pLocale, "UTF-8")) ||
+				(st_sysStrlen2(pLocale) == 4 && st_sysStrcmpN2(ST_B_TRUE, 4, pLocale, "utf8"))) {
 			return ST_B_TRUE;
 		}
-		break;
-	}
-	return ST_B_FALSE;
+
+		for (; *cp != '\0' && *cp != '@' && *cp != '+' && *cp != ','; cp++) {
+			if (*cp != '.') {
+				continue;
+			}
+			encoding = ++cp;
+			for (; *cp != '\0' && *cp != '@' && *cp != '+' && *cp != ','; cp++) {
+				// do nothing
+			}
+			if ((cp - encoding == 5 &&
+						st_sysStrcmpN2(ST_B_TRUE, 5, encoding, "UTF-8")) ||
+					(cp - encoding == 4 &&
+						st_sysStrcmpN2(ST_B_TRUE, 4, encoding, "utf8"))) {
+				return ST_B_TRUE;
+			}
+			break;
+		}
+		return ST_B_FALSE;
+	#else
+		/*
+		 * Under MS Windows we assume non UTF-8 input
+		 */
+		return ST_B_FALSE;
+	#endif
 }
 
 /*----------------------------------------------------------------------------*/
