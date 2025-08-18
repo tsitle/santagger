@@ -143,7 +143,7 @@ main(const int argc, const char *argv[])
 							! cmdln.opts.quiet) \
 						ast_mf_op_prMsg("\n"); \
 					}
-	int        resA        = 0;  /* succ */
+	int        resA        = 0;  // success
 	Tst_err    resF        = ST_ERR_SUCC;
 	Tst_str    *pAppFn     = NULL;
 	Tst_uint32 fcnt        = 0,
@@ -162,13 +162,13 @@ main(const int argc, const char *argv[])
 			#if (WORDS_BIGENDIAN != 1)
 				ast_mf_op_d_mainErrApp((Tst_str*)argv[0],
 						"App was compiled for Little-Endian but system is Big-Endian\n");
-				exit(1);  /* error */
+				exit(1);  // error
 			#endif
 		} else {
 			#if (WORDS_BIGENDIAN == 1)
 				ast_mf_op_d_mainErrApp((Tst_str*)argv[0],
 						"App was compiled for Big-Endian but system is Little-Endian\n");
-				exit(1);  /* error */
+				exit(1);  // error
 			#endif
 		}
 		/* TODO */
@@ -194,19 +194,23 @@ main(const int argc, const char *argv[])
 		ast_mf_op_d_mainErrApp((Tst_str*)argv[0],
 				"getting file's basename failed");
 		ST_DELPOINT(pAppFn)
-		exit(1);  /* error */
+		exit(1);  // error
 	}
 
 	/* set/get locale */
-	if (setlocale(LC_CTYPE, "") == NULL && setlocale(LC_CTYPE, "C.UTF-8") == NULL) {
+	if (setlocale(LC_CTYPE, "") == NULL
+				#if ! (defined(_WIN32) || defined (__CYGWIN__))
+					&& setlocale(LC_CTYPE, "C.UTF-8") == NULL
+				#endif
+			) {
 		ast_mf_op_d_mainErrApp(pAppFn, "setting locale failed");
 		ST_DELPOINT(pAppFn)
-		exit(1);  /* error */
+		exit(1);  // error
 	}
 	if ((pLocaleStr = setlocale(LC_CTYPE, NULL)) == NULL) {
 		ast_mf_op_d_mainErrApp(pAppFn, "getting locale failed");
 		ST_DELPOINT(pAppFn)
-		exit(1);  /* error */
+		exit(1);  // error
 	}
 	/* is in-/output UTF8-encoded ? */
 	cmdln.opts.isInpISOorU8 = ! ast_mf_op_isLocaleUTF8(pLocaleStr);
@@ -227,14 +231,14 @@ main(const int argc, const char *argv[])
 		ast_cln_stc_freeCln(&cmdln);
 		if (resF == ST_ERR_QUIT) {
 			ST_DELPOINT(pAppFn)
-			exit(0);  /* succ */
+			exit(0);  // success
 		}
 		if (resF != ST_ERR_ABRT) {
 			ast_mf_op_d_mainErrApp(pAppFn,
 					"parsing args failed, res=%d", resF);
 		}
 		ST_DELPOINT(pAppFn)
-		exit(1);  /* error */
+		exit(1);  // error
 	}
 
 	/* check commands */
@@ -248,7 +252,7 @@ main(const int argc, const char *argv[])
 		ast_mf_op_d_mainErrApp(pAppFn, "need a filename\n\n");
 		ast_cln_stc_freeCln(&cmdln);
 		ST_DELPOINT(pAppFn)
-		exit(1);  /* error */
+		exit(1);  // error
 	}
 
 	/* check options */
@@ -265,7 +269,7 @@ main(const int argc, const char *argv[])
 					"couldn't create output dir \"%s\"", cmdln.opts.pOutpdir);
 			ast_cln_stc_freeCln(&cmdln);
 			ST_DELPOINT(pAppFn)
-			exit(1);  /* error */
+			exit(1);  // error
 		}
 		if (cmdln.opts.basOpts.verb != 0) {
 			ast_mf_op_d_mainDeb("created output dir \"%s\"", cmdln.opts.pOutpdir);
@@ -280,7 +284,7 @@ main(const int argc, const char *argv[])
 				"initialization of main object failed, res=%d", resF);
 		ast_cln_stc_freeCln(&cmdln);
 		ST_DELPOINT(pAppFn)
-		exit(1);  /* error */
+		exit(1);  // error
 	}
 
 	/* take care of all files given as argument */
@@ -600,9 +604,9 @@ main(const int argc, const char *argv[])
 		if (cmdln.opts.showStat) {
 			ast_mf_op_prMsg("*Done.");
 		}
-		resA = 0;  /* succ */
+		resA = 0;  // success
 	} else {
-		resA = 1;  /* error */
+		resA = 1;  // error
 	}
 	/* */
 	ast_mf_stc_freeMF(&mf);
