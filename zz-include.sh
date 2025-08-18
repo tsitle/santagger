@@ -6,7 +6,7 @@
 
 GCFG_PROJECT_NAME="santagger"
 
-GCFG_OUTPUT_BIN_ARCH_DN="output-bin-archive"
+GCFG_OUTPUT_BIN_ARCH_DN="distPre"
 
 GCFG_CMAKE_INSTALL_PREFIX="/opt/${GCFG_PROJECT_NAME}"
 

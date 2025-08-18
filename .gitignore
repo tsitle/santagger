@@ -9,7 +9,8 @@ src/tests/data/*
 !src/tests/data/data.txt
 !src/tests/data/data.rnd
 
-output-bin-archive/
+dist/
+distPre/
 
 x-*.sh
 
