@@ -771,11 +771,11 @@ function(configure_pkg_config_file pkg_config_file_in)
 	configure_file(${pkg_config_file_in} ${pkg_config_file} @ONLY)
 endfunction()
 
-if(INSTALL_PKG_CONFIG_MODULE)
+if (INSTALL_PKG_CONFIG_MODULE)
 	configure_pkg_config_file(santagger.pc.in)
 
 	install(
 		FILES ${CMAKE_CURRENT_BINARY_DIR}/santagger.pc
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 	)
-endif()
+endif ()
