@@ -73,21 +73,21 @@ function _getCpuArch() {
 	#
 	case "${TMP_CPUARCH_INP}" in
 		x86_64*)
-				echo -n "x64"
-				;;
+			echo -n "x64"
+			;;
 		i686*)
-				echo -n "x86"
-				;;
+			echo -n "x86"
+			;;
 		arm64*|aarch64*)  # macOS:arm64, linux:aarch64
-				echo -n "aarch64"
-				;;
+			echo -n "aarch64"
+			;;
 		armv7*)
-				echo -n "armhf"
-				;;
+			echo -n "armhf"
+			;;
 		*)
-				echo "Error: Unknown CPU architecture '$(uname -m)'" >&2
-				return 1
-				;;
+			echo "Error: Unknown CPU architecture '$(uname -m)'" >&2
+			return 1
+			;;
 	esac
 	return 0
 }

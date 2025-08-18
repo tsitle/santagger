@@ -22,7 +22,7 @@ function printUsage() {
 
 LOPT_BUILDDIRSUFFIX="release"
 TMP_HAVE_ARG_BUILDDIRSUFFIX=false
-LOPT_COMPONENTS="all"
+LOPT_COMPONENTS="bin"
 TMP_HAVE_ARG_COMPONENTS=false
 while [ $# -ne 0 ]; do
 	if [ "${1}" = "all" ] || [ "${1}" = "bin" ] || [ "${1}" = "inc" ]; then
@@ -64,11 +64,7 @@ if [ -z "${TMP_ARG_BUILD_TYPE}" ]; then
 	exit 1
 fi
 
-# install Valgrind version?
-TMP_IS_FOR_VG="$(getIsForValgrindFromSuffix "${LOPT_BUILDDIRSUFFIX}")"
-test "${TMP_IS_FOR_VG}" = "true" && TMP_ARG_IS_VG="valgrind" || TMP_ARG_IS_VG=""
-
-TMP_PC_FN="${TMP_ARG_BUILD_DIR}/santagger.pc"
+TMP_PC_FN="${TMP_ARG_BUILD_DIR}/${GCFG_PROJECT_NAME}.pc"
 TMP_ARG_INSTALL_PREFIX="$(grep -e '^prefix=' "${TMP_PC_FN}" | cut -f2 -d=)"
 
 if [ -z "${TMP_ARG_INSTALL_PREFIX}" ]; then
