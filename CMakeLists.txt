@@ -772,10 +772,10 @@ function(configure_pkg_config_file pkg_config_file_in)
 endfunction()
 
 if (INSTALL_PKG_CONFIG_MODULE)
-	configure_pkg_config_file(santagger.pc.in)
+	configure_pkg_config_file(libsantagger.pc.in)
 
 	install(
-		FILES ${CMAKE_CURRENT_BINARY_DIR}/santagger.pc
+		FILES ${CMAKE_CURRENT_BINARY_DIR}/libsantagger.pc
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 	)
 endif ()

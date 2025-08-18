@@ -64,7 +64,7 @@ if [ -z "${TMP_ARG_BUILD_TYPE}" ]; then
 	exit 1
 fi
 
-TMP_PC_FN="${TMP_ARG_BUILD_DIR}/${GCFG_PROJECT_NAME}.pc"
+TMP_PC_FN="${TMP_ARG_BUILD_DIR}/lib${GCFG_PROJECT_NAME}.pc"
 TMP_ARG_INSTALL_PREFIX="$(grep -e '^prefix=' "${TMP_PC_FN}" | cut -f2 -d=)"
 
 if [ -z "${TMP_ARG_INSTALL_PREFIX}" ]; then
