@@ -112,6 +112,8 @@ else
 fi
 
 for CROSS_TRG in $LVAR_CROSS_TARGETS; do
+	echo -e "\n${VAR_MYNAME}: Build Docker Image for '${CROSS_TRG}'...\n"
+
 	test "${CROSS_TRG}" = "${LCNST_TOS_WIN_X64}" && CROSS_TRG="${LCNST_TOS_IMG_WIN_X64}"
 
 	LTMP_TRG_SHORT="$(echo -n "${CROSS_TRG}" | sed -e 's/-static//' -e 's/-shared//' -e 's/-/_/g')"

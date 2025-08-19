@@ -54,6 +54,8 @@ else
 fi
 
 for CROSS_TRG in $LVAR_CROSS_TARGETS; do
+	echo -e "\n${VAR_MYNAME}: Building app for '${CROSS_TRG}'...\n"
+
 	LTMP_ORG_CROSS_TRG="${CROSS_TRG}"
 	test "${CROSS_TRG}" = "${LCNST_TOS_WIN_X64}" && CROSS_TRG="${LCNST_TOS_IMG_WIN_X64}"
 

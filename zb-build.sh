@@ -145,7 +145,7 @@ LTMP_EXE_NIX_FN="${GCFG_EXECUTABLE_ST_FN}"
 LTMP_EXE_WIN_FN="${GCFG_EXECUTABLE_ST_FN}.exe"
 
 if [ ! -f "${LTMP_EXE_NIX_FN}" ] && [ ! -f "${LTMP_EXE_WIN_FN}" ]; then
-	echo "$(basename "${0}"): Executable '${LTMP_EXE_NIX_FN}'/'${LTMP_EXE_WIN_FN}' not found - not creating TAR ball"
+	echo "$(basename "${0}"): Executable '${LTMP_EXE_NIX_FN}'/'${LTMP_EXE_WIN_FN}' not found - not creating Tarball"
 	exit 0
 fi
 
@@ -190,7 +190,7 @@ if [ "${LTMP_EXE_FN}" = "${LTMP_EXE_WIN_FN}" ]; then
 	fi
 else
 	LTMP_TAR_FN="${LTMP_FN_BASE}.tgz"
-	echo "$(basename "${0}"): Creating TAR ball '${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}'"
+	echo "$(basename "${0}"): Creating Tarball '${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}'"
 	test -f "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}" && rm "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}"
 	tar czf "../${GCFG_OUTPUT_BIN_ARCH_DN}/${LTMP_TAR_FN}" "${LTMP_EXE_FN}" || exit 1
 fi
