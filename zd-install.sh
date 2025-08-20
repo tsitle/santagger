@@ -64,7 +64,15 @@ if [ -z "${TMP_ARG_BUILD_TYPE}" ]; then
 	exit 1
 fi
 
-TMP_PC_FN="${TMP_ARG_BUILD_DIR}/lib${GCFG_PROJECT_NAME}.pc"
+TMP_PC_FN="${TMP_ARG_BUILD_DIR}/lib${GCFG_PROJECT_NAME}"
+case "${LOPT_BUILDDIRSUFFIX}" in
+	release) ;;
+	release_stat*) TMP_PC_FN+="-static" ;;
+	vg_release_stat) TMP_PC_FN+="-static-vg_release" ;;
+	vg_debug_stat) TMP_PC_FN+="-static-vg_debug" ;;
+	*) TMP_PC_FN+="-${LOPT_BUILDDIRSUFFIX}" ;;
+esac
+TMP_PC_FN+=".pc"
 TMP_ARG_INSTALL_PREFIX="$(grep -e '^prefix=' "${TMP_PC_FN}" | cut -f2 -d=)"
 
 if [ -z "${TMP_ARG_INSTALL_PREFIX}" ]; then

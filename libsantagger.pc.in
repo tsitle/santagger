@@ -1,16 +1,16 @@
-# libsantagger pkg-config file
+# libsantagger@OUTPUT_NAME_SUFFIX@ pkg-config file
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: libsantagger
+Name: libsantagger@OUTPUT_NAME_SUFFIX@
 Description: libsantagger is a library for editing tags in audio and video files
 Version: @VERSION@
 Requires:
 Requires.private: @REQU_PRIV@
 Conflicts:
-Libs: -L${libdir} -lsantagger
+Libs: -L${libdir} -lsantagger@OUTPUT_NAME_SUFFIX@
 Libs.private: @LIBS_PRIV@
 Cflags: -I${includedir}

@@ -767,7 +767,7 @@ function(configure_pkg_config_file pkg_config_file_in)
 			set(LIBS_PRIV "${LIBS_PRIV} -lm")
 		endif ()
 	endif ()
-	string(REPLACE ".in" "" pkg_config_file ${pkg_config_file_in})
+	string(REPLACE ".pc.in" "${OUTPUT_NAME_SUFFIX}.pc" pkg_config_file ${pkg_config_file_in})
 	configure_file(${pkg_config_file_in} ${pkg_config_file} @ONLY)
 endfunction()
 
@@ -775,7 +775,7 @@ if (INSTALL_PKG_CONFIG_MODULE)
 	configure_pkg_config_file(libsantagger.pc.in)
 
 	install(
-		FILES ${CMAKE_CURRENT_BINARY_DIR}/libsantagger.pc
+		FILES ${CMAKE_CURRENT_BINARY_DIR}/libsantagger${OUTPUT_NAME_SUFFIX}.pc
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 	)
 endif ()
