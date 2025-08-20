@@ -768,7 +768,7 @@ function(configure_pkg_config_file pkg_config_file_in)
 		endif ()
 	endif ()
 	string(REPLACE ".pc.in" "${OUTPUT_NAME_SUFFIX}.pc" pkg_config_file ${pkg_config_file_in})
-	configure_file(${pkg_config_file_in} ${pkg_config_file} @ONLY)
+	configure_file(src/${pkg_config_file_in} ${pkg_config_file} @ONLY)
 endfunction()
 
 if (INSTALL_PKG_CONFIG_MODULE)
