@@ -69,6 +69,7 @@ case "${LOPT_BUILDDIRSUFFIX}" in
 	release) ;;
 	release_stat*) TMP_PC_FN+="-static" ;;
 	vg_release_stat) TMP_PC_FN+="-static-vg_release" ;;
+	debug_stat*) TMP_PC_FN+="-static-debug" ;;
 	vg_debug_stat) TMP_PC_FN+="-static-vg_debug" ;;
 	*) TMP_PC_FN+="-${LOPT_BUILDDIRSUFFIX}" ;;
 esac

@@ -69,6 +69,8 @@ fi
 
 # ----------------------------------------------------------
 
+LCNST_IMG_ID="st"
+
 LCNST_TOS_LX_X64="linux-x64"
 LCNST_TOS_LX_ARM64="linux-arm64"
 LCNST_TOS_WIN_X64="windows-x64"
@@ -117,7 +119,7 @@ for CROSS_TRG in $LVAR_CROSS_TARGETS; do
 	test "${CROSS_TRG}" = "${LCNST_TOS_WIN_X64}" && CROSS_TRG="${LCNST_TOS_IMG_WIN_X64}"
 
 	LTMP_TRG_SHORT="$(echo -n "${CROSS_TRG}" | sed -e 's/-static//' -e 's/-shared//' -e 's/-/_/g')"
-	LVAR_IMAGE_NAME="app-st-dockcross-${LTMP_TRG_SHORT}-${LVAR_DEB_DIST}"
+	LVAR_IMAGE_NAME="app-${LCNST_IMG_ID}-dockcross-${LTMP_TRG_SHORT}-${LVAR_DEB_DIST}"
 	LVAR_IMAGE_VER="latest"
 
 	LVAR_SRC_OS_IMAGE="dockcross/${CROSS_TRG}"
@@ -129,7 +131,7 @@ for CROSS_TRG in $LVAR_CROSS_TARGETS; do
 		. \
 		|| exit 1
 
-	LTMP_SCR_FN="run-st_dockcross-${LTMP_TRG_SHORT}.sh"
+	LTMP_SCR_FN="run-${LCNST_IMG_ID}_dockcross-${LTMP_TRG_SHORT}.sh"
 
 	docker run --rm "${LVAR_IMAGE_NAME}:${LVAR_IMAGE_VER}" > "../${LTMP_SCR_FN}" || exit 1
 	chmod +x "../${LTMP_SCR_FN}"

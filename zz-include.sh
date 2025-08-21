@@ -28,7 +28,7 @@ function getOsName() {
 		linux*)
 			# check if we are in a 'dockcross' environment
 			if [ -n "${CROSS_TRIPLE}" ]; then
-				# CROSS_TRIPLE: 'aarch64-w64-mingw32', 'aarch64-unknown-linux-gnu', 'x86_64-w64-mingw32.static'
+				# CROSS_TRIPLE: 'aarch64-w64-mingw32', 'aarch64-unknown-linux-gnu', 'x86_64-w64-mingw32.static', 'x86_64-w64-mingw32.shared'
 				if echo -n "${CROSS_TRIPLE}" | grep -q "\-w64\-"; then
 					echo -n "win"
 				else
@@ -65,7 +65,7 @@ function _getCpuArch() {
 	local TMP_CPUARCH_INP
 	# check if we are in a 'dockcross' environment
 	if [ -n "${CROSS_TRIPLE}" ]; then
-		# CROSS_TRIPLE: 'aarch64-w64-mingw32', 'aarch64-unknown-linux-gnu', 'x86_64-w64-mingw32.static'
+		# CROSS_TRIPLE: 'aarch64-w64-mingw32', 'aarch64-unknown-linux-gnu', 'x86_64-w64-mingw32.static', 'x86_64-w64-mingw32.shared'
 		TMP_CPUARCH_INP="$(echo -n "${CROSS_TRIPLE}" | cut -f1 -d-)"
 	else
 		TMP_CPUARCH_INP="$(uname -m)"
@@ -280,6 +280,8 @@ function getBinaryFn() {
 			TMP_BASE+=".so"
 		elif [ "${GVAR_OS}" = "macos" ]; then
 			TMP_BASE+=".dylib"
+		elif [ "${GVAR_OS}" = "win" ]; then
+			TMP_BASE+=".dll"
 		else
 			echo "Error: getBinaryFn(): Unknown OS '${GVAR_OS}'" >&2
 			exit 1
