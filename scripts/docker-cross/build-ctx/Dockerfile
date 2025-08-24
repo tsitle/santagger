@@ -61,6 +61,15 @@ RUN \
 	&& cd .. \
 	&& rm -r "${TMP_DN}" compile_n_install-zlib.sh
 
+# add alias ll
+RUN \
+	echo "alias ll='ls -l'" >> /etc/bash.bashrc
+
+# install 'less'
+RUN \
+	apt install --no-install-recommends -y \
+		less
+
 #
 RUN \
 	rm -rf \
