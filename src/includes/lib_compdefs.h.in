@@ -1,0 +1,72 @@
+/******************************************************************************/
+/* lib_compdefs.h           [Sandy Tagger | Common Lib]                  tw=4 */
+/*                                                                            */
+/* (C) 2005-2025 by Thomas Sandkuehler (technisandk@gmail.com)                */
+/*                                                                            */
+/* Compiler definitions                                                       */
+/******************************************************************************/
+/*                                                                            */
+/* This program is free software; you can redistribute it and/or              */
+/* modify it under the terms of the GNU General Public License as             */
+/* published by the Free Software Foundation; either version 3 of             */
+/* the License, or (at your option) any later version.                        */
+/*                                                                            */
+/******************************************************************************/
+/* Creation date: 02.09.2005 (dd.mm.yyyy)                                     */
+/******************************************************************************/
+
+#ifndef LIBSANTAGGER_LIB_COMPDEFS_H
+#define LIBSANTAGGER_LIB_COMPDEFS_H
+
+/** these will be replaced by CMake */
+
+// -----------------------------------
+// Informational
+// -----------------------------------
+
+//#define LIBSANTAGGER_PPM_FILE_OFFSET_BITS  // library was compiled with _FILE_OFFSET_BITS=64
+//#define LIBSANTAGGER_PPM_LARGEFILE_SOURCE  // library was compiled with _LARGEFILE_SOURCE=1
+
+
+// -----------------------------------
+// Macros
+// -----------------------------------
+
+// for inlining functions
+/// function declarations
+//#define LIBSANTAGGER_KWFNC_INLINE_H  some_keyword
+/// function implementations
+//#define LIBSANTAGGER_KWFNC_INLINE_S  some_keyword
+
+
+// -----------------------------------
+// Constants
+// -----------------------------------
+
+//#define LIBSANTAGGER_CFG_DEBUG            1
+//#define LIBSANTAGGER_CFG_EXTRA_DEBUG      1
+//#define LIBSANTAGGER_CFG_HAVE64BIT        1
+//#define LIBSANTAGGER_CFG_NATIVE64BIT      1
+//#define LIBSANTAGGER_CFG_WORDS_BIGENDIAN  1  // Big-endian
+#ifndef LIBSANTAGGER_CFG_WORDS_BIGENDIAN
+	#define LIBSANTAGGER_CFG_WORDS_BIGENDIAN  0  // Little-endian
+#endif
+
+//#define LIBSANTAGGER_HAVE_FSEEKO                   1
+//#define LIBSANTAGGER_HAVE_READLINK                 1
+//#define LIBSANTAGGER_HAVE_GETTIMEOFDAY             1
+//#define LIBSANTAGGER_HAVE_NANOSLEEP                1
+//#define LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_SEC    1
+//#define LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_USEC   1
+//#define LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_SEC   1
+//#define LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_NSEC  1
+//#define LIBSANTAGGER_HAVE_LIBMPG123                1
+//#define LIBSANTAGGER_HAVE_LIBMAD                   1
+//#define LIBSANTAGGER_HAVE_LIBVORBIS                1
+//#define LIBSANTAGGER_HAVE_LIBZ                     1
+//#define LIBSANTAGGER_HAVE_LIBBCRYPT                1
+//#define LIBSANTAGGER_HAVE_LIBM                     1
+
+#endif  /* LIBSANTAGGER_LIB_COMPDEFS_H */
+
+/******************************************************************************/

@@ -62,7 +62,7 @@ ST_CONTOGG__vorbComm_setCommBO(const Tst_contOgg_opts *pOpts,
                                Tst_contOgg_vorbCmtRaw_intn *pVCRI,
                                const Tst_contOgg__vorbCommTmp *pVCtmp);
 
-#if (CONFIG_ST_ALL_DEBUG == 1)
+#if (LIBSANTAGGER_CFG_DEBUG == 1)
 static Tst_bool
 ST_CONTOGG__vorbComm_doesDataEndWithNULterm(Tst_binobj *pData);
 #endif
@@ -336,7 +336,7 @@ st_contOgg_vorbComm_addKey(Tst_contOgg_substr_intn *pBSI,
 			return ST_ERR_IDAT;
 		}
 	}
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	tmpUI = st_sysReverseByteOrder_UI32(vendLen);  /* ENDIAN: BE-->LE */
 #	else
 	tmpUI = vendLen;
@@ -376,7 +376,7 @@ st_contOgg_vorbComm_addKey(Tst_contOgg_substr_intn *pBSI,
 		alrCpd += 4;
 	}
 	tmpUI = pVCRI->elemCnt + 1;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	tmpUI = st_sysReverseByteOrder_UI32(tmpUI);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_binobj_appendData(pBOnew, (Tst_buf*)&tmpUI, 4);
@@ -428,7 +428,7 @@ st_contOgg_vorbComm_addKey(Tst_contOgg_substr_intn *pBSI,
 				pKey, newDSz);**/
 	/** ELEMENT LENGTH */
 	tmpUI = keyLen + 1 + newDSz;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	tmpUI = st_sysReverseByteOrder_UI32(tmpUI);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_binobj_appendData(pBOnew, (Tst_buf*)&tmpUI, 4);
@@ -623,7 +623,7 @@ ST_CONTOGG__vorbComm_writeHead(Tst_binobj *pBOout, Tst_uint32 totSize)
 	if (res != ST_ERR_SUCC)
 		return res;
 
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	totSize = st_sysReverseByteOrder_UI32(totSize);  /* ENDIAN: BE-->LE */
 #	endif
 
@@ -652,7 +652,7 @@ ST_CONTOGG__vorbComm_setCommBO(const Tst_contOgg_opts *pOpts,
 	ST_CONTOGG__vorbComm_writeHead(pVCRI->pRawCmtBO, newTSz);
 	/** write VENDOR LENGTH, 4 bytes */
 	tmpUI = pVCtmp->vlen;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	tmpUI = st_sysReverseByteOrder_UI32(tmpUI);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_binobj_appendData(pVCRI->pRawCmtBO, (Tst_buf*)&tmpUI, 4);
@@ -665,7 +665,7 @@ ST_CONTOGG__vorbComm_setCommBO(const Tst_contOgg_opts *pOpts,
 		return res;
 	/** write ELEMENT COUNT, 4 bytes */
 	tmpUI = pVCtmp->eCnt;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	tmpUI = st_sysReverseByteOrder_UI32(tmpUI);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_binobj_appendData(pVCRI->pRawCmtBO, (Tst_buf*)&tmpUI, 4);
@@ -676,7 +676,7 @@ ST_CONTOGG__vorbComm_setCommBO(const Tst_contOgg_opts *pOpts,
 	for (x = 0; x < pVCtmp->eCnt; x++) {
 		/* ELEMENT LENGTH */
 		tmpUI = pVCtmp->pELenArr[x];
-#		if (WORDS_BIGENDIAN == 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		tmpUI = st_sysReverseByteOrder_UI32(tmpUI);  /* ENDIAN: BE-->LE */
 #		endif
 		res = st_binobj_appendData(pVCRI->pRawCmtBO, (Tst_buf*)&tmpUI, 4);
@@ -693,7 +693,7 @@ ST_CONTOGG__vorbComm_setCommBO(const Tst_contOgg_opts *pOpts,
 
 /*----------------------------------------------------------------------------*/
 
-#if (CONFIG_ST_ALL_DEBUG == 1)
+#if (LIBSANTAGGER_CFG_DEBUG == 1)
 static Tst_bool
 ST_CONTOGG__vorbComm_doesDataEndWithNULterm(Tst_binobj *pData)
 {

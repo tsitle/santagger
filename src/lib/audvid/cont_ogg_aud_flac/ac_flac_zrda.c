@@ -1266,7 +1266,7 @@ ST_CONTOGG__flacrda_restoreLPC_64bit(
 		const Tst_contOgg__codFlac_restoreLPC2 *pLPC2,
 		Tst_int32 *pRawSamples2)
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	register Tst_int64_native sum64;
 	register Tst_uint32       i,
 	                          j;

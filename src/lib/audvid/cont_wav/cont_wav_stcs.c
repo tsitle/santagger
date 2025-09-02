@@ -206,7 +206,7 @@ st_contWav_stc_rsetOpts(Tst_contWav_opts *pOpts)
 
 	ST_RSETSTC_BASOPTS(pOpts->basOpts)
 	/* */
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	pOpts->isSystemBE = ST_B_FALSE;
 #	else
 	pOpts->isSystemBE = ST_B_TRUE;

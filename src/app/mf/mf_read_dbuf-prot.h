@@ -32,9 +32,9 @@ ST_BEGIN_C_DECLS
 */
 #if defined(SRC_MF_READ_DBUF_C) || defined(SRC_MF_READ_DECMPG1_C) || \
 			defined(SRC_MF_READ_DECVRB_C)
-#	if (HAVE_LIBMPG123 == 1) || \
-				(HAVE_LIBMAD == 1) || \
-				(HAVE_LIBVORBIS == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || \
+				(LIBSANTAGGER_HAVE_LIBMAD == 1) || \
+				(LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 	/** for decoded data */
 	typedef struct {
 		Tst_uint32 sampleR;        /* samplerate in Hz */
@@ -58,9 +58,9 @@ ST_BEGIN_C_DECLS
 */
 #if defined(SRC_MF_READ_DBUF_C) || defined(SRC_MF_READ_DECMPG1_C) || \
 			defined(SRC_MF_READ_DECVRB_C)
-#	if (HAVE_LIBMPG123 == 1) || \
-				(HAVE_LIBMAD == 1) || \
-				(HAVE_LIBVORBIS == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || \
+				(LIBSANTAGGER_HAVE_LIBMAD == 1) || \
+				(LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 	void    ast_mf_rddec_stc_initDB(Tast_mf_rddec_dbuf *pDBuf);
 	void    ast_mf_rddec_stc_rsetDB(Tast_mf_rddec_dbuf *pDBuf);
 #	define  ast_mf_rddec_stc_freeDB(pDBuf)  ast_mf_rddec_stc_rsetDB(pDBuf)

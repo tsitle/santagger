@@ -90,21 +90,21 @@ TEST_M64__run(void)
 	#define LOC_RUNTEST10    0  /* shift */
 	#define LOC_RUNTEST11    0  /* rest */
 
-	#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+	#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 		if (ST_SYSFNC_ISBIGEND) {
 			printf("System is Big-Endian\n");
-			#if (WORDS_BIGENDIAN != 1)
+			#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 				printf("  but app was compiled for Little-Endian\n");
 			#endif
 		} else {
 			printf("System is Little-Endian\n");
-			#if (WORDS_BIGENDIAN == 1)
+			#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 				printf("  but app was compiled for Big-Endian\n");
 			#endif
 		}
 	#endif
 
-	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		printf("System supports 64bit\n");
 	#else
 		printf("System doesn't support 64bit\n");
@@ -265,7 +265,7 @@ TEST_M64__prf64UI(const char *pFnc, const char *pMsg, const Tst_uint64 *pV64)
 	printf("%s(): %s %s\n", pFnc, pMsg, ui64str);*/
 
 	printf("%s(): %s ", pFnc, pMsg);
-	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		printf("0x%08x %08x\n",
 				(Tst_uint32)(pV64->nativeU64 >> 32),
 				(Tst_uint32)((pV64->nativeU64 << 32) >> 32));
@@ -292,7 +292,7 @@ TEST_M64__prf64UI_hexAdec(const char *pFnc, const char *pMsg,
 
 	st_sysUInt64_toDecStr(pV64, numStr, sizeof(numStr));
 	printf("%s(): %s %s    (", pFnc, pMsg, (const char*)numStr);
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	printf("0x%08x %08x)\n",
 			(Tst_uint32)(pV64->nativeU64 >> 32),
 			(Tst_uint32)((pV64->nativeU64 << 32) >> 32));
@@ -305,7 +305,7 @@ void
 TEST_M64__prf64SI(const char *pFnc, const char *pMsg, const Tst_int64 *pV64)
 {
 	printf("%s(): %s ", pFnc, pMsg);
-	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		printf("0x%08x %08x\n",
 				(Tst_uint32)(pV64->nativeS64 >> 32),
 				(Tst_uint32)((pV64->nativeS64 << 32) >> 32));
@@ -332,7 +332,7 @@ TEST_M64__prf64SI_hexAdec(const char *pFnc, const char *pMsg,
 
 	st_sysSInt64_toDecStr(pV64, numStr, sizeof(numStr));
 	printf("%s(): %s %s    (", pFnc, pMsg, (const char*)numStr);
-	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		printf("0x%08x %08x)\n",
 				(Tst_uint32)(pV64->nativeS64 >> 32),
 				(Tst_uint32)((pV64->nativeS64 << 32) >> 32));
@@ -350,7 +350,7 @@ TEST_M64__prf64UI_sh(const char *pFnc, const Tst_int32 shift,
 	} else {
 		printf("%s(): >> %3d = ", pFnc, shift);
 	}
-	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		printf("0x%08x %08x\n",
 				(Tst_uint32)(pV64->nativeU64 >> 32),
 				(Tst_uint32)((pV64->nativeU64 << 32) >> 32));
@@ -368,7 +368,7 @@ TEST_M64__prf64SI_sh(const char *pFnc, const Tst_int32 shift,
 	} else {
 		printf("%s(): >> %3d = ", pFnc, shift);
 	}
-	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		printf("0x%08x %08x\n",
 				(Tst_uint32)(pV64->nativeS64 >> 32),
 				(Tst_uint32)((pV64->nativeS64 << 32) >> 32));

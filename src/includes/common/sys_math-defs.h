@@ -38,7 +38,7 @@ ST_BEGIN_C_DECLS
 */
 /** */
 typedef struct {
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	Tst_int64_native nativeS64;
 #	else
 	Tst_uint32 loS;  /* low-bits */
@@ -48,7 +48,7 @@ typedef struct {
 
 /** */
 typedef struct {
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	Tst_uint64_native nativeU64;
 #	else
 	Tst_uint32 loU;  /* low-bits */

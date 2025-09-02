@@ -644,7 +644,7 @@ st_streamwr_wrUInt64(Tst_streamwr *pSObj, const Tst_streamwr_endian outpEndian,
 	}
 
 	if (nBits > 56) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		res = st_streamwr_wrByte(pSObj,
 				nBits - 56, (wrVal.nativeU64 >> 56) & 0xff);
 #		else
@@ -654,7 +654,7 @@ st_streamwr_wrUInt64(Tst_streamwr *pSObj, const Tst_streamwr_endian outpEndian,
 		nBits = 56;
 	}
 	if (nBits > 48) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		res = st_streamwr_wrByte(pSObj,
 				nBits - 48, (wrVal.nativeU64 >> 48) & 0xff);
 #		else
@@ -664,7 +664,7 @@ st_streamwr_wrUInt64(Tst_streamwr *pSObj, const Tst_streamwr_endian outpEndian,
 		nBits = 48;
 	}
 	if (nBits > 40) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		res = st_streamwr_wrByte(pSObj,
 				nBits - 40, (wrVal.nativeU64 >> 40) & 0xff);
 #		else
@@ -674,7 +674,7 @@ st_streamwr_wrUInt64(Tst_streamwr *pSObj, const Tst_streamwr_endian outpEndian,
 		nBits = 40;
 	}
 	if (nBits > 32) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		res = st_streamwr_wrByte(pSObj,
 				nBits - 32, (wrVal.nativeU64 >> 32) & 0xff);
 #		else
@@ -685,7 +685,7 @@ st_streamwr_wrUInt64(Tst_streamwr *pSObj, const Tst_streamwr_endian outpEndian,
 	}
 
 	if (nBits > 24) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		res = st_streamwr_wrByte(pSObj,
 				nBits - 24, (wrVal.nativeU64 >> 24) & 0xff);
 #		else
@@ -695,7 +695,7 @@ st_streamwr_wrUInt64(Tst_streamwr *pSObj, const Tst_streamwr_endian outpEndian,
 		nBits = 24;
 	}
 	if (nBits > 16 && res == ST_ERR_SUCC) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		res = st_streamwr_wrByte(pSObj,
 				nBits - 16, (wrVal.nativeU64 >> 16) & 0xff);
 #		else
@@ -705,7 +705,7 @@ st_streamwr_wrUInt64(Tst_streamwr *pSObj, const Tst_streamwr_endian outpEndian,
 		nBits = 16;
 	}
 	if (nBits > 8 && res == ST_ERR_SUCC) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		res = st_streamwr_wrByte(pSObj,
 				nBits - 8, (wrVal.nativeU64 >> 8) & 0xff);
 #		else
@@ -715,7 +715,7 @@ st_streamwr_wrUInt64(Tst_streamwr *pSObj, const Tst_streamwr_endian outpEndian,
 		nBits = 8;
 	}
 	if (nBits > 0 && res == ST_ERR_SUCC) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		res = st_streamwr_wrByte(pSObj,
 				nBits, wrVal.nativeU64 & 0xff);
 #		else

@@ -32,7 +32,7 @@ ST_BEGIN_C_DECLS
 */
 #if defined(SRC_DYNLIST_C) || defined(SRC_DYNLIST_STCS_C)
 	/** */
-	ST_INLINE_H void
+	LIBSANTAGGER_KWFNC_INLINE_H void
 	st_dynlist_stc_freeElem(Tst_dynlist_elem *pElem,
 	                        Tst_dynlist_cbFreeElem cbFreeElement);
 #endif  /* protected */

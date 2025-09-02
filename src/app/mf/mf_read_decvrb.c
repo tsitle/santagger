@@ -38,7 +38,7 @@
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-#if (HAVE_LIBVORBIS == 1)
+#if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 
 /*
  * Create new handle
@@ -233,7 +233,7 @@ ast_mf_rddec_cbDecVorb_feedAudioAndDecode(void *pHnd,
 	Tst_err    res = ST_ERR_SUCC;
 	int        resI,
 	           availableSamples;
-#	if (CONFIG_ST_ALL_DEBUG == 1)
+#	if (LIBSANTAGGER_CFG_DEBUG == 1)
 	Tst_uint32 consumedOne;
 #	endif
 	Tast_mf_rddec_dbuf  *pDBuf;
@@ -281,7 +281,7 @@ ast_mf_rddec_cbDecVorb_feedAudioAndDecode(void *pHnd,
 	/**ast_mf_op_prf("\t\tendbyte %ld, endbit %d (%d)\n",
 			pVrb->pVrbBlock->opb.endbyte, pVrb->pVrbBlock->opb.endbit,
 			(pVrb->pVrbBlock->opb.endbit +7) / 8);**/
-#	if (CONFIG_ST_ALL_DEBUG == 1)
+#	if (LIBSANTAGGER_CFG_DEBUG == 1)
 	consumedOne = LOC_GET_CONSUMED_(pVrb->pVrbBlock);
 	if (consumedOne != inpBufSz)
 		return ST_ERR_IDAT;
@@ -345,7 +345,7 @@ ast_mf_rddec_cbDecVorb_closeFeed(void *pHnd)
  * Returns next Tst_int32 smaller or equal to val
  */
 #if 0
-static ST_INLINE_S
+static LIBSANTAGGER_KWFNC_INLINE_S
 Tst_int32 AST_MF__rddec_floor(const float val)
 {
 	Tst_int32 fl = (Tst_int32)(val + 0.5f);

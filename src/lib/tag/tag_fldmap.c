@@ -78,7 +78,7 @@ ST_TFMAP__addGenreStr_asInt_toIV1(Tst_tfldMap_genTagFld *pGTF,
                                   Tst_id3v1_fldData *pOut,
                                   Tst_bool *pIsOK);
 
-#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 #	define LOC_PRF_  printf
 #else
 	/* if LOC_PRF_ is used somewhere we'll get an compiler error */

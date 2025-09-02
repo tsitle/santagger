@@ -18,7 +18,7 @@
 /*
 // Own-Includes
 */
-#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 	#define ST_SYSFNC_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
@@ -49,9 +49,9 @@
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 	const Tst_uint16 st_sysfnc_g_bigEndTest = 0x4321;
-#endif  /* CONFIG_ST_ALL_DEBUG_ADD */
+#endif  /* LIBSANTAGGER_CFG_EXTRA_DEBUG */
 
 /*----------------------------------------------------------------------------*/
 
@@ -375,8 +375,8 @@ st_sysGetTime(void)
 		QueryPerformanceFrequency(&f);
 		return ((double)t.QuadPart / (double)f.QuadPart);
 	#else
-		#if (HAVE_GETTIMEOFDAY == 1 && HAVE_STRUCT_TIMEVAL_TV_SEC == 1 && \
-				HAVE_STRUCT_TIMEVAL_TV_USEC == 1)
+		#if (LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_SEC == 1 && LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_USEC == 1 && \
+				LIBSANTAGGER_HAVE_GETTIMEOFDAY == 1)
 			struct timeval  t;
 			struct timezone tzp;
 
@@ -404,7 +404,8 @@ st_sysSleepMS(const Tst_uint32 millisecs)
 	if (millisecs == 0) {
 		return;
 	}
-	#if (HAVE_STRUCT_TIMESPEC_TV_SEC == 1 && HAVE_STRUCT_TIMESPEC_TV_NSEC == 1 && HAVE_NANOSLEEP == 1)
+	#if (LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_SEC == 1 && LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_NSEC == 1 && \
+			LIBSANTAGGER_HAVE_NANOSLEEP == 1)
 		struct timespec ts;
 
 		ts.tv_sec  = (time_t)((millisecs - millisecs % 1000) / 1000);

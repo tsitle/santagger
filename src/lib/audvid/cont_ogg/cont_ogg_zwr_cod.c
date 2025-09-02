@@ -161,7 +161,7 @@ st_contOgg_wrcod_appendVCmt(Tst_contOgg_obj_intn *pAObjI,
 			} else {
 				x -= (x >= 8 + 4 ? 8 + 4 : x);
 				if (pAObjI->isSrcOggOrFlac) {
-#					if (WORDS_BIGENDIAN != 1)
+#					if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 					x = st_sysReverseByteOrder_UI32(x) >> 8;  /* ENDIAN: LE-->BE */
 #					endif
 					res = st_binobj_appendData(&pBSI->packCur.bdata,

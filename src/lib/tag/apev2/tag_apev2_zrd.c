@@ -315,7 +315,7 @@ ST_TAV2__rd_readHdOrFoot_parse(const Tst_apev2_opts *pOpts,
 
 	/* VERSION (4 bytes), currently 2.0 (2000) is the max allowed */
 	memcpy(&vers, pBB, 4);  /* ENDIAN: LE-->LE */
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	vers = st_sysReverseByteOrder_UI32(vers);  /* ENDIAN: LE-->BE */
 #	endif
 	if (vers > 2000 && ! isFooterOrHeader) {
@@ -328,7 +328,7 @@ ST_TAV2__rd_readHdOrFoot_parse(const Tst_apev2_opts *pOpts,
 
 	/* SIZE excluding header, including fields and footer (4 bytes) */
 	memcpy(pSize, pBB, 4);  /* ENDIAN: LE-->LE */
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	*pSize = st_sysReverseByteOrder_UI32(*pSize);  /* ENDIAN: LE-->BE */
 #	endif
 	if (*pSize > ST_APEV2_MAX_TAGSZ) {
@@ -344,7 +344,7 @@ ST_TAV2__rd_readHdOrFoot_parse(const Tst_apev2_opts *pOpts,
 
 	/* FIELDS (4 bytes) */
 	memcpy(pNumFlds, pBB, 4);  /* ENDIAN: LE-->LE */
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	*pNumFlds = st_sysReverseByteOrder_UI32(*pNumFlds);  /* ENDIAN: LE-->BE */
 #	endif
 	if (*pNumFlds > 65536) {
@@ -362,7 +362,7 @@ ST_TAV2__rd_readHdOrFoot_parse(const Tst_apev2_opts *pOpts,
 
 	/* FLAGS (4 bytes) */
 	memcpy(pFlags, pBB, 4);  /* ENDIAN: LE-->LE */
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	*pFlags = st_sysReverseByteOrder_UI32(*pFlags);  /* ENDIAN: LE-->BE */
 #	endif
 	if (isFooterOrHeader) {

@@ -1278,28 +1278,28 @@ TEST_STREAM__S0_endian(void)
 	/* write Little-Endian buffer */
 	/** */
 	tmpUI32 = ui32a[0];
-	#if (WORDS_BIGENDIAN == 1)
+	#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		tmpUI32 = st_sysReverseByteOrder_UI32(tmpUI32);  /* ENDIAN: BE-->LE */
 	#endif
 	memcpy(bufLE, &tmpUI32, 4);
 	usdLE += 4;
 	/** */
 	tmpUI16 = ui16a[0];
-	#if (WORDS_BIGENDIAN == 1)
+	#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		tmpUI16 = st_sysReverseByteOrder_UI16(tmpUI16);  /* ENDIAN: BE-->LE */
 	#endif
 	memcpy(&bufLE[4], &tmpUI16, 2);
 	usdLE += 2;
 	/** */
 	tmpUI32 = ui32a[1];
-	#if (WORDS_BIGENDIAN == 1)
+	#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		tmpUI32 = st_sysReverseByteOrder_UI32(tmpUI32);  /* ENDIAN: BE-->LE */
 	#endif
 	memcpy(&bufLE[4 + 2], &tmpUI32, 3);
 	usdLE += 3;
 	/** */
 	tmpUI16 = ui16a[1];
-	#if (WORDS_BIGENDIAN == 1)
+	#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		tmpUI16 = st_sysReverseByteOrder_UI16(tmpUI16);  /* ENDIAN: BE-->LE */
 	#endif
 	memcpy(&bufLE[4 + 2 + 3], &tmpUI16, 1);
@@ -1310,21 +1310,21 @@ TEST_STREAM__S0_endian(void)
 	/* write Big-Endian buffer */
 	/** */
 	tmpUI32 = ui32a[0];
-	#if (WORDS_BIGENDIAN != 1)
+	#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		tmpUI32 = st_sysReverseByteOrder_UI32(tmpUI32);  /* ENDIAN: LE-->BE */
 	#endif
 	memcpy(bufBE, &tmpUI32, 4);
 	usdBE += 4;
 	/** */
 	tmpUI16 = ui16a[0];
-	#if (WORDS_BIGENDIAN != 1)
+	#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		tmpUI16 = st_sysReverseByteOrder_UI16(tmpUI16);  /* ENDIAN: LE-->BE */
 	#endif
 	memcpy(&bufBE[4], &tmpUI16, 2);
 	usdBE += 2;
 	/** */
 	tmpUI32 = ui32a[1];
-	#if (WORDS_BIGENDIAN != 1)
+	#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		tmpUI32 <<= 8;
 		tmpUI32   = st_sysReverseByteOrder_UI32(tmpUI32);  /* ENDIAN: LE-->BE */
 	#else
@@ -1334,7 +1334,7 @@ TEST_STREAM__S0_endian(void)
 	usdBE += 3;
 	/** */
 	tmpUI16 = ui16a[1];
-	#if (WORDS_BIGENDIAN != 1)
+	#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		tmpUI16   = st_sysReverseByteOrder_UI16(tmpUI16);  /* ENDIAN: LE-->BE */
 		tmpUI16 >>= 8;
 	#else

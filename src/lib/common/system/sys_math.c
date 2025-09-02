@@ -18,7 +18,7 @@
 /*
 // Own-Includes
 */
-#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 #	define ST_SYSMATH_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
@@ -45,23 +45,23 @@ static const Tst_uint32 ST_SYSILOGTABLE256[256] = {
 };
 #undef LOC_LT_
 
-#if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 /** */
-/*static ST_INLINE_S
+/*static LIBSANTAGGER_KWFNC_INLINE_S
 Tst_uint32 ST_SYSMATH__uint64_mult16bit(const Tst_uint32 factA,
                                         const Tst_uint32 factB);*/
 #endif
 
 /** */
-static ST_INLINE_S Tst_uint32
+static LIBSANTAGGER_KWFNC_INLINE_S Tst_uint32
 ST_SYSMATH__strlen(const char *pStr, const Tst_uint32 strSz);
 /** */
-static ST_INLINE_S void
+static LIBSANTAGGER_KWFNC_INLINE_S void
 ST_SYSMATH__addNStrToNStr(Tst_str *pNumStr,
                           const Tst_uint32 numStrSz, const char *pAdd,
                           const Tst_uint32 addSz);
 /** */
-static ST_INLINE_S void
+static LIBSANTAGGER_KWFNC_INLINE_S void
 ST_SYSMATH__mulNStrBy2(Tst_str *pNumStr, const Tst_uint32 numStrSz);
 
 /** */
@@ -70,7 +70,7 @@ static void ST_SYSMATH__prf(char *pFmt, ...);
 static void ST_SYSMATH__prE(char *pFmt, ...);
 #endif
 
-#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 #	define LOC_CP_I64_TO_UI64_(varUI, varSI)  { \
 				(varUI).nativeU64 = (Tst_uint64_native)(varSI).nativeS64; }
 #	define LOC_CP_UI64_TO_I64_(varSI, varUI)  { \
@@ -109,7 +109,7 @@ st_sysUInt64_setLoHi(Tst_uint64 *pVal,
 {
 	ST_ASSERTN_VOID(pVal == NULL)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pVal->nativeU64 = ((Tst_uint64_native)set32_lo) |
 			((Tst_uint64_native)set32_hi << 32);
 #	else
@@ -126,7 +126,7 @@ st_sysUInt64_setUI32(Tst_uint64 *pVal, const Tst_uint32 set32)
 {
 	ST_ASSERTN_VOID(pVal == NULL)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pVal->nativeU64 = (Tst_uint64_native)set32;
 #	else
 	pVal->loU = set32;
@@ -151,7 +151,7 @@ st_sysUInt64_setUI64(Tst_uint64 *pVal, const Tst_uint64 *pSet64)
 Tst_bool
 st_sysUInt64_setDecStr(Tst_uint64 *pVal, ST_OPTARG(const Tst_str *pNumStr))
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 #	define LOC_ADD_  { \
 				old        = pVal->loU; \
 				pVal->loU += olderLo; \
@@ -192,7 +192,7 @@ st_sysUInt64_setDecStr(Tst_uint64 *pVal, ST_OPTARG(const Tst_str *pNumStr))
 			errFnd = ST_B_TRUE;
 			break;
 		}
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		pVal->nativeU64 *= 10;
 		pVal->nativeU64 += (Tst_uint64_native)(*pCh - '0');
 #		else
@@ -208,7 +208,7 @@ st_sysUInt64_setDecStr(Tst_uint64 *pVal, ST_OPTARG(const Tst_str *pNumStr))
 		++x;
 	}
 	return (! errFnd);
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 #	undef LOC_ADD_
 #	undef LOC_ADD_10X_
 #	endif
@@ -225,7 +225,7 @@ st_sysUInt64_toUI32(const Tst_uint64 *pVal, ST_OPTARG(Tst_bool *pOFflag))
 {
 	ST_ASSERTN_NUM(0, pVal == NULL)  /* ret 0 */
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 #		if (ST_SYSMATH_OVERFLOW_CHECK_ == 1)
 	if (pOFflag != NULL)
 		*pOFflag = ((pVal->nativeU64 >> 32) != 0);
@@ -263,7 +263,7 @@ st_sysUInt64_toHexStr(const Tst_uint64 *pVal,
 {
 	ST_ASSERTN_VOID(pVal == NULL || pHexStr == NULL || numStrSz < 19)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	snprintf((char*)pHexStr, numStrSz, "0x%08x%08x",
 			(Tst_uint32)(pVal->nativeU64 >> 32),
 			(Tst_uint32)((pVal->nativeU64 << 32) >> 32));
@@ -293,7 +293,7 @@ st_sysUInt64_toDecStr(const Tst_uint64 *pVal,
 		pNumStr[bit] = 0;
 	for (x = 64; x > 0; x--) {
 		if (
-#			if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#			if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 				((pVal->nativeU64 >> (x - 1)) & 1) == 1
 #			else
 				(x > 32 &&
@@ -336,7 +336,7 @@ st_sysUInt64_cmpUI32(const Tst_uint64 *pVal64_a,
 {
 	ST_ASSERTN_NUM(0, pVal64_a == NULL)  /* ret 0 */
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (pVal64_a->nativeU64 > (Tst_uint64_native)valCmp32)
 		return 1;  /* a > b */
 	else if (pVal64_a->nativeU64 < (Tst_uint64_native)valCmp32)
@@ -363,7 +363,7 @@ st_sysUInt64_cmpUI64(const Tst_uint64 *pVal64_a,
 {
 	ST_ASSERTN_NUM(0, pVal64_a == NULL || pVal64_b == NULL)  /* ret 0 */
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (pVal64_a->nativeU64 > pVal64_b->nativeU64)
 		return 1;  /* a > b */
 	else if (pVal64_a->nativeU64 < pVal64_b->nativeU64)
@@ -383,13 +383,13 @@ int
 st_sysUInt64_cmpLoHi(const Tst_uint64 *pVal64_a,
 		const Tst_uint32 valCmp_lo, const Tst_uint32 valCmp_hi)
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	Tst_uint64_native valB;
 #	endif
 
 	ST_ASSERTN_NUM(0, pVal64_a == NULL)  /* ret 0 */
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	valB = ((Tst_uint64_native)valCmp_lo) |
 			((Tst_uint64_native)valCmp_hi << 32);
 	if (pVal64_a->nativeU64 > valB)
@@ -423,7 +423,7 @@ st_sysUInt64_addUI32(Tst_uint64 *pVal, const Tst_uint32 add32,
 
 	ST_ASSERTN_VOID(pVal == NULL)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 #		if (ST_SYSMATH_OVERFLOW_CHECK_ == 1)
 	old.nativeU64    = pVal->nativeU64;
 #		endif
@@ -465,7 +465,7 @@ st_sysUInt64_addUI64(Tst_uint64 *pVal, const Tst_uint64 *pAdd64,
 
 	ST_ASSERTN_VOID(pVal == NULL || pAdd64 == NULL || pVal == pAdd64)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 #		if (ST_SYSMATH_OVERFLOW_CHECK_ == 1)
 	old.nativeU64    = pVal->nativeU64;
 #		endif
@@ -507,14 +507,14 @@ st_sysUInt64_subUI32(Tst_uint64 *pVal, const Tst_uint32 sub32,
 	/* overflow check */
 #	if (ST_SYSMATH_OVERFLOW_CHECK_ == 1)
 	if (pOFflag != NULL)
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		*pOFflag = (pVal->nativeU64 < (Tst_uint64_native)sub32);
 #		else
 		*pOFflag = (pVal->hiU == 0 && pVal->loU < sub32);
 #		endif
 #	endif
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pVal->nativeU64 -= sub32;
 #	else
 	if (pVal->loU < sub32)
@@ -531,7 +531,7 @@ void
 st_sysUInt64_subUI64(Tst_uint64 *pVal, const Tst_uint64 *pSub64,
 		ST_OPTARG(Tst_bool *pOFflag))
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 	Tst_uint32 lo,
 	           hi;
 #	endif
@@ -541,7 +541,7 @@ st_sysUInt64_subUI64(Tst_uint64 *pVal, const Tst_uint64 *pSub64,
 	/* overflow check */
 #	if (ST_SYSMATH_OVERFLOW_CHECK_ == 1)
 	if (pOFflag != NULL)
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		*pOFflag = (pVal->nativeU64 < pSub64->nativeU64);
 #		else
 		*pOFflag = (pVal->hiU < pSub64->hiU ||
@@ -549,7 +549,7 @@ st_sysUInt64_subUI64(Tst_uint64 *pVal, const Tst_uint64 *pSub64,
 #		endif
 #	endif
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pVal->nativeU64 -= pSub64->nativeU64;
 #	else
 	/* b - c = b + (-c) = b + (~c + 1) */
@@ -579,7 +579,7 @@ void
 st_sysUInt64_multUI32s(Tst_uint64 *pRes,
 		const Tst_uint32 fact32_a, const Tst_uint32 fact32_b)
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 #	define LOC_LO_(x)  (x & 0xffff)
 #	define LOC_HI_(x)  ((x >> 16) /*& 0xffff*/)
 #	define LOC_AHI_    words32[0]
@@ -605,7 +605,7 @@ st_sysUInt64_multUI32s(Tst_uint64 *pRes,
 		return;
 	}*/
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pRes->nativeU64 = (Tst_uint64_native)fact32_a * (Tst_uint64_native)fact32_b;
 #	else
 	/*if (sysILog2_UI32(fact32_a) + sysILog2_UI32(fact32_b) < 31) {*/
@@ -706,7 +706,7 @@ st_sysUInt64_multUI32(Tst_uint64 *pVal, const Tst_uint32 val32_b,
 	ST_ASSERTN_VOID(pVal == NULL)
 
 	LOC_CP_UI64_(tmp_a, *pVal)
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	tmp_b.nativeU64 = (Tst_uint64_native)val32_b;
 #	else
 	tmp_b.loU = val32_b;
@@ -724,7 +724,7 @@ st_sysUInt64_multUI64s(Tst_uint64 *pRes,
 		const Tst_uint64 *pFact_a, const Tst_uint64 *pFact_b,
 		ST_OPTARG(Tst_bool *pOFflag))
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 #		if (ST_SYSMATH_OVERFLOW_CHECK_ == 1)
 	Tst_uint32 oldHi;
 #		endif
@@ -735,7 +735,7 @@ st_sysUInt64_multUI64s(Tst_uint64 *pRes,
 			pRes == pFact_a || pRes == pFact_b)
 
 	ST_SYSMATH_STC_RSETUI64((*pRes))
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (pFact_a->nativeU64 == 0 || pFact_b->nativeU64 == 0) {
 #		if (ST_SYSMATH_OVERFLOW_CHECK_ == 1)
 		if (pOFflag != NULL)
@@ -815,7 +815,7 @@ st_sysUInt64_divUI32(Tst_uint64 *pVal, const Tst_uint32 div32)
 {
 	ST_ASSERTN_VOID(pVal == NULL)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (div32 == 0) {
 		ST_SYSMATH_STC_RSETUI64((*pVal))
 		return;
@@ -853,7 +853,7 @@ void
 st_sysUInt64_divUI32_rem(Tst_uint64 *pVal, const Tst_uint32 div32,
 		ST_OPTARG(Tst_uint32 *pRemainder32))
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 	Tst_uint64 b,
 	           d,
 	           tmp,
@@ -870,7 +870,7 @@ st_sysUInt64_divUI32_rem(Tst_uint64 *pVal, const Tst_uint32 div32,
 		ST_SYSMATH_STC_RSETUI64((*pVal))
 		return;
 	}
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (pRemainder32 != NULL)
 		*pRemainder32 = (Tst_uint32)(pVal->nativeU64 % (Tst_uint64_native)div32);
 	pVal->nativeU64 = pVal->nativeU64 / (Tst_uint64_native)div32;
@@ -947,7 +947,7 @@ st_sysUInt64_divUI64(Tst_uint64 *pVal, const Tst_uint64 *pDiv64)
 {
 	ST_ASSERTN_VOID(pVal == NULL || pDiv64 == NULL || pVal == pDiv64)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (pDiv64->nativeU64 == 0) {
 		ST_SYSMATH_STC_RSETUI64((*pVal))
 		return;
@@ -967,7 +967,7 @@ void
 st_sysUInt64_divUI64_rem(Tst_uint64 *pVal, const Tst_uint64 *pDiv64,
 		ST_OPTARG(Tst_uint64 *pRemainder64))
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 	Tst_uint64 newDivor,
 	           orgDivi,
 	           tmp;
@@ -976,7 +976,7 @@ st_sysUInt64_divUI64_rem(Tst_uint64 *pVal, const Tst_uint64 *pDiv64,
 
 	ST_ASSERTN_VOID(pVal == NULL || pDiv64 == NULL || pVal == pDiv64)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (pDiv64->nativeU64 == 0) {
 		if (pRemainder64 != NULL)
 			ST_SYSMATH_STC_RSETUI64((*pRemainder64))
@@ -1118,7 +1118,7 @@ st_sysUInt64_shiftRight(Tst_uint64 *pVal, const Tst_int32 sh2r)
 	if (sh2r < 0)
 		st_sysUInt64_shiftLeft(pVal, -sh2r);
 	else if (sh2r > 0) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		pVal->nativeU64 >>= sh2r;
 #		else
 		/* hi ABCDEFGH lo JKLMNPQR >> 3
@@ -1159,7 +1159,7 @@ st_sysUInt64_shiftLeft(Tst_uint64 *pVal, const Tst_int32 sh2l)
 	if (sh2l < 0)
 		st_sysUInt64_shiftRight(pVal, -sh2l);
 	else if (sh2l > 0) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		pVal->nativeU64 <<= sh2l;
 #		else
 		/* hi ABCDEFGH lo JKLMNPQR << 5
@@ -1232,7 +1232,7 @@ sysILog2_UI32(const Tst_uint32 val)
 Tst_uint32
 sysILog2_UI64(const Tst_uint64 *pVal)
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	Tst_uint32 tmp;
 #	endif
 
@@ -1240,7 +1240,7 @@ sysILog2_UI64(const Tst_uint64 *pVal)
 	if (st_sysUInt64_cmpUI32(pVal, 1) < 0)
 		return 0;
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	/* high */
 	tmp = (pVal->nativeU64 >> 32);
 	if (tmp > 0)
@@ -1265,7 +1265,7 @@ sysILog2_UI64(const Tst_uint64 *pVal)
 void
 st_sysUInt64_reverseByteOrder(Tst_uint64 *pVal)
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	Tst_byte tmp;
 	Tst_buf  *pValBuf;
 #	else
@@ -1280,7 +1280,7 @@ st_sysUInt64_reverseByteOrder(Tst_uint64 *pVal)
 	/* big2little or vice versa */
 	/* abcdefgh --> hgfedcba */
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pValBuf = (Tst_buf*)&pVal->nativeU64;
 	/* */
 	tmp        = pValBuf[7];  /* swap 0 and 7 */
@@ -1333,7 +1333,7 @@ st_sysSInt64_setSign(Tst_int64 *pVal, const Tst_bool sgn)
 {
 	ST_ASSERTN_VOID(pVal == NULL)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (pVal->nativeS64 != 0 && LOC_GETSIGN_(*pVal) != sgn)
 		pVal->nativeS64 *= (-1);
 #	else
@@ -1356,7 +1356,7 @@ st_sysSInt64_setLoHi(Tst_int64 *pVal,
 {
 	ST_ASSERTN_VOID(pVal == NULL)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pVal->nativeS64 = (Tst_int64_native)((Tst_uint64_native)set32_lo |
 					((Tst_uint64_native)set32_hi << 32));
 #	else
@@ -1370,7 +1370,7 @@ st_sysSInt64_setI32(Tst_int64 *pVal, const Tst_int32 setI32)
 {
 	ST_ASSERTN_VOID(pVal == NULL)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pVal->nativeS64 = (Tst_int64_native)setI32;
 #	else
 	pVal->loS = (Tst_uint32)setI32;
@@ -1445,7 +1445,7 @@ st_sysSInt64_toI32(const Tst_int64 *pVal, ST_OPTARG(Tst_bool *pOFflag))
 {
 	ST_ASSERTN_NUM(0, pVal == NULL)  /* ret 0 */
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 #		if (ST_SYSMATH_OVERFLOW_CHECK_ == 1)
 	if (pOFflag != NULL)
 		*pOFflag = (((pVal->nativeS64 *
@@ -1523,13 +1523,13 @@ int
 st_sysSInt64_cmpI32(const Tst_int64 *pVal64_a,
 		const Tst_int32 valCmp32)
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 	Tst_int64 temp_b;
 #	endif
 
 	ST_ASSERTN_NUM(0, pVal64_a == NULL)  /* ret 0 */
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (pVal64_a->nativeS64 > (Tst_int64_native)valCmp32)
 		return 1;
 	if (pVal64_a->nativeS64 < (Tst_int64_native)valCmp32)
@@ -1550,7 +1550,7 @@ st_sysSInt64_cmpLoHi(const Tst_int64 *pVal64_a,
 
 	ST_ASSERTN_NUM(0, pVal64_a == NULL)  /* ret 0 */
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	temp_b.nativeS64 = (Tst_int64_native)((Tst_uint64_native)valCmp_lo |
 				((Tst_uint64_native)valCmp_hi << 32));
 	if (pVal64_a->nativeS64 == temp_b.nativeS64)
@@ -1569,14 +1569,14 @@ int
 st_sysSInt64_cmpI64(const Tst_int64 *pVal64_a,
 		const Tst_int64 *pVal64_b)
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 	Tst_bool sgn_a,
 	         sgn_b;
 #	endif
 
 	ST_ASSERTN_NUM(0, pVal64_a == NULL || pVal64_b == NULL)  /* ret 0 */
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (pVal64_a->nativeS64 > pVal64_b->nativeS64)
 		return 1;
 	if (pVal64_a->nativeS64 < pVal64_b->nativeS64)
@@ -1615,7 +1615,7 @@ st_sysSInt64_addI32(Tst_int64 *pVal, const Tst_int32 add32,
 		sgn_a = LOC_GETSIGN_(*pVal);
 #	endif
 	/* */
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pVal->nativeS64 += (Tst_int64_native)add32;
 #	else
 	pVal->loS += (Tst_uint32)add32;
@@ -1654,7 +1654,7 @@ st_sysSInt64_addI64(Tst_int64 *pVal, const Tst_int64 *pAdd64,
 	}
 #	endif
 	/* */
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pVal->nativeS64 += pAdd64->nativeS64;
 #	else
 	pVal->loS += pAdd64->loS;
@@ -1685,7 +1685,7 @@ st_sysSInt64_subI32(Tst_int64 *pVal, const Tst_int32 sub32,
 {
 	Tst_int64 temp;
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	temp.nativeS64 = (Tst_int64_native)sub32;
 #	else
 	ST_SYSMATH_STC_RSETSI64(temp)
@@ -1780,7 +1780,7 @@ void
 st_sysSInt64_multI32s(Tst_int64 *pRes,
 		const Tst_int32 fact32_a, const Tst_int32 fact32_b)
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 	Tst_uint64 temp_rUI;
 #	endif
 	register Tst_int32 temp_aSI = fact32_a,
@@ -1796,7 +1796,7 @@ st_sysSInt64_multI32s(Tst_int64 *pRes,
 		temp_bSI *= -1;
 
 	/* */
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pRes->nativeS64 = (Tst_int64_native)temp_aSI * (Tst_int64_native)temp_bSI;
 #	else
 	if (temp_aSI < 0x10000 && temp_bSI < 0x10000) {
@@ -1823,7 +1823,7 @@ st_sysSInt64_multI32(Tst_int64 *pVal, const Tst_int32 val32_b,
 	ST_ASSERTN_VOID(pVal == NULL)
 
 	LOC_CP_I64_(tmp_a, *pVal)
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	tmp_b.nativeS64 = (Tst_int64_native)val32_b;
 #	else
 	tmp_b.loS = (Tst_uint32)val32_b;
@@ -1991,7 +1991,7 @@ st_sysSInt64_shiftRight(Tst_int64 *pVal, const Tst_int32 sh2r)
 	if (sh2r < 0)
 		st_sysSInt64_shiftLeft(pVal, -sh2r);
 	else if (sh2r > 0) {
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		pVal->nativeS64 >>= sh2r;
 #		else
 		if (sh2r < 32) {
@@ -2058,9 +2058,9 @@ st_sysSInt64_reverseByteOrder(Tst_int64 *pVal)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-#if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 #if 0
-static ST_INLINE_S Tst_uint32
+static LIBSANTAGGER_KWFNC_INLINE_S Tst_uint32
 ST_SYSMATH__uint64_mult16bit(const Tst_uint32 factA, const Tst_uint32 factB)
 {
 #	define LOC_LO_(x)  (x & 0x00ff)
@@ -2109,7 +2109,7 @@ ST_SYSMATH__uint64_mult16bit(const Tst_uint32 factA, const Tst_uint32 factB)
 #	undef LOC_TZ2_
 }
 #endif  /* if 0 */
-#endif  /* CONFIG_ST_ALL_HAVE64BIT != 1 */
+#endif  /* LIBSANTAGGER_CFG_HAVE64BIT != 1 */
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -2118,7 +2118,7 @@ ST_SYSMATH__uint64_mult16bit(const Tst_uint32 factA, const Tst_uint32 factB)
 static void
 ST_SYSMATH__uint64_divUI64__(Tst_uint64 *pVal, const Tst_uint64 *pDiv64)
 {
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 	Tst_uint64 quot64,
 	           qbit64,
 	           div64;
@@ -2126,7 +2126,7 @@ ST_SYSMATH__uint64_divUI64__(Tst_uint64 *pVal, const Tst_uint64 *pDiv64)
 
 	ST_ASSERTN_VOID(pVal == NULL || pDiv64 == NULL)
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	if (pDiv64->nativeU64 == 0) {
 		ST_SYSMATH_STC_RSETUI64((*pVal))
 		return;
@@ -2184,7 +2184,7 @@ ST_SYSMATH__uint64_divUI32__(Tst_uint64 *pVal, const Tst_uint32 div32)
 {
 	Tst_uint64 div64;
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	div64.nativeU64 = (Tst_uint64_native)div32;
 #	else
 	div64.loU = div32;
@@ -2197,7 +2197,7 @@ ST_SYSMATH__uint64_divUI32__(Tst_uint64 *pVal, const Tst_uint32 div32)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-static ST_INLINE_S Tst_uint32
+static LIBSANTAGGER_KWFNC_INLINE_S Tst_uint32
 ST_SYSMATH__strlen(const char *pStr, const Tst_uint32 strSz)
 {
 	char const *pS = pStr;
@@ -2208,7 +2208,7 @@ ST_SYSMATH__strlen(const char *pStr, const Tst_uint32 strSz)
 	return (pS - pStr);
 }
 
-static ST_INLINE_S void
+static LIBSANTAGGER_KWFNC_INLINE_S void
 ST_SYSMATH__addNStrToNStr(Tst_str *pNumStr,
 		const Tst_uint32 numStrSz, const char *pAdd, const Tst_uint32 addSz)
 {
@@ -2261,7 +2261,7 @@ ST_SYSMATH__addNStrToNStr(Tst_str *pNumStr,
 		pNumStr[x] = (Tst_str)resStr[x];
 }
 
-static ST_INLINE_S void
+static LIBSANTAGGER_KWFNC_INLINE_S void
 ST_SYSMATH__mulNStrBy2(Tst_str *pNumStr, const Tst_uint32 numStrSz)
 {
 	/**ST_SYSMATH__prf("mul 2\n");**/

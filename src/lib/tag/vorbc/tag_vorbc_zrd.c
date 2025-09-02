@@ -96,7 +96,7 @@ st_vorbc_rd_readHeader(Tst_streamrd *pSObjP,
 
 	/* read TOTAL SIZE */
 	memcpy(&totsize, &phBuf[ST_VORBC_TAG_PHEAD_SLEN], 4);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	totsize = st_sysReverseByteOrder_UI32(totsize);  /* ENDIAN: LE-->BE */
 #	endif
 	totsize += ST_VORBC_TAG_PHEAD_SLEN + 4;
@@ -189,7 +189,7 @@ st_vorbc_rd_readHeader(Tst_streamrd *pSObjP,
 	res = st_binobj_setData(&pTagI->rawTagBDat, phBuf, sizeof(phBuf));
 	/** VENDOR LENGTH */
 	if (res == ST_ERR_SUCC) {
-#		if (WORDS_BIGENDIAN == 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		tmpUI = st_sysReverseByteOrder_UI32(vlen);  /* ENDIAN: BE-->LE */
 #		else
 		tmpUI = vlen;
@@ -202,7 +202,7 @@ st_vorbc_rd_readHeader(Tst_streamrd *pSObjP,
 	ST_DELPOINT(pTmpVend)
 	/** ELEMENT COUNT */
 	if (res == ST_ERR_SUCC) {
-#		if (WORDS_BIGENDIAN == 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		tmpUI = st_sysReverseByteOrder_UI32(*pNumFlds);  /* ENDIAN: BE-->LE */
 #		else
 		tmpUI = *pNumFlds;

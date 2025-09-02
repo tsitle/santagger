@@ -82,7 +82,7 @@ ST_MD5__formatFlacInput(Tst_buf *pBuf,
                         const Tst_uint32 samples,
                         const Tst_uint32 bytesPerSample);
 
-#if (WORDS_BIGENDIAN == 1)
+#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 /*static void ST_MD5__byteSwap(Tst_uint32 *pBuf, Tst_uint32 words);*/
 static void ST_MD5__byteSwapW4(Tst_uint32 *pBuf);
 static void ST_MD5__byteSwapW14(Tst_uint32 *pBuf);
@@ -175,7 +175,7 @@ st_md5_update(Tst_md5_context *pContext,
 	}
 	/* First chunk is an odd size */
 	memcpy((Tst_byte*)pCTXI->in + 64 - t, pBuf, t);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ST_MD5__byteSwapX16(pCTXI->in);
 #	endif
 	ST_MD5__transform(pCTXI->buf, pCTXI->in);
@@ -185,7 +185,7 @@ st_md5_update(Tst_md5_context *pContext,
 	/* Process data in 64-byte chunks */
 	while (len >= 64) {
 		memcpy(pCTXI->in, pBuf, 64);
-#		if (WORDS_BIGENDIAN == 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		ST_MD5__byteSwapX16(pCTXI->in);
 #		endif
 		ST_MD5__transform(pCTXI->buf, pCTXI->in);
@@ -262,7 +262,7 @@ st_md5_final(Tst_buf digest[16], Tst_md5_context *pContext)
 
 	if (count < 0) {	/* Padding forces an extra block */
 		memset(p, 0, count + 8);
-#		if (WORDS_BIGENDIAN == 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		ST_MD5__byteSwapX16(pCTXI->in);
 #		endif
 		ST_MD5__transform(pCTXI->buf, pCTXI->in);
@@ -270,7 +270,7 @@ st_md5_final(Tst_buf digest[16], Tst_md5_context *pContext)
 		count = 56;
 	}
 	memset(p, 0, count);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ST_MD5__byteSwapW14(pCTXI->in);
 #	endif
 
@@ -279,7 +279,7 @@ st_md5_final(Tst_buf digest[16], Tst_md5_context *pContext)
 	pCTXI->in[15] = pCTXI->bytes[1] << 3 | pCTXI->bytes[0] >> 29;
 	ST_MD5__transform(pCTXI->buf, pCTXI->in);
 
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ST_MD5__byteSwapW4(pCTXI->buf);
 #	endif
 	memcpy(digest, pCTXI->buf, 16);
@@ -395,7 +395,7 @@ ST_MD5__transform(Tst_uint32 buf[4], Tst_uint32 const in[16])
 #undef LOC_MD5STEP_
 
 
-#if (WORDS_BIGENDIAN == 1)
+#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 
 /*
  * Swapping 32bit value:
@@ -478,7 +478,7 @@ ST_MD5__formatFlacInput(Tst_buf *pBuf,
 	register Tst_int32 i32;
 	register Tst_byte  *pBufP = pBuf;
 
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	if (channels == 2 && bytesPerSample == 2) {
 		Tst_int16 *pBufP16 = ((Tst_int16*)pBufP) + 1;
 

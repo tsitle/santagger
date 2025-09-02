@@ -21,7 +21,7 @@
 /*
 // Own-Includes
 */
-#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 #	define ST_TAG_VORBC_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */

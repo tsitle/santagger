@@ -154,7 +154,7 @@ ST_TAV2__rend_headOrFoot(const Tst_bool hdOrFoot, Tst_apev2_tag_intn *pTagI,
 
 	/* VERSION (4 bytes), currently 2.0 (2000) is the max allowed */
 	ui32 = 2000;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	memcpy(pBB, &ui32, 4);
@@ -174,7 +174,7 @@ ST_TAV2__rend_headOrFoot(const Tst_bool hdOrFoot, Tst_apev2_tag_intn *pTagI,
 	}
 	/**st_apev2_prf("%s(): size=%u in %s\n", cFNCN, ui32,
 				(! hdOrFoot ? "Footer" : "Header"));**/
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	memcpy(pBB, &ui32, 4);
@@ -188,7 +188,7 @@ ST_TAV2__rend_headOrFoot(const Tst_bool hdOrFoot, Tst_apev2_tag_intn *pTagI,
 		return ST_ERR_ABRT;
 	}
 	ui32 = numFlds;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	memcpy(pBB, &ui32, 4);
@@ -197,7 +197,7 @@ ST_TAV2__rend_headOrFoot(const Tst_bool hdOrFoot, Tst_apev2_tag_intn *pTagI,
 	/* FLAGS (4 bytes) */
 	ui32  = ST_APEV2_TAG_FLAG_HASHEADER;
 	ui32 |= (hdOrFoot ? ST_APEV2_TAG_FLAG_ISHEADER : 0);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	memcpy(pBB, &ui32, 4);
@@ -360,7 +360,7 @@ ST_TAV2__rend_fldHead(Tst_apev2_fldData_intn *pFldI, const Tst_bool isFinal,
 
 	/* SIZE (4 bytes) */
 	ui32 = frSz;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	memcpy(buf, &ui32, 4);
@@ -370,7 +370,7 @@ ST_TAV2__rend_fldHead(Tst_apev2_fldData_intn *pFldI, const Tst_bool isFinal,
 
 	/* FLAGS (4 bytes) */
 	ui32 = (pFldI->fldPrI.typ == ST_APEV2_FTP_BDAT ? 0x02 : 0);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	memcpy(&buf[4], &ui32, 4);

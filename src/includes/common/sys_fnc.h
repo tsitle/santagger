@@ -242,11 +242,11 @@ st_sysBufSearch(
 /*
 // Macros
 */
-#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 	ST_EXPORT extern const Tst_uint16 st_sysfnc_g_bigEndTest;
 	/** tests whether system is Big-Endian */
 	#define ST_SYSFNC_ISBIGEND  ((*(char*)&st_sysfnc_g_bigEndTest) != 0x21)
-#endif  /* CONFIG_ST_ALL_DEBUG_ADD */
+#endif  /* LIBSANTAGGER_CFG_EXTRA_DEBUG */
 
 
 ST_END_C_DECLS

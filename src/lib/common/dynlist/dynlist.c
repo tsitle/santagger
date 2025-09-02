@@ -763,7 +763,7 @@ st_dynlist_check(const Tst_dynlist *pDL)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-static ST_INLINE_S Tst_dynlist_elem*
+static LIBSANTAGGER_KWFNC_INLINE_S Tst_dynlist_elem*
 ST_DYNLIST__getStartKnot(Tst_dynlist_intn *pDLI,
 		const Tst_uint32 dstIx, Tst_int32 *pDirection, Tst_uint32 *pCurIx)
 {
@@ -943,7 +943,7 @@ ST_DYNLIST__sortInsertionSort(Tst_dynlist_intn *pDLI,
 	}
 }
 
-static ST_INLINE_S void
+static LIBSANTAGGER_KWFNC_INLINE_S void
 ST_DYNLIST__sortInsertionSort_4QMS(
 		Tst_dynlist_cbCompareElems cbCmpElems, void *pCustomCmpOpts,
 		Tst_dynlist_elem *pLeft, Tst_dynlist_elem *pRight)
@@ -970,7 +970,7 @@ ST_DYNLIST__sortInsertionSort_4QMS(
 
 /*----------------------------------------------------------------------------*/
 
-static ST_INLINE_S void
+static LIBSANTAGGER_KWFNC_INLINE_S void
 ST_DYNLIST__sortQuickSort_pivot(
 		Tst_dynlist_cbCompareElems cbCmpElems, void *pCustomCmpOpts,
 		Tst_dynlist_eix *pLeft, Tst_dynlist_eix *pMiddle,

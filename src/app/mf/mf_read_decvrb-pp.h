@@ -30,8 +30,8 @@
 /*
 // System-Includes
 */
-#if (HAVE_LIBVORBIS == 1)
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 #		error libvorbis support requires int64 support
 #	else
 #		include <vorbis/codec.h>
@@ -46,7 +46,7 @@ ST_BEGIN_C_DECLS
 // Functions (protected)
 */
 #if defined(SRC_MF_READ_C) || defined(SRC_MF_READ_DECVRB_C)
-#	if (HAVE_LIBVORBIS == 1)
+#	if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 	/** */
 	Tst_err
 	ast_mf_rddec_cbDecVorb_hndNew(void **ppHnd, const Tst_bool printUsedBPS);
@@ -90,7 +90,7 @@ ST_BEGIN_C_DECLS
 // Types (private)
 */
 #ifdef SRC_MF_READ_DECVRB_C
-#	if (HAVE_LIBVORBIS == 1)
+#	if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 	/** for libvorbis */
 	typedef struct {
 		Tst_bool           printUsedBPS;
@@ -113,7 +113,7 @@ ST_BEGIN_C_DECLS
 // Functions (private)
 */
 #ifdef SRC_MF_READ_DECVRB_C
-#	if (HAVE_LIBVORBIS == 1)
+#	if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 	/** */
 	static Tst_err
 	AST_MF__rddec_convVorb_rawSamples(Tast_mf__rddec_vorb *pVrb);

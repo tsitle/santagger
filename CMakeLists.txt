@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)  # due to 'target_sources(<target> xxx FILE_SET xxx)'
                                       # see https://cmake.org/cmake/help/latest/command/target_sources.html#file-sets
-project(santagger_app_and_lib C)
+project(santagger_app_and_lib_project C)
 
 if (MSVC)
 	message(FATAL_ERROR "__ST__: MSVC Compiler is not supported")
@@ -101,27 +101,6 @@ set_target_properties(santagger_app PROPERTIES OUTPUT_NAME "santagger")
 add_subdirectory("src/app")
 target_link_libraries(santagger_app PRIVATE santagger_lib santagger_includes)
 
-# installation
-include(GNUInstallDirs)
-message(STATUS "__ST__: Install directories: PREFIX='${CMAKE_INSTALL_PREFIX}', BIN='${CMAKE_INSTALL_BINDIR}', LIB='${CMAKE_INSTALL_LIBDIR}', INC='${CMAKE_INSTALL_INCLUDEDIR}'")
-install(TARGETS santagger_app santagger_lib
-	RUNTIME
-		COMPONENT Runtime
-		DESTINATION ${CMAKE_INSTALL_BINDIR}  # Executables
-	LIBRARY
-		COMPONENT Runtime
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}  # Shared libraries
-	ARCHIVE
-		COMPONENT Runtime
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}  # Static libraries
-)
-install(DIRECTORY src/includes/
-	COMPONENT Development
-	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/santagger
-	FILES_MATCHING PATTERN "*.h"
-)
-set_target_properties(santagger_app PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/lib64")
-
 # add executables for tests
 add_executable(santagger_test_binobj)
 add_executable(santagger_test_dl)
@@ -195,6 +174,8 @@ else ()
 endif ()
 
 # Inline Functions
+set(Z_COMPDEFS_LIBSANTAGGER_KWFNC_INLINE_H "")  # this isn't currently set
+set(Z_COMPDEFS_LIBSANTAGGER_KWFNC_INLINE_S "")
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	message(STATUS "__ST__: Compiler flags: w/o InlineFncs (debug)")
 else ()
@@ -203,7 +184,8 @@ else ()
 			message(STATUS "__ST__: Compiler flags: w/ InlineFncs (gcc)")
 			set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fkeep-inline-functions")
 			set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -finline-functions")
-			add_compile_definitions(ST_INLINE_S=inline)
+			set(Z_COMPDEFS_LIBSANTAGGER_KWFNC_INLINE_S "inline")
+			add_compile_definitions(LIBSANTAGGER_KWFNC_INLINE_S=${Z_COMPDEFS_LIBSANTAGGER_KWFNC_INLINE_S})
 		elseif (CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
 			# Clang does not support the 'keep-inline-functions' flag
 			message(STATUS "__ST__: Compiler flags: w/o InlineFncs (Clang)")
@@ -214,15 +196,25 @@ else ()
 		message(STATUS "__ST__: Compiler flags: w/o InlineFncs (X_OPT=0)")
 	endif ()
 endif ()
+if (Z_COMPDEFS_LIBSANTAGGER_KWFNC_INLINE_H MATCHES "^$")
+	add_compile_definitions(LIBSANTAGGER_KWFNC_INLINE_H=)
+endif ()
+if (Z_COMPDEFS_LIBSANTAGGER_KWFNC_INLINE_S MATCHES "^$")
+	add_compile_definitions(LIBSANTAGGER_KWFNC_INLINE_S=)
+endif ()
 
 # GDB
+set(Z_COMPDEFS_LIBSANTAGGER_CFG_DEBUG OFF)
+set(Z_COMPDEFS_LIBSANTAGGER_CFG_EXTRA_DEBUG OFF)
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	message(STATUS "__ST__: Compiler flags: w/ Debug")
 	#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb")
 	# enable debugging stuff
-	add_compile_definitions(CONFIG_ST_ALL_DEBUG=1)
+	add_compile_definitions(LIBSANTAGGER_CFG_DEBUG=1)
+	set(Z_COMPDEFS_LIBSANTAGGER_CFG_DEBUG ON)
 	# enable additional debugging stuff
-	add_compile_definitions(CONFIG_ST_ALL_DEBUG_ADD=1)
+	add_compile_definitions(LIBSANTAGGER_CFG_EXTRA_DEBUG=1)
+	set(Z_COMPDEFS_LIBSANTAGGER_CFG_EXTRA_DEBUG ON)
 else ()
 	message(STATUS "__ST__: Compiler flags: w/o Debug")
 endif ()
@@ -279,18 +271,43 @@ endif ()
 # ----------------------------------------------------------------------------
 
 # check for 64 bit host system
+set(Z_COMPDEFS_LIBSANTAGGER_PPM_FILE_OFFSET_BITS OFF)
+set(Z_COMPDEFS_LIBSANTAGGER_PPM_LARGEFILE_SOURCE OFF)
+set(Z_COMPDEFS_LIBSANTAGGER_CFG_HAVE64BIT OFF)
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 	message(STATUS "__ST__: Compiler defs: 64-bit host system detected (pointer size)")
+	#
+	# When '_FILE_OFFSET_BITS' is defined as 64, it enables support for handling files larger than 2GB on 32-bit systems.
+	# The macro must be defined before including any header files to ensure all file-related functions use 64-bit offsets.
+	# When enabled, it affects several aspects of file handling:
+	#   - Makes `off_t` and related types 64-bit
+	#   - Ensures file operations (like `fseek`, `lseek`, etc.) use 64-bit variants
+	#   - Modifies structures like `struct stat` to use 64-bit fields
 	add_compile_definitions(_FILE_OFFSET_BITS=64)
-	add_compile_definitions(_LARGEFILE_SOURCE)
-	add_compile_definitions(CONFIG_ST_ALL_HAVE64BIT=1)
+	set(Z_COMPDEFS_LIBSANTAGGER_PPM_FILE_OFFSET_BITS ON)
+	#
+	# '_LARGEFILE_SOURCE' part of the LFS (Large File Support) extension:
+	#    - Enables support for handling large files (>2GB) on 32-bit systems
+	#    - Often used in conjunction with `_FILE_OFFSET_BITS=64`
+	# When defined, it makes available the basic set of large file interfaces.
+	# It must be defined before including any system headers.
+	# Historical Context:
+	#   - Was introduced to maintain binary compatibility with older applications while providing new interfaces for large file support
+	#   - Part of the POSIX standard's approach to handling files larger than 2GB on 32-bit systems
+	add_compile_definitions(_LARGEFILE_SOURCE=1)
+	set(Z_COMPDEFS_LIBSANTAGGER_PPM_LARGEFILE_SOURCE ON)
+	#
+	add_compile_definitions(LIBSANTAGGER_CFG_HAVE64BIT=1)
+	set(Z_COMPDEFS_LIBSANTAGGER_CFG_HAVE64BIT ON)
 else ()
 	message(STATUS "__ST__: Compiler defs: 32-bit host system detected (pointer size)")
 endif ()
 
+set(Z_COMPDEFS_LIBSANTAGGER_CFG_NATIVE64BIT OFF)
 if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|aarch64|ppc64|mips64")
 	message(STATUS "__ST__: Compiler defs: 64-bit host system detected (processor)")
-	add_compile_definitions(CONFIG_ST_ALL_NATIVE64BIT=1)
+	add_compile_definitions(LIBSANTAGGER_CFG_NATIVE64BIT=1)
+	set(Z_COMPDEFS_LIBSANTAGGER_CFG_NATIVE64BIT ON)
 else ()
 	message(STATUS "__ST__: Compiler defs: 32-bit host system detected (processor)")
 endif ()
@@ -301,88 +318,90 @@ include(TestBigEndian)
 # test for big-endian or little-endian
 test_big_endian(IS_BIG_ENDIAN)
 
+set(Z_COMPDEFS_LIBSANTAGGER_CFG_WORDS_BIGENDIAN OFF)
 if (IS_BIG_ENDIAN)
 	message(STATUS "__ST__: Compiler defs: Big-endian")
-	add_compile_definitions(WORDS_BIGENDIAN=1)
+	add_compile_definitions(LIBSANTAGGER_CFG_WORDS_BIGENDIAN=1)
+	set(Z_COMPDEFS_LIBSANTAGGER_CFG_WORDS_BIGENDIAN ON)
 else ()
 	message(STATUS "__ST__: Compiler defs: Little-endian")
-	add_compile_definitions(WORDS_BIGENDIAN=0)
+	add_compile_definitions(LIBSANTAGGER_CFG_WORDS_BIGENDIAN=0)
 endif ()
 
 # include the CheckFunctionExists module
 include(CheckFunctionExists)
 
 # check if fseeko() exists
-check_function_exists(fseeko HAVE_FSEEKO)
-if (HAVE_FSEEKO)
-	message(STATUS "__ST__: Compiler defs: HAVE_FSEEKO=1")
-	add_compile_definitions(HAVE_FSEEKO=1)
+check_function_exists(fseeko Z_COMPDEFS_LIBSANTAGGER_HAVE_FSEEKO)
+if (Z_COMPDEFS_LIBSANTAGGER_HAVE_FSEEKO)
+	message(STATUS "__ST__: Compiler defs: LIBSANTAGGER_HAVE_FSEEKO=1")
+	add_compile_definitions(LIBSANTAGGER_HAVE_FSEEKO=1)
 else ()
-	message(STATUS "__ST__: Compiler defs: no HAVE_FSEEKO")
+	message(STATUS "__ST__: Compiler defs: no LIBSANTAGGER_HAVE_FSEEKO")
 endif ()
 
 # check if readlink() exists
-check_function_exists(readlink HAVE_READLINK)
-if (HAVE_READLINK)
-	message(STATUS "__ST__: Compiler defs: HAVE_READLINK=1")
-	add_compile_definitions(HAVE_READLINK=1)
+check_function_exists(readlink Z_COMPDEFS_LIBSANTAGGER_HAVE_READLINK)
+if (Z_COMPDEFS_LIBSANTAGGER_HAVE_READLINK)
+	message(STATUS "__ST__: Compiler defs: LIBSANTAGGER_HAVE_READLINK=1")
+	add_compile_definitions(LIBSANTAGGER_HAVE_READLINK=1)
 else ()
-	message(STATUS "__ST__: Compiler defs: no HAVE_READLINK")
+	message(STATUS "__ST__: Compiler defs: no LIBSANTAGGER_HAVE_READLINK")
 endif ()
 
 # check if gettimeofday() exists
-check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
-if (HAVE_GETTIMEOFDAY)
-	message(STATUS "__ST__: Compiler defs: HAVE_GETTIMEOFDAY=1")
-	add_compile_definitions(HAVE_GETTIMEOFDAY=1)
+check_function_exists(gettimeofday Z_COMPDEFS_LIBSANTAGGER_HAVE_GETTIMEOFDAY)
+if (Z_COMPDEFS_LIBSANTAGGER_HAVE_GETTIMEOFDAY)
+	message(STATUS "__ST__: Compiler defs: LIBSANTAGGER_HAVE_GETTIMEOFDAY=1")
+	add_compile_definitions(LIBSANTAGGER_HAVE_GETTIMEOFDAY=1)
 else ()
-	message(STATUS "__ST__: Compiler defs: no HAVE_GETTIMEOFDAY")
+	message(STATUS "__ST__: Compiler defs: no LIBSANTAGGER_HAVE_GETTIMEOFDAY")
 endif ()
 
 # check if nanosleep() exists
-check_function_exists(nanosleep HAVE_NANOSLEEP)
-if (HAVE_NANOSLEEP)
-	message(STATUS "__ST__: Compiler defs: HAVE_NANOSLEEP=1")
-	add_compile_definitions(HAVE_NANOSLEEP=1)
+check_function_exists(nanosleep Z_COMPDEFS_LIBSANTAGGER_HAVE_NANOSLEEP)
+if (Z_COMPDEFS_LIBSANTAGGER_HAVE_NANOSLEEP)
+	message(STATUS "__ST__: Compiler defs: LIBSANTAGGER_HAVE_NANOSLEEP=1")
+	add_compile_definitions(LIBSANTAGGER_HAVE_NANOSLEEP=1)
 else ()
-	message(STATUS "__ST__: Compiler defs: no HAVE_NANOSLEEP")
+	message(STATUS "__ST__: Compiler defs: no LIBSANTAGGER_HAVE_NANOSLEEP")
 endif ()
 
 # include the CheckStructHasMember module
 include(CheckStructHasMember)
 
 # check if 'struct timeval' has the member 'tv_sec'
-check_struct_has_member("struct timeval" tv_sec sys/select.h HAVE_STRUCT_TIMEVAL_TV_SEC LANGUAGE C)
-if (HAVE_STRUCT_TIMEVAL_TV_SEC)
-	message(STATUS "__ST__: Compiler defs: HAVE_STRUCT_TIMEVAL_TV_SEC=1")
-	add_compile_definitions(HAVE_STRUCT_TIMEVAL_TV_SEC=1)
+check_struct_has_member("struct timeval" tv_sec sys/select.h Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_SEC LANGUAGE C)
+if (Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_SEC)
+	message(STATUS "__ST__: Compiler defs: LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_SEC=1")
+	add_compile_definitions(LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_SEC=1)
 else ()
-	message(STATUS "__ST__: Compiler defs: no HAVE_STRUCT_TIMEVAL_TV_SEC")
+	message(STATUS "__ST__: Compiler defs: no LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_SEC")
 endif ()
 # check if 'struct timeval' has the member 'tv_usec'
-check_struct_has_member("struct timeval" tv_usec sys/select.h HAVE_STRUCT_TIMEVAL_TV_USEC LANGUAGE C)
-if (HAVE_STRUCT_TIMEVAL_TV_USEC)
-	message(STATUS "__ST__: Compiler defs: HAVE_STRUCT_TIMEVAL_TV_USEC=1")
-	add_compile_definitions(HAVE_STRUCT_TIMEVAL_TV_USEC=1)
+check_struct_has_member("struct timeval" tv_usec sys/select.h Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_USEC LANGUAGE C)
+if (Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_USEC)
+	message(STATUS "__ST__: Compiler defs: LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_USEC=1")
+	add_compile_definitions(LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_USEC=1)
 else ()
-	message(STATUS "__ST__: Compiler defs: no HAVE_STRUCT_TIMEVAL_TV_USEC")
+	message(STATUS "__ST__: Compiler defs: no LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_USEC")
 endif ()
 
 # check if 'struct timespec' has the member 'tv_sec'
-check_struct_has_member("struct timespec" tv_sec sys/time.h HAVE_STRUCT_TIMESPEC_TV_SEC)
-if (HAVE_STRUCT_TIMESPEC_TV_SEC)
-	message(STATUS "__ST__: Compiler defs: HAVE_STRUCT_TIMESPEC_TV_SEC=1")
-	add_compile_definitions(HAVE_STRUCT_TIMESPEC_TV_SEC=1)
+check_struct_has_member("struct timespec" tv_sec sys/time.h Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_SEC)
+if (Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_SEC)
+	message(STATUS "__ST__: Compiler defs: LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_SEC=1")
+	add_compile_definitions(LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_SEC=1)
 else ()
-	message(STATUS "__ST__: Compiler defs: no HAVE_STRUCT_TIMESPEC_TV_SEC")
+	message(STATUS "__ST__: Compiler defs: no LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_SEC")
 endif ()
 # check if 'struct timespec' has the member 'tv_nsec'
-check_struct_has_member("struct timespec" tv_nsec sys/time.h HAVE_STRUCT_TIMESPEC_TV_NSEC)
-if (HAVE_STRUCT_TIMESPEC_TV_NSEC)
-	message(STATUS "__ST__: Compiler defs: HAVE_STRUCT_TIMESPEC_TV_NSEC=1")
-	add_compile_definitions(HAVE_STRUCT_TIMESPEC_TV_NSEC=1)
+check_struct_has_member("struct timespec" tv_nsec sys/time.h Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_NSEC)
+if (Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_NSEC)
+	message(STATUS "__ST__: Compiler defs: LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_NSEC=1")
+	add_compile_definitions(LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_NSEC=1)
 else ()
-	message(STATUS "__ST__: Compiler defs: no HAVE_STRUCT_TIMESPEC_TV_NSEC")
+	message(STATUS "__ST__: Compiler defs: no LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_NSEC")
 endif ()
 
 # ----------------------------------------------------------------------------
@@ -543,7 +562,7 @@ if (APP_SED AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 			COMMAND ${APP_SED} -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
 			COMMAND ${APP_SED} -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
 			COMMAND ${APP_SED} -e "s;###VERS_COMMITID###;${GIT_VERSION_CID};g"
-			COMMAND ${APP_SED} -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
+			COMMAND ${APP_SED} -e "s;these will be replaced by CMake;these have been replaced by CMake;g"
 			OUTPUT_FILE "${X_FN_APP_VERSION_H}"
 			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
@@ -557,7 +576,7 @@ if (APP_SED AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 			COMMAND ${APP_SED} -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
 			COMMAND ${APP_SED} -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
 			COMMAND ${APP_SED} -e "s;###VERS_COMMITID###;${GIT_VERSION_CID};g"
-			COMMAND ${APP_SED} -e "s;these will to be replaced by CMake;these have been replaced by CMake;g"
+			COMMAND ${APP_SED} -e "s;these will be replaced by CMake;these have been replaced by CMake;g"
 			OUTPUT_FILE "${X_FN_LIB_VERSION_H}"
 			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
@@ -604,9 +623,12 @@ find_path(LIBMPG123_INCLUDE_DIR NAMES mpg123.h PATHS /usr/include /usr/local/inc
 
 set(Z_VAR_PC_REQU_MPG123 OFF)
 set(Z_VAR_PC_REQU_MAD OFF)
+set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBMPG123 OFF)
+set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBMAD OFF)
 if (LIBMPG123 AND LIBMPG123_INCLUDE_DIR)
 	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libmpg123: ${LIBMPG123}")
-	add_compile_definitions(HAVE_LIBMPG123=1)
+	add_compile_definitions(LIBSANTAGGER_HAVE_LIBMPG123=1)
+	set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBMPG123 ON)
 
 	if (NOT BUILD_SHARED_LIBS AND WIN32)
 		set(MPG123_USE_STATIC_LIBS ON CACHE BOOL "Link mpg123 statically" FORCE)
@@ -638,7 +660,8 @@ else ()
 
 	if (LIBMAD AND LIBMAD_INCLUDE_DIR)
 		message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libmad: ${LIBMAD}")
-		add_compile_definitions(HAVE_LIBMAD=1)
+		add_compile_definitions(LIBSANTAGGER_HAVE_LIBMAD=1)
+		set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBMAD ON)
 
 		target_link_libraries(santagger_app PRIVATE ${LIBMAD})
 		include_directories(${LIBMAD_INCLUDE_DIR})
@@ -659,10 +682,12 @@ find_path(LIBOGG_INCLUDE_DIR NAMES ogg/ogg.h PATHS /usr/include /usr/local/inclu
 set(Z_VAR_NEED_LIBM OFF)
 set(Z_VAR_PC_REQU_VORBIS OFF)
 set(Z_VAR_PC_REQU_OGG OFF)
+set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBVORBIS OFF)
 if (LIBVORBIS AND LIBVORBIS_INCLUDE_DIR AND LIBOGG AND LIBOGG_INCLUDE_DIR)
 	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libvorbis: ${LIBVORBIS}")
 	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libogg: ${LIBOGG}")
-	add_compile_definitions(HAVE_LIBVORBIS=1)
+	add_compile_definitions(LIBSANTAGGER_HAVE_LIBVORBIS=1)
+	set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBVORBIS ON)
 
 	target_link_libraries(santagger_app PRIVATE ${LIBVORBIS} ${LIBOGG})
 	include_directories(${LIBVORBIS_INCLUDE_DIR} ${LIBOGG_INCLUDE_DIR})
@@ -687,9 +712,11 @@ find_library(LIBZ NAMES z ${Z_VAR_ZLIB_STATIC_EXTRA_NAME} PATHS /usr/local/opt/z
 find_path(LIBZ_INCLUDE_DIR NAMES zlib.h PATHS /usr/include /usr/local/include /opt/include /opt/local/include)
 
 set(Z_VAR_PC_REQU_LIBZ OFF)
+set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBZ OFF)
 if (LIBZ AND LIBZ_INCLUDE_DIR)
 	message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libz: ${LIBZ}")
-	add_compile_definitions(HAVE_LIBZ=1)
+	add_compile_definitions(LIBSANTAGGER_HAVE_LIBZ=1)
+	set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBZ ON)
 
 	target_link_libraries(santagger_app PRIVATE ${LIBZ})
 	include_directories(${LIBZ_INCLUDE_DIR})
@@ -701,6 +728,7 @@ endif ()
 
 # libbcrypt
 set(Z_VAR_PC_REQU_BCRYPT OFF)
+set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBBCRYPT OFF)
 if (WIN32)
 	# link to shared library 'libbcrypt' - required only for MS Windows
 	find_library(LIBBCRYPT NAMES bcrypt)
@@ -710,23 +738,134 @@ if (WIN32)
 		message(FATAL_ERROR "__ST__: libbcrypt not found")
 	endif ()
 	target_link_libraries(santagger_lib PRIVATE ${LIBBCRYPT})
+	set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBBCRYPT ON)
 
 	set(Z_VAR_PC_REQU_BCRYPT ON)
 endif ()
 
 # libm
 set(Z_VAR_PC_REQU_LIBM OFF)
+set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBM OFF)
 if (Z_VAR_NEED_LIBM)
 	# link to shared library 'libm' - required only for Debian when using libvorbis
 	find_library(LIBM NAMES m)
 	if (LIBM)
 		message(STATUS "__ST__: Found ${Z_VAR_EXT_LIBRARY_LINK_TYPE} libm: ${LIBM}")
 		target_link_libraries(santagger_app PRIVATE ${LIBM})
+		set(Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBM ON)
 
 		set(Z_VAR_PC_REQU_LIBM ON)
 	else ()
 		message(STATUS "__ST__: libm not found")
 	endif ()
+endif ()
+
+# ----------------------------------------------------------------------------
+# Create file 'lib_compdefs.h'
+# ----------------------------------------------------------------------------
+
+set(X_FN_LIB_COMPDEFS_H "src/includes/lib_compdefs.h")
+function (replaceCompDefs)
+	set(Z_TEMP_OUTP_FN "${santagger_app_and_lib_project_BINARY_DIR}/${X_FN_LIB_COMPDEFS_H}")
+	message(STATUS "__ST__: Writing file '${Z_TEMP_OUTP_FN}'")
+
+	file(READ ${X_FN_LIB_COMPDEFS_H}.in FILE_CONTENTS)
+	if (Z_COMPDEFS_LIBSANTAGGER_PPM_FILE_OFFSET_BITS)
+		string(REPLACE "//#define LIBSANTAGGER_PPM_FILE_OFFSET_BITS " "#define LIBSANTAGGER_PPM_FILE_OFFSET_BITS " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_PPM_LARGEFILE_SOURCE)
+		string(REPLACE "//#define LIBSANTAGGER_PPM_LARGEFILE_SOURCE " "#define LIBSANTAGGER_PPM_LARGEFILE_SOURCE " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (NOT Z_COMPDEFS_LIBSANTAGGER_KWFNC_INLINE_H MATCHES "^$")
+		string(REPLACE "//#define LIBSANTAGGER_KWFNC_INLINE_H  some_keyword" "#define LIBSANTAGGER_KWFNC_INLINE_H  ${Z_COMPDEFS_LIBSANTAGGER_KWFNC_INLINE_H}" FILE_CONTENTS ${FILE_CONTENTS})
+	else ()
+		string(REPLACE "//#define LIBSANTAGGER_KWFNC_INLINE_H  some_keyword" "#define LIBSANTAGGER_KWFNC_INLINE_H  /* empty */" FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (NOT Z_COMPDEFS_LIBSANTAGGER_KWFNC_INLINE_S MATCHES "^$")
+		string(REPLACE "//#define LIBSANTAGGER_KWFNC_INLINE_S  some_keyword" "#define LIBSANTAGGER_KWFNC_INLINE_S  ${Z_COMPDEFS_LIBSANTAGGER_KWFNC_INLINE_S}" FILE_CONTENTS ${FILE_CONTENTS})
+	else ()
+		string(REPLACE "//#define LIBSANTAGGER_KWFNC_INLINE_S  some_keyword" "#define LIBSANTAGGER_KWFNC_INLINE_S  /* empty */" FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_CFG_DEBUG)
+		string(REPLACE "//#define LIBSANTAGGER_CFG_DEBUG " "#define LIBSANTAGGER_CFG_DEBUG " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_CFG_EXTRA_DEBUG)
+		string(REPLACE "//#define LIBSANTAGGER_CFG_EXTRA_DEBUG " "#define LIBSANTAGGER_CFG_EXTRA_DEBUG " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_CFG_HAVE64BIT)
+		string(REPLACE "//#define LIBSANTAGGER_CFG_HAVE64BIT " "#define LIBSANTAGGER_CFG_HAVE64BIT " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_CFG_NATIVE64BIT)
+		string(REPLACE "//#define LIBSANTAGGER_CFG_NATIVE64BIT " "#define LIBSANTAGGER_CFG_NATIVE64BIT " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_CFG_WORDS_BIGENDIAN)
+		string(REPLACE "//#define LIBSANTAGGER_CFG_WORDS_BIGENDIAN " "#define LIBSANTAGGER_CFG_WORDS_BIGENDIAN " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_FSEEKO)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_FSEEKO " "#define LIBSANTAGGER_HAVE_FSEEKO " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_READLINK)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_READLINK " "#define LIBSANTAGGER_HAVE_READLINK " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_GETTIMEOFDAY)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_GETTIMEOFDAY " "#define LIBSANTAGGER_HAVE_GETTIMEOFDAY " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_NANOSLEEP)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_NANOSLEEP " "#define LIBSANTAGGER_HAVE_NANOSLEEP " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_SEC)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_SEC " "#define LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_SEC " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_USEC)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_USEC " "#define LIBSANTAGGER_HAVE_STRUCT_TIMEVAL_TV_USEC " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_SEC)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_SEC " "#define LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_SEC " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_NSEC)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_NSEC " "#define LIBSANTAGGER_HAVE_STRUCT_TIMESPEC_TV_NSEC " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBMPG123)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_LIBMPG123 " "#define LIBSANTAGGER_HAVE_LIBMPG123 " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBMAD)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_LIBMAD " "#define LIBSANTAGGER_HAVE_LIBMAD " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBVORBIS)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_LIBVORBIS " "#define LIBSANTAGGER_HAVE_LIBVORBIS " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBZ)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_LIBZ " "#define LIBSANTAGGER_HAVE_LIBZ " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBBCRYPT)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_LIBBCRYPT " "#define LIBSANTAGGER_HAVE_LIBBCRYPT " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	if (Z_COMPDEFS_LIBSANTAGGER_HAVE_LIBM)
+		string(REPLACE "//#define LIBSANTAGGER_HAVE_LIBM " "#define LIBSANTAGGER_HAVE_LIBM " FILE_CONTENTS ${FILE_CONTENTS})
+	endif ()
+	string(REPLACE "these will be replaced by CMake" "these have been replaced by CMake" FILE_CONTENTS ${FILE_CONTENTS})
+	file(WRITE ${Z_TEMP_OUTP_FN} ${FILE_CONTENTS})
+endfunction ()
+replaceCompDefs()
+add_compile_definitions("LIBSANTAGGER_DONT_INCL_LIB_COMPDEFS=1")
+
+# ----------------------------------------------------------------------------
+# For Pkg-config and Installation
+# ----------------------------------------------------------------------------
+
+include(GNUInstallDirs)
+
+if (CMAKE_INSTALL_PREFIX MATCHES "^$")
+	message(FATAL_ERROR "CMAKE_INSTALL_PREFIX is empty")
+endif ()
+if (CMAKE_INSTALL_FULL_BINDIR MATCHES "^$")
+	message(FATAL_ERROR "CMAKE_INSTALL_FULL_BINDIR is empty")
+endif ()
+if (CMAKE_INSTALL_FULL_LIBDIR MATCHES "^$")
+	message(FATAL_ERROR "CMAKE_INSTALL_FULL_LIBDIR is empty")
+endif ()
+if (CMAKE_INSTALL_FULL_INCLUDEDIR MATCHES "^$")
+	message(FATAL_ERROR "CMAKE_INSTALL_FULL_INCLUDEDIR is empty")
 endif ()
 
 # ----------------------------------------------------------------------------
@@ -779,3 +918,34 @@ if (INSTALL_PKG_CONFIG_MODULE)
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 	)
 endif ()
+
+# ----------------------------------------------------------------------------
+# Installation
+# ----------------------------------------------------------------------------
+
+message(STATUS "__ST__: Install directories: PREFIX='${CMAKE_INSTALL_PREFIX}', BIN='${CMAKE_INSTALL_BINDIR}', LIB='${CMAKE_INSTALL_LIBDIR}', INC='${CMAKE_INSTALL_INCLUDEDIR}'")
+install(
+	TARGETS santagger_app santagger_lib
+	RUNTIME
+		COMPONENT Runtime
+		DESTINATION ${CMAKE_INSTALL_BINDIR}  # Executables
+	LIBRARY
+		COMPONENT Runtime
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}  # Shared libraries
+	ARCHIVE
+		COMPONENT Runtime
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}  # Static libraries
+)
+install(
+	DIRECTORY src/includes/
+	COMPONENT Development
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${LIBRARY_ST_PUBLIC_NAME}
+	FILES_MATCHING PATTERN "*.h"
+)
+install(
+	FILES
+		${santagger_app_and_lib_project_BINARY_DIR}/${X_FN_LIB_COMPDEFS_H}
+	COMPONENT Development
+	DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${LIBRARY_ST_PUBLIC_NAME}"
+)
+set_target_properties(santagger_app PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/lib64")

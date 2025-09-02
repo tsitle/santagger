@@ -25,6 +25,10 @@
 #if !defined(ST_LIBSANTAG_VERS_STRING)
 	#error No library version defined
 #endif
+#ifndef LIBSANTAGGER_DONT_INCL_LIB_COMPDEFS
+	// ReSharper disable once CppUnusedIncludeDirective
+	#include "lib_compdefs.h"
+#endif
 
 /*
 // System-Includes
@@ -33,16 +37,12 @@
 #include <stdint.h>     /* uint8_t, uint64_t, ... */
 #include <inttypes.h>   /* PRIu64, PRId64, PRIx64 */
 #include <sys/types.h>  /* off_t */
-#if (CONFIG_ST_ALL_DEBUG == 1)
+#if (LIBSANTAGGER_CFG_DEBUG == 1)
 	#include <assert.h>
 #endif
 
-
-/* directive for inlining functions */
-#ifndef ST_INLINE_S
-	#define ST_INLINE_S  /* empty */
-#endif
-#define ST_INLINE_H  /* empty */
+// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 /* ST_BEGIN/END_C_DECLS is used so that C++ compilers
  *   don't mangle their names  */
@@ -86,7 +86,7 @@
 #endif
 
 /*#if !defined(__LITTLE_ENDIAN__) &&
-			( defined(WORDS_BIGENDIAN) || defined(__BIG_ENDIAN__) )*/
+			( defined(LIBSANTAGGER_CFG_WORDS_BIGENDIAN) || defined(__BIG_ENDIAN__) )*/
 
 
 ST_BEGIN_C_DECLS
@@ -215,7 +215,7 @@ typedef uint16_t     Tst_uint16;   /* (16bits) */
 typedef int16_t      Tst_int16;    /* (16bits) */
 typedef uint32_t     Tst_uint32;   /* (32bits) */
 typedef int32_t      Tst_int32;    /* (32bits) */
-#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 typedef uint64_t     Tst_uint64_native;  /* (64bits) */
 typedef int64_t      Tst_int64_native;   /* (64bits) */
 #endif
@@ -223,8 +223,8 @@ typedef int64_t      Tst_int64_native;   /* (64bits) */
 #define Tst_buf      Tst_byte      /* (8bits) for buffers */
 /** Tst_foffs + Tst_fsize */
 /*** (32/64bits) for offsets in files, etc. */
-#if (HAVE_FSEEKO == 1)
-	#if (CONFIG_ST_ALL_NATIVE64BIT == 1)
+#if (LIBSANTAGGER_HAVE_FSEEKO == 1)
+	#if (LIBSANTAGGER_CFG_NATIVE64BIT == 1)
 		#define Tst_foffs  long int
 	#else
 		#define Tst_foffs  long long int
@@ -233,8 +233,8 @@ typedef int64_t      Tst_int64_native;   /* (64bits) */
 	#define Tst_foffs  long int
 #endif
 /*** (64bits) for filesizes */
-#if (HAVE_FSEEKO == 1)
-	#if (CONFIG_ST_ALL_NATIVE64BIT == 1)
+#if (LIBSANTAGGER_HAVE_FSEEKO == 1)
+	#if (LIBSANTAGGER_CFG_NATIVE64BIT == 1)
 		#define Tst_fsize  unsigned long int
 	#else
 		#define Tst_fsize  unsigned long long int
@@ -296,7 +296,7 @@ typedef struct {
 #define ST_DEBMSG_MAXSZ  16384
 
 /** Suffixes for integer constants */
-#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	#define ST_UI64_CONST_SUFX(mac_libdefs_ui64)  mac_libdefs_ui64 ## UL
 	#define ST_SI64_CONST_SUFX(mac_libdefs_si64)  mac_libdefs_si64 ## L
 #elif defined(__cplusplus)
@@ -321,14 +321,14 @@ typedef struct {
 #define ST_TUINT32_MIN  0
 #define ST_TUINT32_MAX  4294967295
 /*** Tst_foffs */
-#if (HAVE_FSEEKO == 1)
+#if (LIBSANTAGGER_HAVE_FSEEKO == 1)
 	#define ST_TFOFFS_MAX  ((Tst_foffs)ST_SI64_CONST_SUFX(9223372036854775807))
 #else
 	#define ST_TFOFFS_MAX  ((Tst_foffs)ST_TINT32_MAX)
 #endif
 #define ST_TFOFFS_MIN  ((Tst_foffs)(-ST_TFOFFS_MAX - 1))
 /*** Tst_fsize */
-#if (HAVE_FSEEKO == 1)
+#if (LIBSANTAGGER_HAVE_FSEEKO == 1)
 	#define ST_TFSIZE_MAX  ((Tst_fsize)ST_UI64_CONST_SUFX(18446744073709551615))
 #else
 	#define ST_TFSIZE_MAX  ((Tst_fsize)ST_TUINT32_MAX)
@@ -338,7 +338,7 @@ typedef struct {
 /** for printf & co. */
 /*** 64bit integer */
 #ifndef PRIu64
-	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		#define PRIu64  "llu"
 	#elif defined(__cplusplus)
 		#define PRIu64  "llu"
@@ -347,7 +347,7 @@ typedef struct {
 	#endif
 #endif
 #ifndef PRId64
-	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		#define PRId64  "lld"
 	#elif defined(__cplusplus)
 		#define PRId64  "lld"
@@ -356,7 +356,7 @@ typedef struct {
 	#endif
 #endif
 #ifndef PRIx64
-	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		#define PRIx64  "llx"
 	#elif defined(__cplusplus)
 		#define PRIx64  "llx"
@@ -370,7 +370,7 @@ typedef struct {
 #define ST_SI64_PRF_PLD  "%+"PRId64
 #define ST_SI64_PRF_0X   ST_UI64_PRF_0X
 /*** Tst_foffs */
-#if (HAVE_FSEEKO == 1)
+#if (LIBSANTAGGER_HAVE_FSEEKO == 1)
 	#define ST_TFOFFS_PRF_0X   ST_SI64_PRF_0X
 	#define ST_TFOFFS_PRF_LD   ST_SI64_PRF_LD
 	#define ST_TFOFFS_PRF_PLD  ST_SI64_PRF_PLD
@@ -380,7 +380,7 @@ typedef struct {
 	#define ST_TFOFFS_PRF_PLD  "%+ld"
 #endif
 /*** Tst_fsize */
-#if (HAVE_FSEEKO == 1)
+#if (LIBSANTAGGER_HAVE_FSEEKO == 1)
 	#define ST_TFSIZE_PRF_0X  ST_UI64_PRF_0X
 	#define ST_TFSIZE_PRF_LU  ST_UI64_PRF_LU
 #else
@@ -389,7 +389,7 @@ typedef struct {
 #endif
 
 /** max filesize */
-#if (HAVE_FSEEKO == 1)
+#if (LIBSANTAGGER_HAVE_FSEEKO == 1)
 	#define ST_FILESIZE_MAX  \
 				(ST_TFSIZE_MAX & ST_UI64_CONST_SUFX(0x7ffffffffff00000))
 #else
@@ -434,7 +434,7 @@ typedef struct {
 						(mac_libdefs_verbLevelCheck))
 
 /** assertion */
-#if (CONFIG_ST_ALL_DEBUG == 1)
+#if (LIBSANTAGGER_CFG_DEBUG == 1)
 	#define ST_ASSERTN_IARG(mac_libdefs_assConds)  { \
 				if (mac_libdefs_assConds) { \
 					assert(! (mac_libdefs_assConds)); return ST_ERR_IARG; \

@@ -18,7 +18,7 @@
 /*
 // Own-Includes
 */
-#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 	#define ST_SYSFILE_DEB_  0  /* enable additional debugging stuff ? */
 #endif
 /** */
@@ -756,7 +756,7 @@ st_sysFStc_getFPos(Tst_sys_fstc *pFStc)
 
 	if (! ((Tst_sys__fstc_intn*)pFStc->pObInternal)->isVirt) {
 		if (((Tst_sys__fstc_intn*)pFStc->pObInternal)->pFP == NULL ||
-					#if (HAVE_FSEEKO == 1)
+					#if (LIBSANTAGGER_HAVE_FSEEKO == 1)
 						(pos = ftello(((Tst_sys__fstc_intn*)pFStc->pObInternal)->pFP)) < 0
 					#else
 						(pos = ftell(((Tst_sys__fstc_intn*)pFStc->pObInternal)->pFP)) < 0
@@ -799,7 +799,7 @@ st_sysFStc_setFPos(Tst_sys_fstc *pFStc,
 			default:
 				return ST_B_FALSE;
 		}
-		#if (HAVE_FSEEKO == 1)
+		#if (LIBSANTAGGER_HAVE_FSEEKO == 1)
 			resB = (fseeko(pFStcI->pFP, offs, whence) == 0);
 		#else
 			resB = (fseek(pFStcI->pFP, offs, whence) == 0);
@@ -1304,7 +1304,7 @@ ST_SYSFILE__fOd_exists(const Tst_str *pPath,
 		const Tst_bool fOrD, const Tst_uint32 recursLev,
 		Tst_fsize *pSize, Tst_bool *pErrTooBig)
 {
-	#if (HAVE_READLINK == 1)
+	#if (LIBSANTAGGER_HAVE_READLINK == 1)
 		Tst_bool  resB;
 		Tst_str   *pStr = NULL;
 		Tst_int32 resI;
@@ -1353,7 +1353,7 @@ ST_SYSFILE__fOd_exists(const Tst_str *pPath,
 	}
 
 	/* if it's a symlink, follow it */
-	#if (HAVE_READLINK == 1)
+	#if (LIBSANTAGGER_HAVE_READLINK == 1)
 		if (S_ISLNK(statBuf.st_mode) != 0) {
 			if (statBuf.st_size < 1) {
 				return ST_B_FALSE;

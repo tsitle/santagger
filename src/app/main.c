@@ -33,7 +33,7 @@
 /*
 // Own-Includes
 */
-#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 #	define LOC_SHOWLOCALE_  0  /* show locale ? */
 #endif
 /** */
@@ -81,7 +81,7 @@
 #if (LOC_SHOWLOCALE_ == 1)
 #	include <langinfo.h>    /* nl_langinfo() */
 #endif
-#if (HAVE_LIBZ == 1)
+#if (LIBSANTAGGER_HAVE_LIBZ == 1)
 #	include <zlib.h>        /* uncompress(), compress(), compressBound(), Z_OK */
 #endif
 
@@ -116,7 +116,7 @@ AST_MAIN__getFFmt(Tast_mf_finfo *pMF, const Tst_str *pAppFn,
 static Tst_err
 AST_MAIN__updInput(Tast_mf_finfo *pMF);
 /** */
-#if (HAVE_LIBZ == 1)
+#if (LIBSANTAGGER_HAVE_LIBZ == 1)
 	static Tst_err
 	AST_MAIN__cbZLibDecompress(Tst_binobj *pBinDatIn,
 	                           Tst_uint32 uncomprSzShould,
@@ -157,15 +157,15 @@ main(const int argc, const char *argv[])
 	Tast_mf_finfo mf;
 
 	/* check endianess */
-	#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+	#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 		if (ST_SYSFNC_ISBIGEND) {
-			#if (WORDS_BIGENDIAN != 1)
+			#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 				ast_mf_op_d_mainErrApp((Tst_str*)argv[0],
 						"App was compiled for Little-Endian but system is Big-Endian\n");
 				exit(1);  // error
 			#endif
 		} else {
-			#if (WORDS_BIGENDIAN == 1)
+			#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 				ast_mf_op_d_mainErrApp((Tst_str*)argv[0],
 						"App was compiled for Big-Endian but system is Little-Endian\n");
 				exit(1);  // error
@@ -680,7 +680,7 @@ AST_MAIN__cbSetOpts_tagIV2(void *pSetOptsData, Tst_id3v2_tag *pTag)
 
 	/* unsync'ing currently breaks compatibility with iTunes 10.1 */
 	st_id3v2_opts_setDoUnsyncing(pTag, pSOD->pCmdln->optsTagIV2.allwUnsynch);
-	#if (HAVE_LIBZ == 1)
+	#if (LIBSANTAGGER_HAVE_LIBZ == 1)
 		/* compression currently breaks compatibility with iTunes 10.1 */
 		st_id3v2_opts_setCompressBigFrames(pTag, pSOD->pCmdln->optsTagIV2.allwCompr);
 		st_id3v2_opts_setCB_cbZLib(pTag, AST_MAIN__cbZLibDecompress,
@@ -926,7 +926,7 @@ AST_MAIN__updInput(Tast_mf_finfo *pMF)
 
 /*----------------------------------------------------------------------------*/
 
-#if (HAVE_LIBZ == 1)
+#if (LIBSANTAGGER_HAVE_LIBZ == 1)
 /*
  * Decompress a ZLIB-compressed buffer/file
  *

@@ -918,7 +918,7 @@ st_streamrd_rdUInt64(Tst_streamrd *pSObj, const Tst_streamrd_endian inpEndian,
 {
 	Tst_byte byt,
 	         xNBits = nBits;
-#	if (CONFIG_ST_ALL_HAVE64BIT != 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 	Tst_byte usedBits = 0;
 #	endif
 	Tst_streamrd_intn *pSOI;
@@ -939,7 +939,7 @@ st_streamrd_rdUInt64(Tst_streamrd *pSObj, const Tst_streamrd_endian inpEndian,
 	pSOI->totBitsRd_rem += xNBits;
 	do {
 		if (xNBits <= pSOI->sbuf.leftoverBits) {
-#			if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#			if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 			pVal->nativeU64 = (pVal->nativeU64 << xNBits) |
 					(Tst_uint64_native)(byt >> (pSOI->sbuf.leftoverBits - xNBits));
 #			else
@@ -954,7 +954,7 @@ st_streamrd_rdUInt64(Tst_streamrd *pSObj, const Tst_streamrd_endian inpEndian,
 			pSOI->sbuf.leftoverBits -= xNBits;
 			break;
 		} else {
-#			if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#			if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 			pVal->nativeU64 = (pVal->nativeU64 << pSOI->sbuf.leftoverBits) | byt;
 #			else
 			if (usedBits + pSOI->sbuf.leftoverBits > 32) {
@@ -1476,7 +1476,7 @@ st_streamrd_rdFlacUtf8Encoded_uint64(Tst_streamrd *pSObj,
 	Tst_byte   x      = 0;
 	Tst_uint32 i      = 0,
 	           tmp32  = 0;
-	#if (CONFIG_ST_ALL_HAVE64BIT != 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 		Tst_bool full36 = ST_B_FALSE;
 	#endif
 
@@ -1510,13 +1510,13 @@ st_streamrd_rdFlacUtf8Encoded_uint64(Tst_streamrd *pSObj,
 		tmp32 = 0;  /* 0 bit */
 		i     = 6;
 		/* */
-		#if (CONFIG_ST_ALL_HAVE64BIT != 1)
+		#if (LIBSANTAGGER_CFG_HAVE64BIT != 1)
 			full36 = ST_B_TRUE;
 		#endif
 	} else
 		return ST_ERR_IDAT;
 
-#	if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#	if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 	pVal->nativeU64 = (Tst_uint64_native)tmp32;
 #	else
 	pVal->loU = tmp32;
@@ -1530,7 +1530,7 @@ st_streamrd_rdFlacUtf8Encoded_uint64(Tst_streamrd *pSObj,
 		if (! (x & 0x80) || (x & 0x40))  /* 10xxxxxx */
 			return ST_ERR_IDAT;
 		/* */
-#		if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#		if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		pVal->nativeU64 = (pVal->nativeU64 << 6) | (x & 0x3F);  /* +6 bit */
 #		else
 		if (full36 && i == 1) {

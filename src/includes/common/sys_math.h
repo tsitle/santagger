@@ -277,7 +277,7 @@ st_sysSInt64_reverseByteOrder(Tst_int64 *pVal);
 // Macros
 */
 /** Tst_int64 + Tst_uint64 */
-#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 #	define ST_SYSMATH_STC_RSETSI64(mac_int64Bits)  { \
 			(mac_int64Bits).nativeS64 = 0; \
 		}

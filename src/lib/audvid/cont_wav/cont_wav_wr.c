@@ -588,7 +588,7 @@ ST_CONTWAV__wr_writeRiff_head(const Tst_contWav_opts *pOpts,
 
 	/** chunkSize: filesize - 8 */
 	ui32 = alignedDataSz + (pElemI->hdInfo.isExtensibleWFmt ? 60 : 36);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui32, 4);
@@ -613,7 +613,7 @@ ST_CONTWAV__wr_writeRiff_head(const Tst_contWav_opts *pOpts,
 		return res;
 
 	/** chunkSize: data size */
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(dataSz32);  /* ENDIAN: BE-->LE */
 #	else
 	ui32 = dataSz32;
@@ -638,7 +638,7 @@ ST_CONTWAV__wr_writeAiff_head(const Tst_contWav_opts *pOpts,
 
 	/** chunkSize: filesize - 8 */
 	ui32 = alignedDataSz + 46 + ssndOffsetSz;
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: LE-->BE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui32, 4);
@@ -664,7 +664,7 @@ ST_CONTWAV__wr_writeAiff_head(const Tst_contWav_opts *pOpts,
 
 	/** chunkSize: data size */
 	ui32 = dataSz32 + 8 + ssndOffsetSz;
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: LE-->BE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui32, 4);
@@ -672,7 +672,7 @@ ST_CONTWAV__wr_writeAiff_head(const Tst_contWav_opts *pOpts,
 		return res;
 
 	/** offset (offset to sound data) */
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	ui32 = st_sysReverseByteOrder_UI32(ssndOffsetSz);  /* ENDIAN: LE-->BE */
 #	else
 	ui32 = ssndOffsetSz;
@@ -682,7 +682,7 @@ ST_CONTWAV__wr_writeAiff_head(const Tst_contWav_opts *pOpts,
 		return res;
 
 	/** blockSize */
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	ui32 = /*st_sysReverseByteOrder_UI32(0);*/0;  /* ENDIAN: LE-->BE */
 #	else
 	ui32 = 0;
@@ -707,7 +707,7 @@ ST_CONTWAV__wr_writeRiff_waveFmtChunk(const Tst_contWav_opts *pOpts,
 
 	/* chunkSize */
 	ui32 = (pElemI->hdInfo.isExtensibleWFmt ? 40 : 16);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui32, 4);
@@ -718,7 +718,7 @@ ST_CONTWAV__wr_writeRiff_waveFmtChunk(const Tst_contWav_opts *pOpts,
 	ui16 = (pElemI->hdInfo.isExtensibleWFmt ?
 				ST_CONTWAV_WAVEFMT_EXTENSIBLE :
 				ST_CONTWAV_WAVEFMT_PCM);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui16 = st_sysReverseByteOrder_UI16(ui16);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui16, 2);
@@ -727,7 +727,7 @@ ST_CONTWAV__wr_writeRiff_waveFmtChunk(const Tst_contWav_opts *pOpts,
 
 	/* channels */
 	ui16 = pElemI->hdInfo.channels;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui16 = st_sysReverseByteOrder_UI16(ui16);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui16, 2);
@@ -736,7 +736,7 @@ ST_CONTWAV__wr_writeRiff_waveFmtChunk(const Tst_contWav_opts *pOpts,
 
 	/* sample rate */
 	ui32 = pElemI->hdInfo.sampleRate;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui32, 4);
@@ -746,7 +746,7 @@ ST_CONTWAV__wr_writeRiff_waveFmtChunk(const Tst_contWav_opts *pOpts,
 	/* average bytes per second */
 	ui32 = pElemI->hdInfo.sampleRate * pElemI->hdInfo.channels *
 			((pElemI->hdInfo.bitsPerSample + 7) / 8);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui32, 4);
@@ -755,7 +755,7 @@ ST_CONTWAV__wr_writeRiff_waveFmtChunk(const Tst_contWav_opts *pOpts,
 
 	/* block align */
 	ui16 = pElemI->hdInfo.channels * ((pElemI->hdInfo.bitsPerSample + 7) / 8);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui16 = st_sysReverseByteOrder_UI16(ui16);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui16, 2);
@@ -764,7 +764,7 @@ ST_CONTWAV__wr_writeRiff_waveFmtChunk(const Tst_contWav_opts *pOpts,
 
 	/* bits per sample */
 	ui16 = ((pElemI->hdInfo.bitsPerSample + 7) / 8) * 8;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui16 = st_sysReverseByteOrder_UI16(ui16);  /* ENDIAN: BE-->LE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui16, 2);
@@ -775,7 +775,7 @@ ST_CONTWAV__wr_writeRiff_waveFmtChunk(const Tst_contWav_opts *pOpts,
 	if (pElemI->hdInfo.isExtensibleWFmt) {
 		/* cbSize (size of the extension) */
 		ui16 = 22;
-#		if (WORDS_BIGENDIAN == 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		ui16 = st_sysReverseByteOrder_UI16(ui16);  /* ENDIAN: BE-->LE */
 #		endif
 		res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui16, 2);
@@ -784,7 +784,7 @@ ST_CONTWAV__wr_writeRiff_waveFmtChunk(const Tst_contWav_opts *pOpts,
 
 		/* validBitsPerSample */
 		ui16 = pElemI->hdInfo.bitsPerSample;
-#		if (WORDS_BIGENDIAN == 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		ui16 = st_sysReverseByteOrder_UI16(ui16);  /* ENDIAN: BE-->LE */
 #		endif
 		res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui16, 2);
@@ -793,7 +793,7 @@ ST_CONTWAV__wr_writeRiff_waveFmtChunk(const Tst_contWav_opts *pOpts,
 
 		/* channel mask (Speaker position mask) */
 		ui32 = pElemI->hdInfo.channMask;
-#		if (WORDS_BIGENDIAN == 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #		endif
 		res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui32, 4);
@@ -831,7 +831,7 @@ ST_CONTWAV__wr_writeAiff_formCommChunk(const Tst_contWav_opts *pOpts,
 
 	/* chunkSize */
 	ui32 = 18;
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: LE-->BE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui32, 4);
@@ -840,7 +840,7 @@ ST_CONTWAV__wr_writeAiff_formCommChunk(const Tst_contWav_opts *pOpts,
 
 	/* channels */
 	ui16 = pElemI->hdInfo.channels;
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	ui16 = st_sysReverseByteOrder_UI16(ui16);  /* ENDIAN: LE-->BE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui16, 2);
@@ -849,7 +849,7 @@ ST_CONTWAV__wr_writeAiff_formCommChunk(const Tst_contWav_opts *pOpts,
 
 	/* total samples */
 	ui32 = st_sysUInt64_toUI32(&pElemI->hdInfo.totSampleCnt, NULL);
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: LE-->BE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui32, 4);
@@ -858,7 +858,7 @@ ST_CONTWAV__wr_writeAiff_formCommChunk(const Tst_contWav_opts *pOpts,
 
 	/* bits per sample */
 	ui16 = pElemI->hdInfo.bitsPerSample;
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	ui16 = st_sysReverseByteOrder_UI16(ui16);  /* ENDIAN: LE-->BE */
 #	endif
 	res = st_sysFStc_writeBuf(&pElemI->fstcOut, &ui16, 2);
@@ -898,7 +898,7 @@ ST_CONTWAV__wr_writeSaneExtended(const Tst_contWav_opts *pOpts,
 
 	/* exponent */
 	ui16 = exponent + 0x3FFF;
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	ui16 = st_sysReverseByteOrder_UI16(ui16);  /* ENDIAN: LE-->BE */
 #	endif
 	res = st_sysFStc_writeBuf(pFStcOut, &ui16, 2);
@@ -907,7 +907,7 @@ ST_CONTWAV__wr_writeSaneExtended(const Tst_contWav_opts *pOpts,
 
 	/* mantissa, first word */
 	ui32 = val;
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: LE-->BE */
 #	endif
 	res = st_sysFStc_writeBuf(pFStcOut, &ui32, 4);

@@ -294,7 +294,7 @@ st_mpeg1_rd2_getSideinfoSize(const Tst_mpeg1_fhd *pMFH)
 
 /*----------------------------------------------------------------------------*/
 
-ST_INLINE_S Tst_uint32
+LIBSANTAGGER_KWFNC_INLINE_S Tst_uint32
 st_mpeg1_rd2_getSamplesPerFrame(const Tst_mpeg1_layer lay,
 		const Tst_mpeg1_audioVers vers)
 {
@@ -357,7 +357,7 @@ st_mpeg1_rd2_readVBRheadXing(const Tst_buf *pBuf, const Tst_uint32 bufSz,
 
 	/* Flags (4 bytes) */
 	memcpy(&val, pBB, 4);
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	val = st_sysReverseByteOrder_UI32(val);  /* ENDIAN: BE-->LE */
 #	endif
 	val = val & 0x0f;
@@ -372,7 +372,7 @@ st_mpeg1_rd2_readVBRheadXing(const Tst_buf *pBuf, const Tst_uint32 bufSz,
 		if (pBB + 4 > pBEnd)
 			return ST_ERR_IDAT;
 		memcpy(&val, pBB, 4);
-#		if (WORDS_BIGENDIAN != 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		val = st_sysReverseByteOrder_UI32(val);  /* ENDIAN: BE-->LE */
 #		endif
 		pVBRhd->aFraCnt = val;
@@ -385,7 +385,7 @@ st_mpeg1_rd2_readVBRheadXing(const Tst_buf *pBuf, const Tst_uint32 bufSz,
 		if (pBB + 4 > pBEnd)
 			return ST_ERR_IDAT;
 		memcpy(&val, pBB, 4);
-#		if (WORDS_BIGENDIAN != 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		val = st_sysReverseByteOrder_UI32(val);  /* ENDIAN: BE-->LE */
 #		endif
 		pVBRhd->fsz = val;
@@ -406,7 +406,7 @@ st_mpeg1_rd2_readVBRheadXing(const Tst_buf *pBuf, const Tst_uint32 bufSz,
 		if (pBB + 4 > pBEnd)
 			return ST_ERR_IDAT;
 		memcpy(&val, pBB, 4);
-#		if (WORDS_BIGENDIAN != 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		val = st_sysReverseByteOrder_UI32(val);  /* ENDIAN: BE-->LE */
 #		endif
 		if (val > 100)
@@ -472,7 +472,7 @@ st_mpeg1_rd2_readVBRheadFraun(const Tst_buf *pBuf, const Tst_uint32 bufSz,
 
 	/* Quality (2 bytes) */
 	memcpy(&valUS, pBB, 2);
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	valUS = st_sysReverseByteOrder_UI16(valUS);  /* ENDIAN: BE-->LE */
 #	endif
 	if (valUS > 100)
@@ -483,7 +483,7 @@ st_mpeg1_rd2_readVBRheadFraun(const Tst_buf *pBuf, const Tst_uint32 bufSz,
 
 	/* Bytes - including the VBR header (4 bytes) */
 	memcpy(&valUI, pBB, 4);
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	valUI = st_sysReverseByteOrder_UI32(valUI);  /* ENDIAN: BE-->LE */
 #	endif
 	pVBRhd->fsz = valUI;
@@ -492,7 +492,7 @@ st_mpeg1_rd2_readVBRheadFraun(const Tst_buf *pBuf, const Tst_uint32 bufSz,
 
 	/* Frames - including the VBR header (4 bytes) */
 	memcpy(&valUI, pBB, 4);
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	valUI = st_sysReverseByteOrder_UI32(valUI);  /* ENDIAN: BE-->LE */
 #	endif
 	pVBRhd->aFraCnt = valUI;
@@ -503,7 +503,7 @@ st_mpeg1_rd2_readVBRheadFraun(const Tst_buf *pBuf, const Tst_uint32 bufSz,
 
 	/* TOC: Number of entries within TOC table (2 bytes) */
 	memcpy(&entCnt, pBB, 2);
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	entCnt = st_sysReverseByteOrder_UI16(entCnt);  /* ENDIAN: BE-->LE */
 #	endif
 	/**st_mpeg1_prE("      hdEntCnt: %u\n", (Tst_uint32)entCnt);**/
@@ -514,7 +514,7 @@ st_mpeg1_rd2_readVBRheadFraun(const Tst_buf *pBuf, const Tst_uint32 bufSz,
 
 	/* TOC: Size per table entry in bytes, max 4 (2 bytes) */
 	memcpy(&entSz, pBB, 2);
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	entSz = st_sysReverseByteOrder_UI16(entSz);  /* ENDIAN: BE-->LE */
 #	endif
 	if (entSz > 2)
@@ -842,7 +842,7 @@ ST_MPEG1__rd2_calcBRI_v2_25_l2_3(const Tst_byte byt, Tst_uint32 *pBRate)
 /*
  * Returns next Tst_int32 smaller or equal to val
  */
-static ST_INLINE_S
+static LIBSANTAGGER_KWFNC_INLINE_S
 Tst_int32 ST_MPEG1__rd2_floor(const double val)
 {
 	Tst_int32 fl = (Tst_int32)(val + (double)0.5f);

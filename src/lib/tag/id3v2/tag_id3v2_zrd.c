@@ -242,7 +242,7 @@ st_id3v2_rd_readHdOrFoot(Tst_id3v2_tag *pTag,
 	if (! isFooterOrHeader) {
 		/*** convert SyncSafe Integer */
 		memcpy(pEhdNfraSz, &tbuf[6], 4);  /* ENDIAN: BE-->BE */
-#		if (WORDS_BIGENDIAN != 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		*pEhdNfraSz = st_sysReverseByteOrder_UI32(*pEhdNfraSz);  /* ENDIAN: BE-->LE */
 #		endif
 		*pEhdNfraSz = st_id3v2_sync_syncsafe2uint(*pEhdNfraSz);

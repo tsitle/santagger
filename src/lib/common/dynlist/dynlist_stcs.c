@@ -113,7 +113,7 @@ st_dynlist_stc_freeDL(Tst_dynlist *pDL)
 /*----------------------------------------------------------------------------*/
 
 /* Tst_dynlist_elem */
-ST_INLINE_S void
+LIBSANTAGGER_KWFNC_INLINE_S void
 st_dynlist_stc_freeElem(Tst_dynlist_elem *pElem,
 		Tst_dynlist_cbFreeElem cbFreeElement)
 {

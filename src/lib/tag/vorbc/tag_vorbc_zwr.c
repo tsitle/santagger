@@ -163,7 +163,7 @@ ST_TVORBC__rend_head(Tst_vorbc_tag_intn *pTagI,
 		ui32  = st_tagBas_gs_getSize(pTBasNew);
 		ui32 -= (ui32 >= ST_VORBC_TAG_PHEAD_SLEN + 4 ?
 				ST_VORBC_TAG_PHEAD_SLEN + 4 : ui32);
-#		if (WORDS_BIGENDIAN == 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #		endif
 	} else
@@ -173,7 +173,7 @@ ST_TVORBC__rend_head(Tst_vorbc_tag_intn *pTagI,
 
 	/* VENDOR LENGTH */
 	ui32 = *pVendLen;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	memcpy(pBB, &ui32, 4);
@@ -183,7 +183,7 @@ ST_TVORBC__rend_head(Tst_vorbc_tag_intn *pTagI,
 
 	/* ELEMENT COUNT */
 	ui32 = numFlds;
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 	memcpy(pBB, &ui32, 4);
@@ -372,7 +372,7 @@ ST_TVORBC__rend_fldHead(Tst_vorbc_fldData_intn *pFldI, const Tst_bool isFinal,
 
 	/* SIZE (4 bytes) */
 	ui32 = (frSz >= 4 ? frSz - 4 : 0);
-#	if (WORDS_BIGENDIAN == 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 	ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #	endif
 
@@ -498,7 +498,7 @@ static Tst_err
 ST_TVORBC__rend_pict(Tst_vorbc_opts *pOpts, Tst_vorbc_fldData_intn *pFldI,
 		Tst_binobj *pTagBO)
 {
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 #		define LOC_APPUI32_CVEND_(mac_ui32)  \
 					mac_ui32 = st_sysReverseByteOrder_UI32(mac_ui32);  /* ENDIAN: LE-->BE */
 #	else

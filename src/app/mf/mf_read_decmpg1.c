@@ -38,12 +38,12 @@
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1)
 
 Tst_err
 ast_mf_rddec_initExtLibMpg(void)
 {
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	if (mpg123_init() != MPG123_OK)
 		return ST_ERR_FAIL;
 #	endif  /* libmpg123 */
@@ -54,7 +54,7 @@ ast_mf_rddec_initExtLibMpg(void)
 void
 ast_mf_rddec_freeExtLibMpg(void)
 {
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	mpg123_exit();
 #	endif  /* libmpg123 */
 }
@@ -65,7 +65,7 @@ ast_mf_rddec_freeExtLibMpg(void)
 /*----------------------------------------------------------------------------*/
 
 /* Callbacks for libmpg123 or libmad */
-#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1)
 
 /*
  * Create new handle
@@ -74,15 +74,15 @@ Tst_err
 ast_mf_rddec_cbDecMpg_hndNew(void **ppHnd, const Tst_bool printUsedBPS)
 {
 	Tst_err res;
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	Tast_mf__rddec_mpg123 *pM123 = NULL;
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	Tast_mf__rddec_mad    *pMad  = NULL;
 #	endif  /* libmpg123 */
 
 	ST_ASSERTN_IARG(ppHnd == NULL)
 
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	ST_CALLOC(pM123, Tast_mf__rddec_mpg123*,
 			1, sizeof(Tast_mf__rddec_mpg123))
 	if (pM123 == NULL)
@@ -94,7 +94,7 @@ ast_mf_rddec_cbDecMpg_hndNew(void **ppHnd, const Tst_bool printUsedBPS)
 	/* */
 	pM123->printUsedBPS = printUsedBPS;
 
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	ST_CALLOC(pMad, Tast_mf__rddec_mad*, 1, sizeof(Tast_mf__rddec_mad))
 	if (pMad == NULL)
 		return ST_ERR_OMEM;
@@ -118,19 +118,19 @@ ast_mf_rddec_cbDecMpg_hndNew(void **ppHnd, const Tst_bool printUsedBPS)
 void
 ast_mf_rddec_cbDecMpg_hndDel(void *pHnd)
 {
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	Tast_mf__rddec_mpg123 *pM123 = (Tast_mf__rddec_mpg123*)pHnd;
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	Tast_mf__rddec_mad    *pMad  = (Tast_mf__rddec_mad*)pHnd;
 #	endif  /* libmpg123 */
 
 	ST_ASSERTN_VOID(pHnd == NULL)
 
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	AST_MF__rddec_stc_freeM123(pM123);
 	ST_DELPOINT(pM123)
 
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	AST_MF__rddec_stc_freeMad(pMad);
 	ST_DELPOINT(pMad)
 
@@ -149,7 +149,7 @@ ast_mf_rddec_cbDecMpg_setOutputFmt(void *pHnd,
 		Tst_uint32 *pUsedBitsPerSample)
 {
 	Tast_mf_rddec_dbuf    *pDBuf;
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	const char            *cFNCN = __func__;
 	Tst_err               res;
 	int                   resI = 0;
@@ -158,7 +158,7 @@ ast_mf_rddec_cbDecMpg_setOutputFmt(void *pHnd,
 #		endif
 	Tast_mf__rddec_mpg123 *pM123   = (Tast_mf__rddec_mpg123*)pHnd;
 	//Tst_uint32            srcBps;
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	Tast_mf__rddec_mad    *pMad = (Tast_mf__rddec_mad*)pHnd;
 #	endif  /* libmpg123 */
 
@@ -168,7 +168,7 @@ ast_mf_rddec_cbDecMpg_setOutputFmt(void *pHnd,
 
 	*pUsedBitsPerSample = 0;
 
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	if (desiredBitsPerSample == 0 || desiredBitsPerSample > 16) {
 #		if (MPG123_API_VERSION >= 25)
 		/* check whether libmpg123 supports signed 32bit output */
@@ -242,7 +242,7 @@ ast_mf_rddec_cbDecMpg_setOutputFmt(void *pHnd,
 				pDBuf->bps);
 	}
 
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	/* 16, 24 and 32bit output are supported by us */
 	pDBuf = &pMad->dbuf;
 	if (desiredBitsPerSample == 0)
@@ -278,14 +278,14 @@ ast_mf_rddec_cbDecMpg_setOutputFmt(void *pHnd,
 Tst_err
 ast_mf_rddec_cbDecMpg_openFeed(void *pHnd)
 {
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	int resI;
 	Tast_mf__rddec_mpg123 *pM123 = (Tast_mf__rddec_mpg123*)pHnd;
 #	endif  /* libmpg123 */
 
 	ST_ASSERTN_IARG(pHnd == NULL)
 
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	resI = mpg123_open_feed(pM123->pM123hnd);
 	if (resI != MPG123_OK)
 		return ST_ERR_FAIL;
@@ -309,11 +309,11 @@ ast_mf_rddec_cbDecMpg_feedInp(void *pHnd,
 		Tst_buf *pInpBuf, const Tst_uint32 inpBufSz)
 {
 	Tst_err               res;
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	const char            *cFNCN = __func__;
 	int                   resI;
 	Tast_mf__rddec_mpg123 *pM123 = (Tast_mf__rddec_mpg123*)pHnd;
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	Tast_mf__rddec_ibuf   *pIBuf;
 #	endif  /* libmpg123 */
 
@@ -322,7 +322,7 @@ ast_mf_rddec_cbDecMpg_feedInp(void *pHnd,
 	if (inpBufSz == 0)
 		return ST_ERR_SUCC;
 
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	/** */
 	ST_ASSERTN_NUM(ST_ERR_FAIL, ! pM123->dbuf.isOutpFmtSet)
 	/** */
@@ -345,7 +345,7 @@ ast_mf_rddec_cbDecMpg_feedInp(void *pHnd,
 		return ST_ERR_FAIL;
 	}
 
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	/** */
 	ST_ASSERTN_NUM(ST_ERR_FAIL,
 			! ((Tast_mf__rddec_mad*)pHnd)->dbuf.isOutpFmtSet)
@@ -394,18 +394,18 @@ ast_mf_rddec_cbDecMpg_decode(void *pHnd,
 	Tst_bool passSamplesToClient;
 	Tast_mf_rddec_dbuf *pDBuf;
 
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	pDBuf = &((Tast_mf__rddec_mpg123*)pHnd)->dbuf;
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	pDBuf = &((Tast_mf__rddec_mad*)pHnd)->dbuf;
 #	endif  /* libmpg123 */
 	passSamplesToClient = (cbPCMclient != NULL && pPCMclientHandle != NULL);
 
 	do {
-#		if (HAVE_LIBMPG123 == 1)
+#		if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 		res = AST_MF__rddec_cbDecMpg_decodeOnly_mpg123(pHnd, isLastCall,
 				pNeedMore, passSamplesToClient);
-#		elif (HAVE_LIBMAD == 1)
+#		elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 		res = AST_MF__rddec_cbDecMpg_decodeOnly_mad(pHnd, isLastCall,
 				pNeedMore, passSamplesToClient);
 #		endif  /* libmpg123 */
@@ -429,14 +429,14 @@ ast_mf_rddec_cbDecMpg_decode(void *pHnd,
 Tst_err
 ast_mf_rddec_cbDecMpg_closeFeed(void *pHnd)
 {
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	int resI;
 	Tast_mf__rddec_mpg123 *pM123 = (Tast_mf__rddec_mpg123*)pHnd;
 #	endif  /* libmpg123 */
 
 	ST_ASSERTN_IARG(pHnd == NULL)
 
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	resI = mpg123_close(pM123->pM123hnd);
 	if (resI != MPG123_OK)
 		return ST_ERR_FAIL;
@@ -450,7 +450,7 @@ ast_mf_rddec_cbDecMpg_closeFeed(void *pHnd)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1)
 #define LOC_RESZ_DECBUFOUTI32_(mac_sampleCnt, mac_sampleRes, mac_pDBuf)  { \
 			if ((mac_sampleCnt) > (mac_sampleRes)) { \
 				Tst_err res = ast_mf_rddec_stc_reszDecBufOutI32(mac_pDBuf, mac_sampleCnt); \
@@ -460,7 +460,7 @@ ast_mf_rddec_cbDecMpg_closeFeed(void *pHnd)
 			}
 #endif  /* libmpg123 or libmad */
 
-#if (HAVE_LIBMPG123 == 1)
+#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -739,7 +739,7 @@ AST_MF__rddec_convMpg123_rawSamples_inp32shift(Tast_mf__rddec_mpg123 *pM123)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-#elif (HAVE_LIBMAD == 1)
+#elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 
 /*
  * Decode data that has been feed to the stream into raw PCM samples
@@ -994,7 +994,7 @@ AST_MF__rddec_convMad_rawSamples_inp24shift(Tast_mf__rddec_mad *pMad)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-#if (HAVE_LIBMPG123 == 1)
+#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 
 /* Tast_mf__rddec_mpg123 */
 static Tst_err
@@ -1028,7 +1028,7 @@ AST_MF__rddec_stc_freeM123(Tast_mf__rddec_mpg123 *pM123)
 	ast_mf_rddec_stc_freeDB(&pM123->dbuf);
 }
 
-#elif (HAVE_LIBMAD == 1)
+#elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 
 /* Tast_mf__rddec_mad */
 static Tst_err
@@ -1071,7 +1071,7 @@ AST_MF__rddec_stc_freeMad(Tast_mf__rddec_mad *pMad)
 
 /*----------------------------------------------------------------------------*/
 
-#if (HAVE_LIBMPG123 != 1) && (HAVE_LIBMAD == 1)
+#if (LIBSANTAGGER_HAVE_LIBMPG123 != 1) && (LIBSANTAGGER_HAVE_LIBMAD == 1)
 /* Tast_mf__rddec_ibuf */
 static void
 AST_MF__rddec_stc_initIB(Tast_mf__rddec_ibuf *pIBuf)
@@ -1097,7 +1097,7 @@ AST_MF__rddec_stc_rsetIB(Tast_mf__rddec_ibuf *pIBuf)
 }
 #endif  /* !libmpg123 && libmad */
 
-#if (HAVE_LIBMPG123 == 1)
+#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 static Tst_err
 AST_MF__rddec_stc_reszDecBufTmp(Tast_mf_rddec_dbuf *pDBuf,
 		const Tst_uint32 newSz)

@@ -21,7 +21,7 @@
 /*
 // Own-Includes
 */
-#if (CONFIG_ST_ALL_DEBUG_ADD == 1)
+#if (LIBSANTAGGER_CFG_EXTRA_DEBUG == 1)
 #	define AST_MF_OUTP_DEB_  1  /* enable additional debugging stuff ? */
 #endif
 /** */

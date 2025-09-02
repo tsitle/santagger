@@ -365,7 +365,7 @@ ST_CONTOGG__flacrdh_parseApp(const Tst_contOgg_opts *pOpts,
 		Tst_contOgg_codFlac_defParsH *pDPh, Tst_uint32 mdSz)
 {
 	#define LOC_FNCN_  __func__
-	#if (WORDS_BIGENDIAN != 1)
+	#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		#define LOC_APPUI32_CVEND_(mac_ui32)  \
 					mac_ui32 = st_sysReverseByteOrder_UI32(mac_ui32);  /* ENDIAN: LE-->BE */
 	#else

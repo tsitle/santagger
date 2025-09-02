@@ -611,7 +611,7 @@ ST_TIV2__rend_fld(const Tst_id3v2_tag_intn *pTagI,
 			frHdFlags.hasV4dli = ST_B_TRUE;
 		if (pTagI->verMaj == 3) {
 			/* V3: append uncomressed size of frame */
-#			if (WORDS_BIGENDIAN != 1)
+#			if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 			tmpUSOF = st_sysReverseByteOrder_UI32(tmpUSOF);  /* ENDIAN: LE-->BE */
 #			endif
 		} else {
@@ -735,7 +735,7 @@ ST_TIV2__rend_fldHead(const Tst_id3v2_opts *pOpts, const Tst_byte verMaj,
 
 	/* FRAME SIZE */
 	if (verMaj < 4) {
-#		if (WORDS_BIGENDIAN != 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		tmp   = st_sysReverseByteOrder_UI32(frSize);  /* ENDIAN: LE-->BE */
 		tmp >>= ((4 - frHdIdSz) * 8);
 #		else
@@ -753,7 +753,7 @@ ST_TIV2__rend_fldHead(const Tst_id3v2_opts *pOpts, const Tst_byte verMaj,
 	if (verMaj > 2) {
 		ST_TIV2__rend_fldFlags(pOpts, verMaj, pFrHdFlags, &flagBytes);
 		tmpWrd = flagBytes;
-#		if (WORDS_BIGENDIAN != 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		tmpWrd = st_sysReverseByteOrder_UI16(tmpWrd);  /* ENDIAN: LE-->BE */
 #		endif
 		res = st_binobj_replaceData(pOutp, (Tst_foffs)(frHdIdSz * 2),
@@ -1178,7 +1178,7 @@ ST_TIV2__rend_fd_encUVal(const Tst_id3v2_opts *pOpts, const char *pFnc,
 	if (ST_TFDEB_ISVERBTAG_BD(pOpts->basOpts))
 		st_id3v2_d_fdeb3(pOpts, 2, pFnc, pFldI,
 				"uva %u", pFldI->dataUVal);
-#	if (WORDS_BIGENDIAN != 1)
+#	if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 	tmp = st_sysReverseByteOrder_UI32(pFldI->dataUVal);  /* ENDIAN: LE-->BE */
 #	else
 	tmp = pFldI->dataUVal;

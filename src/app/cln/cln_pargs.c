@@ -43,16 +43,16 @@
 #include <string.h>      /* strcat() */
 #include <ctype.h>       /* isprint() */
 #include <unistd.h>      /* getopt(), char(optarg), int(optind,opterr,optopt), ... */
-#if (HAVE_LIBVORBIS == 1)
+#if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 	#include <vorbis/codec.h>
 #endif
-#if (HAVE_LIBMPG123 == 1)
+#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	#include <mpg123.h>
 #endif
-#if (HAVE_LIBMAD == 1)
+#if (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	#include <mad.h>
 #endif
-#if (HAVE_LIBZ == 1)
+#if (LIBSANTAGGER_HAVE_LIBZ == 1)
 	#include <zlib.h>
 #endif
 
@@ -235,10 +235,10 @@ AST_CLN__pa_sc_help(const Tst_str *pAppFn, const Tast_cln_cbMsg cbMsg,
 			"Decode to WAVE or AIFF");
 		LOC_PR_DE_("Works with the following input:");
 		LOC_PR_DE_(" - Ogg-Flac and pure Flac");
-		#if (HAVE_LIBVORBIS == 1)
+		#if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 			LOC_PR_DE_(" - Ogg-Vorbis");
 		#endif
-		#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+		#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1)
 			LOC_PR_DE_(" - MPEG-1 (Layer I-III, e.g. MP3)");
 		#endif
 		LOC_PR_DE_("See --bps option");
@@ -568,26 +568,26 @@ AST_CLN__pa_sc_info(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 
 	cbMsg("\nApp      : %s %s", APP_ST_NAME, APP_ST_VERS_STRING);
 	cbMsg("Compiled : %s %s (%s-Endian)", __DATE__, __TIME__,
-			#if (WORDS_BIGENDIAN != 1)
+			#if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 				"Little"
 			#else
 				"Big"
 			#endif
 		);
 	st_sysStrapp((Tst_str*)"", &pSup);
-	#if (CONFIG_ST_ALL_HAVE64BIT == 1)
+	#if (LIBSANTAGGER_CFG_HAVE64BIT == 1)
 		st_sysStrapp((Tst_str*)"64bit ", &pSup);
 	#endif
-	#if (HAVE_LIBVORBIS == 1)
+	#if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 		st_sysStrapp((Tst_str*)"libvorbis ", &pSup);
 	#endif
-	#if (HAVE_LIBMPG123 == 1)
+	#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 		st_sysStrapp((Tst_str*)"libmpg123 ", &pSup);
 	#endif
-	#if (HAVE_LIBMAD == 1)
+	#if (LIBSANTAGGER_HAVE_LIBMAD == 1)
 		st_sysStrapp((Tst_str*)"libmad ", &pSup);
 	#endif
-	#if (HAVE_LIBZ == 1)
+	#if (LIBSANTAGGER_HAVE_LIBZ == 1)
 		st_sysStrapp((Tst_str*)"zlib ", &pSup);
 	#endif
 	cbMsg("Supports : %s", pSup);
@@ -606,7 +606,7 @@ AST_CLN__pa_sc_info(const Tast_cln_cbMsg cbMsg, const Tst_str* pAppFn)
 static Tst_err
 AST_CLN__pa_sc_version(const Tast_cln_cbMsg cbMsg)
 {
-	#if (HAVE_LIBVORBIS == 1) || (HAVE_LIBMAD == 1) || (HAVE_LIBZ == 1)
+	#if (LIBSANTAGGER_HAVE_LIBVORBIS == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1) || (LIBSANTAGGER_HAVE_LIBZ == 1)
 		char const *pVer;
 	#endif
 	Tst_mtes_string tagger;
@@ -628,21 +628,21 @@ AST_CLN__pa_sc_version(const Tast_cln_cbMsg cbMsg)
 	}
 	cbMsg("[%s]", pTmp);
 	//
-	#if (HAVE_LIBVORBIS == 1)
+	#if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 		pVer = vorbis_version_string();
 		if (pVer == NULL) {
 			pVer = "n/a";
 		}
 		cbMsg("[libvorbis: %s]", pVer);
 	#endif
-	#if (HAVE_LIBMPG123 == 1)
+	#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 		cbMsg("[libmpg123: API version %d]", MPG123_API_VERSION);
 	#endif
-	#if (HAVE_LIBMAD == 1)
+	#if (LIBSANTAGGER_HAVE_LIBMAD == 1)
 		pVer = MAD_VERSION;
 		cbMsg("[libmad: %s]", pVer);
 	#endif
-	#if (HAVE_LIBZ == 1)
+	#if (LIBSANTAGGER_HAVE_LIBZ == 1)
 		pVer = ZLIB_VERSION;
 		cbMsg("[zlib: %s]", pVer);
 	#endif

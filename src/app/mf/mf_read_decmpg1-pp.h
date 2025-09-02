@@ -30,14 +30,14 @@
 /*
 // System-Includes
 */
-#if (HAVE_LIBMPG123 == 1)
+#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 #	include <mpg123.h>
 #	if (MPG123_API_VERSION <= 25)
 		/* defining the following is necessary because of
 		 *   a bug in libmpg123, at least in version 1.12.1  */
 #		define MPG123_NO_CONFIGURE
 #	endif
-#elif (HAVE_LIBMAD == 1)
+#elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 #	include <mad.h>
 #endif
 
@@ -48,7 +48,7 @@ ST_BEGIN_C_DECLS
 // Functions (protected)
 */
 #if defined(SRC_MF_READ_C) || defined(SRC_MF_READ_DECMPG1_C)
-#	if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	/** */
 	Tst_err
 	ast_mf_rddec_initExtLibMpg(void);
@@ -95,7 +95,7 @@ ST_BEGIN_C_DECLS
 // Types (private)
 */
 #ifdef SRC_MF_READ_DECMPG1_C
-#	if (HAVE_LIBMPG123 != 1) && (HAVE_LIBMAD == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 != 1) && (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	/** for input data */
 	typedef struct {
 		Tst_uint32 inpBufUsed;
@@ -107,7 +107,7 @@ ST_BEGIN_C_DECLS
 	} Tast_mf__rddec_ibuf;
 #	endif  /* !libmpg123 && libmad */
 
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	/** for libmpg123 */
 	/*** */
 	typedef struct {
@@ -120,7 +120,7 @@ ST_BEGIN_C_DECLS
 		Tast_mf_rddec_dbuf   dbuf;
 	} Tast_mf__rddec_mpg123;
 
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	/** for libmad */
 	/*** */
 	typedef struct {
@@ -152,7 +152,7 @@ ST_BEGIN_C_DECLS
 */
 #ifdef SRC_MF_READ_DECMPG1_C
 	/** */
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	/*** */
 	static Tst_err
 	AST_MF__rddec_cbDecMpg_decodeOnly_mpg123(void *pHnd,
@@ -174,7 +174,7 @@ ST_BEGIN_C_DECLS
 
 	static Tst_err
 	AST_MF__rddec_convMpg123_rawSamples_inp32shift(Tast_mf__rddec_mpg123 *pM123);
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	/*** */
 	static Tst_err
 	AST_MF__rddec_cbDecMpg_decodeOnly_mad(void *pHnd,
@@ -193,13 +193,13 @@ ST_BEGIN_C_DECLS
 #	endif  /* libmpg123 */
 
 	/** */
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	static Tst_err
 	AST_MF__rddec_stc_initM123(Tast_mf__rddec_mpg123 *pM123);
 
 	static void
 	AST_MF__rddec_stc_freeM123(Tast_mf__rddec_mpg123 *pM123);
-#	elif (HAVE_LIBMAD == 1)
+#	elif (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	static Tst_err
 	AST_MF__rddec_stc_initMad(Tast_mf__rddec_mad *pMad);
 
@@ -208,7 +208,7 @@ ST_BEGIN_C_DECLS
 #	endif  /* libmpg123 */
 
 	/** */
-#	if (HAVE_LIBMPG123 != 1) && (HAVE_LIBMAD == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 != 1) && (LIBSANTAGGER_HAVE_LIBMAD == 1)
 	static void
 	AST_MF__rddec_stc_initIB(Tast_mf__rddec_ibuf *pIBuf);
 
@@ -218,7 +218,7 @@ ST_BEGIN_C_DECLS
 #	endif  /* !libmpg123 && libmad */
 
 	/** */
-#	if (HAVE_LIBMPG123 == 1)
+#	if (LIBSANTAGGER_HAVE_LIBMPG123 == 1)
 	static Tst_err
 	AST_MF__rddec_stc_reszDecBufTmp(Tast_mf_rddec_dbuf *pDBuf,
 	                                const Tst_uint32 newSz);

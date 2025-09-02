@@ -1202,7 +1202,7 @@ ST_CONTOGG__rdcod_getBogusVCmt(const Tst_buf *pCodecHeadBuf,
 		}
 		/* VENDOR LENGTH */
 		ui32 = 5;
-#		if (WORDS_BIGENDIAN == 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN == 1)
 		ui32 = st_sysReverseByteOrder_UI32(ui32);  /* ENDIAN: BE-->LE */
 #		endif
 		memcpy(pBufP, &ui32, 4);

@@ -32,9 +32,9 @@
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-#if (HAVE_LIBMPG123 == 1) || \
-			(HAVE_LIBMAD == 1) || \
-			(HAVE_LIBVORBIS == 1)
+#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || \
+			(LIBSANTAGGER_HAVE_LIBMAD == 1) || \
+			(LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 
 /* Tast_mf_rddec_dbuf */
 void

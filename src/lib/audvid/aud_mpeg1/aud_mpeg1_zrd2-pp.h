@@ -39,7 +39,7 @@ ST_BEGIN_C_DECLS
 	Tst_int32
 	st_mpeg1_rd2_getSideinfoSize(const Tst_mpeg1_fhd *pMFH);
 	/** */
-	ST_INLINE_H Tst_uint32
+	LIBSANTAGGER_KWFNC_INLINE_H Tst_uint32
 	st_mpeg1_rd2_getSamplesPerFrame(const Tst_mpeg1_layer lay,
 	                                const Tst_mpeg1_audioVers vers);
 	/** */
@@ -93,7 +93,7 @@ ST_BEGIN_C_DECLS
 	static Tst_err
 	ST_MPEG1__rd2_calcBRI_v2_25_l2_3(const Tst_byte byt, Tst_uint32 *pBRate);
 	/** */
-	static ST_INLINE_H Tst_int32
+	static LIBSANTAGGER_KWFNC_INLINE_H Tst_int32
 	ST_MPEG1__rd2_floor(const double val);
 #endif  /* private */
 

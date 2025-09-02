@@ -356,7 +356,7 @@ st_utilsFmt_getMime_enum_byBuffer_audvid(const Tst_buf *pBuf,
 
 	else if (sz >= 4) {
 		memcpy(&cmpUI, pBuf, 4);  /* ENDIAN: BE-->BE */
-#		if (WORDS_BIGENDIAN != 1)
+#		if (LIBSANTAGGER_CFG_WORDS_BIGENDIAN != 1)
 		cmpUI = st_sysReverseByteOrder_UI32(cmpUI);  /* ENDIAN: BE-->LE */
 #		endif
 		if ((cmpUI & 0xffe00000) == 0xffe00000 &&      /* (frame sync) */

@@ -798,12 +798,12 @@ AST_MF__rd_readAV_mpeg1(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 	Tst_uint32 ecnt;
 	char       debMsg[512];
 	Tst_bool   showErrs = ST_B_FALSE;
-	#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+	#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1)
 		Tst_contWav_obj *pWavObj = NULL;
 	#endif  /* libmpg123 or libmad */
 
 	/* init external lib */
-	#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+	#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1)
 		if (pCmdln->cmds.anlz || pCmdln->cmds.decAud) {
 			res = ast_mf_rddec_initExtLibMpg();
 			if (res != ST_ERR_SUCC)
@@ -814,7 +814,7 @@ AST_MF__rd_readAV_mpeg1(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 	/* set up options */
 	/** pcm client */
 	if (pCmdln->cmds.decAud) {
-		#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+		#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1)
 			res = AST_MF__rd_initPCMclient(pCmdln, pMF, cFNCN, &pWavObj);
 			if (res != ST_ERR_SUCC) {
 				ast_mf_rddec_freeExtLibMpg();
@@ -834,7 +834,7 @@ AST_MF__rd_readAV_mpeg1(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 		st_mpeg1_opts_setCB_pcmClient(&pMF->audMpg1,
 				NULL, NULL, NULL, NULL, NULL);
 	/** decoder */
-	#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+	#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1)
 		if (pCmdln->cmds.anlz || pCmdln->cmds.decAud) {
 			st_mpeg1_opts_setCB_decoding(&pMF->audMpg1,
 					ast_mf_rddec_cbDecMpg_hndNew,
@@ -873,7 +873,7 @@ AST_MF__rd_readAV_mpeg1(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF)
 		showErrs = ST_B_TRUE;
 
 	/* end pcm client and decoding */
-	#if (HAVE_LIBMPG123 == 1) || (HAVE_LIBMAD == 1)
+	#if (LIBSANTAGGER_HAVE_LIBMPG123 == 1) || (LIBSANTAGGER_HAVE_LIBMAD == 1)
 		if (pWavObj != NULL)
 			AST_MF__rd_endPCMclient(pCmdln, pMF, cFNCN, &pWavObj);
 
@@ -935,7 +935,7 @@ AST_MF__rd_readAV_oggOrFlac(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 	/** decoder */
 	if (ufmtStrType == ST_UTILSFMT_MTP_AUDVIDOGG) {
 		if (pCmdln->cmds.anlz || pCmdln->cmds.decAud) {
-			#if (HAVE_LIBVORBIS == 1)
+			#if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 				st_contOgg_opts_setCB_vorbDecoding(&pMF->avOgg,
 						ast_mf_rddec_cbDecVorb_hndNew,
 						ast_mf_rddec_cbDecVorb_hndDel,
@@ -950,7 +950,7 @@ AST_MF__rd_readAV_oggOrFlac(Tast_cln_a *pCmdln, Tast_mf_finfo *pMF,
 				}
 			#endif  /* libvorbis */
 		} else {
-			#if (HAVE_LIBVORBIS == 1)
+			#if (LIBSANTAGGER_HAVE_LIBVORBIS == 1)
 				st_contOgg_opts_setCB_vorbDecoding(&pMF->avOgg,
 						NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 			#endif  /* libvorbis */
