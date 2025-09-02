@@ -15,8 +15,8 @@
 /* Creation date: 13.04.2011 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_TAG_FLDMAP_PROT_H
-#define HEAD_TAG_FLDMAP_PROT_H
+#ifndef LIBSANTAGGER_TAG_FLDMAP_PROT_H
+#define LIBSANTAGGER_TAG_FLDMAP_PROT_H
 
 ST_BEGIN_C_DECLS
 
@@ -83,6 +83,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_TAG_FLDMAP_PROT_H */
+#endif  /* LIBSANTAGGER_TAG_FLDMAP_PROT_H */
 
 /******************************************************************************/

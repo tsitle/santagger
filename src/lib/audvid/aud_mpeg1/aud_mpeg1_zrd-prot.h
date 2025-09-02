@@ -15,8 +15,8 @@
 /* Creation date: 30.12.2009 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_AUD_MPEG1_ZRD_PROT_H
-#define HEAD_AUD_MPEG1_ZRD_PROT_H
+#ifndef LIBSANTAGGER_AUD_MPEG1_ZRD_PROT_H
+#define LIBSANTAGGER_AUD_MPEG1_ZRD_PROT_H
 
 /*
 // Own-Includes
@@ -43,6 +43,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_AUD_MPEG1_ZRD_PROT_H */
+#endif  /* LIBSANTAGGER_AUD_MPEG1_ZRD_PROT_H */
 
 /******************************************************************************/

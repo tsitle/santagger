@@ -15,8 +15,8 @@
 /* Creation date: 03.07.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_CONT_WAV_DEFS_H
-#define HEAD_CONT_WAV_DEFS_H
+#ifndef LIBSANTAGGER_CONT_WAV_DEFS_H
+#define LIBSANTAGGER_CONT_WAV_DEFS_H
 
 /*
 // Own-Includes
@@ -66,6 +66,6 @@ typedef void (*Tst_contWav_cbNewOutputStream)(const Tst_uint32 bsIx,
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_CONT_WAV_DEFS_H */
+#endif  /* LIBSANTAGGER_CONT_WAV_DEFS_H */
 
 /******************************************************************************/

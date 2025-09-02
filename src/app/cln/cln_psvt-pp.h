@@ -15,8 +15,8 @@
 /* Creation date: 19.05.2005 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_CLN_PSVT_PP_H
-#define HEAD_CLN_PSVT_PP_H
+#ifndef APPSANTAGGER_CLN_PSVT_PP_H
+#define APPSANTAGGER_CLN_PSVT_PP_H
 
 /*
 // Own-Includes
@@ -179,6 +179,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_CLN_PSVT_PP_H */
+#endif  /* APPSANTAGGER_CLN_PSVT_PP_H */
 
 /******************************************************************************/

@@ -20,8 +20,8 @@
 /* Those functions etc. that I wrote are marked with "by Tas".                */
 /******************************************************************************/
 
-#ifndef HEAD_W_MD5_PROT_H
-#define HEAD_W_MD5_PROT_H
+#ifndef LIBSANTAGGER_W_MD5_PROT_H
+#define LIBSANTAGGER_W_MD5_PROT_H
 
 /*
 // Own-Includes
@@ -88,6 +88,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_W_MD5_PROT_H */
+#endif  /* LIBSANTAGGER_W_MD5_PROT_H */
 
 /******************************************************************************/

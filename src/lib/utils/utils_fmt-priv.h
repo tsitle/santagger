@@ -15,8 +15,8 @@
 /* Creation date: 08.01.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_UTILS_FMT_PRIV_H
-#define HEAD_UTILS_FMT_PRIV_H
+#ifndef LIBSANTAGGER_UTILS_FMT_PRIV_H
+#define LIBSANTAGGER_UTILS_FMT_PRIV_H
 
 
 ST_BEGIN_C_DECLS
@@ -183,6 +183,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_UTILS_FMT_PRIV_H */
+#endif  /* LIBSANTAGGER_UTILS_FMT_PRIV_H */
 
 /******************************************************************************/

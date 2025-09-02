@@ -15,8 +15,8 @@
 /* Creation date: 30.12.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_AUD_MPEG1_DEFS_H
-#define HEAD_AUD_MPEG1_DEFS_H
+#ifndef LIBSANTAGGER_AUD_MPEG1_DEFS_H
+#define LIBSANTAGGER_AUD_MPEG1_DEFS_H
 
 /*
 // Own-Includes
@@ -78,6 +78,6 @@ typedef struct {
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_AUD_MPEG1_DEFS_H */
+#endif  /* LIBSANTAGGER_AUD_MPEG1_DEFS_H */
 
 /******************************************************************************/

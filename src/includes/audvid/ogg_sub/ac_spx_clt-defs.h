@@ -15,8 +15,8 @@
 /* Creation date: 20.04.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_AC_SPX_CLT_DEFS_H
-#define HEAD_AC_SPX_CLT_DEFS_H
+#ifndef LIBSANTAGGER_AC_SPX_CLT_DEFS_H
+#define LIBSANTAGGER_AC_SPX_CLT_DEFS_H
 
 
 ST_BEGIN_C_DECLS
@@ -64,6 +64,6 @@ typedef struct {
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_AC_SPX_CLT_DEFS_H */
+#endif  /* LIBSANTAGGER_AC_SPX_CLT_DEFS_H */
 
 /******************************************************************************/

@@ -15,8 +15,8 @@
 /* Creation date: 02.04.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_AV_ZFDEB_PROT_H
-#define HEAD_AV_ZFDEB_PROT_H
+#ifndef LIBSANTAGGER_AV_ZFDEB_PROT_H
+#define LIBSANTAGGER_AV_ZFDEB_PROT_H
 
 /*
 // Own-Includes
@@ -116,6 +116,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_AV_ZFDEB_PROT_H */
+#endif  /* LIBSANTAGGER_AV_ZFDEB_PROT_H */
 
 /******************************************************************************/

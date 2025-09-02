@@ -15,8 +15,8 @@
 /* Creation date: 19.05.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_MC_SKEL_PROT_H
-#define HEAD_MC_SKEL_PROT_H
+#ifndef LIBSANTAGGER_MC_SKEL_PROT_H
+#define LIBSANTAGGER_MC_SKEL_PROT_H
 
 /*
 // Own-Includes
@@ -87,6 +87,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_MC_SKEL_PROT_H */
+#endif  /* LIBSANTAGGER_MC_SKEL_PROT_H */
 
 /******************************************************************************/

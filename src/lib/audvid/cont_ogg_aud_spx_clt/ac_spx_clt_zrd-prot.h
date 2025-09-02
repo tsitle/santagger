@@ -15,8 +15,8 @@
 /* Creation date: 20.04.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_AC_SPX_CLT_ZRD_PROT_H
-#define HEAD_AC_SPX_CLT_ZRD_PROT_H
+#ifndef LIBSANTAGGER_AC_SPX_CLT_ZRD_PROT_H
+#define LIBSANTAGGER_AC_SPX_CLT_ZRD_PROT_H
 
 /*
 // Own-Includes
@@ -49,6 +49,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_AC_SPX_CLT_ZRD_PROT_H */
+#endif  /* LIBSANTAGGER_AC_SPX_CLT_ZRD_PROT_H */
 
 /******************************************************************************/

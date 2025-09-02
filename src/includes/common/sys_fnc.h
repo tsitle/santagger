@@ -15,8 +15,8 @@
 /* Creation date: 19.05.2005 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_SYS_FNC_H
-#define HEAD_SYS_FNC_H
+#ifndef LIBSANTAGGER_SYS_FNC_H
+#define LIBSANTAGGER_SYS_FNC_H
 
 /*
 // Own-Includes
@@ -251,6 +251,6 @@ st_sysBufSearch(
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_SYS_FNC_H */
+#endif  /* LIBSANTAGGER_SYS_FNC_H */
 
 /******************************************************************************/

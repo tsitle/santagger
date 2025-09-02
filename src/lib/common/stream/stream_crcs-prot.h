@@ -15,8 +15,8 @@
 /* Creation date: 07.05.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_STREAM_CRCS_PROT_H
-#define HEAD_STREAM_CRCS_PROT_H
+#ifndef LIBSANTAGGER_STREAM_CRCS_PROT_H
+#define LIBSANTAGGER_STREAM_CRCS_PROT_H
 
 /*
 // Own-Includes
@@ -88,6 +88,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_STREAM_CRCS_PROT_H */
+#endif  /* LIBSANTAGGER_STREAM_CRCS_PROT_H */
 
 /******************************************************************************/

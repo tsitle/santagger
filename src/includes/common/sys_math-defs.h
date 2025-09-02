@@ -15,8 +15,8 @@
 /* Creation date: 13.05.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_SYS_MATH_DEFS_H
-#define HEAD_SYS_MATH_DEFS_H
+#ifndef LIBSANTAGGER_SYS_MATH_DEFS_H
+#define LIBSANTAGGER_SYS_MATH_DEFS_H
 
 /*
 // Own-Includes
@@ -59,6 +59,6 @@ typedef struct {
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_SYS_MATH_DEFS_H */
+#endif  /* LIBSANTAGGER_SYS_MATH_DEFS_H */
 
 /******************************************************************************/

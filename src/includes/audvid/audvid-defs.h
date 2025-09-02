@@ -15,8 +15,8 @@
 /* Creation date: 12.07.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_AUDVID_DEFS_H
-#define HEAD_AUDVID_DEFS_H
+#ifndef LIBSANTAGGER_AUDVID_DEFS_H
+#define LIBSANTAGGER_AUDVID_DEFS_H
 
 /*
 // Own-Includes
@@ -112,6 +112,6 @@ typedef Tst_err
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_AUDVID_DEFS_H */
+#endif  /* LIBSANTAGGER_AUDVID_DEFS_H */
 
 /******************************************************************************/

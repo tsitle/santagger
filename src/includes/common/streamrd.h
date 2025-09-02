@@ -15,8 +15,8 @@
 /* Creation date: 07.05.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_STREAMRD_H
-#define HEAD_STREAMRD_H
+#ifndef LIBSANTAGGER_STREAMRD_H
+#define LIBSANTAGGER_STREAMRD_H
 
 /*
 // Own-Includes
@@ -258,6 +258,6 @@ st_streamrd_stc_freeSObj(Tst_streamrd *pSObj);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_STREAMRD_H */
+#endif  /* LIBSANTAGGER_STREAMRD_H */
 
 /******************************************************************************/

@@ -15,8 +15,8 @@
 /* Creation date: 16.04.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_CONT_OGG_H
-#define HEAD_CONT_OGG_H
+#ifndef LIBSANTAGGER_CONT_OGG_H
+#define LIBSANTAGGER_CONT_OGG_H
 
 /*
 // Own-Includes
@@ -315,6 +315,6 @@ st_contOgg_stc_rsetTheoraInfo(Tst_contOgg_theoraInfo *pTI);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_CONT_OGG_H */
+#endif  /* LIBSANTAGGER_CONT_OGG_H */
 
 /******************************************************************************/

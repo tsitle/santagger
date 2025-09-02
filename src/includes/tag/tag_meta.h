@@ -15,8 +15,8 @@
 /* Creation date: 23.04.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_TAG_META_H
-#define HEAD_TAG_META_H
+#ifndef LIBSANTAGGER_TAG_META_H
+#define LIBSANTAGGER_TAG_META_H
 
 /*
 // Own-Includes
@@ -197,6 +197,6 @@ st_tagMeta_stc_freeTagArr(Tst_tagMeta_mtArr *pMA);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_TAG_META_H */
+#endif  /* LIBSANTAGGER_TAG_META_H */
 
 /******************************************************************************/

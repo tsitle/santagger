@@ -15,8 +15,8 @@
 /* Creation date: 16.05.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_AC_VORB_DEFS_H
-#define HEAD_AC_VORB_DEFS_H
+#ifndef LIBSANTAGGER_AC_VORB_DEFS_H
+#define LIBSANTAGGER_AC_VORB_DEFS_H
 
 
 ST_BEGIN_C_DECLS
@@ -37,6 +37,6 @@ typedef struct {
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_AC_VORB_DEFS_H */
+#endif  /* LIBSANTAGGER_AC_VORB_DEFS_H */
 
 /******************************************************************************/

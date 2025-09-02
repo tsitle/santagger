@@ -15,8 +15,8 @@
 /* Creation date: 20.05.2005 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_SYS_FILE_H
-#define HEAD_SYS_FILE_H
+#ifndef LIBSANTAGGER_SYS_FILE_H
+#define LIBSANTAGGER_SYS_FILE_H
 
 /*
 // Own-Includes
@@ -169,6 +169,6 @@ st_sys_stc_freeFStc(Tst_sys_fstc *pFStc);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_SYS_FILE_H */
+#endif  /* LIBSANTAGGER_SYS_FILE_H */
 
 /******************************************************************************/

@@ -15,8 +15,8 @@
 /* Creation date: 16.06.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_VC_DRC_THEO_DEFS_H
-#define HEAD_VC_DRC_THEO_DEFS_H
+#ifndef LIBSANTAGGER_VC_DRC_THEO_DEFS_H
+#define LIBSANTAGGER_VC_DRC_THEO_DEFS_H
 
 
 ST_BEGIN_C_DECLS
@@ -48,6 +48,6 @@ typedef struct {
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_VC_DRC_THEO_DEFS_H */
+#endif  /* LIBSANTAGGER_VC_DRC_THEO_DEFS_H */
 
 /******************************************************************************/

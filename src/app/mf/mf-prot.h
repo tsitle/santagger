@@ -15,8 +15,8 @@
 /* Creation date: 19.05.2005 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_MF_PROT_H
-#define HEAD_MF_PROT_H
+#ifndef APPSANTAGGER_MF_PROT_H
+#define APPSANTAGGER_MF_PROT_H
 
 /*
 // Own-Includes
@@ -156,6 +156,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_MF_PROT_H */
+#endif  /* APPSANTAGGER_MF_PROT_H */
 
 /******************************************************************************/

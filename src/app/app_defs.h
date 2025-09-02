@@ -15,8 +15,8 @@
 /* Creation date: 19.05.2005 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_APP_DEFS_H
-#define HEAD_APP_DEFS_H
+#ifndef APPSANTAGGER_APP_DEFS_H
+#define APPSANTAGGER_APP_DEFS_H
 
 /*
 // Own-Includes
@@ -34,6 +34,6 @@
 #define APP_ST_AUTHOR  "Thomas Sandkuehler <technisandk@gmail.com>"
 #define APP_ST_COPYR   ("2005-2025 by " APP_ST_AUTHOR)
 
-#endif  /* HEAD_APP_DEFS_H */
+#endif  /* APPSANTAGGER_APP_DEFS_H */
 
 /******************************************************************************/

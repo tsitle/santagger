@@ -15,8 +15,8 @@
 /* Creation date: 08.08.2025 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef FNCS_TEST_COMMON_H
-#define FNCS_TEST_COMMON_H
+#ifndef TESTSANTAGGER_FNCS_TEST_COMMON_H
+#define TESTSANTAGGER_FNCS_TEST_COMMON_H
 
 /*
 // Own-Includes

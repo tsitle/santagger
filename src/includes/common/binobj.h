@@ -19,8 +19,8 @@
 /* Creation date: 23.11.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_BINOBJ_H
-#define HEAD_BINOBJ_H
+#ifndef LIBSANTAGGER_BINOBJ_H
+#define LIBSANTAGGER_BINOBJ_H
 
 /*
 // Own-Includes
@@ -137,6 +137,6 @@ st_binobj_stc_rsetData(Tst_binobj *pBO);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_BINOBJ_H */
+#endif  /* LIBSANTAGGER_BINOBJ_H */
 
 /******************************************************************************/

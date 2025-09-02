@@ -15,8 +15,8 @@
 /* Creation date: 07.05.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_STREAMRD_PRIV_H
-#define HEAD_STREAMRD_PRIV_H
+#ifndef LIBSANTAGGER_STREAMRD_PRIV_H
+#define LIBSANTAGGER_STREAMRD_PRIV_H
 
 /*
 // Own-Includes
@@ -228,6 +228,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_STREAMRD_PRIV_H */
+#endif  /* LIBSANTAGGER_STREAMRD_PRIV_H */
 
 /******************************************************************************/

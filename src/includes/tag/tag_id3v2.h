@@ -15,8 +15,8 @@
 /* Creation date: 06.01.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_TAG_ID3V2_H
-#define HEAD_TAG_ID3V2_H
+#ifndef LIBSANTAGGER_TAG_ID3V2_H
+#define LIBSANTAGGER_TAG_ID3V2_H
 
 /*
 // Own-Includes
@@ -550,6 +550,6 @@ st_id3v2_stc_rsetFldErrs(Tst_id3v2_fldErrs *pErr);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_TAG_ID3V2_H */
+#endif  /* LIBSANTAGGER_TAG_ID3V2_H */
 
 /******************************************************************************/

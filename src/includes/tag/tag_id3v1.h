@@ -15,8 +15,8 @@
 /* Creation date: 20.05.2005 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_TAG_ID3V1_H
-#define HEAD_TAG_ID3V1_H
+#ifndef LIBSANTAGGER_TAG_ID3V1_H
+#define LIBSANTAGGER_TAG_ID3V1_H
 
 /*
 // Own-Includes
@@ -223,6 +223,6 @@ st_id3v1_stc_rsetFPr(Tst_id3v1_fldProp *pFldPr);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_TAG_ID3V1_H */
+#endif  /* LIBSANTAGGER_TAG_ID3V1_H */
 
 /******************************************************************************/

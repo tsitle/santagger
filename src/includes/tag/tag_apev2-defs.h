@@ -15,8 +15,8 @@
 /* Creation date: 07.01.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_TAG_APEV2_DEFS_H
-#define HEAD_TAG_APEV2_DEFS_H
+#ifndef LIBSANTAGGER_TAG_APEV2_DEFS_H
+#define LIBSANTAGGER_TAG_APEV2_DEFS_H
 
 /*
 // Own-Includes
@@ -132,6 +132,6 @@ typedef struct {
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_TAG_APEV2_DEFS_H */
+#endif  /* LIBSANTAGGER_TAG_APEV2_DEFS_H */
 
 /******************************************************************************/

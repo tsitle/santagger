@@ -15,8 +15,8 @@
 /* Creation date: 08.01.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_UTILS_FMT_H
-#define HEAD_UTILS_FMT_H
+#ifndef LIBSANTAGGER_UTILS_FMT_H
+#define LIBSANTAGGER_UTILS_FMT_H
 
 /*
 // Own-Includes
@@ -125,6 +125,6 @@ st_utilsFmt_getMime_defFExt_byEnum(const Tst_utilsFmt_mimeTp mtp);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_UTILS_FMT_H */
+#endif  /* LIBSANTAGGER_UTILS_FMT_H */
 
 /******************************************************************************/

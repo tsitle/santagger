@@ -15,8 +15,8 @@
 /* Creation date: 03.07.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_CONT_WAV_H
-#define HEAD_CONT_WAV_H
+#ifndef LIBSANTAGGER_CONT_WAV_H
+#define LIBSANTAGGER_CONT_WAV_H
 
 /*
 // Own-Includes
@@ -125,6 +125,6 @@ st_contWav_wr_finishWritingCB(void *pHandle);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_CONT_WAV_H */
+#endif  /* LIBSANTAGGER_CONT_WAV_H */
 
 /******************************************************************************/

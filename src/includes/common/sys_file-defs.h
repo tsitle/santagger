@@ -15,8 +15,8 @@
 /* Creation date: 20.05.2005 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_SYS_FILE_DEFS_H
-#define HEAD_SYS_FILE_DEFS_H
+#ifndef LIBSANTAGGER_SYS_FILE_DEFS_H
+#define LIBSANTAGGER_SYS_FILE_DEFS_H
 
 /*
 // Own-Includes
@@ -69,6 +69,6 @@ typedef struct {
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_SYS_FILE_DEFS_H */
+#endif  /* LIBSANTAGGER_SYS_FILE_DEFS_H */
 
 /******************************************************************************/

@@ -16,8 +16,8 @@
 /* Creation date: 08.01.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_STRING_MTE_H
-#define HEAD_STRING_MTE_H
+#ifndef LIBSANTAGGER_STRING_MTE_H
+#define LIBSANTAGGER_STRING_MTE_H
 
 /*
 // Own-Includes
@@ -414,6 +414,6 @@ st_mtes_stc_rsetCharSet(Tst_mtes_cset *pCSet, const Tst_bool isU16_leOrBe);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_STRING_MTE_H */
+#endif  /* LIBSANTAGGER_STRING_MTE_H */
 
 /******************************************************************************/

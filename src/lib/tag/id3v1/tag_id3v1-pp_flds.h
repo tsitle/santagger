@@ -15,8 +15,8 @@
 /* Creation date: 18.04.2011 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_TAG_ID3V1_PP_FLDS_H
-#define HEAD_TAG_ID3V1_PP_FLDS_H
+#ifndef LIBSANTAGGER_TAG_ID3V1_PP_FLDS_H
+#define LIBSANTAGGER_TAG_ID3V1_PP_FLDS_H
 
 
 ST_BEGIN_C_DECLS
@@ -90,6 +90,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_TAG_ID3V1_PP_FLDS_H */
+#endif  /* LIBSANTAGGER_TAG_ID3V1_PP_FLDS_H */
 
 /******************************************************************************/

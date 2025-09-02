@@ -15,8 +15,8 @@
 /* Creation date: 29.10.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_CONT_OGG_COMMON_PROT_H
-#define HEAD_CONT_OGG_COMMON_PROT_H
+#ifndef LIBSANTAGGER_CONT_OGG_COMMON_PROT_H
+#define LIBSANTAGGER_CONT_OGG_COMMON_PROT_H
 
 
 ST_BEGIN_C_DECLS
@@ -65,6 +65,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_CONT_OGG_COMMON_PROT_H */
+#endif  /* LIBSANTAGGER_CONT_OGG_COMMON_PROT_H */
 
 /******************************************************************************/

@@ -15,8 +15,8 @@
 /* Creation date: 07.01.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_TAG_APEV2_H
-#define HEAD_TAG_APEV2_H
+#ifndef LIBSANTAGGER_TAG_APEV2_H
+#define LIBSANTAGGER_TAG_APEV2_H
 
 /*
 // Own-Includes
@@ -351,6 +351,6 @@ st_apev2_stc_rsetStrTp(Tst_apev2_fldd_strtp *pStrTp);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_TAG_APEV2_H */
+#endif  /* LIBSANTAGGER_TAG_APEV2_H */
 
 /******************************************************************************/

@@ -15,8 +15,8 @@
 /* Creation date: 07.01.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_TAG_VORBC_ZRD_PP_H
-#define HEAD_TAG_VORBC_ZRD_PP_H
+#ifndef LIBSANTAGGER_TAG_VORBC_ZRD_PP_H
+#define LIBSANTAGGER_TAG_VORBC_ZRD_PP_H
 
 /*
 // Own-Includes
@@ -90,6 +90,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_TAG_VORBC_ZRD_PP_H */
+#endif  /* LIBSANTAGGER_TAG_VORBC_ZRD_PP_H */
 
 /******************************************************************************/

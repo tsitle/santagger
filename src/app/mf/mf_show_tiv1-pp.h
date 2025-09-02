@@ -15,8 +15,8 @@
 /* Creation date: 06.01.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_MF_SHOW_TIV1_PP_H
-#define HEAD_MF_SHOW_TIV1_PP_H
+#ifndef APPSANTAGGER_MF_SHOW_TIV1_PP_H
+#define APPSANTAGGER_MF_SHOW_TIV1_PP_H
 
 /*
 // Own-Includes
@@ -60,6 +60,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_MF_SHOW_TIV1_PP_H */
+#endif  /* APPSANTAGGER_MF_SHOW_TIV1_PP_H */
 
 /******************************************************************************/

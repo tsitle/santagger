@@ -15,8 +15,8 @@
 /* Creation date: 16.04.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_AUD_MPEG1_H
-#define HEAD_AUD_MPEG1_H
+#ifndef LIBSANTAGGER_AUD_MPEG1_H
+#define LIBSANTAGGER_AUD_MPEG1_H
 
 /*
 // Own-Includes
@@ -188,6 +188,6 @@ st_mpeg1_stc_freeMO(Tst_mpeg1_obj *pMO);
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_AUD_MPEG1_H */
+#endif  /* LIBSANTAGGER_AUD_MPEG1_H */
 
 /******************************************************************************/

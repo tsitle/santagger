@@ -15,8 +15,8 @@
 /* Creation date: 10.01.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_UTILS_FMT_DEFS_H
-#define HEAD_UTILS_FMT_DEFS_H
+#ifndef LIBSANTAGGER_UTILS_FMT_DEFS_H
+#define LIBSANTAGGER_UTILS_FMT_DEFS_H
 
 /*
 // Own-Includes
@@ -107,6 +107,6 @@ typedef enum {
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_UTILS_FMT_DEFS_H */
+#endif  /* LIBSANTAGGER_UTILS_FMT_DEFS_H */
 
 /******************************************************************************/

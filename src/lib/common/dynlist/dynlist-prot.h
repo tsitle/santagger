@@ -15,8 +15,8 @@
 /* Creation date: 09.08.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_DYNLIST_PROT_H
-#define HEAD_DYNLIST_PROT_H
+#ifndef LIBSANTAGGER_DYNLIST_PROT_H
+#define LIBSANTAGGER_DYNLIST_PROT_H
 
 /*
 // Own-Includes
@@ -64,6 +64,6 @@ ST_BEGIN_C_DECLS
 
 ST_END_C_DECLS
 
-#endif  /* HEAD_DYNLIST_PROT_H */
+#endif  /* LIBSANTAGGER_DYNLIST_PROT_H */
 
 /******************************************************************************/

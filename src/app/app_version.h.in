@@ -15,8 +15,8 @@
 /* Creation date: 01.04.2011 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_APP_VERSION_H
-#define HEAD_APP_VERSION_H
+#ifndef APPSANTAGGER_APP_VERSION_H
+#define APPSANTAGGER_APP_VERSION_H
 
 /*
 // Constants
@@ -30,6 +30,6 @@
 #define APP_ST_VERS_COMMITID   ("###VERS_COMMITID###")
 
 
-#endif  /* HEAD_APP_VERSION_H */
+#endif  /* APPSANTAGGER_APP_VERSION_H */
 
 /******************************************************************************/

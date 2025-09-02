@@ -15,8 +15,8 @@
 /* Creation date: 29.10.2010 (dd.mm.yyyy)                                     */
 /******************************************************************************/
 
-#ifndef HEAD_AUD_FLAC_DEFS_H
-#define HEAD_AUD_FLAC_DEFS_H
+#ifndef LIBSANTAGGER_AUD_FLAC_DEFS_H
+#define LIBSANTAGGER_AUD_FLAC_DEFS_H
 
 /*
 // Constants
@@ -36,6 +36,6 @@
  */
 
 
-#endif  /* HEAD_AUD_FLAC_DEFS_H */
+#endif  /* LIBSANTAGGER_AUD_FLAC_DEFS_H */
 
 /******************************************************************************/
