@@ -2,10 +2,25 @@ cmake_minimum_required(VERSION 3.23)  # due to 'target_sources(<target> xxx FILE
                                       # see https://cmake.org/cmake/help/latest/command/target_sources.html#file-sets
 project(santagger_app_and_lib_project C)
 
+set(CMAKE_C_STANDARD 17)
+
 if (MSVC)
 	message(FATAL_ERROR "__ST__: MSVC Compiler is not supported")
 endif ()
 
+# ----------------------------------------------------------------------------
+# CMake Modules
+# ----------------------------------------------------------------------------
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-mods" ${CMAKE_MODULE_PATH})
+
+include(TsUtils RESULT_VARIABLE Z_INC_UTILS)
+if (NOT Z_INC_UTILS)
+	message(FATAL_ERROR "__ST__: could not include TsUtils")
+endif ()
+
+# ----------------------------------------------------------------------------
+# CMake Options
 # ----------------------------------------------------------------------------
 
 option(BUILD_FOR_VALGRIND "Build for Valgrind" OFF)
@@ -13,6 +28,8 @@ option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 option(STRIP_AFTER_BUILD "Strip executable after build" OFF)
 
 option(INSTALL_PKG_CONFIG_MODULE "Install santagger.pc file" ON)
+
+# ----------------------------------------------------------------------------
 
 set(X_OPT 2)       # 0|1|2|3|s   (Optimization level (s=optimize for size))
 set(X_PED "nor")   # nor|err|no  (be pedantic (warning level) ?)
@@ -23,9 +40,6 @@ set(X_LIB_ABI_VERSION 1)
 
 # ----------------------------------------------------------------------------
 
-set(CMAKE_C_STANDARD 17)
-
-#
 if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
 endif ()
@@ -82,6 +96,8 @@ elseif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif ()
 
 # ----------------------------------------------------------------------------
+# Add targets
+# ----------------------------------------------------------------------------
 
 # add shared library headers
 add_library(santagger_includes INTERFACE)
@@ -119,24 +135,13 @@ add_subdirectory(src/tests)
 # Strip executable
 # ----------------------------------------------------------------------------
 
-if (STRIP_AFTER_BUILD AND NOT BUILD_FOR_VALGRIND)
-	if (CMAKE_BUILD_TYPE STREQUAL "Release")
-		message(STATUS "__ST__: Strip executable/lib")
-		if (APPLE)
-			set(TMP_TARGET_LIST santagger_app;santagger_lib)
-			foreach(target ${TMP_TARGET_LIST})
-				add_custom_command(TARGET ${target} POST_BUILD
-					COMMAND strip -x -S $<TARGET_FILE:${target}>)
-			endforeach ()
-		else ()
-			set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -s")
-			set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} -s")
-		endif ()
+if (STRIP_AFTER_BUILD)
+	set(TMP_TARGET_LIST santagger_app;santagger_lib)  # semi-colon separated list
+	if (NOT BUILD_FOR_VALGRIND)
+		ts_strip_targets_after_build("__ST__" "${TMP_TARGET_LIST}")
 	else ()
-		message(STATUS "__ST__: not stripping executable/lib (!release)")
+		message(STATUS "__ST__: not enabling Stripping for targets '${TMP_TARGET_LIST}' (valgrind)")
 	endif ()
-elseif (STRIP_AFTER_BUILD AND BUILD_FOR_VALGRIND)
-	message(STATUS "__ST__: not stripping executable/lib (valgrind)")
 endif ()
 
 # ----------------------------------------------------------------------------
@@ -405,203 +410,33 @@ else ()
 endif ()
 
 # ----------------------------------------------------------------------------
-# Semantic version variables
+# Git Semantic Version
 # ----------------------------------------------------------------------------
 
-set(X_FN_APP_VERSION_H "src/app/app_version.h")
-set(X_FN_LIB_VERSION_H "src/includes/lib_version.h")
-
-# Find Git
-find_program(APP_GIT "git")
-# Find Grep
-find_program(APP_GREP "grep")
-
-if (APP_GIT AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
-	# get the current Git tag description (e.g. '1.0-2-ga12d3ef') for semantic versioning
-	##
-	execute_process(
-			COMMAND ${APP_GIT} describe --tags --dirty
-			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-			OUTPUT_VARIABLE GIT_VERSION_SEM
-			OUTPUT_STRIP_TRAILING_WHITESPACE
-		)
-	## for testing the version parsing only:
-	#set(GIT_VERSION_SEM "12.34-gdeadbeef")
-	#set(GIT_VERSION_SEM "12.34-56-gdeadbeef")
-	#set(GIT_VERSION_SEM "12.34-alpha5-gdeadbeef")
-	#set(GIT_VERSION_SEM "12.34-alpha5-67-gdeadbeef")
-	#set(GIT_VERSION_SEM "12.34-alpha5-67-gdeadbeef-dirty")
-	#set(GIT_VERSION_SEM "1.0-alpha-3-g4fdbbae-dirty")
-	#set(GIT_VERSION_SEM "1.0-alpha-g4fdbbae-dirty")
-	#set(GIT_VERSION_SEM "1.0-alpha-g4fdbbae")
-	#set(GIT_VERSION_SEM "1.0-g4fdbbae-dirty")
-	#set(GIT_VERSION_SEM "1.0-g4fdbbae")
-	#set(GIT_VERSION_SEM "1.0-beta")
-	#set(GIT_VERSION_SEM "1.0")
-	##
-	if (GIT_VERSION_SEM MATCHES "^$")
-		message(FATAL_ERROR "__ST__: could not determine Git Semantic version")
-	endif ()
-
-	# get only the major and minor version
-	#   --> extract everything before the first dash (-)
-	string(REGEX REPLACE "-.*" "" GIT_VERSION_MAJMIN "${GIT_VERSION_SEM}")
-	#message(STATUS "Git version: mm '${GIT_VERSION_MAJMIN}'")
-	if (GIT_VERSION_MAJMIN MATCHES "^$")
-		message(FATAL_ERROR "__ST__: could not determine Git Major.Minor version")
-	endif ()
-
-	# get only the major version
-	#   --> extract everything before the first dot (.)
-	string(REGEX REPLACE "\\.[0-9]*" "" GIT_VERSION_MAJOR "${GIT_VERSION_MAJMIN}")
-	if (GIT_VERSION_MAJOR MATCHES "^$")
-		message(FATAL_ERROR "__ST__: could not determine Git Major version")
-	endif ()
-
-	# get only the minor version
-	#   --> extract everything after the first dot (.)
-	string(REGEX REPLACE "^([^\\.]*)\\.([^\\.]*)" "\\2" GIT_VERSION_MINOR "${GIT_VERSION_MAJMIN}")
-	if (GIT_VERSION_MINOR MATCHES "^$")
-		message(FATAL_ERROR "__ST__: could not determine Git Minor version")
-	endif ()
-
-	# get only the patch level
-	#   --> in the example '1.2-ga12d3ef' that would be '0'
-	#   --> in the example '1.2-3-ga12d3ef' that would be '3'
-	#   --> in the example '1.2-alpha3-4-ga12d3ef' that would be 'alpha3-4'
-	#   --> in the example '1.2-alpha3-4-ga12d3ef-dirty' that would be 'alpha3-4'
-	string(REGEX REPLACE "-dirty$" "" GIT_VERSION_TMP "${GIT_VERSION_SEM}")
-	#message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
-	string(REGEX REPLACE "-g[a-z0-9]*$" "" GIT_VERSION_TMP "${GIT_VERSION_TMP}")
-	#message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
-	string(REGEX REPLACE "^${GIT_VERSION_MAJMIN}-" "" GIT_VERSION_TMP "${GIT_VERSION_TMP}")  # '12.34-5' --> '5'
-	string(REGEX REPLACE "^${GIT_VERSION_MAJMIN}$" "0" GIT_VERSION_TMP "${GIT_VERSION_TMP}")  # '12.34' --> '0'
-	#message(STATUS "Git version: tmp '${GIT_VERSION_TMP}'")
-
-	string(REGEX REPLACE "^.*-([0-9]*)$" "\\1" GIT_VERSION_PATCH "${GIT_VERSION_TMP}")
-	#message(STATUS "Git version: patch '${GIT_VERSION_PATCH}'")
-	string(REGEX REPLACE "^alpha.*-" "" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'alpha-3' --> '3'
-	string(REGEX REPLACE "^beta.*-" "" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'beta-3' --> '3'
-	string(REGEX REPLACE "^alpha.*$" "0" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'alpha' --> '0'
-	string(REGEX REPLACE "^beta.*$" "0" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")  # 'beta' --> '0'
-	#message(STATUS "Git version: patch '${GIT_VERSION_PATCH}'")
-
-	# get only the alpha/beta marker
-	#   --> in the example '1.2-ga12d3ef' that would be ''
-	#   --> in the example '1.2-3-ga12d3ef' that would be ''
-	#   --> in the example '1.2-alpha3-4-ga12d3ef' that would be 'alpha3'
-	#   --> in the example '1.2-alpha3-4-ga12d3ef-dirty' that would be 'alpha3'
-	string(REGEX REPLACE "^[0-9]*\\.[0-9]*-(.*)$" "\\1" GIT_VERSION_ALPHABETA "${GIT_VERSION_TMP}")
-	#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
-
-	string(REGEX REPLACE "^(.*)-[0-9]*$" "\\1" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
-	#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
-	string(REGEX REPLACE "^${GIT_VERSION_PATCH}$" "" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
-	#message(STATUS "Git version: ab '${GIT_VERSION_ALPHABETA}'")
-
-	# --------------------------
-	# get only the commit ID
-	execute_process(
-			COMMAND ${APP_GIT} rev-parse --short HEAD
-			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-			OUTPUT_VARIABLE GIT_VERSION_CID
-			OUTPUT_STRIP_TRAILING_WHITESPACE
-		)
-	if (GIT_VERSION_CID MATCHES "^$")
-		message(FATAL_ERROR "__ST__: could not determine Git Commit ID")
-	endif ()
-elseif (EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
-	message(STATUS "__ST__: Using existing lib_version.h")
-	if (APP_GREP)
-		set(Z_VAR_CMD_GREP "${APP_GREP}")
-	elseif (WIN32)
-		# we are in a MS Windows Terminal (and not in an UCRT64 environment)
-		set(Z_VAR_CMD_GREP "findstr")
-		set(X_FN_LIB_VERSION_H "src\\includes\\lib_version.h")
-	else ()
-		message(FATAL_ERROR "__ST__: No application found for 'grep'")
-	endif ()
-	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_STRING " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_SEM WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_MAJOR " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_MAJOR WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_MINOR " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_MINOR WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_PATCH " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_PATCH WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_ALPHABETA " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_ALPHABETA WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND ${Z_VAR_CMD_GREP} " ST_LIBSANTAG_VERS_COMMITID " "${X_FN_LIB_VERSION_H}" OUTPUT_VARIABLE GIT_VERSION_CID WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-	# --> extract everything in between the parenthesis - but without the quotation marks
-	string(REGEX REPLACE "(.*)\\(\"(.*)\"\\)(.*)" "\\2" GIT_VERSION_SEM "${GIT_VERSION_SEM}")
-	if (GIT_VERSION_SEM MATCHES "^$")
-		message(FATAL_ERROR "__ST__: could not determine Git Semantic version")
-	endif ()
-	# --> extract everything in between the parenthesis
-	string(REGEX REPLACE "(.*)\\((.*)\\)(.*)" "\\2" GIT_VERSION_MAJOR "${GIT_VERSION_MAJOR}")
-	# --> extract everything in between the parenthesis
-	string(REGEX REPLACE "(.*)\\((.*)\\)(.*)" "\\2" GIT_VERSION_MINOR "${GIT_VERSION_MINOR}")
-	# --> extract everything in between the parenthesis
-	string(REGEX REPLACE "(.*)\\((.*)\\)(.*)" "\\2" GIT_VERSION_PATCH "${GIT_VERSION_PATCH}")
-	# --> extract everything in between the parenthesis - but without the quotation marks
-	string(REGEX REPLACE "(.*)\\(\"(.*)\"\\)(.*)" "\\2" GIT_VERSION_ALPHABETA "${GIT_VERSION_ALPHABETA}")
-	# --> extract everything in between the parenthesis - but without the quotation marks
-	string(REGEX REPLACE "(.*)\\(\"(.*)\"\\)(.*)" "\\2" GIT_VERSION_CID "${GIT_VERSION_CID}")
-endif ()
-
-# ----------------------------------------------------------------------------
-# Replace version strings and numbers in app_version.h and lib_version.h
-# ----------------------------------------------------------------------------
-
-# Find Sed
-find_program(APP_SED "sed")
-
-if (APP_SED AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
-	message(STATUS "__ST__: Rewrite file '${X_FN_APP_VERSION_H}'")
-	execute_process(
-			INPUT_FILE "${X_FN_APP_VERSION_H}.in"
-			COMMAND ${APP_SED} -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
-			COMMAND ${APP_SED} -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
-			COMMAND ${APP_SED} -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
-			COMMAND ${APP_SED} -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
-			COMMAND ${APP_SED} -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
-			COMMAND ${APP_SED} -e "s;###VERS_COMMITID###;${GIT_VERSION_CID};g"
-			COMMAND ${APP_SED} -e "s;these will be replaced by CMake;these have been replaced by CMake;g"
-			OUTPUT_FILE "${X_FN_APP_VERSION_H}"
-			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		)
-
-	message(STATUS "__ST__: Rewrite file '${X_FN_LIB_VERSION_H}'")
-	execute_process(
-			INPUT_FILE "${X_FN_LIB_VERSION_H}.in"
-			COMMAND ${APP_SED} -e "s;###VERS_STRING###;${GIT_VERSION_SEM};g"
-			COMMAND ${APP_SED} -e "s;###VERS_MAJOR###;${GIT_VERSION_MAJOR};g"
-			COMMAND ${APP_SED} -e "s;###VERS_MINOR###;${GIT_VERSION_MINOR};g"
-			COMMAND ${APP_SED} -e "s;###VERS_PATCH###;${GIT_VERSION_PATCH};g"
-			COMMAND ${APP_SED} -e "s;###VERS_ALPHABETA###;${GIT_VERSION_ALPHABETA};g"
-			COMMAND ${APP_SED} -e "s;###VERS_COMMITID###;${GIT_VERSION_CID};g"
-			COMMAND ${APP_SED} -e "s;these will be replaced by CMake;these have been replaced by CMake;g"
-			OUTPUT_FILE "${X_FN_LIB_VERSION_H}"
-			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		)
-else ()
-	message(STATUS "__ST__: Not rewriting files '${X_FN_APP_VERSION_H}' and '${X_FN_LIB_VERSION_H}'")
-endif ()
-
-if (NOT EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_APP_VERSION_H}")
-	message(FATAL_ERROR "__ST__: Missing app_version.h")
-endif ()
-if (NOT EXISTS "${CMAKE_SOURCE_DIR}/${X_FN_LIB_VERSION_H}")
-	message(FATAL_ERROR "__ST__: Missing lib_version.h")
-endif ()
-
-message(STATUS "__ST__: Git version: Semantic=${GIT_VERSION_SEM}; Major=${GIT_VERSION_MAJOR}; Minor=${GIT_VERSION_MINOR}; A/B=${GIT_VERSION_ALPHABETA}; Patch=${GIT_VERSION_PATCH}; CID=${GIT_VERSION_CID}")
-
-target_sources(santagger_app
-	PRIVATE
-		${X_FN_APP_VERSION_H}
+ts_git_read_version_and_write_to_file(
+		"__ST__"
+		"${CMAKE_SOURCE_DIR}/.git"
+		"${CMAKE_SOURCE_DIR}/src/includes/lib_version.h.in"
+		"${CMAKE_SOURCE_DIR}/src/includes/lib_version.h"
+		"ST_LIBSANTAG"
 )
 target_sources(santagger_includes
 	INTERFACE FILE_SET HEADERS
 	BASE_DIRS ${PROJECT_SOURCE_DIR}
 	FILES
-		${X_FN_LIB_VERSION_H}
+		src/includes/lib_version.h
+)
+
+ts_git_read_version_and_write_to_file(
+		"__ST__"
+		"${CMAKE_SOURCE_DIR}/.git"
+		"${CMAKE_SOURCE_DIR}/src/app/app_version.h.in"
+		"${CMAKE_SOURCE_DIR}/src/app/app_version.h"
+		"APP_ST"
+)
+target_sources(santagger_app
+	PRIVATE
+		src/app/app_version.h
 )
 
 # ----------------------------------------------------------------------------
@@ -872,50 +707,43 @@ endif ()
 # Pkg-config
 # ----------------------------------------------------------------------------
 
-# Helper function to configure pkg-config files
-function(configure_pkg_config_file pkg_config_file_in)
-	set(prefix ${CMAKE_INSTALL_PREFIX})
-	set(exec_prefix ${CMAKE_INSTALL_FULL_BINDIR})
-	set(libdir ${CMAKE_INSTALL_FULL_LIBDIR})
-	set(includedir ${CMAKE_INSTALL_FULL_INCLUDEDIR})
-	set(VERSION ${GIT_VERSION_SEM})
-	set(REQU_PRIV "")
+if (INSTALL_PKG_CONFIG_MODULE)
+	ts_read_git_version_from_c_header_file("__ST__" "${CMAKE_SOURCE_DIR}/src/includes/lib_version.h" "ST_LIBSANTAG_VERS_STRING" TMP_GIT_VERS_SEM TRUE)
+
+	set(TMP_PC_REQU_PRIV "")
 	if (BUILD_SHARED_LIBS)
 		if (Z_VAR_PC_REQU_MPG123)
-			set(REQU_PRIV "${REQU_PRIV} libmpg123")
+			set(TMP_PC_REQU_PRIV "${TMP_PC_REQU_PRIV} libmpg123")
 		endif ()
 		if (Z_VAR_PC_REQU_MAD)
-			set(REQU_PRIV "${REQU_PRIV} mad")
+			set(TMP_PC_REQU_PRIV "${TMP_PC_REQU_PRIV} mad")
 		endif ()
 		if (Z_VAR_PC_REQU_VORBIS)
-			set(REQU_PRIV "${REQU_PRIV} vorbis")
+			set(TMP_PC_REQU_PRIV "${TMP_PC_REQU_PRIV} vorbis")
 		endif ()
 		if (Z_VAR_PC_REQU_OGG)
-			set(REQU_PRIV "${REQU_PRIV} ogg")
+			set(TMP_PC_REQU_PRIV "${TMP_PC_REQU_PRIV} ogg")
 		endif ()
 		if (Z_VAR_PC_REQU_LIBZ)
-			set(REQU_PRIV "${REQU_PRIV} zlib")
+			set(TMP_PC_REQU_PRIV "${TMP_PC_REQU_PRIV} zlib")
 		endif ()
 	endif ()
-	set(LIBS_PRIV "")
+
+	set(TMP_PC_LIBS_PRIV "")
 	if (BUILD_SHARED_LIBS)
 		if (Z_VAR_PC_REQU_BCRYPT)
-			set(LIBS_PRIV "${LIBS_PRIV} -lbcrypt")
+			set(TMP_PC_LIBS_PRIV "${TMP_PC_LIBS_PRIV} -lbcrypt")
 		endif ()
 		if (Z_VAR_PC_REQU_LIBM)
-			set(LIBS_PRIV "${LIBS_PRIV} -lm")
+			set(TMP_PC_LIBS_PRIV "${TMP_PC_LIBS_PRIV} -lm")
 		endif ()
 	endif ()
-	string(REPLACE ".pc.in" "${OUTPUT_NAME_SUFFIX}.pc" pkg_config_file ${pkg_config_file_in})
-	configure_file(src/${pkg_config_file_in} ${pkg_config_file} @ONLY)
-endfunction()
 
-if (INSTALL_PKG_CONFIG_MODULE)
-	configure_pkg_config_file(libsantagger.pc.in)
+	ts_pkgconfig__configure_pkg_config_file("src" "libsantagger.pc.in" "${OUTPUT_NAME_SUFFIX}" "${TMP_GIT_VERS_SEM}" "${TMP_PC_REQU_PRIV}" "${TMP_PC_LIBS_PRIV}")
 
 	install(
-		FILES ${CMAKE_CURRENT_BINARY_DIR}/libsantagger${OUTPUT_NAME_SUFFIX}.pc
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+			FILES ${CMAKE_CURRENT_BINARY_DIR}/libsantagger${OUTPUT_NAME_SUFFIX}.pc
+			DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 	)
 endif ()
 
